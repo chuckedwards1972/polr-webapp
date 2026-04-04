@@ -2,17 +2,389 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POLR WebApp - Recovery Platform</title>
-    <script>
-        // Redirect to main app
-        window.location.href = "POLR-WIRED.html";
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>POLR WebApp - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:#0c1a2e; --navy2:#1a2f4a; --navy3:#243550;
+            --gold:#c8913a; --gold2:#e8aa55; --gold3:#f5d48a;
+            --cream:#faf7f2; --cream2:#f0ebe1;
+            --white:#fff; --text:#1a1a2a; --muted:#5a6070; --light:#9aa0ae; --border:#e2ddd6;
+            --bg:#060b14; --bg2:#0a1120; --bg3:#0f1929; --bg4:#142035;
+            --l0:#d4a853; --l1:#8b7cf8; --l2:#3b9ef5; --l3:#e8704a; --l4:#2ec4a0; --l5:#5bc46e; --l6:#8899b0;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'DM Sans', sans-serif; 
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy3) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--white);
+        }
+        
+        .login-container {
+            background: rgba(26, 47, 74, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(200, 145, 58, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold2);
+            margin-bottom: 10px;
+            letter-spacing: 0.1em;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        
+        .level-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .level-btn {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .level-btn:hover {
+            background: rgba(200, 145, 58, 0.2);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+        
+        .level-btn.selected {
+            background: linear-gradient(135deg, var(--gold), #8b5e2a);
+            border-color: var(--gold2);
+            color: var(--white);
+        }
+        
+        .login-form {
+            display: none;
+            text-align: left;
+        }
+        
+        .login-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--gold), #8b5e2a);
+            border: none;
+            border-radius: 10px;
+            color: var(--white);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(200, 145, 58, 0.3);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .quick-login {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .quick-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(200, 145, 58, 0.2);
+            border-color: var(--gold);
+        }
+        
+        .mobile-notice {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(200, 145, 58, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .level-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-notice {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 481px) {
+            .mobile-notice {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
-        <h1>Loading POLR WebApp...</h1>
-        <p>If you are not redirected automatically, <a href="POLR-WIRED.html">click here</a>.</p>
+    <div class="mobile-notice">📱 Mobile Optimized</div>
+    
+    <div class="login-container">
+        <div class="logo">POLR</div>
+        <div class="subtitle">Recovery Ministry Platform</div>
+        
+        <div class="level-selector" id="levelSelector">
+            <button class="level-btn" data-level="0" data-username="admin" data-password="L0Admin123!">
+                L0 Admin
+            </button>
+            <button class="level-btn" data-level="1" data-username="level1" data-password="TestUser1!">
+                L1 User
+            </button>
+            <button class="level-btn" data-level="2" data-username="level2" data-password="TestUser2!">
+                L2 User
+            </button>
+            <button class="level-btn" data-level="3" data-username="level3" data-password="TestUser3!">
+                L3 User
+            </button>
+            <button class="level-btn" data-level="4" data-username="level4" data-password="TestUser4!">
+                L4 User
+            </button>
+            <button class="level-btn" data-level="5" data-username="level5" data-password="TestUser5!">
+                L5 User
+            </button>
+            <button class="level-btn" data-level="6" data-username="level6" data-password="TestUser6!">
+                L6 User
+            </button>
+        </div>
+        
+        <div class="login-form" id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="username" placeholder="Enter username" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="password" placeholder="Enter password">
+            </div>
+            <button class="login-btn" id="loginBtn">Login to Dashboard</button>
+            <div class="error" id="error"></div>
+        </div>
+        
+        <div class="quick-login" id="quickLogin" style="display: none;">
+            <button class="quick-btn" onclick="quickLogin('admin', 'L0Admin123!')">
+                🔧 Quick Login as L0 Admin
+            </button>
+            <button class="quick-btn" onclick="quickLogin('level1', 'TestUser1!')">
+                👤 Quick Login as L1 User
+            </button>
+        </div>
     </div>
+
+    <script>
+        const backendUrl = 'https://polr-backend.onrender.com';
+        let selectedLevel = null;
+        
+        // Level selection
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                selectedLevel = {
+                    level: this.dataset.level,
+                    username: this.dataset.username,
+                    password: this.dataset.password
+                };
+                
+                // Show login form
+                document.getElementById('loginForm').classList.add('active');
+                document.getElementById('username').value = selectedLevel.username;
+                document.getElementById('password').value = selectedLevel.password;
+                document.getElementById('quickLogin').style.display = 'block';
+                
+                // Auto-focus password
+                document.getElementById('password').focus();
+            });
+        });
+        
+        // Login function
+        document.getElementById('loginBtn').addEventListener('click', async function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const error = document.getElementById('error');
+            
+            if (!username || !password) {
+                error.textContent = 'Please enter username and password';
+                error.classList.add('show');
+                return;
+            }
+            
+            this.disabled = true;
+            this.textContent = 'Logging in...';
+            error.classList.remove('show');
+            
+            try {
+                const response = await fetch(`${backendUrl}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store token and redirect to main app
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Redirect to main POLR app
+                    window.location.href = 'POLR-WIRED.html';
+                } else {
+                    error.textContent = data.message || 'Login failed';
+                    error.classList.add('show');
+                }
+            } catch (err) {
+                error.textContent = 'Connection error. Please try again.';
+                error.classList.add('show');
+            }
+            
+            this.disabled = false;
+            this.textContent = 'Login to Dashboard';
+        });
+        
+        // Quick login function
+        function quickLogin(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            document.getElementById('loginBtn').click();
+        }
+        
+        // Allow Enter key to login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+        
+        // Check for URL parameters for direct login
+        const urlParams = new URLSearchParams(window.location.search);
+        const userParam = urlParams.get('user');
+        const demoParam = urlParams.get('demo');
+        
+        if (userParam && demoParam === 'true') {
+            // Auto-select and login for demo
+            const demoBtn = document.querySelector(`[data-username="${userParam}"]`);
+            if (demoBtn) {
+                demoBtn.click();
+                setTimeout(() => {
+                    document.getElementById('loginBtn').click();
+                }, 500);
+            }
+        }
+    </script>
 </body>
 </html>
