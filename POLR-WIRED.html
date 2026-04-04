@@ -2000,7 +2000,7 @@ function PlatformPage({
           setSession(sess); setLegalAccept(username); onLogin(sess);
           setPage('dashboard');
         })
-        .catch(function() { _doLocalLogin(); });
+        .catch(function(e){ setError("Invalid username or password. Please try again."); });
     } else {
       _doLocalLogin();
     }
@@ -35198,6 +35198,7 @@ applySupp();
 
 </body>
 </html>
+
 
 
 
