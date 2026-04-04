@@ -30317,7 +30317,7 @@ function GlobalNav({
     onClick: function () {
       return setPage(session ? 'dashboard' : 'platform');
     }
-  }, session ? "POLR Dashboard" : "Member Login")), session && /*#__PURE__*/React.createElement("button", {className: "nav-cta", style: {background:"transparent", color:"rgba(252,129,129,0.85)", border:"1px solid rgba(252,129,129,0.25)", marginLeft:"0.35rem"}, onClick: function() { sessionStorage.removeItem('polr_session'); setPage('home'); }}, "Log Out"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("button", {
+  }, session ? "".concat((_session$name = session.name) === null || _session$name === void 0 ? void 0 : _session$name.split(' ')[0], " \xB7 Dashboard") : 'Member Login')), session && /*#__PURE__*/React.createElement("button", {className: "nav-cta", style: {background:"transparent", color:"rgba(252,129,129,0.85)", border:"1px solid rgba(252,129,129,0.25)", marginLeft:"0.35rem"}, onClick: function() { sessionStorage.removeItem('polr_session'); setPage('home'); }}, "Log Out"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("button", {
     className: "nav-give-btn",
     onClick: function () {
       return setPage('donate');
