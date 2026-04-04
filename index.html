@@ -54,7 +54,20 @@
         .subtitle {
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .scripture {
+            color: var(--gold2);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-style: italic;
             margin-bottom: 30px;
+            line-height: 1.4;
+            padding: 15px;
+            background: rgba(200, 145, 58, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid var(--gold);
         }
         
         .level-selector {
@@ -234,9 +247,10 @@
     <div class="login-container">
         <div class="logo">POLR</div>
         <div class="subtitle">Recovery Ministry Platform</div>
+        <div class="scripture">"Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins" - Acts 2:38</div>
         
         <div class="level-selector" id="levelSelector">
-            <button class="level-btn" data-level="0" data-username="admin" data-password="L0Admin123!">
+            <button class="level-btn" data-level="0" data-username="POLRTTD" data-password="L0Admin123!">
                 L0 Admin
             </button>
             <button class="level-btn" data-level="1" data-username="level1" data-password="TestUser1!">
@@ -273,7 +287,7 @@
         </div>
         
         <div class="quick-login" id="quickLogin" style="display: none;">
-            <button class="quick-btn" onclick="quickLogin('admin', 'L0Admin123!')">
+            <button class="quick-btn" onclick="quickLogin('POLRTTD', 'L0Admin123!')">
                 🔧 Quick Login as L0 Admin
             </button>
             <button class="quick-btn" onclick="quickLogin('level1', 'TestUser1!')">
