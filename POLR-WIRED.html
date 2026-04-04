@@ -1,4 +1,4 @@
-﻿<!-- POLR Network v2.0 build:20260404144653 -->
+<!-- POLR Network v2.0 build:20260404144653 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1850,9 +1850,6 @@ function renderAudit() {
 
 
 function setSection(id) {
-  MOBILE_MENU_OPEN = false;
-  const d = document.getElementById('mobile-drawer');
-  if (d) d.classList.remove('open');
   ACTIVE_SECTION = id;
   const el = document.getElementById('section-content');
   if (el) { el.innerHTML = renderSection(id); el.scrollTop = 0; }
@@ -1868,13 +1865,7 @@ function setSection(id) {
 
 // ═══════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════
-render();
-setTimeout(() => {
-  if (SESSION && LOADERS[ACTIVE_SECTION]) LOADERS[ACTIVE_SECTION]();
-}, 300);
-</script>
-</body></html>const LOADERS = {
+const LOADERS = {
   'overview': loadDashboardStats,
   'lms': loadLMSSteps,
   'members': loadMembers,
@@ -1887,4 +1878,10 @@ setTimeout(() => {
   'audit': loadAudit,
 };
 
-
+// ═══════════════════════════════════════════════════
+render();
+setTimeout(() => {
+  if (SESSION && LOADERS[ACTIVE_SECTION]) LOADERS[ACTIVE_SECTION]();
+}, 300);
+</script>
+</body></html>
