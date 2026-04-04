@@ -1,4 +1,4 @@
-﻿<!-- POLR Network v2.0 build:20260404144653 -->
+<!-- POLR Network v2.0 build:20260404144653 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -333,8 +333,8 @@ async function apiFetch(path, opts={}) {
 // Render
 function render() {
   const saved = getSavedSession();
-  if (saved && (saved.level !== undefined || saved.username) {
-    SESSION = Object.assign({level:0,firstName:'User',lastName:'',tenantId:'polr',campusId:null}, saved);
+  if (saved && (saved.level !== undefined)) {
+    SESSION = saved;
     renderApp();
   } else {
     renderLogin();
@@ -425,9 +425,10 @@ function handleGuestAccess() {
 // MAIN APP
 // ═══════════════════════════════════════════════════
 function renderApp() {
+  try {
   if (!SESSION) { renderLogin(); return; }
   const lvl = SESSION.level;
-  const lm = LEVEL_META[lvl] || LEVEL_META[0] || {label:'Admin',color:'#d4a853',bg:'rgba(212,168,83,0.12)'};
+  const lm = LEVEL_META[lvl] || LEVEL_META[6];
 
   const navSections = getNavSections(lvl);
 
@@ -483,6 +484,10 @@ function renderApp() {
   if (INSTALL_PROMPT) {
     const btn = document.getElementById('install-btn');
     if (btn) btn.style.display = 'block';
+  }
+  } catch(e) {
+    console.error('renderApp error:', e);
+    document.getElementById('app').innerHTML = '<div style="color:white;padding:2rem;font-family:sans-serif;"><h2>POLR Network</h2><p>Loading error: ' + e.message + '</p><button onclick="localStorage.clear();location.reload();" style="padding:8px 16px;margin-top:1rem;cursor:pointer;">Reset & Retry</button></div>';
   }
 }
 
@@ -675,7 +680,7 @@ function renderSection(id) {
 // OVERVIEW DASHBOARD
 // ═══════════════════════════════════════════════════
 function renderOverview(lvl) {
-  const lm = LEVEL_META[lvl] || LEVEL_META[0] || {label:'Admin',color:'#d4a853',bg:'rgba(212,168,83,0.12)'};
+  const lm = LEVEL_META[lvl] || LEVEL_META[6];
   const name = SESSION?.firstName || SESSION?.username || 'Friend';
   const hour = new Date().getHours();
   const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
