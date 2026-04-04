@@ -1997,8 +1997,7 @@ function PlatformPage({
         .then(function(user) {
           var lvl = user.level !== undefined ? user.level : 5;
           var sess = Object.assign({}, user, { username: username, level: lvl, ts: Date.now() });
-          setSession(sess); setLegalAccept(username); onLogin(sess);
-          setPage('dashboard');
+          setSession(sess); setLegalAccept(username); onLogin(sess); setTimeout(function(){ setPage('dashboard'); }, 100);
         })
         .catch(function(e){ setError("Invalid username or password. Please try again."); });
     } else {
@@ -35198,6 +35197,7 @@ applySupp();
 
 </body>
 </html>
+
 
 
 
