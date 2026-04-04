@@ -35204,5 +35204,20 @@ applySupp();
 })();
 </script>
 
-</body>
+<script id="polr-mobile-fix">
+function applyMobileFix() {
+  if (window.innerWidth <= 768) {
+    var sidebar = document.querySelector('.dash-sidebar');
+    if (sidebar) { sidebar.style.display = 'none'; }
+    var main = document.querySelector('.dash-main');
+    if (main) { main.style.marginLeft = '0'; main.style.width = '100%'; }
+    var layout = document.querySelector('.dash-layout');
+    if (layout) { layout.style.paddingLeft = '0'; }
+  }
+}
+setInterval(applyMobileFix, 500);
+window.addEventListener('resize', applyMobileFix);
+applyMobileFix();
+</script></body>
 </html>
+
