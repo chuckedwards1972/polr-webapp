@@ -334,7 +334,7 @@ async function apiFetch(path, opts={}) {
 function render() {
   const saved = getSavedSession();
   if (saved && (saved.level !== undefined || saved.username) {
-    SESSION = saved;
+    SESSION = Object.assign({level:0,firstName:'User',lastName:'',tenantId:'polr',campusId:null}, saved);
     renderApp();
   } else {
     renderLogin();
