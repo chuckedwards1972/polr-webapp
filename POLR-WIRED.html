@@ -1847,18 +1847,7 @@ function renderAudit() {
 // ═══════════════════════════════════════════════════
 // ASYNC LOADERS — called after section renders
 // ═══════════════════════════════════════════════════
-const LOADERS = {
-  'overview': loadDashboardStats,
-  'lms': loadLMSSteps,
-  'members': loadMembers,
-  'housing': loadHousing,
-  'workforce': loadEmployers,
-  'financial': loadFinancial,
-  'donations': loadDonations,
-  'users': loadUsers,
-  'campuses': loadCampuses,
-  'audit': loadAudit,
-};
+
 
 function setSection(id) {
   ACTIVE_SECTION = id;
@@ -1882,4 +1871,17 @@ setTimeout(() => {
   if (SESSION && LOADERS[ACTIVE_SECTION]) LOADERS[ACTIVE_SECTION]();
 }, 300);
 </script>
-</body></html>
+</body></html>const LOADERS = {
+  'overview': loadDashboardStats,
+  'lms': loadLMSSteps,
+  'members': loadMembers,
+  'housing': loadHousing,
+  'workforce': loadEmployers,
+  'financial': loadFinancial,
+  'donations': loadDonations,
+  'users': loadUsers,
+  'campuses': loadCampuses,
+  'audit': loadAudit,
+};
+
+
