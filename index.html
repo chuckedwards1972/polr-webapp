@@ -1,419 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>POLR WebApp - Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy:#0c1a2e; --navy2:#1a2f4a; --navy3:#243550;
-            --gold:#c8913a; --gold2:#e8aa55; --gold3:#f5d48a;
-            --cream:#faf7f2; --cream2:#f0ebe1;
-            --white:#fff; --text:#1a1a2a; --muted:#5a6070; --light:#9aa0ae; --border:#e2ddd6;
-            --bg:#060b14; --bg2:#0a1120; --bg3:#0f1929; --bg4:#142035;
-            --l0:#d4a853; --l1:#8b7cf8; --l2:#3b9ef5; --l3:#e8704a; --l4:#2ec4a0; --l5:#5bc46e; --l6:#8899b0;
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'DM Sans', sans-serif; 
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy3) 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: var(--white);
-        }
-        
-        .login-container {
-            background: rgba(26, 47, 74, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(200, 145, 58, 0.2);
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        
-        .logo {
-            font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gold2);
-            margin-bottom: 10px;
-            letter-spacing: 0.1em;
-        }
-        
-        .subtitle {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-        
-        .scripture {
-            color: var(--gold2);
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-style: italic;
-            margin-bottom: 30px;
-            line-height: 1.4;
-            padding: 15px;
-            background: rgba(200, 145, 58, 0.1);
-            border-radius: 10px;
-            border-left: 3px solid var(--gold);
-        }
-        
-        .level-selector {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        
-        .level-btn {
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            color: var(--white);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .level-btn:hover {
-            background: rgba(200, 145, 58, 0.2);
-            border-color: var(--gold);
-            transform: translateY(-2px);
-        }
-        
-        .level-btn.selected {
-            background: linear-gradient(135deg, var(--gold), #8b5e2a);
-            border-color: var(--gold2);
-            color: var(--white);
-        }
-        
-        .login-form {
-            display: none;
-            text-align: left;
-        }
-        
-        .login-form.active {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            color: var(--white);
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--gold);
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--gold), #8b5e2a);
-            border: none;
-            border-radius: 10px;
-            color: var(--white);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(200, 145, 58, 0.3);
-        }
-        
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .error {
-            color: #ff6b6b;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        .error.show {
-            display: block;
-        }
-        
-        .quick-login {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .quick-btn {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            color: var(--white);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.8rem;
-        }
-        
-        .quick-btn:hover {
-            background: rgba(200, 145, 58, 0.2);
-            border-color: var(--gold);
-        }
-        
-        .mobile-notice {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(200, 145, 58, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 1000;
-        }
-        
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
-            }
-            
-            .level-selector {
-                grid-template-columns: 1fr;
-            }
-            
-            .mobile-notice {
-                display: block;
-            }
-        }
-        
-        @media (min-width: 481px) {
-            .mobile-notice {
-                display: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f1f2e">
+<title>POLR Network — Path of Life Recovery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0f1f2e;
+    --navy-mid: #1a3c5e;
+    --gold: #c8a951;
+    --gold-light: #e2c97e;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --text-muted: rgba(255,255,255,0.55);
+    --error: #e05252;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Background cross pattern */
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,169,81,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,81,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Radial glow */
+  body::after {
+    content: '';
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(26,60,94,0.6) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    margin: 1rem;
+    padding: 2.5rem 2rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,169,81,0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-wrap {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .emblem {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    border: 2px solid rgba(200,169,81,0.4);
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
+  }
+
+  .logo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .logo-title span {
+    color: var(--gold);
+  }
+
+  .logo-sub {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,81,0.3), transparent);
+    margin: 1.5rem 0;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus {
+    border-color: rgba(200,169,81,0.5);
+    background: rgba(255,255,255,0.09);
+  }
+
+  input::placeholder {
+    color: rgba(255,255,255,0.25);
+  }
+
+  /* Fix iOS zoom on input focus */
+  @media (max-width: 768px) {
+    input { font-size: 16px; }
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.95rem;
+    margin-top: 0.5rem;
+    background: var(--gold);
+    border: none;
+    border-radius: 8px;
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 48px;
+  }
+
+  .btn:hover { background: var(--gold-light); }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .error-msg {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(224,82,82,0.12);
+    border: 1px solid rgba(224,82,82,0.3);
+    border-radius: 8px;
+    color: #f08080;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .error-msg.show { display: block; }
+
+  .scripture {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(15,31,46,0.3);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
 </head>
 <body>
-    <div class="mobile-notice">📱 Mobile Optimized</div>
-    
-    <div class="login-container">
-        <div class="logo">POLR</div>
-        <div class="subtitle">Recovery Ministry Platform</div>
-        <div class="scripture">"Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins" - Acts 2:38</div>
-        
-        <div class="level-selector" id="levelSelector">
-            <button class="level-btn" data-level="0" data-username="POLRTTD" data-password="ACTS2:38">
-                L0 Admin
-            </button>
-            <button class="level-btn" data-level="1" data-username="level1" data-password="TestUser1!">
-                L1 User
-            </button>
-            <button class="level-btn" data-level="2" data-username="level2" data-password="TestUser2!">
-                L2 User
-            </button>
-            <button class="level-btn" data-level="3" data-username="level3" data-password="TestUser3!">
-                L3 User
-            </button>
-            <button class="level-btn" data-level="4" data-username="level4" data-password="TestUser4!">
-                L4 User
-            </button>
-            <button class="level-btn" data-level="5" data-username="level5" data-password="TestUser5!">
-                L5 User
-            </button>
-            <button class="level-btn" data-level="6" data-username="level6" data-password="TestUser6!">
-                L6 User
-            </button>
-        </div>
-        
-        <div class="login-form" id="loginForm">
-            <div class="form-group">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-input" id="username" placeholder="Enter username" readonly>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-input" id="password" placeholder="Enter password">
-            </div>
-            <button class="login-btn" id="loginBtn">Login to Dashboard</button>
-            <div class="error" id="error"></div>
-        </div>
-        
-        <div class="quick-login" id="quickLogin" style="display: none;">
-            <button class="quick-btn" onclick="quickLogin('POLRTTD', 'ACTS2:38')">
-                🔧 Quick Login as L0 Admin
-            </button>
-            <button class="quick-btn" onclick="quickLogin('level1', 'TestUser1!')">
-                👤 Quick Login as L1 User
-            </button>
-        </div>
-    </div>
 
-    <script>
-        const backendUrl = 'https://polr-backend-production.up.railway.app';
-        let selectedLevel = null;
-        
-        // Level selection
-        document.querySelectorAll('.level-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                selectedLevel = {
-                    level: this.dataset.level,
-                    username: this.dataset.username,
-                    password: this.dataset.password
-                };
-                
-                // Show login form
-                document.getElementById('loginForm').classList.add('active');
-                document.getElementById('username').value = selectedLevel.username;
-                document.getElementById('password').value = selectedLevel.password;
-                document.getElementById('quickLogin').style.display = 'block';
-                
-                // Auto-focus password
-                document.getElementById('password').focus();
-            });
-        });
-        
-        // Login function
-        document.getElementById('loginBtn').addEventListener('click', async function() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const error = document.getElementById('error');
-            
-            if (!username || !password) {
-                error.textContent = 'Please enter username and password';
-                error.classList.add('show');
-                return;
-            }
-            
-            this.disabled = true;
-            this.textContent = 'Logging in...';
-            error.classList.remove('show');
-            
-            try {
-                const response = await fetch(`${backendUrl}/api/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Store token and redirect to main app
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    
-                    // Redirect to main POLR app
-                    window.location.href = 'POLR-WIRED.html';
-                } else {
-                    error.textContent = data.message || 'Login failed';
-                    error.classList.add('show');
-                }
-            } catch (err) {
-                // Fallback for testing - allow direct login to main app
-                console.log('Backend not available, using fallback login');
-                
-                // Create mock user data
-                const mockUser = {
-                    username: username,
-                    level: username === 'POLRTTD' ? 0 : (username.startsWith('level') ? parseInt(username.replace('level', '')) : 1),
-                    email: username + '@polr.com'
-                };
-                
-                // Store mock data and redirect
-                localStorage.setItem('token', 'mock-token-' + Date.now());
-                localStorage.setItem('user', JSON.stringify(mockUser));
-                localStorage.setItem('fallback-mode', 'true');
-                
-                // Redirect to main POLR app
-                window.location.href = 'POLR-WIRED.html';
-            }
-            
-            this.disabled = false;
-            this.textContent = 'Login to Dashboard';
-        });
-        
-        // Quick login function
-        function quickLogin(username, password) {
-            document.getElementById('username').value = username;
-            document.getElementById('password').value = password;
-            document.getElementById('loginBtn').click();
-        }
-        
-        // Allow Enter key to login
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('loginBtn').click();
-            }
-        });
-        
-        // Check for URL parameters for direct login
-        const urlParams = new URLSearchParams(window.location.search);
-        const userParam = urlParams.get('user');
-        const demoParam = urlParams.get('demo');
-        
-        if (userParam && demoParam === 'true') {
-            // Auto-select and login for demo
-            const demoBtn = document.querySelector(`[data-username="${userParam}"]`);
-            if (demoBtn) {
-                demoBtn.click();
-                setTimeout(() => {
-                    document.getElementById('loginBtn').click();
-                }, 500);
-            }
-        }
-    </script>
+<div class="card">
+  <div class="logo-wrap">
+    <div class="emblem">P</div>
+    <div class="logo-title"><span>POLR</span> Network</div>
+    <div class="logo-sub">Path of Life Recovery</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter username" autocomplete="username" autocapitalize="none" spellcheck="false">
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+  </div>
+
+  <button class="btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="scripture">
+    "I can do all things through Christ which strengtheneth me."<br>
+    — Philippians 4:13
+  </div>
+</div>
+
+<script>
+  const API = 'https://polr-backend-production.up.railway.app/api';
+
+  // Allow Enter key to submit
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  async function doLogin() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('loginBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    errorMsg.classList.remove('show');
+
+    if (!username || !password) {
+      showError('Please enter your username and password.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Signing in...';
+
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError(data.message || 'Invalid credentials. Please try again.');
+        return;
+      }
+
+      // Store auth data
+      localStorage.setItem('polr_token', data.token);
+      localStorage.setItem('polr_user', JSON.stringify(data.user));
+
+      // Route by level
+      const level = data.user.level;
+      if (level <= 2) {
+        window.location.href = 'POLR-WIRED.html';
+      } else if (level <= 4) {
+        window.location.href = 'POLR-WIRED.html';
+      } else {
+        window.location.href = 'POLR-WIRED.html';
+      }
+
+    } catch (err) {
+      showError('Cannot connect to server. Please try again.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('loginBtn').innerHTML = 'Sign In';
+  }
+
+  // Auto-focus username on desktop
+  if (window.innerWidth > 768) {
+    document.getElementById('username').focus();
+  }
+
+  // Check if already logged in
+  const token = localStorage.getItem('polr_token');
+  if (token) {
+    window.location.href = 'POLR-WIRED.html';
+  }
+</script>
 </body>
 </html>
