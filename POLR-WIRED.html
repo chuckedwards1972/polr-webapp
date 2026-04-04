@@ -551,7 +551,7 @@ body{font-family:var(--font-body);background:var(--cream);color:var(--text);}
 const API_BASE = (function() {
   var h = window.location.hostname;
   if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:3001/api';
-  return 'https://api.polrnetwork.com/api';
+  return 'https://polr-backend-production.up.railway.app/api';
 })();
 // Expose for PWA layer
 window.POLR_API_BASE = API_BASE;
@@ -652,7 +652,7 @@ window.POLR_CONTACT = {
 };
 
 
-const TOKEN_KEY = 'polr_jwt';
+const TOKEN_KEY = 'polr_token';
 
 function _getToken() {
   return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY);
@@ -878,7 +878,7 @@ window.addEventListener('polr:session-expired', function() {
 
 // â”€â”€ BACKEND AVAILABILITY CHECK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Falls back to localStorage gracefully if backend is unreachable
-var POLR_BACKEND_LIVE = false;
+var POLR_BACKEND_LIVE = true;
 window.POLR_AUDIT_MODE = (localStorage.getItem('polr_audit_mode') === '1');
 fetch(API_BASE.replace('/api','') + '/health')
   .then(function(r){ if(r.ok) POLR_BACKEND_LIVE = true; })
@@ -33269,7 +33269,7 @@ function handleProvisioning() {
   // Try backend provision endpoint
   var apiBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:3001/api'
-    : 'https://api.polrnetwork.com/api';
+    : 'https://polr-backend-production.up.railway.app/api';
 
   // Try token validation if token provided
   if (params.token) {
@@ -33445,7 +33445,7 @@ function syncToBackend() {
     if (!pending.length) { syncInProgress = false; return; }
 
     var apiBase = window.POLR_API_BASE ||
-      (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://api.polrnetwork.com/api');
+      (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://polr-backend-production.up.railway.app/api');
     var token = localStorage.getItem('polr_token') || null;
 
     Promise.all(pending.map(function(item) {
@@ -33477,7 +33477,7 @@ function syncToBackend() {
 function pullFromBackend() {
   if (!navigator.onLine) return;
   var apiBase = window.POLR_API_BASE ||
-    (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://api.polrnetwork.com/api');
+    (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://polr-backend-production.up.railway.app/api');
   var token = localStorage.getItem('polr_token') || null;
   if (!token) return;
 
@@ -35204,20 +35204,10 @@ applySupp();
 })();
 </script>
 
-<script id="polr-mobile-fix">
-function applyMobileFix() {
-  if (window.innerWidth <= 768) {
-    var sidebar = document.querySelector('.dash-sidebar');
-    if (sidebar) { sidebar.style.display = 'none'; }
-    var main = document.querySelector('.dash-main');
-    if (main) { main.style.marginLeft = '0'; main.style.width = '100%'; }
-    var layout = document.querySelector('.dash-layout');
-    if (layout) { layout.style.paddingLeft = '0'; }
-  }
-}
-setInterval(applyMobileFix, 500);
-window.addEventListener('resize', applyMobileFix);
-applyMobileFix();
-</script></body>
+</body>
 </html>
+
+
+
+
 
