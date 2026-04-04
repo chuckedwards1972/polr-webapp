@@ -1850,6 +1850,9 @@ function renderAudit() {
 
 
 function setSection(id) {
+  MOBILE_MENU_OPEN = false;
+  const d = document.getElementById('mobile-drawer');
+  if (d) d.classList.remove('open');
   ACTIVE_SECTION = id;
   const el = document.getElementById('section-content');
   if (el) { el.innerHTML = renderSection(id); el.scrollTop = 0; }
