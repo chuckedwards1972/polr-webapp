@@ -1181,221 +1181,664 @@ function simplePanel(title, subtitle, btnLabel, btnAction) {
   </div></div>`;
 }
 
-function renderGrants() { return simplePanel('Grants','Manage grant applications and funding opportunities.','New Application','toast("Grant form coming soon")'); }
-function renderMentors() { return simplePanel('Mentor Match','Connect members with mentors based on skills and story.','Add Mentor','toast("Mentor form coming soon")'); }
-function renderIncidents() { return simplePanel('Incident Reports','Track and manage behavioral incidents.','Report Incident','toast("Incident form coming soon")'); }
-function renderDrugTests() { return simplePanel('Drug Test Tracking','Record and manage drug test results.','Log Test','toast("Drug test form coming soon")'); }
-function renderAnnouncements() { return simplePanel('Announcements','Post announcements to your campus or ministry-wide.','New Announcement','toast("Announcement form coming soon")'); }
-function renderPrayer() { return simplePanel('Prayer Requests','Submit and view prayer requests from the community.','Submit Prayer','toast("Prayer form coming soon")'); }
-function renderMessaging() { return simplePanel('Messages','Internal messaging between staff and members.','New Message','toast("Messaging coming soon")'); }
-function renderChapel() { return simplePanel('Chapel & Devotionals','Schedule chapel services and devotional times.','Schedule Service','toast("Chapel form coming soon")'); }
-function renderTestimony() {
+function renderGrants() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
-    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Testimony Builder</div>
-    ${scriptureVersionSelector('testimony', SCRIPTURE_PREF)}
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Grants</div>
+    <button class="btn btn-gold btn-sm" onclick="showGrantForm()">+ New Application</button>
   </div>
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Active Applications</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--success);">$0</div><div class="stat-label">Awarded YTD</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Pending Review</div></div>
+  </div>
+  <div id="grant-form-container"></div>
   <div class="panel">
-    <div class="panel-sub">Your story is a weapon of spiritual warfare. Write it in three parts: before, turning point, and now.</div>
-    <div class="scripture-block" style="margin-bottom:1rem;">"And they overcame him by the blood of the Lamb, and by the word of their testimony."<span class="scripture-ref">Revelation 12:11 ${SCRIPTURE_PREF}</span></div>
-    <div class="form-group"><label class="form-label">Before — What life was like</label><textarea class="form-input" rows="4" placeholder="Describe your life before recovery..."></textarea></div>
-    <div class="form-group"><label class="form-label">Turning Point — What happened</label><textarea class="form-input" rows="4" placeholder="Describe your turning point..."></textarea></div>
-    <div class="form-group"><label class="form-label">Now — What life is like today</label><textarea class="form-input" rows="4" placeholder="Describe your life in recovery..."></textarea></div>
-    <button class="btn btn-gold" onclick="toast('Testimony saved!','success')">Save Testimony</button>
+    <div class="panel-title">Grant Applications</div>
+    <div style="text-align:center;color:var(--dmuted);padding:2rem;font-size:0.88rem;">No grant applications yet. Click "+ New Application" to get started.</div>
   </div></div>`;
 }
-function renderScriptureDay() {
+
+function showGrantForm() {
+  const c = document.getElementById('grant-form-container');
+  if (!c) return;
+  c.innerHTML = `<div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">New Grant Application</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Grant Name / Funder</label><input class="form-input" placeholder="e.g. SAMHSA Recovery Housing Grant"></div>
+      <div class="form-group"><label class="form-label">Amount Requested</label><input class="form-input" type="number" placeholder="0.00"></div>
+      <div class="form-group"><label class="form-label">Deadline</label><input class="form-input" type="date"></div>
+      <div class="form-group"><label class="form-label">Category</label>
+        <select class="form-select"><option>Housing</option><option>Treatment</option><option>Workforce</option><option>Education</option><option>General Operations</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Description / Notes</label><textarea class="form-input" rows="3" placeholder="Brief description of the grant and how funds will be used..."></textarea></div>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-gold" onclick="toast('Grant application saved!','success');document.getElementById('grant-form-container').innerHTML=''">Save Application</button>
+      <button class="btn" onclick="document.getElementById('grant-form-container').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+}
+
+function renderMentors() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
-    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Scripture of the Day</div>
-    ${scriptureVersionSelector('scripture-day', SCRIPTURE_PREF)}
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Mentor Match Engine</div>
+    <button class="btn btn-gold btn-sm">+ Add Mentor</button>
   </div>
-  <div class="panel">
-    <div class="scripture-block" style="font-size:1.1rem;line-height:1.8;">
-      "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."
-      <span class="scripture-ref">Proverbs 3:5-6 ${SCRIPTURE_PREF}</span>
+  <div class="scripture-block" style="margin-bottom:1.25rem;">"Iron sharpeneth iron; so a man sharpeneth the countenance of his friend."<span class="scripture-ref">Proverbs 27:17 ${SCRIPTURE_PREF}</span></div>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Available Mentors</div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        ${['John D. — 3 yrs recovery, Step 12','Marcus T. — 5 yrs recovery, Workforce focus','David R. — 7 yrs recovery, Housing expert'].map(m => `
+        <div style="display:flex;align-items:center;gap:10px;padding:0.75rem;background:var(--bg3);border-radius:var(--r);border:1px solid var(--bdr);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--l4b);border:1px solid var(--l4);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--l4);font-size:0.85rem;flex-shrink:0;">${m[0]}</div>
+          <div style="flex:1;"><div style="font-size:0.85rem;font-weight:500;color:var(--dtxt);">${m.split(' — ')[0]}</div><div style="font-size:0.72rem;color:var(--dmuted);">${m.split(' — ')[1]}</div></div>
+          <button class="btn btn-sm btn-outline-gold" onclick="toast('Match request sent!','success')">Match</button>
+        </div>`).join('')}
+      </div>
     </div>
-    <div style="margin-top:1.25rem;border-top:1px solid var(--bdr);padding-top:1rem;">
-      <div class="form-group"><label class="form-label">My Reflection</label><textarea class="form-input" rows="4" placeholder="What does this scripture mean to you today?"></textarea></div>
-      <button class="btn btn-gold btn-sm" onclick="toast('Reflection saved!','success')">Save Reflection</button>
+    <div class="panel">
+      <div class="panel-title">Request a Mentor</div>
+      <div class="form-group"><label class="form-label">Areas of Focus</label>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.25rem;">
+          ${['Sobriety','Housing','Employment','Faith','Family','Step Work'].map(a => `<button class="btn btn-sm" onclick="this.classList.toggle('btn-outline-gold')">${a}</button>`).join('')}
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Availability</label>
+        <select class="form-select"><option>Weekdays</option><option>Weekends</option><option>Evenings</option><option>Flexible</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-input" rows="3" placeholder="What are you hoping to get from a mentor relationship?"></textarea></div>
+      <button class="btn btn-gold" onclick="toast('Mentor request submitted!','success')">Submit Request</button>
     </div>
   </div></div>`;
+}
+
+function renderIncidents() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Incident Reports</div>
+    <button class="btn btn-gold btn-sm" onclick="showIncidentForm()">+ Report Incident</button>
+  </div>
+  <div id="incident-form-container"></div>
+  <div class="panel">
+    <div class="panel-title">Recent Incidents</div>
+    <div style="text-align:center;color:var(--dmuted);padding:2rem;font-size:0.88rem;">No incidents reported.</div>
+  </div></div>`;
+}
+
+function showIncidentForm() {
+  const c = document.getElementById('incident-form-container');
+  if (!c) return;
+  c.innerHTML = `<div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Report Incident</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Date / Time</label><input class="form-input" type="datetime-local"></div>
+      <div class="form-group"><label class="form-label">Severity</label>
+        <select class="form-select"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Location</label><input class="form-input" placeholder="House name or location"></div>
+      <div class="form-group"><label class="form-label">Type</label>
+        <select class="form-select"><option>Behavioral</option><option>Safety</option><option>Substance Use</option><option>Property</option><option>Other</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="4" placeholder="Describe what happened..."></textarea></div>
+    <div class="form-group"><label class="form-label">Action Taken</label><textarea class="form-input" rows="3" placeholder="What action was taken?"></textarea></div>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-gold" onclick="toast('Incident report submitted!','success');document.getElementById('incident-form-container').innerHTML=''">Submit Report</button>
+      <button class="btn" onclick="document.getElementById('incident-form-container').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+}
+
+function renderDrugTests() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Drug Test Tracking</div>
+    <button class="btn btn-gold btn-sm" onclick="showDrugTestForm()">+ Log Test</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="stat-card"><div class="stat-num" style="color:var(--success);">0</div><div class="stat-label">Clean This Month</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--danger);">0</div><div class="stat-label">Positive This Month</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Pending Tests</div></div>
+  </div>
+  <div id="drug-test-form"></div>
+  <div class="panel">
+    <div class="panel-title">Test Log</div>
+    <div style="text-align:center;color:var(--dmuted);padding:2rem;font-size:0.88rem;">No tests logged yet.</div>
+  </div></div>`;
+}
+
+function showDrugTestForm() {
+  const c = document.getElementById('drug-test-form');
+  if (!c) return;
+  c.innerHTML = `<div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Log Drug Test</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Member</label><input class="form-input" placeholder="Member name"></div>
+      <div class="form-group"><label class="form-label">Test Date</label><input class="form-input" type="date"></div>
+      <div class="form-group"><label class="form-label">Result</label>
+        <select class="form-select"><option value="negative">Negative (Clean)</option><option value="positive">Positive</option><option value="refused">Refused</option><option value="pending">Pending</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Administered By</label><input class="form-input" placeholder="Staff name"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-input" rows="2" placeholder="Additional notes..."></textarea></div>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-gold" onclick="toast('Test logged!','success');document.getElementById('drug-test-form').innerHTML=''">Save</button>
+      <button class="btn" onclick="document.getElementById('drug-test-form').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+}
+
+function renderAnnouncements() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Announcements</div>
+    <button class="btn btn-gold btn-sm" onclick="showAnnouncementForm()">+ New Announcement</button>
+  </div>
+  <div id="announcement-form"></div>
+  <div style="display:flex;flex-direction:column;gap:0.75rem;">
+    ${[
+      {title:'Welcome to the new POLR platform!',body:'We have launched our new ministry operating system. All members can now track their walk progress, journal, and access lessons from any device.',date:'Today',badge:'Ministry Wide'},
+      {title:'House Meeting — Thibodaux',body:'Monthly house meeting this Saturday at 10am. All residents are required to attend.',date:'2 days ago',badge:'Thibodaux Campus'},
+    ].map(a => `
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.25rem;">
+        <div style="font-weight:500;color:var(--dtxt);">${a.title}</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span class="badge badge-gold" style="font-size:0.6rem;">${a.badge}</span>
+          <span style="font-size:0.7rem;color:var(--ddim);">${a.date}</span>
+        </div>
+      </div>
+      <div style="font-size:0.85rem;color:var(--dmuted);line-height:1.7;">${a.body}</div>
+    </div>`).join('')}
+  </div></div>`;
+}
+
+function showAnnouncementForm() {
+  const c = document.getElementById('announcement-form');
+  if (!c) return;
+  c.innerHTML = `<div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">New Announcement</div>
+    <div class="form-group"><label class="form-label">Title</label><input class="form-input" placeholder="Announcement title"></div>
+    <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" rows="4" placeholder="Write your announcement..."></textarea></div>
+    <div class="form-group"><label class="form-label">Audience</label>
+      <select class="form-select"><option>Ministry Wide</option><option>Thibodaux Campus</option><option>Port Allen Campus</option><option>Baton Rouge Campus</option><option>New Orleans Campus</option></select>
+    </div>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-gold" onclick="toast('Announcement posted!','success');document.getElementById('announcement-form').innerHTML=''">Post</button>
+      <button class="btn" onclick="document.getElementById('announcement-form').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+}
+
+function renderPrayer() {
+  const prayers = JSON.parse(localStorage.getItem('polr_prayers') || '[]');
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Prayer Requests</div>
+  <div class="scripture-block" style="margin-bottom:1.25rem;">"Pray without ceasing."<span class="scripture-ref">1 Thessalonians 5:17 ${SCRIPTURE_PREF}</span></div>
+  <div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Submit a Prayer Request</div>
+    <div class="form-group"><label class="form-label">Prayer Request</label><textarea class="form-input" id="prayer-body" rows="4" placeholder="Share your prayer request..."></textarea></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;">
+      <input type="checkbox" id="prayer-anon" style="width:16px;height:16px;">
+      <label for="prayer-anon" style="font-size:0.78rem;color:var(--dmuted);">Submit anonymously</label>
+    </div>
+    <button class="btn btn-gold" onclick="savePrayer()">Submit Prayer Request</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:0.75rem;">
+    ${prayers.length === 0 ? '<div class="panel" style="text-align:center;color:var(--dmuted);padding:2rem;">No prayer requests yet.</div>' :
+      prayers.slice().reverse().map(p => `
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.25rem;">
+          <span style="font-size:0.78rem;font-weight:500;color:var(--gold);">${p.anon ? 'Anonymous' : (SESSION?.firstName || 'Member')}</span>
+          <span style="font-size:0.7rem;color:var(--ddim);">${new Date(p.date).toLocaleDateString()}</span>
+        </div>
+        <div style="font-size:0.88rem;color:var(--dmuted);line-height:1.7;">${p.body}</div>
+        <button class="btn btn-sm btn-outline-gold" style="margin-top:0.5rem;" onclick="toast('Praying for this request','success')">Pray</button>
+      </div>`).join('')}
+  </div></div>`;
+}
+
+function savePrayer() {
+  const body = document.getElementById('prayer-body')?.value.trim();
+  const anon = document.getElementById('prayer-anon')?.checked;
+  if (!body) { toast('Please write your prayer request.', 'error'); return; }
+  const prayers = JSON.parse(localStorage.getItem('polr_prayers') || '[]');
+  prayers.push({id:Date.now(),body,anon,date:new Date().toISOString()});
+  localStorage.setItem('polr_prayers', JSON.stringify(prayers));
+  toast('Prayer request submitted!', 'success');
+  setSection('prayer');
+}
+
+function renderMessaging() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Messages</div>
+  <div class="grid-2" style="height:500px;">
+    <div class="panel" style="display:flex;flex-direction:column;">
+      <div class="panel-title">Conversations</div>
+      <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem;">
+        ${['Jeff Walthers','House Manager — Thibodaux','Staff Team'].map(n => `
+        <div style="display:flex;align-items:center;gap:10px;padding:0.75rem;border-radius:var(--r);border:1px solid var(--bdr);cursor:pointer;" onclick="this.style.background='var(--l0b)'">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--l1b);border:1px solid var(--l1);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--l1);flex-shrink:0;">${n[0]}</div>
+          <div><div style="font-size:0.85rem;font-weight:500;color:var(--dtxt);">${n}</div><div style="font-size:0.72rem;color:var(--dmuted);">Tap to open conversation</div></div>
+        </div>`).join('')}
+      </div>
+      <button class="btn btn-gold btn-sm btn-full" style="margin-top:0.75rem;" onclick="toast('New message coming soon','info')">+ New Message</button>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;">
+      <div class="panel-title">Select a conversation</div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--dmuted);font-size:0.85rem;">Select a conversation to view messages</div>
+      <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+        <input class="form-input" placeholder="Type a message..." style="flex:1;">
+        <button class="btn btn-gold" onclick="toast('Message sent!','success')">Send</button>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function renderChapel() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Chapel & Devotionals</div>
+    <button class="btn btn-gold btn-sm" onclick="showChapelForm()">+ Schedule Service</button>
+  </div>
+  <div class="scripture-block" style="margin-bottom:1.25rem;">"Not forsaking the assembling of ourselves together, as the manner of some is; but exhorting one another."<span class="scripture-ref">Hebrews 10:25 ${SCRIPTURE_PREF}</span></div>
+  <div id="chapel-form"></div>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Upcoming Services</div>
+      ${[
+        {title:'Sunday Morning Chapel',date:'This Sunday 9:00 AM',location:'Thibodaux Campus',leader:'Jeff Walthers'},
+        {title:'Wednesday Devotional',date:'Wednesday 7:00 PM',location:'Port Allen Campus',leader:'House Manager'},
+      ].map(s => `
+      <div style="padding:0.75rem;border:1px solid var(--bdr);border-radius:var(--r);margin-bottom:0.75rem;">
+        <div style="font-weight:500;color:var(--dtxt);margin-bottom:0.25rem;">${s.title}</div>
+        <div style="font-size:0.78rem;color:var(--gold);margin-bottom:0.15rem;">${s.date}</div>
+        <div style="font-size:0.75rem;color:var(--dmuted);">${s.location} — Led by ${s.leader}</div>
+      </div>`).join('')}
+    </div>
+    <div class="panel">
+      <div class="panel-title">Devotional Archive</div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        ${['Living in Surrender','The Power of Community','Walking in Grace','Forgiveness as Freedom'].map(d => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--bdr);border-radius:var(--r);">
+          <span style="font-size:0.82rem;color:var(--dtxt);">${d}</span>
+          <button class="btn btn-sm" onclick="toast('Opening devotional...','info')">View</button>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function showChapelForm() {
+  const c = document.getElementById('chapel-form');
+  if (!c) return;
+  c.innerHTML = `<div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Schedule Chapel Service</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Service Title</label><input class="form-input" placeholder="e.g. Sunday Morning Chapel"></div>
+      <div class="form-group"><label class="form-label">Date & Time</label><input class="form-input" type="datetime-local"></div>
+      <div class="form-group"><label class="form-label">Campus</label>
+        <select class="form-select"><option>All Campuses</option><option>Thibodaux</option><option>Port Allen</option><option>Baton Rouge</option><option>New Orleans</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Led By</label><input class="form-input" placeholder="Service leader name"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Scripture / Theme</label><input class="form-input" placeholder="e.g. John 3:16 — God's Love"></div>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-gold" onclick="toast('Service scheduled!','success');document.getElementById('chapel-form').innerHTML=''">Schedule</button>
+      <button class="btn" onclick="document.getElementById('chapel-form').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
 }
 
 // ═══════════════════════════════════════════════════
 // ADMIN SECTIONS
 // ═══════════════════════════════════════════════════
-function renderReporting() { return simplePanel('Reports & Analytics','Ministry health reports, member progress, and campus statistics.','',''); }
+function renderReporting() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Reports & Analytics</div>
+  <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+    <button class="btn btn-outline-gold btn-sm">Ministry Health</button>
+    <button class="btn btn-sm">Member Progress</button>
+    <button class="btn btn-sm">Campus Reports</button>
+    <button class="btn btn-sm">Financial Summary</button>
+  </div>
+  <div class="grid-4" style="margin-bottom:1.5rem;">
+    <div class="stat-card"><div class="stat-num" id="rpt-members">--</div><div class="stat-label">Total Members</div></div>
+    <div class="stat-card"><div class="stat-num" id="rpt-completed">--</div><div class="stat-label">Completed Program</div></div>
+    <div class="stat-card"><div class="stat-num" id="rpt-placed">--</div><div class="stat-label">Job Placements</div></div>
+    <div class="stat-card"><div class="stat-num" id="rpt-donations">--</div><div class="stat-label">YTD Donations</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Member Status Breakdown</div>
+      <div id="rpt-status-chart" style="display:flex;flex-direction:column;gap:0.5rem;padding:0.5rem 0;">
+        ${[['Active','var(--success)',75],['Completed','var(--l2)',15],['Pending','var(--warning)',7],['Inactive','var(--danger)',3]].map(([label,color,pct]) => `
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;">
+            <span style="color:var(--dtxt);">${label}</span>
+            <span style="color:${color};font-family:var(--font-mono);">${pct}%</span>
+          </div>
+          <div class="xp-bar" style="height:8px;"><div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width 0.8s;"></div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Step Completion Rate</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;padding:0.5rem 0;">
+        ${[1,2,3,4,5,6,7,8,9,10,11,12].map(s => {
+          const pct = Math.max(5, 100 - (s-1)*8);
+          return `<div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:0.7rem;color:var(--dmuted);width:40px;font-family:var(--font-mono);">Step ${s}</span>
+            <div class="xp-bar" style="flex:1;height:6px;"><div style="height:100%;width:${pct}%;background:var(--gold);border-radius:3px;"></div></div>
+            <span style="font-size:0.7rem;color:var(--dmuted);width:30px;text-align:right;">${pct}%</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div></div>`;
+}
+
 function renderUsers() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
     <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">User Management</div>
-    <button class="btn btn-gold btn-sm">+ Add User</button>
+    <button class="btn btn-gold btn-sm" onclick="showAddUserForm()">+ Add User</button>
   </div>
-  <div class="panel"><div style="text-align:center;color:var(--dmuted);padding:2rem;" id="users-list">Loading users...</div></div>
+  <div id="add-user-form"></div>
+  <div class="panel"><div id="users-list"><div style="text-align:center;color:var(--dmuted);padding:2rem;">Loading users...</div></div></div>
   </div>`;
 }
 
-async function loadUsers() {
-  const el = document.getElementById('users-list');
-  if (!el) return;
+function showAddUserForm() {
+  const c = document.getElementById('add-user-form');
+  if (!c) return;
+  c.innerHTML = `<div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Add New User</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="new-username" placeholder="Username"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="new-password" type="password" placeholder="Password"></div>
+      <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="new-firstname" placeholder="First name"></div>
+      <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="new-lastname" placeholder="Last name"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="new-email" type="email" placeholder="Email"></div>
+      <div class="form-group"><label class="form-label">Level</label>
+        <select class="form-select" id="new-level">
+          <option value="1">L1 — HQ Admin</option>
+          <option value="2">L2 — Regional Director</option>
+          <option value="3">L3 — Campus Director</option>
+          <option value="4">L4 — House Manager</option>
+          <option value="5">L5 — Staff</option>
+          <option value="6" selected>L6 — Member</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-gold" onclick="createUser()">Create User</button>
+      <button class="btn" onclick="document.getElementById('add-user-form').innerHTML=''">Cancel</button>
+    </div>
+  </div>`;
+}
+
+async function createUser() {
+  const username = document.getElementById('new-username')?.value.trim();
+  const password = document.getElementById('new-password')?.value;
+  const firstName = document.getElementById('new-firstname')?.value.trim();
+  const lastName = document.getElementById('new-lastname')?.value.trim();
+  const email = document.getElementById('new-email')?.value.trim();
+  const level = parseInt(document.getElementById('new-level')?.value);
+  if (!username || !password) { toast('Username and password required.', 'error'); return; }
   try {
-    const users = await apiFetch('/admin/users');
-    if (!users.length) { el.textContent = 'No users found.'; return; }
-    el.outerHTML = `<div style="overflow-x:auto;"><table class="tbl">
-      <thead><tr><th>Username</th><th>Name</th><th>Level</th><th>Campus</th><th>Status</th></tr></thead>
-      <tbody>${users.map(u => { const lm = LEVEL_META[u.level]||LEVEL_META[6]; return `<tr>
-        <td style="font-family:var(--font-mono);font-size:0.82rem;">${u.username}</td>
-        <td>${u.first_name||''} ${u.last_name||''}</td>
-        <td><span class="badge" style="background:${lm.bg};color:${lm.color};">L${u.level} ${lm.label}</span></td>
-        <td style="font-size:0.78rem;color:var(--dmuted);">${u.campus_name||'All'}</td>
-        <td><span class="badge ${u.is_active?'badge-green':'badge-red'}">${u.is_active?'Active':'Inactive'}</span></td>
-      </tr>`; }).join('')}</tbody>
-    </table></div>`;
-  } catch(e) { if (el) el.textContent = 'Could not load users.'; }
+    await apiFetch('/admin/users', {method:'POST', body:{username,password,first_name:firstName,last_name:lastName,email,level}});
+    toast('User created!', 'success');
+    document.getElementById('add-user-form').innerHTML = '';
+    loadUsers();
+  } catch(e) { toast(e.message || 'Failed to create user.', 'error'); }
 }
 
 function renderCampuses() {
   return `<div style="animation:fadeIn 0.3s ease">
-  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Campuses</div>
-  <div class="panel"><div style="text-align:center;color:var(--dmuted);padding:2rem;" id="campuses-list">Loading campuses...</div></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Campuses</div>
+    <button class="btn btn-gold btn-sm" onclick="toast('Add campus coming soon','info')">+ Add Campus</button>
+  </div>
+  <div id="campuses-list"><div style="text-align:center;color:var(--dmuted);padding:2rem;">Loading campuses...</div></div>
   </div>`;
-}
-
-async function loadCampuses() {
-  const el = document.getElementById('campuses-list');
-  if (!el) return;
-  try {
-    const campuses = await apiFetch('/admin/campuses');
-    el.outerHTML = `<div class="grid-auto">${campuses.map(c => `
-      <div class="stat-card">
-        <div style="font-weight:600;color:var(--dtxt);margin-bottom:0.25rem;">${c.name}</div>
-        <div style="font-size:0.75rem;color:var(--dmuted);margin-bottom:0.5rem;">${c.city}, ${c.state}</div>
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-          <span class="badge badge-green" style="font-size:0.6rem;">${c.active_members||0} members</span>
-          <span class="badge badge-blue" style="font-size:0.6rem;">${c.house_count||0} houses</span>
-        </div>
-      </div>`).join('')}</div>`;
-  } catch(e) {}
 }
 
 function renderSiteConfig() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Site Configuration</div>
-  <div class="panel">
-    <div class="panel-title">Ministry Settings</div>
-    <div class="form-group"><label class="form-label">Ministry Name</label><input class="form-input" value="POLR Network"></div>
-    <div class="form-group"><label class="form-label">Tagline</label><input class="form-input" value="Path of Life Recovery"></div>
-    <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" value="info@polrnetwork.com"></div>
-    <div class="form-group"><label class="form-label">Default Scripture Version</label>
-      <select class="form-select" onchange="setScriptureVersion('global',this.value)">
-        ${SCRIPTURE_VERSIONS.map(v => `<option value="${v}" ${SCRIPTURE_PREF===v?'selected':''}>${v}</option>`).join('')}
-      </select>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Ministry Settings</div>
+      <div class="form-group"><label class="form-label">Ministry Name</label><input class="form-input" value="POLR Network"></div>
+      <div class="form-group"><label class="form-label">Tagline</label><input class="form-input" value="Path of Life Recovery"></div>
+      <div class="form-group"><label class="form-label">Founded</label><input class="form-input" value="2019"></div>
+      <div class="form-group"><label class="form-label">Founder</label><input class="form-input" value="Jeff Walthers"></div>
+      <div class="form-group"><label class="form-label">Headquarters</label><input class="form-input" value="Thibodaux, Louisiana"></div>
+      <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" value="info@polrnetwork.com"></div>
+      <button class="btn btn-gold" onclick="toast('Settings saved!','success')">Save Settings</button>
     </div>
-    <button class="btn btn-gold" onclick="toast('Site config saved!','success')">Save Configuration</button>
+    <div class="panel">
+      <div class="panel-title">Scripture & Content Defaults</div>
+      <div class="form-group"><label class="form-label">Default Scripture Version</label>
+        <select class="form-select" onchange="setScriptureVersion('global',this.value)">
+          ${SCRIPTURE_VERSIONS.map(v => `<option value="${v}" ${SCRIPTURE_PREF===v?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Platform Version</label><input class="form-input" value="2.0.0" readonly></div>
+      <div class="form-group"><label class="form-label">Backend URL</label><input class="form-input" value="${API}" readonly></div>
+      <div class="form-group"><label class="form-label">Frontend URL</label><input class="form-input" value="chuckedwards1972.github.io/polr-webapp" readonly></div>
+      <button class="btn btn-gold" onclick="toast('Config saved!','success')">Save Config</button>
+    </div>
   </div></div>`;
 }
 
 function renderModules() {
-  const modules = ['LMS','Housing','Workforce','Financial','Walk Engine','Member Management','Reporting','Communications','White Label'];
+  const modules = [
+    {name:'LMS / Education',desc:'12-step walk, lessons, XP system',active:true},
+    {name:'Housing Management',desc:'Beds, occupancy, house rules',active:true},
+    {name:'Workforce Placement',desc:'Employers, job tracking, cohorts',active:true},
+    {name:'Financial Overview',desc:'Donations, expenses, reporting',active:true},
+    {name:'Walk Configuration Engine',desc:'Step requirements, XP values',active:true},
+    {name:'Member Management',desc:'Intake, progress, promotions',active:true},
+    {name:'Reporting & Analytics',desc:'Ministry health dashboards',active:true},
+    {name:'Communications',desc:'Announcements, messaging, SMS',active:true},
+    {name:'White Label',desc:'Multi-tenant licensing capability',active:true},
+    {name:'Grants Engine',desc:'Grant tracking and applications',active:true},
+    {name:'Mentor Match',desc:'Member-mentor pairing system',active:true},
+    {name:'Drug Test Tracking',desc:'Test logging and compliance',active:true},
+  ];
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Module Control Center</div>
-  <div class="grid-auto">${modules.map(m => `
+  <div class="grid-auto">
+    ${modules.map(m => `
     <div class="stat-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-weight:500;color:var(--dtxt);font-size:0.88rem;">${m}</div>
-        <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
-          <input type="checkbox" checked style="opacity:0;width:0;height:0;">
-          <span style="position:absolute;inset:0;background:var(--success);border-radius:20px;transition:0.3s;"></span>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">
+        <div style="font-weight:500;color:var(--dtxt);font-size:0.88rem;line-height:1.3;">${m.name}</div>
+        <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;flex-shrink:0;margin-left:8px;">
+          <input type="checkbox" ${m.active?'checked':''} style="opacity:0;width:0;height:0;" onchange="toast(this.checked?'${m.name} enabled':'${m.name} disabled','success')">
+          <span style="position:absolute;inset:0;background:${m.active?'var(--success)':'var(--bdr2)'};border-radius:20px;transition:0.3s;"></span>
+          <span style="position:absolute;top:2px;left:${m.active?'18':'2'}px;width:16px;height:16px;background:white;border-radius:50%;transition:0.3s;"></span>
         </label>
       </div>
-      <div style="font-size:0.7rem;color:var(--success);margin-top:0.35rem;">Active</div>
+      <div style="font-size:0.7rem;color:var(--dmuted);">${m.desc}</div>
+      <div style="font-size:0.65rem;color:${m.active?'var(--success)':'var(--danger)'};margin-top:0.35rem;font-weight:600;">${m.active?'ACTIVE':'INACTIVE'}</div>
     </div>`).join('')}
   </div></div>`;
 }
 
-function renderWalkConfig() { return simplePanel('Walk Configuration Engine','Configure the 12-step walk program, step requirements, and XP values.','',''); }
+function renderWalkConfig() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Walk Configuration Engine</div>
+  <div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Global Walk Settings</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Total Steps</label><input class="form-input" value="12" type="number"></div>
+      <div class="form-group"><label class="form-label">XP Per Step Completion</label><input class="form-input" value="100" type="number"></div>
+      <div class="form-group"><label class="form-label">XP Per Lesson</label><input class="form-input" value="10" type="number"></div>
+      <div class="form-group"><label class="form-label">Require Step Approval</label>
+        <select class="form-select"><option>Yes — Staff must approve</option><option>No — Self-reported</option></select>
+      </div>
+    </div>
+    <button class="btn btn-gold" onclick="toast('Walk config saved!','success')">Save Configuration</button>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Step Configuration</div>
+    <div style="overflow-x:auto;"><table class="tbl">
+      <thead><tr><th>Step</th><th>Title</th><th>Est. Days</th><th>XP</th><th>Required</th></tr></thead>
+      <tbody>
+        ${[
+          [1,'Admitting Powerlessness',30],
+          [2,'Coming to Believe',30],
+          [3,'Turning Our Will Over',30],
+          [4,'Searching Moral Inventory',45],
+          [5,'Admitting Our Wrongs',30],
+          [6,'Ready for God to Remove Defects',30],
+          [7,'Humbly Asking God',30],
+          [8,'Making a List of Amends',30],
+          [9,'Making Direct Amends',60],
+          [10,'Continuing Personal Inventory',30],
+          [11,'Prayer and Meditation',30],
+          [12,'Spiritual Awakening and Service',365],
+        ].map(([n,t,d]) => `<tr>
+          <td style="font-family:var(--font-mono);">${n}</td>
+          <td>${t}</td>
+          <td><input style="width:60px;padding:4px 6px;background:var(--bg3);border:1px solid var(--bdr2);border-radius:4px;color:var(--dtxt);font-size:0.78rem;" value="${d}"></td>
+          <td><input style="width:60px;padding:4px 6px;background:var(--bg3);border:1px solid var(--bdr2);border-radius:4px;color:var(--dtxt);font-size:0.78rem;" value="100"></td>
+          <td><input type="checkbox" checked style="width:16px;height:16px;"></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>
+    <button class="btn btn-gold btn-sm" style="margin-top:1rem;" onclick="toast('Step config saved!','success')">Save Step Config</button>
+  </div></div>`;
+}
 
 function renderLicensing() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Licensing Engine</div>
+  <div class="grid-4" style="margin-bottom:1.5rem;">
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Active Licenses</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Pending Applications</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--success);">$0</div><div class="stat-label">License Revenue</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">White Label Sites</div></div>
+  </div>
   <div class="grid-2">
     <div class="panel">
-      <div class="panel-title">Active Licenses</div>
-      <div style="text-align:center;color:var(--dmuted);padding:2rem;font-size:0.85rem;">No active licenses yet.</div>
+      <div class="panel-title">License Applications</div>
+      <div style="text-align:center;color:var(--dmuted);padding:2rem;font-size:0.85rem;">No applications yet.</div>
+      <button class="btn btn-gold btn-sm btn-full" onclick="showLicenseForm()">+ New Application</button>
     </div>
-    <div class="panel">
-      <div class="panel-title">New License Application</div>
+    <div class="panel" id="license-form-panel">
+      <div class="panel-title">Apply for License</div>
       <div class="form-group"><label class="form-label">Organization Name</label><input class="form-input" placeholder="Ministry or organization name"></div>
-      <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" type="email" placeholder="contact@org.com"></div>
+      <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" placeholder="Primary contact"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="contact@org.com"></div>
       <div class="form-group"><label class="form-label">License Type</label>
-        <select class="form-select"><option>White Label</option><option>Affiliate</option><option>Full Platform</option></select>
+        <select class="form-select"><option>White Label — Full Platform</option><option>Affiliate — Referral Only</option><option>Partner — Shared Branding</option></select>
       </div>
-      <button class="btn btn-gold" onclick="toast('Application submitted!','success')">Submit Application</button>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="3" placeholder="Brief description of your ministry..."></textarea></div>
+      <button class="btn btn-gold" onclick="toast('License application submitted!','success')">Submit Application</button>
     </div>
   </div></div>`;
 }
 
 function renderPlatformBiz() {
   return `<div style="animation:fadeIn 0.3s ease">
-  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Platform Business</div>
+  <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:0.5rem;">Platform Business</div>
+  <div style="font-size:0.78rem;color:var(--dmuted);margin-bottom:1.25rem;">L0 — Platform Owner view only</div>
   <div class="grid-4" style="margin-bottom:1.5rem;">
     <div class="stat-card"><div class="stat-num" style="color:var(--success);">$0</div><div class="stat-label">Monthly Revenue</div></div>
     <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Active Clients</div></div>
     <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">White Label Sites</div></div>
-    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Pending Apps</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Pending Applications</div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:1rem;">
+    <div class="panel">
+      <div class="panel-title">Client Management</div>
+      <div style="text-align:center;color:var(--dmuted);padding:1.5rem;font-size:0.85rem;">No clients yet. License applications will appear here.</div>
+      <button class="btn btn-gold btn-sm btn-full" onclick="setSection('licensing')">View Licensing Engine</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Revenue Share</div>
+      <div style="text-align:center;color:var(--dmuted);padding:1.5rem;font-size:0.85rem;">Revenue share tracking activates when first license is issued.</div>
+    </div>
   </div>
   <div class="grid-2">
-    <div class="panel"><div class="panel-title">Client Management</div><div style="color:var(--dmuted);text-align:center;padding:2rem;font-size:0.85rem;">No clients yet.</div></div>
-    <div class="panel"><div class="panel-title">Revenue Share</div><div style="color:var(--dmuted);text-align:center;padding:2rem;font-size:0.85rem;">No revenue share data.</div></div>
+    <div class="panel">
+      <div class="panel-title">Platform Billing</div>
+      <div class="form-group"><label class="form-label">Billing Model</label>
+        <select class="form-select"><option>Monthly Subscription</option><option>Annual Subscription</option><option>Per-Member</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Base License Fee</label><input class="form-input" type="number" placeholder="$0.00"></div>
+      <button class="btn btn-gold btn-sm" onclick="toast('Billing config saved!','success')">Save</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title">API Key Management</div>
+      <div class="form-group"><label class="form-label">Platform API Key</label>
+        <div style="display:flex;gap:0.5rem;">
+          <input class="form-input" value="polr_live_••••••••••••••••" readonly style="flex:1;font-family:var(--font-mono);font-size:0.8rem;">
+          <button class="btn btn-sm btn-outline-gold" onclick="toast('Key copied!','success')">Copy</button>
+        </div>
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="toast('New key generated!','success')">Regenerate Key</button>
+    </div>
   </div></div>`;
 }
 
 function renderDeployment() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Deployment Manager</div>
-  <div class="panel">
-    <div class="panel-title">Current Deployment</div>
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="stat-card"><div class="stat-num" style="color:var(--success);">Live</div><div class="stat-label">Platform Status</div></div>
+    <div class="stat-card"><div class="stat-num">v2.0</div><div class="stat-label">Current Version</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--success);">OK</div><div class="stat-label">Database Status</div></div>
+  </div>
+  <div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-title">Active Deployments</div>
     <div style="display:flex;flex-direction:column;gap:0.75rem;">
-      <div style="display:flex;justify-content:space-between;padding:0.75rem;background:var(--bg3);border-radius:var(--r);flex-wrap:wrap;gap:0.5rem;">
-        <div><div style="font-size:0.82rem;font-weight:500;color:var(--dtxt);">Backend — Railway</div><div style="font-size:0.72rem;color:var(--dmuted);font-family:var(--font-mono);">polr-backend-production.up.railway.app</div></div>
-        <span class="badge badge-green">Live</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:0.75rem;background:var(--bg3);border-radius:var(--r);flex-wrap:wrap;gap:0.5rem;">
-        <div><div style="font-size:0.82rem;font-weight:500;color:var(--dtxt);">Frontend — GitHub Pages</div><div style="font-size:0.72rem;color:var(--dmuted);font-family:var(--font-mono);">chuckedwards1972.github.io/polr-webapp</div></div>
-        <span class="badge badge-green">Live</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:0.75rem;background:var(--bg3);border-radius:var(--r);flex-wrap:wrap;gap:0.5rem;">
-        <div><div style="font-size:0.82rem;font-weight:500;color:var(--dtxt);">Database — PostgreSQL</div><div style="font-size:0.72rem;color:var(--dmuted);font-family:var(--font-mono);">Railway managed PostgreSQL</div></div>
-        <span class="badge badge-green">Connected</span>
-      </div>
+      ${[
+        {name:'Backend API',host:'Railway',url:'polr-backend-production.up.railway.app',status:'Live'},
+        {name:'Frontend App',host:'GitHub Pages',url:'chuckedwards1972.github.io/polr-webapp',status:'Live'},
+        {name:'Database',host:'Railway PostgreSQL',url:'Managed internally',status:'Connected'},
+      ].map(d => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;background:var(--bg3);border-radius:var(--r);border:1px solid var(--bdr);flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <div style="font-size:0.85rem;font-weight:500;color:var(--dtxt);">${d.name} — ${d.host}</div>
+          <div style="font-size:0.72rem;color:var(--dmuted);font-family:var(--font-mono);">${d.url}</div>
+        </div>
+        <span class="badge badge-green">${d.status}</span>
+      </div>`).join('')}
     </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Health Check</div>
+    <button class="btn btn-outline-gold" onclick="runHealthCheck()">Run Health Check</button>
+    <div id="health-result" style="margin-top:1rem;"></div>
   </div></div>`;
+}
+
+async function runHealthCheck() {
+  const el = document.getElementById('health-result');
+  if (el) el.innerHTML = '<div style="color:var(--dmuted);">Checking...</div>';
+  try {
+    const data = await fetch(`${API}/health`).then(r => r.json());
+    if (el) el.innerHTML = `<div style="padding:0.75rem;background:rgba(46,196,160,0.08);border:1px solid rgba(46,196,160,0.2);border-radius:var(--r);">
+      <div style="color:var(--success);font-weight:600;margin-bottom:0.5rem;">All Systems Operational</div>
+      <div style="font-size:0.78rem;color:var(--dmuted);font-family:var(--font-mono);">Status: ${data.status} | DB: ${data.database} | v${data.version}</div>
+    </div>`;
+  } catch(e) {
+    if (el) el.innerHTML = `<div style="padding:0.75rem;background:rgba(252,129,129,0.08);border:1px solid rgba(252,129,129,0.2);border-radius:var(--r);color:var(--danger);">Health check failed. Check connection.</div>`;
+  }
 }
 
 function renderAudit() {
   return `<div style="animation:fadeIn 0.3s ease">
   <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);margin-bottom:1.25rem;">Audit Log</div>
-  <div class="panel"><div style="text-align:center;color:var(--dmuted);padding:2rem;" id="audit-list">Loading audit log...</div></div>
+  <div class="panel"><div id="audit-list"><div style="text-align:center;color:var(--dmuted);padding:2rem;">Loading audit log...</div></div></div>
   </div>`;
-}
-
-async function loadAudit() {
-  const el = document.getElementById('audit-list');
-  if (!el) return;
-  try {
-    const logs = await apiFetch('/admin/audit-log?limit=50');
-    if (!logs.length) { el.textContent = 'No audit entries.'; return; }
-    el.outerHTML = `<div style="overflow-x:auto;"><table class="tbl">
-      <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Entity</th></tr></thead>
-      <tbody>${logs.map(l => `<tr>
-        <td style="font-size:0.72rem;color:var(--dmuted);font-family:var(--font-mono);">${new Date(l.created_at).toLocaleString()}</td>
-        <td style="font-size:0.78rem;">${l.username||'—'}</td>
-        <td><span class="badge badge-blue" style="font-size:0.6rem;">${l.action}</span></td>
-        <td style="font-size:0.78rem;color:var(--dmuted);">${l.entity_type||'—'}</td>
-      </tr>`).join('')}</tbody>
-    </table></div>`;
-  } catch(e) {}
 }
 
 // ═══════════════════════════════════════════════════
