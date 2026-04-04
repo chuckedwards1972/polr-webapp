@@ -1,4 +1,4 @@
-<!-- POLR Network v2.0 build:20260404144653 -->
+﻿<!-- POLR Network v2.0 build:20260404144653 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -333,7 +333,7 @@ async function apiFetch(path, opts={}) {
 // Render
 function render() {
   const saved = getSavedSession();
-  if (saved && (saved.level !== undefined)) {
+  if (saved && (saved.level !== undefined || saved.username) {
     SESSION = saved;
     renderApp();
   } else {
