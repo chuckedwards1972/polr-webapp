@@ -1,4 +1,4 @@
-﻿<!-- POLR Network v2.0 build:20260404144653 -->
+<!-- POLR Network v2.0 build:20260404144653 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -673,9 +673,7 @@ function renderSection(id) {
     default: return renderOverview(lvl);
   }
 }
-</script>
 
-<script>
 // ═══════════════════════════════════════════════════
 // OVERVIEW DASHBOARD
 // ═══════════════════════════════════════════════════
@@ -1879,7 +1877,7 @@ function setSection(id) {
 // ═══════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════
-try { render(); } catch(e) { document.getElementById('app').innerHTML = '<div style="color:white;padding:2rem;background:#0c1a2e;min-height:100vh;"><h2 style="color:#c8913a;">POLR Network</h2><p>Error: ' + e.message + '</p><button onclick="localStorage.clear();location.reload();" style="padding:8px 16px;margin-top:1rem;background:#c8913a;border:none;cursor:pointer;">Reset</button></div>'; }
+render();
 setTimeout(() => {
   if (SESSION && LOADERS[ACTIVE_SECTION]) LOADERS[ACTIVE_SECTION]();
 }, 300);
