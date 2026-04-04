@@ -691,7 +691,7 @@ async function _apiFetch(path, opts) {
 var POLR_API = {
   auth: {
     login: function(username, password, remember) {
-      return _apiFetch('/auth/login', { method: 'POST', body: { username: username, password: password } })
+      return _apiFetch('/auth/login', { method: 'POST', body: { username: username, password: pass } }); //, { method: 'POST', body: { username: username, password: password } })
         .then(function(data) { _setToken(data.token, remember); return data.user; });
     },
     me: function() { return _apiFetch('/auth/me'); },
@@ -35198,6 +35198,7 @@ applySupp();
 
 </body>
 </html>
+
 
 
 
