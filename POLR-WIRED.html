@@ -878,7 +878,7 @@ window.addEventListener('polr:session-expired', function() {
 
 // â”€â”€ BACKEND AVAILABILITY CHECK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Falls back to localStorage gracefully if backend is unreachable
-var POLR_BACKEND_LIVE = true;
+var POLR_BACKEND_LIVE = false;
 window.POLR_AUDIT_MODE = (localStorage.getItem('polr_audit_mode') === '1');
 fetch(API_BASE.replace('/api','') + '/health')
   .then(function(r){ if(r.ok) POLR_BACKEND_LIVE = true; })
@@ -35198,6 +35198,7 @@ applySupp();
 
 </body>
 </html>
+
 
 
 
