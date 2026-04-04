@@ -1992,14 +1992,6 @@ function PlatformPage({
       setError('Please enter your username/email and password.');
       return;
     }
-    var _doLocalLogin = function() {
-      var found = findMember(username, pass);
-      if (!found) { setError('Invalid username or password. Please try again.'); return; }
-      var lvl = found.level !== undefined ? found.level : found.role === 'admin' ? 0 : found.role === 'ambassador' ? 1 : found.role === 'chair' ? 2 : found.role === 'housemother' ? 3 : found.role === 'workforce' ? 4 : 5;
-      var sess = Object.assign({}, found, { username: username, level: lvl, ts: Date.now() });
-      setSession(sess); setLegalAccept(username); onLogin(sess);
-      setPage('dashboard');
-    };
     if (POLR_BACKEND_LIVE) {
       POLR_API.auth.login(username, pass, false)
         .then(function(user) {
@@ -35206,6 +35198,7 @@ applySupp();
 
 </body>
 </html>
+
 
 
 
