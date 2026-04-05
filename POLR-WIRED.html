@@ -219,6 +219,14 @@ textarea.form-input{resize:vertical;min-height:100px;}
 </div>
 
 <script>
+window.onerror = function(msg, src, line, col, err) {
+  document.body.style.background = '#0c1a2e';
+  document.body.style.color = 'white';
+  document.body.style.padding = '2rem';
+  document.body.style.fontFamily = 'sans-serif';
+  document.body.innerHTML = '<h2 style="color:#c8913a;">POLR Network</h2><div style="background:rgba(255,0,0,0.15);border:1px solid red;padding:1rem;border-radius:8px;margin:1rem 0;"><strong>JavaScript Error on line ' + line + ':</strong><br>' + msg + '</div><button onclick="localStorage.clear();window.location.href=\'index.html\';" style="padding:10px 20px;background:#c8913a;border:none;border-radius:6px;cursor:pointer;font-weight:700;margin-top:1rem;">Reset & Login</button>';
+  return true;
+};
 const API = 'https://polr-backend-production.up.railway.app/api';
 
 const SCRIPTURE_VERSIONS = ['KJV','NKJV','NIV','ESV','NASB','AMP','MSG'];
