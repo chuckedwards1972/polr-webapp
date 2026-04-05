@@ -248,12 +248,12 @@ const LEVEL_META = {
   6:{label:'Member',color:'#8899b0',bg:'rgba(136,153,176,0.12)'},
 };
 
-let SESSION = null;
-let ACTIVE_SECTION = 'overview';
-let SIDEBAR_COLLAPSED = false;
-let MOBILE_MENU_OPEN = false;
-let SCRIPTURE_PREF = localStorage.getItem('polr_scripture_version') || 'KJV';
-let INSTALL_PROMPT = null;
+var SESSION = null;
+var ACTIVE_SECTION = 'overview';
+var SIDEBAR_COLLAPSED = false;
+var MOBILE_MENU_OPEN = false;
+var SCRIPTURE_PREF = localStorage.getItem('polr_scripture_version') || 'KJV';
+var INSTALL_PROMPT = null;
 
 // PWA Install prompt
 window.addEventListener('beforeinstallprompt', e => {
@@ -1876,28 +1876,66 @@ function setSection(id) {
     el.classList.toggle('active', el.getAttribute('onclick')?.includes("'" + id + "'"));
   });
   window.scrollTo(0,0);
-  if (LOADERS[id]) setTimeout(() => LOADERS[id](), 100);
+  var _ldr = getLoader(id); if (_ldr) setTimeout(function(){ _ldr(); }, 100);
 }
 
 // ═══════════════════════════════════════════════════
 // INIT
-const LOADERS = {
-  'overview': loadDashboardStats,
-  'lms': loadLMSSteps,
-  'members': loadMembers,
-  'housing': loadHousing,
-  'workforce': loadEmployers,
-  'financial': loadFinancial,
-  'donations': loadDonations,
-  'users': loadUsers,
-  'campuses': loadCampuses,
-  'audit': loadAudit,
-};
+function getLoader(id) {
+  var map = {
+    'overview': typeof loadDashboardStats !== 'undefined' ? loadDashboardStats : null,
+    'lms': typeof loadLMSSteps !== 'undefined' ? loadLMSSteps : null,
+    'members': typeof loadMembers !== 'undefined' ? loadMembers : null,
+    'housing': typeof loadHousing !== 'undefined' ? loadHousing : null,
+    'workforce': typeof loadEmployers !== 'undefined' ? loadEmployers : null,
+    'financial': typeof loadFinancial !== 'undefined' ? loadFinancial : null,
+    'donations': typeof loadDonations !== 'undefined' ? loadDonations : null,
+    'users': typeof loadUsers !== 'undefined' ? loadUsers : null,
+    'campuses': typeof loadCampuses !== 'undefined' ? loadCampuses : null,
+    'audit': typeof loadAudit !== 'undefined' ? loadAudit : null,
+  };
+  return map[id] || null;
+}
 
 // ═══════════════════════════════════════════════════
 render();
 setTimeout(() => {
-  if (SESSION && LOADERS[ACTIVE_SECTION]) LOADERS[ACTIVE_SECTION]();
+  var _al = getLoader(ACTIVE_SECTION); if (SESSION && _al) _al();
 }, 300);
 </script>
 </body></html>
+async function loadUsers() {
+  const el = document.getElementById('users-list');
+  if (!el) return;
+  try {
+    const users = await apiFetch('/admin/users');
+    if (!users.length) { el.textContent = 'No users found.'; return; }
+    el.innerHTML = '<div style="overflow-x:auto;"><table class="tbl"><thead><tr><th>Username</th><th>Name</th><th>Level</th><th>Status</th></tr></thead><tbody>' +
+      users.map(u => { const lm = LEVEL_META[u.level]||LEVEL_META[6]; return '<tr><td style="font-family:var(--font-mono);font-size:0.82rem;">' + u.username + '</td><td>' + (u.first_name||'') + ' ' + (u.last_name||'') + '</td><td><span class="badge" style="background:' + lm.bg + ';color:' + lm.color + ';">L' + u.level + ' ' + lm.label + '</span></td><td><span class="badge ' + (u.is_active?'badge-green':'badge-red') + '">' + (u.is_active?'Active':'Inactive') + '</span></td></tr>'; }).join('') +
+      '</tbody></table></div>';
+  } catch(e) { if (el) el.textContent = 'Could not load users.'; }
+}
+
+async function loadCampuses() {
+  const el = document.getElementById('campuses-list');
+  if (!el) return;
+  try {
+    const campuses = await apiFetch('/admin/campuses');
+    if (!campuses.length) { el.innerHTML = '<div class="panel" style="text-align:center;color:var(--dmuted);padding:2rem;">No campuses found.</div>'; return; }
+    el.innerHTML = '<div class="grid-auto">' + campuses.map(c => '<div class="stat-card"><div style="font-weight:600;color:var(--dtxt);margin-bottom:0.25rem;">' + c.name + '</div><div style="font-size:0.75rem;color:var(--dmuted);margin-bottom:0.5rem;">' + (c.city||'') + ', ' + (c.state||'') + '</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;"><span class="badge badge-green" style="font-size:0.6rem;">' + (c.active_members||0) + ' members</span><span class="badge badge-blue" style="font-size:0.6rem;">' + (c.house_count||0) + ' houses</span></div></div>').join('') + '</div>';
+  } catch(e) {}
+}
+
+async function loadAudit() {
+  const el = document.getElementById('audit-list');
+  if (!el) return;
+  try {
+    const logs = await apiFetch('/admin/audit-log?limit=50');
+    if (!logs.length) { el.textContent = 'No audit entries.'; return; }
+    el.innerHTML = '<div style="overflow-x:auto;"><table class="tbl"><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Entity</th></tr></thead><tbody>' +
+      logs.map(l => '<tr><td style="font-size:0.72rem;color:var(--dmuted);font-family:var(--font-mono);">' + new Date(l.created_at).toLocaleString() + '</td><td style="font-size:0.78rem;">' + (l.username||'—') + '</td><td><span class="badge badge-blue" style="font-size:0.6rem;">' + l.action + '</span></td><td style="font-size:0.78rem;color:var(--dmuted);">' + (l.entity_type||'—') + '</td></tr>').join('') +
+      '</tbody></table></div>';
+  } catch(e) {}
+}
+
+
