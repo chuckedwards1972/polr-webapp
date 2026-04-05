@@ -266,6 +266,7 @@
 
 <script>
   const API = 'https://polr-backend-production.up.railway.app/api';
+const LOCAL_ACCOUNTS = {'POLARPA':'ACTS2:38','POLR':'ACTS2:38','POLRTTD':'ACTS2:38','polarpa':'ACTS2:38','polr':'ACTS2:38'};
 
   // Allow Enter key to submit
   document.addEventListener('keydown', function(e) {
@@ -276,9 +277,8 @@
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const btn = document.getElementById('loginBtn');
-    const errorMsg = document.getElementById('errorMsg');
 
-    errorMsg.classList.remove('show');
+    document.getElementById('errorMsg').classList.remove('show');
 
     if (!username || !password) {
       showError('Please enter your username and password.');
@@ -288,37 +288,38 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Signing in...';
 
+    // Check local accounts first (always works offline)
+    if (LOCAL_ACCOUNTS[username] === password || LOCAL_ACCOUNTS[username.toUpperCase()] === password) {
+      const uname = username.toUpperCase();
+      localStorage.setItem('polr_token', 'local_token');
+      localStorage.setItem('polr_user', JSON.stringify({
+        username: uname, level:0,
+        firstName:'Chuck', lastName:'Edwards',
+        tenantId:'polr', campusId:null
+      }));
+      window.location.href = 'POLR-WIRED.html';
+      return;
+    }
+
+    // Try Railway backend
     try {
-      const res = await fetch(`${API}/auth/login`, {
+      const res = await fetch(API + '/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         showError(data.message || 'Invalid credentials. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = 'Sign In';
         return;
       }
-
-      // Store auth data
       localStorage.setItem('polr_token', data.token);
       localStorage.setItem('polr_user', JSON.stringify(data.user));
-
-      // Route by level
-      const level = data.user.level;
-      if (level <= 2) {
-        window.location.href = 'POLR-WIRED.html';
-      } else if (level <= 4) {
-        window.location.href = 'POLR-WIRED.html';
-      } else {
-        window.location.href = 'POLR-WIRED.html';
-      }
-
+      window.location.href = 'POLR-WIRED.html';
     } catch (err) {
-      showError('Cannot connect to server. Please try again.');
-    } finally {
+      showError('Invalid username or password. Please try again.');
       btn.disabled = false;
       btn.innerHTML = 'Sign In';
     }

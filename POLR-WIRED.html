@@ -333,15 +333,19 @@ async function apiFetch(path, opts={}) {
 // Render
 function render() {
   try {
-    const saved = getSavedSession();
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem('polr_user') || 'null'); } catch(e) {}
     if (saved && saved.username) {
-      SESSION = {level:0, firstName:'User', lastName:'', tenantId:'polr', campusId:null, ...saved};
+      SESSION = saved;
+      if (SESSION.level === undefined) SESSION.level = 0;
+      if (!SESSION.firstName) SESSION.firstName = SESSION.username;
       renderApp();
     } else {
-      renderLogin();
+      // No session - redirect to login
+      window.location.href = 'index.html';
     }
   } catch(e) {
-    document.getElementById('app').innerHTML = '<div style="color:white;padding:2rem;min-height:100vh;background:#0c1a2e;"><h2 style="color:#c8913a;">POLR Network</h2><p style="margin-top:1rem;">Error: ' + e.message + '</p><button onclick="localStorage.clear();location.reload();" style="margin-top:1rem;padding:8px 16px;background:#c8913a;border:none;border-radius:6px;cursor:pointer;font-weight:700;">Reset & Login</button></div>';
+    document.getElementById('app').innerHTML = '<div style="color:white;padding:2rem;min-height:100vh;background:#0c1a2e;font-family:sans-serif;"><h2 style="color:#c8913a;margin-bottom:1rem;">POLR Network</h2><p>Session error. Please log in again.</p><button onclick="localStorage.clear();window.location.href=\'index.html\';" style="margin-top:1rem;padding:10px 20px;background:#c8913a;border:none;border-radius:6px;cursor:pointer;font-weight:700;">Go to Login</button></div>';
   }
 }
 
