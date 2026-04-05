@@ -1939,3 +1939,58 @@ async function loadAudit() {
 }
 
 
+function renderTestimony() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Testimony Builder</div>
+    ${scriptureVersionSelector('testimony', SCRIPTURE_PREF)}
+  </div>
+  <div class="panel">
+    <div class="panel-sub">Your story is a weapon of spiritual warfare. Write it in three parts: before, turning point, and now.</div>
+    <div class="scripture-block" style="margin-bottom:1rem;">"And they overcame him by the blood of the Lamb, and by the word of their testimony."<span class="scripture-ref">Revelation 12:11 ${SCRIPTURE_PREF}</span></div>
+    <div class="form-group"><label class="form-label">Before — What life was like</label><textarea class="form-input" rows="4" placeholder="Describe your life before recovery..."></textarea></div>
+    <div class="form-group"><label class="form-label">Turning Point — What happened</label><textarea class="form-input" rows="4" placeholder="Describe your turning point..."></textarea></div>
+    <div class="form-group"><label class="form-label">Now — What life is like today</label><textarea class="form-input" rows="4" placeholder="Describe your life in recovery..."></textarea></div>
+    <button class="btn btn-gold" onclick="toast('Testimony saved!','success')">Save Testimony</button>
+  </div></div>`;
+}
+
+function renderScriptureDay() {
+  return `<div style="animation:fadeIn 0.3s ease">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem;">
+    <div style="font-family:var(--font-serif);font-size:1.25rem;color:var(--dtxt);">Scripture of the Day</div>
+    ${scriptureVersionSelector('scripture-day', SCRIPTURE_PREF)}
+  </div>
+  <div class="panel">
+    <div class="scripture-block" style="font-size:1.1rem;line-height:1.8;">
+      "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."
+      <span class="scripture-ref">Proverbs 3:5-6 ${SCRIPTURE_PREF}</span>
+    </div>
+    <div style="margin-top:1.25rem;border-top:1px solid var(--bdr);padding-top:1rem;">
+      <div class="form-group"><label class="form-label">My Reflection</label><textarea class="form-input" rows="4" placeholder="What does this scripture mean to you today?"></textarea></div>
+      <button class="btn btn-gold btn-sm" onclick="saveScriptureReflection()">Save Reflection</button>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:1rem;">
+    <div class="panel-title">Past Reflections</div>
+    <div id="scripture-reflections">
+      ${(()=>{
+        const refs = JSON.parse(localStorage.getItem('polr_scripture_refs') || '[]');
+        if (!refs.length) return '<div style="color:var(--dmuted);text-align:center;padding:1rem;font-size:0.85rem;">No reflections saved yet.</div>';
+        return refs.slice().reverse().map(r => '<div style="padding:0.75rem 0;border-bottom:1px solid var(--bdr);"><div style="font-size:0.72rem;color:var(--ddim);margin-bottom:0.25rem;">' + new Date(r.date).toLocaleDateString() + '</div><div style="font-size:0.85rem;color:var(--dmuted);">' + r.text + '</div></div>').join('');
+      })()}
+    </div>
+  </div></div>`;
+}
+
+function saveScriptureReflection() {
+  const ta = document.querySelector('#section-content textarea');
+  if (!ta || !ta.value.trim()) { toast('Please write a reflection first.', 'error'); return; }
+  const refs = JSON.parse(localStorage.getItem('polr_scripture_refs') || '[]');
+  refs.push({text: ta.value.trim(), date: new Date().toISOString()});
+  localStorage.setItem('polr_scripture_refs', JSON.stringify(refs));
+  toast('Reflection saved!', 'success');
+  setSection('scripture-day');
+}
+
+
