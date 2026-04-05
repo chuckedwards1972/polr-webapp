@@ -332,12 +332,16 @@ async function apiFetch(path, opts={}) {
 
 // Render
 function render() {
-  const saved = getSavedSession();
-  if (saved && (saved.level !== undefined)) {
-    SESSION = saved;
-    renderApp();
-  } else {
-    renderLogin();
+  try {
+    const saved = getSavedSession();
+    if (saved && saved.username) {
+      SESSION = {level:0, firstName:'User', lastName:'', tenantId:'polr', campusId:null, ...saved};
+      renderApp();
+    } else {
+      renderLogin();
+    }
+  } catch(e) {
+    document.getElementById('app').innerHTML = '<div style="color:white;padding:2rem;min-height:100vh;background:#0c1a2e;"><h2 style="color:#c8913a;">POLR Network</h2><p style="margin-top:1rem;">Error: ' + e.message + '</p><button onclick="localStorage.clear();location.reload();" style="margin-top:1rem;padding:8px 16px;background:#c8913a;border:none;border-radius:6px;cursor:pointer;font-weight:700;">Reset & Login</button></div>';
   }
 }
 
