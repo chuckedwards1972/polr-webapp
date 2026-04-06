@@ -33252,7 +33252,7 @@ function handleProvisioning() {
   // Try backend provision endpoint
   var apiBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:3001/api'
-    : 'https://api.polrnetwork.com/api';
+    : 'https://polr-backend-production.up.railway.app/api';
 
   // Try token validation if token provided
   if (params.token) {
@@ -33428,7 +33428,7 @@ function syncToBackend() {
     if (!pending.length) { syncInProgress = false; return; }
 
     var apiBase = window.POLR_API_BASE ||
-      (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://api.polrnetwork.com/api');
+      (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://polr-backend-production.up.railway.app/api');
     var token = localStorage.getItem('polr_token') || null;
 
     Promise.all(pending.map(function(item) {
@@ -33460,7 +33460,7 @@ function syncToBackend() {
 function pullFromBackend() {
   if (!navigator.onLine) return;
   var apiBase = window.POLR_API_BASE ||
-    (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://api.polrnetwork.com/api');
+    (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://polr-backend-production.up.railway.app/api');
   var token = localStorage.getItem('polr_token') || null;
   if (!token) return;
 
@@ -35189,6 +35189,8 @@ applySupp();
 
 </body>
 </html>
+
+
 
 
 
