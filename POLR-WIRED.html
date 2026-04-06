@@ -1958,8 +1958,7 @@ render();
 setTimeout(() => {
   var _al = getLoader(ACTIVE_SECTION); if (SESSION && _al) _al();
 }, 300);
-</script>
-</body></html>
+
 async function loadUsers() {
   const el = document.getElementById('users-list');
   if (!el) return;
@@ -2090,5 +2089,25 @@ function renderSection(id) {
   }
 }
 
+const LOADERS = {
+  'overview': loadDashboardStats,
+  'lms': loadLMSSteps,
+  'members': loadMembers,
+  'housing': loadHousing,
+  'workforce': loadEmployers,
+  'financial': loadFinancial,
+  'donations': loadDonations,
+  'users': loadUsers,
+  'campuses': loadCampuses,
+  'audit': loadAudit,
+};
 
-
+// INIT
+try { render(); } catch(e) {
+  document.getElementById('app').innerHTML = '<div style="color:white;padding:2rem;min-height:100vh;background:#0c1a2e;font-family:sans-serif;"><h2 style="color:#c8913a;margin-bottom:1rem;">POLR Network</h2><p>Loading error: ' + e.message + '</p><button onclick="localStorage.clear();window.location.href=\'index.html\';" style="margin-top:1rem;padding:10px 20px;background:#c8913a;border:none;border-radius:6px;cursor:pointer;font-weight:700;">Reset & Login</button></div>';
+}
+setTimeout(function() {
+  if (SESSION && LOADERS[ACTIVE_SECTION]) LOADERS[ACTIVE_SECTION]();
+}, 300);
+</script>
+</body></html>
