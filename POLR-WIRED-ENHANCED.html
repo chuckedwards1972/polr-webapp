@@ -32587,7 +32587,7 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
-  const _useState52 = useState('home'),
+  const _useState52 = useState(getSession() ? 'dashboard' : 'home'),
     page = _useState52[0],
     setPage = _useState52[1];
   const _useState53 = useState(getSession),
@@ -35189,6 +35189,7 @@ applySupp();
 
 </body>
 </html>
+
 
 
 
