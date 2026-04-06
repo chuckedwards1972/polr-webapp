@@ -534,7 +534,7 @@ body{font-family:var(--font-body);background:var(--cream);color:var(--text);}
 const API_BASE = (function() {
   var h = window.location.hostname;
   if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:3000/api';
-  return 'https://api.polrnetwork.com/api';
+  return 'https://polr-backend-production.up.railway.app/api';
 })();
 // Expose for PWA layer
 window.POLR_API_BASE = API_BASE;
@@ -35189,3 +35189,5 @@ applySupp();
 
 </body>
 </html>
+
+
