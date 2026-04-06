@@ -985,17 +985,19 @@ async function loadMembers() {
     const data = await apiFetch('/members?limit=50');
     const members = data.members || [];
     if (!members.length) { el.innerHTML = `<div style="text-align:center;color:var(--dmuted);padding:2rem;">No members found.</div>`; return; }
-    el.innerHTML = `<div style="overflow-x:auto;"><table class="tbl">
-      <thead><tr><th>Name</th><th>Status</th><th>Step</th><th>Campus</th><th>Intake</th><th>XP</th></tr></thead>
-      <tbody>${members.map(m => `<tr>
-        <td style="font-weight:500;">${m.first_name} ${m.last_name}</td>
-        <td><span class="badge ${m.status==='active'?'badge-green':m.status==='completed'?'badge-blue':'badge-gold'}">${m.status}</span></td>
-        <td>Step ${m.current_step||1}</td>
-        <td style="color:var(--dmuted);font-size:0.78rem;">${m.campus_name||'—'}</td>
-        <td style="color:var(--dmuted);font-size:0.78rem;">${m.intake_date?new Date(m.intake_date).toLocaleDateString():'—'}</td>
-        <td style="color:var(--gold);font-family:var(--font-mono);font-size:0.78rem;">${m.total_xp||0}</td>
-      </tr>`).join('')}</tbody>
-    </table></div>`;
+    // Cache member names for dropdowns
+    localStorage.setItem('polr_members_cache', JSON.stringify(members.map(m => ({first_name:m.first_name,last_name:m.last_name,id:m.id}))));
+    
+    el.innerHTML = '<div style="overflow-x:auto;"><table class="tbl">' +
+      '<thead><tr><th>Name</th><th>Status</th><th>Step</th><th>Campus</th><th>Intake</th><th>XP</th></tr></thead>' +
+      '<tbody>' + members.map(m => '<tr>' +
+        '<td style="font-weight:500;">' + m.first_name + ' ' + m.last_name + '</td>' +
+        '<td><span class="badge ' + (m.status==='active'?'badge-green':m.status==='completed'?'badge-blue':'badge-gold') + '">' + m.status + '</span></td>' +
+        '<td>Step ' + (m.current_step||1) + '</td>' +
+        '<td style="color:var(--dmuted);font-size:0.78rem;">' + (m.campus_name||'—') + '</td>' +
+        '<td style="color:var(--dmuted);font-size:0.78rem;">' + (m.intake_date?new Date(m.intake_date).toLocaleDateString():'—') + '</td>' +
+        '<td style="color:var(--gold);font-family:var(--font-mono);font-size:0.78rem;">' + (m.total_xp||0) + '</td>' +
+      '</tr>').join('') + '</tbody></table></div>';
   } catch(e) {
     if (el) el.innerHTML = '<div style="text-align:center;padding:2rem;">' +
       '<div style="color:var(--danger);margin-bottom:0.75rem;font-size:0.85rem;">Could not connect to backend.</div>' +
@@ -2118,12 +2120,20 @@ function renderSection(id) {
 
 
 function getLocalMemberOptions() {
-  // Get members from local storage cache or return common options
   const cached = JSON.parse(localStorage.getItem('polr_members_cache') || '[]');
-  if (cached.length > 0) {
-    return cached.map(m => '<option value="' + m.first_name + ' ' + m.last_name + '">' + m.first_name + ' ' + m.last_name + '</option>').join('');
+  const drugtests = JSON.parse(localStorage.getItem('polr_drug_tests') || '[]');
+  const incidents = JSON.parse(localStorage.getItem('polr_incidents') || '[]');
+  
+  // Build name list from all local sources
+  const names = new Set();
+  cached.forEach(m => names.add(m.first_name + ' ' + m.last_name));
+  drugtests.forEach(t => { if(t.member) names.add(t.member); });
+  incidents.forEach(i => { if(i.individuals) i.individuals.split(',').forEach(n => { if(n.trim()) names.add(n.trim()); }); });
+  
+  if (names.size > 0) {
+    return Array.from(names).sort().map(n => '<option value="' + n + '">' + n + '</option>').join('');
   }
-  return '<option value="__custom__">Type name manually</option>';
+  return '';
 }
 
 function addIncidentIndividual() {
