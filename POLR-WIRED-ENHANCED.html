@@ -22219,7 +22219,7 @@ function Dashboard({
     }
   }), /*#__PURE__*/React.createElement("div", {
     className: "dash-bar"
-  }, (session && session.level === 0) ? LEVELS.map(function (l, i) {
+  }, LEVELS.map(function (l, i) {
     return /*#__PURE__*/React.createElement("button", {
       key: l.id,
       className: "level-tab".concat(level === i ? ' active' : ''),
@@ -22229,7 +22229,8 @@ function Dashboard({
         background: "var(".concat(l.bg, ")")
       } : {},
       onClick: function () {
-        if (session && session.level === 0) { setLevel(i); setActiveSection('overview'); }
+        setLevel(i);
+        setActiveSection('overview');
       }
     }, /*#__PURE__*/React.createElement("div", {
       className: "ldot",
