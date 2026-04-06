@@ -20836,7 +20836,7 @@ function Dashboard({
   var _session$level;
   const _useState0 = useState((_session$level = session === null || session === void 0 ? void 0 : session.level) !== null && _session$level !== void 0 ? _session$level : 5),
     level = _useState0[0],
-    setLevel = _useState0[1];
+    setLevel = _useState0[1]; const canPreview = session && session.level === 0;
   const _useState1 = useState(false),
     sidebarCollapsed = _useState1[0],
     setSidebarCollapsed = _useState1[1];
@@ -20966,8 +20966,8 @@ function Dashboard({
   }, []);
 
 
-  // previewSession — lets admin preview any level; all children see the viewed level
-  var previewSession = Object.assign({}, session, { level: level });
+  // previewSession — admin only preview; non-L0 locked to their level
+  var previewSession = Object.assign({}, session, { level: session && session.level === 0 ? level : (session ? session.level : 6) });
   const feedIdx = useRef(0);
 
   // Save platform state whenever it changes
@@ -35189,6 +35189,8 @@ applySupp();
 
 </body>
 </html>
+
+
 
 
 
