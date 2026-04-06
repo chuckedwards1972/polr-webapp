@@ -20923,7 +20923,7 @@ function Dashboard({
           // Meetings
           meetings: meetingsR || p.meetings,
           // Grants
-          grantApplications: grantsR || p.grantApplications,
+          grantApplications: (Array.isArray(grantsR) ? grantsR : (grantsR && grantsR.grants ? grantsR.grants : p.grantApplications)),
           // Expansion missions
           expansionMissions: missionsR || p.expansionMissions,
           // Pipeline board
@@ -35189,6 +35189,9 @@ applySupp();
 
 </body>
 </html>
+
+
+
 
 
 
