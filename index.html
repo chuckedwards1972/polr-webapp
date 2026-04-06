@@ -317,6 +317,7 @@ const LOCAL_ACCOUNTS = {'POLARPA':'ACTS2:38','POLR':'ACTS2:38','POLRTTD':'ACTS2:
       }
       localStorage.setItem('polr_token', data.token);
       localStorage.setItem('polr_user', JSON.stringify(data.user));
+      sessionStorage.setItem('polr_session', JSON.stringify({name: (data.user.firstName||data.user.username)+' '+(data.user.lastName||''), level: data.user.level, username: data.user.username, role: 'staff', ts: Date.now()}));
       window.location.href = 'POLR-WIRED-ENHANCED.html';
     } catch (err) {
       showError('Invalid username or password. Please try again.');
@@ -346,4 +347,6 @@ const LOCAL_ACCOUNTS = {'POLARPA':'ACTS2:38','POLR':'ACTS2:38','POLRTTD':'ACTS2:
 </script>
 </body>
 </html>
+
+
 
