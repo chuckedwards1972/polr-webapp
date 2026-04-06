@@ -1,9 +1,9 @@
-// POLR Backend Configuration
+﻿// POLR Backend Configuration
 // Connect frontend to your Node.js backend
 
 window.POLR_BACKEND_CONFIG = {
   // Backend URL - Update this to your deployed backend URL
-  BACKEND_URL: 'http://localhost:3000', // Change when deployed
+  BACKEND_URL: 'https://polr-backend-production.up.railway.app', // Change when deployed
   
   // API Endpoints
   ENDPOINTS: {
@@ -409,11 +409,11 @@ window.checkBackendConnection = async function() {
     
     if (response.ok) {
       window.POLR_BACKEND_LIVE = true;
-      console.log('✅ Backend connected:', await response.json());
+      console.log('âœ… Backend connected:', await response.json());
       return true;
     }
   } catch (error) {
-    console.log('⚠️ Backend not available, using localStorage fallback');
+    console.log('âš ï¸ Backend not available, using localStorage fallback');
     window.POLR_BACKEND_LIVE = false;
     return false;
   }
@@ -421,3 +421,4 @@ window.checkBackendConnection = async function() {
 
 // Auto-check connection on load
 setTimeout(window.checkBackendConnection, 1000);
+
