@@ -21,6 +21,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<!-- Backend Configuration -->
+<script src="backend-config.js"></script>
 <style>
 
 /* ═══════ POLR DESIGN TOKENS ═══════ */
@@ -531,7 +533,7 @@ body{font-family:var(--font-body);background:var(--cream);color:var(--text);}
 // ═══════════════════════════════════════════════════════════════════
 const API_BASE = (function() {
   var h = window.location.hostname;
-  if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:3001/api';
+  if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:3000/api';
   return 'https://api.polrnetwork.com/api';
 })();
 // Expose for PWA layer
