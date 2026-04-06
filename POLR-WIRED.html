@@ -642,10 +642,14 @@ function scriptureVersionSelector(docType, currentVersion) {
 }
 
 function setScriptureVersion(docType, version) {
+  SCRIPTURE_PREF = version;
+  localStorage.setItem('polr_scripture_version', version);
   if (docType === 'global') {
-    SCRIPTURE_PREF = version;
-    localStorage.setItem('polr_scripture_version', version);
     toast('Default scripture version set to ' + version);
+  } else {
+    toast('Scripture version changed to ' + version);
+    // Re-render current section to update all scripture references
+    setTimeout(() => setSection(ACTIVE_SECTION), 100);
   }
 }
 
@@ -993,7 +997,11 @@ async function loadMembers() {
       </tr>`).join('')}</tbody>
     </table></div>`;
   } catch(e) {
-    if (el) el.innerHTML = `<div style="text-align:center;color:var(--dmuted);padding:2rem;">Could not load members.</div>`;
+    if (el) el.innerHTML = '<div style="text-align:center;padding:2rem;">' +
+      '<div style="color:var(--danger);margin-bottom:0.75rem;font-size:0.85rem;">Could not connect to backend.</div>' +
+      '<div style="color:var(--dmuted);font-size:0.82rem;margin-bottom:1rem;">Members require backend connection. Check your Railway deployment is running.</div>' +
+      '<button class="btn btn-outline-gold btn-sm" onclick="loadMembers()">Retry</button>' +
+      '</div>';
   }
 }
 
@@ -1324,7 +1332,14 @@ function showIncidentForm() {
     '</div>' +
     '<div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="inc-desc" rows="4" placeholder="Describe what happened in detail..."></textarea></div>' +
     '<div class="form-group"><label class="form-label">Action Taken</label><textarea class="form-input" id="inc-action" rows="3" placeholder="What action was taken immediately?"></textarea></div>' +
-    '<div class="form-group"><label class="form-label">Individuals Involved</label><input class="form-input" id="inc-who" placeholder="Names of members/staff involved"></div>' +
+    '<div class="form-group"><label class="form-label">Individuals Involved</label>' +
+    '<div id="inc-individuals-list" style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.4rem;"></div>' +
+    '<div style="display:flex;gap:0.5rem;">' +
+    '<select class="form-select" id="inc-who-select" style="flex:1;"><option value="">Select member/staff...</option>' +
+    getLocalMemberOptions() +
+    '<option value="__custom__">+ Type custom name</option></select>' +
+    '<button class="btn btn-sm btn-outline-gold" onclick="addIncidentIndividual()">Add</button></div>' +
+    '<input class="form-input" id="inc-who-custom" placeholder="Custom name" style="margin-top:0.4rem;display:none;"></div>' +
     '<div style="display:flex;gap:0.5rem;">' +
     '<button class="btn btn-gold" onclick="submitIncident()">Submit Report</button>' +
     '<button class="btn" id="cancel-inc-btn">Cancel</button></div></div>';
@@ -1339,7 +1354,7 @@ function submitIncident() {
   const type = document.getElementById('inc-type')?.value;
   const desc = document.getElementById('inc-desc')?.value.trim();
   const action = document.getElementById('inc-action')?.value.trim();
-  const who = document.getElementById('inc-who')?.value.trim();
+  const who = getIncidentIndividuals() || document.getElementById('inc-who')?.value?.trim() || '';
   if (!desc) { toast('Please describe the incident.', 'error'); return; }
   const incidents = JSON.parse(localStorage.getItem('polr_incidents') || '[]');
   incidents.push({id:Date.now(), date:dt||new Date().toISOString(), severity:sev, location:loc, type, description:desc, action_taken:action, individuals:who, reported_by:SESSION?.username, created_at:new Date().toISOString()});
@@ -1376,7 +1391,12 @@ function showDrugTestForm() {
   const today = new Date().toISOString().split('T')[0];
   c.innerHTML = '<div class="panel" style="margin-bottom:1rem;"><div class="panel-title">Log Drug Test</div>' +
     '<div class="grid-2">' +
-    '<div class="form-group"><label class="form-label">Member Name</label><input class="form-input" id="dt-member" placeholder="Member full name"></div>' +
+    '<div class="form-group"><label class="form-label">Member Name</label>' +
+    '<select class="form-select" id="dt-member-select" onchange="handleDtMemberSelect(this)">' +
+    '<option value="">Select member...</option>' +
+    getLocalMemberOptions() +
+    '<option value="__custom__">+ Type custom name</option></select>' +
+    '<input class="form-input" id="dt-member" placeholder="Member full name" style="margin-top:0.4rem;display:none;"></div>' +
     '<div class="form-group"><label class="form-label">Test Date</label><input class="form-input" id="dt-date" type="date" value="' + today + '"></div>' +
     '<div class="form-group"><label class="form-label">Result</label><select class="form-select" id="dt-result"><option value="negative">Negative (Clean)</option><option value="positive">Positive</option><option value="refused">Refused</option><option value="pending">Pending Lab</option></select></div>' +
     '<div class="form-group"><label class="form-label">Test Type</label><select class="form-select" id="dt-type"><option>Urine Screen</option><option>Breathalyzer</option><option>Lab Panel</option><option>Observed</option></select></div>' +
@@ -1390,7 +1410,8 @@ function showDrugTestForm() {
 }
 
 function submitDrugTest() {
-  const member = document.getElementById('dt-member')?.value.trim();
+  const selMember = document.getElementById('dt-member-select')?.value;
+  const member = (selMember && selMember !== '__custom__' ? selMember : document.getElementById('dt-member')?.value?.trim()) || '';
   const date = document.getElementById('dt-date')?.value;
   const result = document.getElementById('dt-result')?.value;
   const type = document.getElementById('dt-type')?.value;
@@ -2022,7 +2043,7 @@ function renderScriptureDay() {
       <span class="scripture-ref">Proverbs 3:5-6 ${SCRIPTURE_PREF}</span>
     </div>
     <div style="margin-top:1.25rem;border-top:1px solid var(--bdr);padding-top:1rem;">
-      <div class="form-group"><label class="form-label">My Reflection</label><textarea class="form-input" rows="4" placeholder="What does this scripture mean to you today?"></textarea></div>
+      <div class="form-group"><label class="form-label">My Reflection</label><textarea class="form-input" id="scripture-reflection-text" rows="4" placeholder="What does this scripture mean to you today?"></textarea></div>
       <button class="btn btn-gold btn-sm" onclick="saveScriptureReflection()">Save Reflection</button>
     </div>
   </div>
@@ -2032,17 +2053,23 @@ function renderScriptureDay() {
       ${(()=>{
         const refs = JSON.parse(localStorage.getItem('polr_scripture_refs') || '[]');
         if (!refs.length) return '<div style="color:var(--dmuted);text-align:center;padding:1rem;font-size:0.85rem;">No reflections saved yet.</div>';
-        return refs.slice().reverse().map(r => '<div style="padding:0.75rem 0;border-bottom:1px solid var(--bdr);"><div style="font-size:0.72rem;color:var(--ddim);margin-bottom:0.25rem;">' + new Date(r.date).toLocaleDateString() + '</div><div style="font-size:0.85rem;color:var(--dmuted);">' + r.text + '</div></div>').join('');
+        return refs.slice().reverse().map(r => '<div style="padding:0.75rem 0;border-bottom:1px solid var(--bdr);"><div style="font-size:0.72rem;color:var(--ddim);margin-bottom:0.25rem;">' + new Date(r.date).toLocaleDateString() + ' — ' + (r.version||'KJV') + '</div>' + (r.scripture ? '<div style="font-size:0.75rem;color:var(--gold);margin-bottom:0.25rem;">' + r.scripture + '</div>' : '') + '<div style="font-size:0.85rem;color:var(--dmuted);">' + r.text + '</div></div>').join('');
       })()}
     </div>
   </div></div>`;
 }
 
 function saveScriptureReflection() {
-  const ta = document.querySelector('#section-content textarea');
+  const ta = document.getElementById('scripture-reflection-text');
   if (!ta || !ta.value.trim()) { toast('Please write a reflection first.', 'error'); return; }
   const refs = JSON.parse(localStorage.getItem('polr_scripture_refs') || '[]');
-  refs.push({text: ta.value.trim(), date: new Date().toISOString()});
+  refs.push({
+    text: ta.value.trim(), 
+    scripture: 'Proverbs 3:5-6',
+    scripture_text: 'Trust in the LORD with all thine heart; and lean not unto thine own understanding.',
+    version: SCRIPTURE_PREF,
+    date: new Date().toISOString()
+  });
   localStorage.setItem('polr_scripture_refs', JSON.stringify(refs));
   toast('Reflection saved!', 'success');
   setSection('scripture-day');
@@ -2087,6 +2114,56 @@ function renderSection(id) {
     case 'audit': return renderAudit();
     default: return renderOverview(lvl);
   }
+}
+
+
+function getLocalMemberOptions() {
+  // Get members from local storage cache or return common options
+  const cached = JSON.parse(localStorage.getItem('polr_members_cache') || '[]');
+  if (cached.length > 0) {
+    return cached.map(m => '<option value="' + m.first_name + ' ' + m.last_name + '">' + m.first_name + ' ' + m.last_name + '</option>').join('');
+  }
+  return '<option value="__custom__">Type name manually</option>';
+}
+
+function addIncidentIndividual() {
+  const sel = document.getElementById('inc-who-select');
+  const custom = document.getElementById('inc-who-custom');
+  const list = document.getElementById('inc-individuals-list');
+  if (!sel || !list) return;
+  let name = sel.value === '__custom__' ? custom?.value.trim() : sel.value;
+  if (!name) { toast('Select or enter a name.', 'error'); return; }
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:4px 8px;background:var(--bg3);border-radius:4px;font-size:0.82rem;color:var(--dtxt);';
+  div.innerHTML = name + '<button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.9rem;">&#215;</button>';
+  div.dataset.name = name;
+  list.appendChild(div);
+  sel.value = '';
+  if (custom) { custom.value = ''; custom.style.display = 'none'; }
+}
+
+function getIncidentIndividuals() {
+  const list = document.getElementById('inc-individuals-list');
+  if (!list) return '';
+  return Array.from(list.querySelectorAll('div[data-name]')).map(d => d.dataset.name).join(', ');
+}
+
+function handleDtMemberSelect(sel) {
+  const custom = document.getElementById('dt-member');
+  if (!custom) return;
+  if (sel.value === '__custom__') {
+    custom.style.display = 'block';
+    custom.focus();
+  } else {
+    custom.style.display = 'none';
+    custom.value = sel.value;
+  }
+}
+
+function handleIncWhoSelect(sel) {
+  const custom = document.getElementById('inc-who-custom');
+  if (!custom) return;
+  custom.style.display = sel.value === '__custom__' ? 'block' : 'none';
 }
 
 const LOADERS = {
