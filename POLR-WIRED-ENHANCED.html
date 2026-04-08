@@ -30583,23 +30583,7 @@ function HomePage({
       lineHeight: 1.8,
       marginBottom: '1rem'
     }
-  }, "Thirty years ago, Jeff Walthers came to Thibodaux, Louisiana addicted to meth, unemployed, divorced, and out of options. He had exhausted every human resource available to him."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontFamily: 'var(--font-italic)',
-      fontSize: '1.05rem',
-      color: 'var(--muted)',
-      lineHeight: 1.8,
-      marginBottom: '1rem'
-    }
-  }, "\"I wish I could say He was my first choice, but truthfully, He was my last. Yet when I finally turned to Him, He wasn't offended. He was waiting.\""), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontFamily: 'var(--font-italic)',
-      fontSize: '1.05rem',
-      color: 'var(--muted)',
-      lineHeight: 1.8,
-      marginBottom: '1.25rem'
-    }
-  }, "On July 5, 1995 \u2014 after countless broken promises \u2014 Jeff hit the end of himself for good. In that moment of complete surrender, he heard something that changed everything."), /*#__PURE__*/React.createElement("div", {
+  }, window.__featuredTestimony ? window.__featuredTestimony.excerpt : "Every person who walks through our doors arrives the same way — out of options, out of time, and finally ready to let God do what only God can do. That is where transformation begins.", /*#__PURE__*/React.createElement("div", {
     style: {
       background: 'var(--navy)',
       borderRadius: 12,
@@ -35386,6 +35370,34 @@ applySupp();
 
   // Also check after session events
   window.addEventListener('polr:session-set', function() { setTimeout(checkAgreement, 500); });
+})();
+</script>
+
+
+<script>
+(function() {
+  var BASE = 'https://polr-backend-production.up.railway.app';
+  function loadFeatured() {
+    var token = localStorage.getItem('polr_token');
+    if (!token) return;
+    fetch(BASE + '/api/testimonies/featured', {
+      headers: { Authorization: 'Bearer ' + token }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d && d.excerpt) {
+        window.__featuredTestimony = d;
+        var els = document.querySelectorAll('[data-testimony-excerpt]');
+        els.forEach(function(el) { el.textContent = d.excerpt; });
+        var names = document.querySelectorAll('[data-testimony-name]');
+        names.forEach(function(el) { el.textContent = d.author_name || 'Ministry Testimony'; });
+        var dates = document.querySelectorAll('[data-testimony-date]');
+        dates.forEach(function(el) { el.textContent = d.testimony_date || ''; });
+      }
+    })
+    .catch(function() {});
+  }
+  setTimeout(loadFeatured, 2000);
 })();
 </script>
 
