@@ -744,19 +744,6 @@ var POLR_API = {
     add:      function(d) { return _apiFetch('/licensing/partners', { method: 'POST', body: d }); }
   },
 
-  lms: {
-    courses:     function(step)       { return _apiFetch('/lms/courses' + (step ? '?step=' + step : '')); },
-    lessons:     function(courseId)   { return _apiFetch('/lms/courses/' + courseId + '/lessons'); },
-    submitForm:  function(lessonId, memberId, answers) {
-      return _apiFetch('/lms/lessons/' + lessonId + '/submit', { method: 'POST', body: { memberId: memberId, answers: answers } });
-    },
-    getSubmission: function(lessonId, memberId) {
-      return _apiFetch('/lms/lessons/' + lessonId + '/submission/' + memberId);
-    },
-    submissions: function() { return _apiFetch('/lms/submissions'); },
-    classSchedule: function() { return _apiFetch('/lms/class-schedule'); },
-    updateClassSchedule: function(d) { return _apiFetch('/lms/class-schedule', { method: 'PUT', body: d }); }
-  },
   activity: { list: function(n) { return _apiFetch('/activity?limit=' + (n||50)); } },
 
   // ── ACTIONS API (audit-enforced — every action writes to DB) ─────────
