@@ -1216,10 +1216,10 @@ function initPlatformState() {
     members: [],
     meetings: [{
       id: 'm1',
-      name: 'HOPE Place Thibodaux — Daily',
+      name: 'HOPE Place Port Allen',
       day: 'Mon–Sat',
       time: '7:00 AM',
-      location: '501-A St. Mary St, Thibodaux',
+      location: '12883 Hwy 190 West, Port Allen LA 70767',
       campus: 'hope-place-port-allen',
       active: true,
       attendance: []
@@ -1237,7 +1237,7 @@ function initPlatformState() {
       name: 'HOPE Place Port Allen',
       day: 'Wednesday',
       time: '7:00 PM',
-      location: 'Larose, LA',
+      location: 'Port Allen, LA',
       campus: 'hope-place-port-allen',
       active: true,
       attendance: []
@@ -1344,7 +1344,7 @@ function initPlatformState() {
       name: 'House Alpha',
       beds: 4,
       occupied: 4,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Men',
       active: true
     }, {
@@ -1352,7 +1352,7 @@ function initPlatformState() {
       name: 'House Beta',
       beds: 4,
       occupied: 3,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Women',
       active: true
     }, {
@@ -1498,7 +1498,7 @@ function initPlatformState() {
     weeklyReports: [],
     contactRoutes: [{
       id: 'hope-place-port-allen',
-      name: 'HOPE Place Thibodaux',
+      name: 'HOPE Place Port Allen',
       email: 'bro.chuck.edwards@gmail.com',
       phone: '225-333-0330',
       leader: 'Director',
@@ -1506,14 +1506,14 @@ function initPlatformState() {
     }, {
       id: 'hope-place-port-allen',
       name: 'HOPE Place Port Allen',
-      email: 'hop.thibodaux@{HOPE_WEBSITE}',
+      email: 'bro.chuck.edwards@gmail.com',
       phone: '225-333-0330',
       leader: 'Campus Lead',
       queue: []
     }, {
       id: 'hope-place-port-allen',
       name: 'HOPE Place Port Allen',
-      email: 'hop.larose@{HOPE_WEBSITE}',
+      email: 'bro.chuck.edwards@gmail.com',
       phone: '225-333-0330',
       leader: 'Campus Lead',
       queue: []
@@ -2257,7 +2257,7 @@ function PlatformPage({
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: ""
-  }, "Select your campus..."), /*#__PURE__*/React.createElement("option", null, "HOPE Place \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Larose"), /*#__PURE__*/React.createElement("option", null, "HOPE Place @ Port Allen"))), /*#__PURE__*/React.createElement("div", {
+  }, "Select your campus..."), /*#__PURE__*/React.createElement("option", null, "HOPE Place \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Larose"), /*#__PURE__*/React.createElement("option", null, "HOPE Place Port Allen"))), /*#__PURE__*/React.createElement("div", {
     style: {
       background: 'var(--cream2)',
       border: '1px solid var(--border)',
@@ -2855,7 +2855,7 @@ function NotificationsCenter({ platform, update, toast, session }) {
     { id:'action', icon:'👆', label:'Action Required', color:'var(--l1)' },
   ];
 
-  const TARGETS = ['All Members','Campus Leaders Only','Group Chairs','Specific Campus: Thibodaux','Specific Campus: Port Allen','Members 0-30 Days Sober'];
+  const TARGETS = ['All Members','Campus Leaders Only','Group Chairs','Specific Campus: Port Allen','Specific Campus: Port Allen','Members 0-30 Days Sober'];
 
   const enablePush = () => {
     if (!('Notification' in window)) { toast('Browser does not support push notifications'); return; }
@@ -3203,7 +3203,7 @@ function EventsBuilder({ platform, update, toast, session }) {
             React.createElement('div', { style:{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'var(--dmuted)', marginBottom:'0.3rem' } }, 'Campus'),
             React.createElement('select', { value:form.campus, onChange:setFEvt('campus'),
               style:{ width:'100%', padding:'0.65rem 0.75rem', borderRadius:8, border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dtxt)', fontSize:'0.88rem', outline:'none' } },
-              ['All','HOPE Place Thibodaux','HOPE Place @ Port Allen','HOP Thibodaux'].map(function(c){ return React.createElement('option',{key:c},c); })
+              ['All','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen'].map(function(c){ return React.createElement('option',{key:c},c); })
             )
           ),
 
@@ -3485,9 +3485,9 @@ function MembersFullPanel({ platform, update, toast, session }) {
   // ── LIVE: member list from API-hydrated platform.members ──
   // SAMPLE_MEMBERS kept only as local fallback if no API data yet
   var SAMPLE_MEMBERS = [
-    { id:'m1', name:'Chuck Edwards', username:'HOPEHQ', role:'admin', level:0, status:'Active', campus:'Thibodaux', sobrietyDate:'2020-06-01' },
-    { id:'m2', name:'James W.', username:'jamesw', role:'member', level:5, status:'Active', campus:'Thibodaux' },
-    { id:'m3', name:'Sarah M.', username:'sarahm', role:'member', level:5, status:'Active', campus:'HOPE Place @ Port Allen' },
+    { id:'m1', name:'Chuck Edwards', username:'HOPEHQ', role:'admin', level:0, status:'Active', campus:'Port Allen', sobrietyDate:'2020-06-01' },
+    { id:'m2', name:'James W.', username:'jamesw', role:'member', level:5, status:'Active', campus:'Port Allen' },
+    { id:'m3', name:'Sarah M.', username:'sarahm', role:'member', level:5, status:'Active', campus:'HOPE Place Port Allen' },
   ];
 
   // Use API members when hydrated, show sample only before first load
@@ -4809,9 +4809,9 @@ function InterventionConsole({ platform, update, updateInList, toast, session })
   var _s7 = useState(''), customMsg = _s7[0], setCustomMsg = _s7[1];
 
   var SAMPLE_ALERTS = [
-    { id:'a1', member:'Sarah M.', severity:'critical', type:'relapse-risk', note:'3 consecutive missed meetings. Last login 8 days ago. Step work stalled at Step 2.', ts: Date.now()-3600000, recoveryStage:'Early Recovery (45 days)', attendanceTrend:'↓ 80% drop this month', riskScore:87, emotionalIndicators:['Withdrawal from community','Missed calls to pastor or mentor','Social media activity increase (isolation pattern)'], sobrietyDate:'2025-09-10', campus:'HOPE Place Thibodaux' },
-    { id:'a2', member:'James K.', severity:'critical', type:'relapse-risk', note:'Pattern: weekend absences. Family crisis reported by House Mother.', ts: Date.now()-7200000, recoveryStage:'Active Recovery (8 months)', attendanceTrend:'↓ Weekend attendance 0%', riskScore:74, emotionalIndicators:['Family stress trigger active','Reported financial pressure','Missed mentor check-in'], sobrietyDate:'2024-07-20', campus:'HOPE Place Thibodaux' },
-    { id:'a3', member:'Devon S.', severity:'warning', type:'milestone', note:'Approaching 30-day milestone in 3 days. First major milestone — needs recognition.', ts: Date.now()-10800000, recoveryStage:'Early Recovery (27 days)', attendanceTrend:'↑ Consistent attendance', riskScore:18, emotionalIndicators:['Positive engagement','Asking questions in group'], sobrietyDate:'2025-12-25', campus:'HOPE Place @ Port Allen' },
+    { id:'a1', member:'Sarah M.', severity:'critical', type:'relapse-risk', note:'3 consecutive missed meetings. Last login 8 days ago. Step work stalled at Step 2.', ts: Date.now()-3600000, recoveryStage:'Early Recovery (45 days)', attendanceTrend:'↓ 80% drop this month', riskScore:87, emotionalIndicators:['Withdrawal from community','Missed calls to pastor or mentor','Social media activity increase (isolation pattern)'], sobrietyDate:'2025-09-10', campus:'HOPE Place Port Allen' },
+    { id:'a2', member:'James K.', severity:'critical', type:'relapse-risk', note:'Pattern: weekend absences. Family crisis reported by House Mother.', ts: Date.now()-7200000, recoveryStage:'Active Recovery (8 months)', attendanceTrend:'↓ Weekend attendance 0%', riskScore:74, emotionalIndicators:['Family stress trigger active','Reported financial pressure','Missed mentor check-in'], sobrietyDate:'2024-07-20', campus:'HOPE Place Port Allen' },
+    { id:'a3', member:'Devon S.', severity:'warning', type:'milestone', note:'Approaching 30-day milestone in 3 days. First major milestone — needs recognition.', ts: Date.now()-10800000, recoveryStage:'Early Recovery (27 days)', attendanceTrend:'↑ Consistent attendance', riskScore:18, emotionalIndicators:['Positive engagement','Asking questions in group'], sobrietyDate:'2025-12-25', campus:'HOPE Place Port Allen' },
     { id:'a4', member:'Marcus T.', severity:'warning', type:'attendance', note:'Attendance dropped from weekly to bi-weekly over past 3 weeks.', ts: Date.now()-14400000, recoveryStage:'Active Recovery (6 months)', attendanceTrend:'↓ 50% reduction', riskScore:51, emotionalIndicators:['No specific trigger identified','New work schedule reported'], sobrietyDate:'2025-06-01', campus:'HOPE Place Port Allen' },
   ];
 
@@ -9722,7 +9722,7 @@ var predictLeadershipEmergence = function(platform) {
 };
 
 var CAMPUS_CONFIGS = [
-  { id:'thibodaux', name:'HOPE Place Thibodaux', icon:'🏛️', region:'Lafourche/Terrebonne', lat:29.80, lng:-90.82 },
+  { id:'thibodaux', name:'HOPE Place Port Allen', icon:'🏛️', region:'Lafourche/Terrebonne', lat:29.80, lng:-90.82 },
   { id:'hop-thib',  name:'HOPE Place Port Allen',        icon:'✝️', region:'Lafourche',             lat:29.79, lng:-90.81 },
   { id:'hope-place-port-allen',name:'HOPE Place Port Allen',            icon:'🙏', region:'Lafourche South',       lat:29.57, lng:-90.38 },
   { id:'polr-place-port-allen',name:'Port Allen',              icon:'🌆', region:'West Baton Rouge',      lat:30.45, lng:-91.21 },
@@ -11105,13 +11105,13 @@ function GuestRecoveryPanel({ platform, toast, session, setActive }) {
 
 function GuestImpactPanel({ platform, toast, session, setActive }) {
   var STORIES = [
-    {name:"Marcus W.", campus:"HOPE Place Thibodaux", outcome:"Employed Full-Time", streak:182, milestone:"6 Months Sober",
+    {name:"Marcus W.", campus:"HOPE Place Port Allen", outcome:"Employed Full-Time", streak:182, milestone:"6 Months Sober",
      story:"I walked in with nothing. No job, no hope, no plan. HOPE gave me a place to be honest. The workforce coordinator helped me get my OSHA-10. I am working at the refinery now. 182 days clean.",
      icon:"🛠", color:"var(--l4)"},
-    {name:"Angela L.", campus:"HOPE Place Thibodaux", outcome:"Placed, BR Facility Services", streak:243, milestone:"8 Months, Reunited with Family",
+    {name:"Angela L.", campus:"HOPE Place Port Allen", outcome:"Placed, BR Facility Services", streak:243, milestone:"8 Months, Reunited with Family",
      story:"I did not think any employer would hire me with my background. The HOPE team helped me see my story differently. I am employed, my kids are back, and I have not used in 8 months.",
      icon:"💼", color:"var(--gold)"},
-    {name:"A House Mother", campus:"HOPE Place HOP Thibodaux", outcome:"Leading a Recovery House", streak:730, milestone:"2 Years Clean",
+    {name:"A House Mother", campus:"HOPE Place HOPE Place Port Allen", outcome:"Leading a Recovery House", streak:730, milestone:"2 Years Clean",
      story:"I came in as a resident. Now I run the house. Two years clean. I watch women arrive broken and leave whole. This is what purpose feels like.",
      icon:"🏠", color:"var(--l5)"},
     {name:"Devon S.", campus:"Port Allen", outcome:"GED Passed, Trade School Enrolled", streak:94, milestone:"3 Months, GED Complete",
@@ -11398,14 +11398,14 @@ function EduAdminPanel({ platform, update, toast, session, setActive }) {
 
   // Seed enrollment data (replaced by real when backend connects)
   var ENROLLMENT_DATA = [
-    {name:'Marcus W.',    campus:'HOPE Place Thibodaux', tracks:['GED','Workforce'],  pct:62, lastActive:'2 days ago',  status:'On Track'},
-    {name:'Angela L.',    campus:'HOPE Place Thibodaux', tracks:['Workforce'],         pct:94, lastActive:'Today',       status:'Graduating'},
-    {name:'Devon S.',     campus:'HOPE Place @ Port Allen',           tracks:['GED','Trade'],       pct:38, lastActive:'1 week ago',  status:'Needs Check-in'},
+    {name:'Marcus W.',    campus:'HOPE Place Port Allen', tracks:['GED','Workforce'],  pct:62, lastActive:'2 days ago',  status:'On Track'},
+    {name:'Angela L.',    campus:'HOPE Place Port Allen', tracks:['Workforce'],         pct:94, lastActive:'Today',       status:'Graduating'},
+    {name:'Devon S.',     campus:'HOPE Place Port Allen',           tracks:['GED','Trade'],       pct:38, lastActive:'1 week ago',  status:'Needs Check-in'},
     {name:'Patricia R.',  campus:'HOPE Place Port Allen', tracks:['Life Skills'], pct:77, lastActive:'3 days ago',  status:'On Track'},
     {name:'James D.',     campus:'HOPE Place Port Allen', tracks:['Trade'],          pct:21, lastActive:'2 weeks ago', status:'At Risk'},
-    {name:'Tamika W.',    campus:'HOPE Place Thibodaux', tracks:['Ministry','Life Skills'], pct:55, lastActive:'Yesterday', status:'On Track'},
-    {name:'Robert T.',    campus:'HOPE Place @ Port Allen',           tracks:['Workforce','GED'],   pct:81, lastActive:'Today',       status:'On Track'},
-    {name:'Lisa C.',      campus:'HOPE Place Thibodaux', tracks:['Trade'],              pct:44, lastActive:'4 days ago', status:'On Track'},
+    {name:'Tamika W.',    campus:'HOPE Place Port Allen', tracks:['Ministry','Life Skills'], pct:55, lastActive:'Yesterday', status:'On Track'},
+    {name:'Robert T.',    campus:'HOPE Place Port Allen',           tracks:['Workforce','GED'],   pct:81, lastActive:'Today',       status:'On Track'},
+    {name:'Lisa C.',      campus:'HOPE Place Port Allen', tracks:['Trade'],              pct:44, lastActive:'4 days ago', status:'On Track'},
   ];
 
   var TRACK_STATS = [
@@ -11507,16 +11507,16 @@ function PipelineBoard({ platform, update, toast, session, setActive }) {
 
   // Seed pipeline data (replaces with real member data post-backend)
   var SEED_PIPELINE = [
-    {id:'pl1', name:'Marcus W.',   campus:'HOPE Place Thibodaux', stage:'retained',     track:'Trade',       employer:'BR Facility Services',   coordinator:'HOPE Director',   daysIn:182, nextMilestone:'6-month review',         urgency:'low'},
-    {id:'pl2', name:'Devon S.',    campus:'HOPE Place @ Port Allen',           stage:'training',     track:'GED + Trade', employer:null,                     coordinator:'Ambassador Team', daysIn:38,  nextMilestone:'GED Math test — Apr 15', urgency:'medium'},
-    {id:'pl3', name:'Angela L.',   campus:'HOPE Place Thibodaux', stage:'placed',       track:'Workforce',   employer:'BR Facility Services',   coordinator:'HOPE Director',   daysIn:61,  nextMilestone:'90-day retention check', urgency:'low'},
+    {id:'pl1', name:'Marcus W.',   campus:'HOPE Place Port Allen', stage:'retained',     track:'Trade',       employer:'BR Facility Services',   coordinator:'HOPE Director',   daysIn:182, nextMilestone:'6-month review',         urgency:'low'},
+    {id:'pl2', name:'Devon S.',    campus:'HOPE Place Port Allen',           stage:'training',     track:'GED + Trade', employer:null,                     coordinator:'Ambassador Team', daysIn:38,  nextMilestone:'GED Math test — Apr 15', urgency:'medium'},
+    {id:'pl3', name:'Angela L.',   campus:'HOPE Place Port Allen', stage:'placed',       track:'Workforce',   employer:'BR Facility Services',   coordinator:'HOPE Director',   daysIn:61,  nextMilestone:'90-day retention check', urgency:'low'},
     {id:'pl4', name:'James D.',    campus:'HOPE Place Port Allen',stage:'stabilizing',track:'Workforce',   employer:null,                     coordinator:'House Mother',    daysIn:14,  nextMilestone:'Career assessment',      urgency:'high'},
     {id:'pl5', name:'Patricia R.', campus:'HOPE Place Port Allen',stage:'jobready',track:'Home Health', employer:null,                     coordinator:'Workforce Team',  daysIn:22,  nextMilestone:'Agency interview Apr 8', urgency:'medium'},
-    {id:'pl6', name:'Tamika W.',   campus:'HOPE Place Thibodaux', stage:'interviewing', track:'Ministry',    employer:'HOPE Staff Candidate',   coordinator:'HOPE Director',   daysIn:45,  nextMilestone:'Second interview',       urgency:'medium'},
-    {id:'pl7', name:'Robert T.',   campus:'HOPE Place @ Port Allen',           stage:'training',     track:'Trade',       employer:null,                     coordinator:'Workforce Team',  daysIn:29,  nextMilestone:'OSHA-10 test Apr 12',    urgency:'high'},
-    {id:'pl8', name:'Lisa C.',     campus:'HOPE Place Thibodaux', stage:'jobready',     track:'Workforce',   employer:null,                     coordinator:'Workforce Team',  daysIn:18,  nextMilestone:'Resume review',          urgency:'low'},
-    {id:'pl9', name:'Kevin M.',    campus:'HOPE Place @ Port Allen',           stage:'stabilizing',  track:'Life Skills', employer:null,                     coordinator:'House Mother',    daysIn:7,   nextMilestone:'Week 2 check-in',        urgency:'high'},
-    {id:'pl10',name:'Sandra B.',   campus:'HOPE Place Thibodaux', stage:'interviewing', track:'Home Health', employer:'Home Instead',            coordinator:'Workforce Team',  daysIn:31,  nextMilestone:'Reference check',        urgency:'medium'},
+    {id:'pl6', name:'Tamika W.',   campus:'HOPE Place Port Allen', stage:'interviewing', track:'Ministry',    employer:'HOPE Staff Candidate',   coordinator:'HOPE Director',   daysIn:45,  nextMilestone:'Second interview',       urgency:'medium'},
+    {id:'pl7', name:'Robert T.',   campus:'HOPE Place Port Allen',           stage:'training',     track:'Trade',       employer:null,                     coordinator:'Workforce Team',  daysIn:29,  nextMilestone:'OSHA-10 test Apr 12',    urgency:'high'},
+    {id:'pl8', name:'Lisa C.',     campus:'HOPE Place Port Allen', stage:'jobready',     track:'Workforce',   employer:null,                     coordinator:'Workforce Team',  daysIn:18,  nextMilestone:'Resume review',          urgency:'low'},
+    {id:'pl9', name:'Kevin M.',    campus:'HOPE Place Port Allen',           stage:'stabilizing',  track:'Life Skills', employer:null,                     coordinator:'House Mother',    daysIn:7,   nextMilestone:'Week 2 check-in',        urgency:'high'},
+    {id:'pl10',name:'Sandra B.',   campus:'HOPE Place Port Allen', stage:'interviewing', track:'Home Health', employer:'Home Instead',            coordinator:'Workforce Team',  daysIn:31,  nextMilestone:'Reference check',        urgency:'medium'},
   ];
 
   // ── LIVE: prefer API pipeline; SEED_PIPELINE shown only before first load ──
@@ -11964,11 +11964,11 @@ function CohortManager({ platform, update, toast, session, setActive }) {
   var SEED_COHORTS = [
     {id:'co1',name:'OSHA-10 Spring 2026',track:'Trade - OSHA-10',sponsor:'Turner Industries',
      sponsorAmount:5000,startDate:'2026-04-01',endDate:'2026-04-15',targetSize:10,
-     enrolled:9,completed:0,status:'active',campus:'HOPE Place Thibodaux',
+     enrolled:9,completed:0,status:'active',campus:'HOPE Place Port Allen',
      members:['Marcus W.','Devon S.','Robert T.','Kevin M.','James P.','Andre L.','Chris T.','Marcus B.','Tony F.']},
     {id:'co2',name:'Home Health Cohort — March 2026',track:'Home Health Aide - Full Track',sponsor:'Home Instead',
      sponsorAmount:3200,startDate:'2026-03-10',endDate:'2026-03-31',targetSize:8,
-     enrolled:8,completed:7,status:'completed',campus:'HOPE Place Thibodaux',
+     enrolled:8,completed:7,status:'completed',campus:'HOPE Place Port Allen',
      members:['Patricia R.','Sandra B.','Lisa C.','Tamika W.','Maria G.','Joyce P.','Cindy R.','Anne M.']},
     {id:'co3',name:'Workforce Readiness Q2',track:'Workforce - Full Track',sponsor:'BR Facility Services',
      sponsorAmount:2800,startDate:'2026-04-15',endDate:'2026-05-15',targetSize:12,
@@ -15029,7 +15029,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           React.createElement('div',{style:{fontSize:'1.5rem',marginBottom:'0.5rem'}},'\uD83C\uDF89'),
           React.createElement('div',{style:{fontWeight:600,color:'var(--dtxt)',marginBottom:'0.5rem'}},'No events yet'),
           React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',marginBottom:'1rem'}},'Add events in the Events & Meetings panel, then come back to generate flyers.'),
-          React.createElement('button',{onClick:function(){openEventFlyer({title:'POLR Community Gathering',date:'April 26, 2026',time:'3:00 PM',location:'HOPE Place Thibodaux',description:'Join the HOPE community for a spring gathering. Food, fellowship, and testimony. Free and open to all.'});},
+          React.createElement('button',{onClick:function(){openEventFlyer({title:'POLR Community Gathering',date:'April 26, 2026',time:'3:00 PM',location:'HOPE Place Port Allen',description:'Join the HOPE community for a spring gathering. Food, fellowship, and testimony. Free and open to all.'});},
             className:'btn-primary',style:{padding:'0.6rem 1.5rem'}},'Preview Demo Event Flyer')
         )
       ):events.map(function(evt){
@@ -15194,9 +15194,9 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.85rem'}},
             [
-              {id:'hope-place-port-allen', name:'HOPE Place Thibodaux',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',        city:'Thibodaux'},
-              {id:'hope-place-port-allen',  name:'HOPE Place Port Allen',   phone:'225-333-0330', email:'hop.thibodaux@{HOPE_WEBSITE}', city:'Thibodaux'},
-              {id:'hope-place-port-allen',name:'HOPE Place Port Allen',      phone:'225-333-0330', email:'hop.larose@{HOPE_WEBSITE}',    city:'Larose'},
+              {id:'hope-place-port-allen', name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',        city:'Thibodaux'},
+              {id:'hope-place-port-allen',  name:'HOPE Place Port Allen',   phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', city:'Thibodaux'},
+              {id:'hope-place-port-allen',name:'HOPE Place Port Allen',      phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',    city:'Larose'},
               {id:'polr-place-port-allen',name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'portallen@{HOPE_WEBSITE}',     city:'Port Allen'},
             ].map(function(campus){
               var campusURL = 'https://{HOPE_WEBSITE}/platform?campus='+campus.id+'#journal';
@@ -15525,7 +15525,7 @@ function BizAccountingLedger({ platform, update, toast, setActive }) {
   var _sf=React.useState({
     type:'income', category:'housing', description:'',
     amount:'', date:new Date().toISOString().split('T')[0],
-    payer:'', campus:'HOPE Place Thibodaux', status:'paid',
+    payer:'', campus:'HOPE Place Port Allen', status:'paid',
     paypalRef:'', notes:''
   }), form=_sf[0], setForm=_sf[1];
   var setF=function(k){return function(e){setForm(function(p){return Object.assign({},p,{[k]:e.target.value});});};};
@@ -15566,18 +15566,18 @@ function BizAccountingLedger({ platform, update, toast, setActive }) {
 
   // Seed transactions
   var SEED = [
-    {id:'lx1',type:'income',category:'housing',description:'Housing fees — HOPE Place Thibodaux — March',amount:3200,date:'2026-03-01',payer:'Residents',campus:'HOPE Place Thibodaux',status:'paid',paypalRef:'',notes:'8 residents \xd7 $400/mo'},
-    {id:'lx2',type:'income',category:'housing',description:'Housing fees — HOP Thibodaux — March',amount:2100,date:'2026-03-01',payer:'Residents',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'6 residents \xd7 $350/mo'},
+    {id:'lx1',type:'income',category:'housing',description:'Housing fees — HOPE Place Port Allen — March',amount:3200,date:'2026-03-01',payer:'Residents',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'8 residents \xd7 $400/mo'},
+    {id:'lx2',type:'income',category:'housing',description:'Housing fees — HOPE Place Port Allen — March',amount:2100,date:'2026-03-01',payer:'Residents',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'6 residents \xd7 $350/mo'},
     {id:'lx3',type:'income',category:'license_fee',description:'Platform license — Hope Recovery Ministries — March',amount:499,date:'2026-03-01',payer:'Hope Recovery Ministries',campus:'External',status:'paid',paypalRef:'PP-2026030112345',notes:'Growth plan'},
     {id:'lx4',type:'income',category:'license_fee',description:'Platform license — Redeemer House NO — March',amount:799,date:'2026-03-01',payer:'Redeemer House New Orleans',campus:'External',status:'paid',paypalRef:'PP-2026030112346',notes:'Ministry Pro plan'},
     {id:'lx5',type:'income',category:'license_fee',description:'Platform license — Gulf Coast Reentry — March',amount:2500,date:'2026-03-01',payer:'Gulf Coast Reentry Collaborative',campus:'External',status:'pending',paypalRef:'',notes:'Reentry Pro plan — invoice sent'},
     {id:'lx6',type:'income',category:'grant_award',description:'Entergy Foundation — Workforce Dev Grant',amount:65000,date:'2026-03-01',payer:'Entergy Foundation',campus:'All',status:'paid',paypalRef:'',notes:'Award #EF-2026-0042'},
     {id:'lx7',type:'income',category:'grant_royalty',description:'Grant royalty — Hope Recovery WIOA award',amount:6500,date:'2026-03-15',payer:'Hope Recovery Ministries',campus:'External',status:'pending',paypalRef:'',notes:'10% of $65,000 WIOA award'},
-    {id:'lx8',type:'income',category:'placement_fee',description:'Employer placement fee — BR Facility Services',amount:750,date:'2026-03-10',payer:'BR Facility Services',campus:'HOPE Place Thibodaux',status:'paid',paypalRef:'PP-2026031098765',notes:'Marcus W. — 90-day retention confirmed'},
-    {id:'lx9',type:'income',category:'cohort_sponsor',description:'Cohort sponsorship — OSHA-10 Spring 2026',amount:5000,date:'2026-03-01',payer:'Turner Industries',campus:'HOPE Place Thibodaux',status:'paid',paypalRef:'',notes:'10-person cohort'},
-    {id:'lx10',type:'expense',category:'house_mother',description:'House Mother compensation — Alpha House — March',amount:1200,date:'2026-03-01',payer:'',campus:'HOPE Place Thibodaux',status:'paid',paypalRef:'',notes:'Maria S. — $300/wk \xd7 4 weeks'},
+    {id:'lx8',type:'income',category:'placement_fee',description:'Employer placement fee — BR Facility Services',amount:750,date:'2026-03-10',payer:'BR Facility Services',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'PP-2026031098765',notes:'Marcus W. — 90-day retention confirmed'},
+    {id:'lx9',type:'income',category:'cohort_sponsor',description:'Cohort sponsorship — OSHA-10 Spring 2026',amount:5000,date:'2026-03-01',payer:'Turner Industries',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'10-person cohort'},
+    {id:'lx10',type:'expense',category:'house_mother',description:'House Mother compensation — Alpha House — March',amount:1200,date:'2026-03-01',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Maria S. — $300/wk \xd7 4 weeks'},
     {id:'lx11',type:'expense',category:'house_mother',description:'House Mother compensation — Beta House — March',amount:1200,date:'2026-03-01',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Carmen R. — $300/wk \xd7 4 weeks'},
-    {id:'lx12',type:'expense',category:'maintenance',description:'Flooring + paint — House Alpha & Beta',amount:4200,date:'2026-03-05',payer:'',campus:'HOPE Place Thibodaux',status:'paid',paypalRef:'',notes:'Annual refresh'},
+    {id:'lx12',type:'expense',category:'maintenance',description:'Flooring + paint — House Alpha & Beta',amount:4200,date:'2026-03-05',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Annual refresh'},
     {id:'lx13',type:'expense',category:'supplies',description:'Curriculum packets + devotionals — Larose',amount:680,date:'2026-03-08',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Step packets Q2 2026'},
   ];
 
@@ -15758,7 +15758,7 @@ function BizAccountingLedger({ platform, update, toast, setActive }) {
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Campus'),
             React.createElement('select',{value:form.campus,onChange:setF('campus'),style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none'}},
-              ['HOPE Place Thibodaux','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','External','All'].map(function(s){return React.createElement('option',{key:s},s);}))
+              ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','External','All'].map(function(s){return React.createElement('option',{key:s},s);}))
           ),
           React.createElement('div',{style:{gridColumn:'1/-1'}},
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Notes'),
@@ -16737,19 +16737,19 @@ function MentorMatchEngine({ platform, update, session, toast, setActive }) {
 
   // Alumni pool: residents who are status 'Alumni' or have days > 180
   var ALUMNI_POOL = [
-    {id:'alum1',name:'Marcus W.',days:420,campus:'HOPE Place Thibodaux',
+    {id:'alum1',name:'Marcus W.',days:420,campus:'HOPE Place Port Allen',
      talents:['carpentry','mentorship','cooking'],
      barriers:['substance_alcohol','housing_instability','incarceration'],
      stepProgress:12,employed:true,employer:'BR Facility Services',
      bio:'12 steps complete. 14 months clean. Working full-time. Available for weekly check-ins.',
      availability:'Tue/Thu evenings'},
-    {id:'alum2',name:'Devon S.',days:380,campus:'HOPE Place Thibodaux',
+    {id:'alum2',name:'Devon S.',days:380,campus:'HOPE Place Port Allen',
      talents:['warehouse','driving','leadership'],
      barriers:['substance_opioid','family_separation','court_referral'],
      stepProgress:12,employed:true,employer:'Gulf Freight',
      bio:'Former court referral. 12 months clean. Forklift certified. Loves helping guys who came from the system.',
      availability:'Mon/Wed evenings'},
-    {id:'alum3',name:'Angela M.',days:310,campus:'HOPE Place Thibodaux',
+    {id:'alum3',name:'Angela M.',days:310,campus:'HOPE Place Port Allen',
      talents:['home_health','childcare','peer_support'],
      barriers:['substance_alcohol','domestic_violence','housing_instability'],
      stepProgress:9,employed:true,employer:'Home Instead',
@@ -19756,7 +19756,7 @@ function GuestMeetingsPanel({ platform, toast, session }) {
 
   var meetings = platform.meetings||[];
   var campusLocations = {
-    'HOPE Place Thibodaux': 'Thibodaux, LA', 'HOPE Place Port Allen': 'Thibodaux, LA',
+    'HOPE Place Port Allen': 'Thibodaux, LA', 'HOPE Place Port Allen': 'Thibodaux, LA',
     'HOPE Place Port Allen': 'Larose, LA', 'Port Allen': 'Port Allen, LA'
   };
 
@@ -20127,7 +20127,7 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
         React.createElement('div',{style:{fontSize:'0.82rem',fontWeight:600,color:'var(--dtxt)',marginBottom:'0.65rem'}},'Connect with a Group Chair or Director in your area:'),
         React.createElement('div',{style:{display:'flex',gap:'0.65rem',flexWrap:'wrap',justifyContent:'center',marginBottom:'0.85rem'}},
           [
-            {name:'HOPE Place Thibodaux',     phone:'225-333-0330', href:'tel:225-333-0330'},
+            {name:'HOPE Place Port Allen',     phone:'225-333-0330', href:'tel:225-333-0330'},
             {name:'HOPE Place Port Allen',      phone:'225-333-0330', href:'tel:225-333-0330'},
             {name:'HOPE Place Port Allen',         phone:'225-333-0330', href:'tel:225-333-0330'},
             {name:'Port Allen',         phone:'225-333-0330', href:'tel:225-333-0330'},
@@ -20255,7 +20255,7 @@ function GuestMentorPanel({ platform, update, toast }) {
           React.createElement('select',{value:campus,onChange:function(e){setCampus(e.target.value);},
             style:{width:'100%',padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none'}},
             React.createElement('option',{value:''},'-- Select nearest --'),
-            ['HOPE Place Thibodaux','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen','Not sure'].map(function(loc){
+            ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen','Not sure'].map(function(loc){
               return React.createElement('option',{key:loc,value:loc},loc);
             })
           )
@@ -20279,7 +20279,7 @@ function GuestMentorPanel({ platform, update, toast }) {
 
 function GuestSignupPanel({ platform, update, toast, setPage }) {
   var _s1=useState('register'), mode=_s1[0], setMode=_s1[1];
-  var _s2=useState({name:'',email:'',phone:'',campus:'HOPE Place Thibodaux',password:'',agreeTerms:false,agreeHIPAA:false,agreeMinistry:false}),
+  var _s2=useState({name:'',email:'',phone:'',campus:'HOPE Place Port Allen',password:'',agreeTerms:false,agreeHIPAA:false,agreeMinistry:false}),
     form=_s2[0], setForm=_s2[1];
   var _s3=useState(false), loading=_s3[0], setLoading=_s3[1];
 
@@ -20363,7 +20363,7 @@ function GuestSignupPanel({ platform, update, toast, setPage }) {
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Nearest HOPE Place'),
             React.createElement('select',{value:form.campus,onChange:setF('campus'),
               style:{width:'100%',padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none'}},
-              ['HOPE Place Thibodaux','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen'].map(function(loc){
+              ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen'].map(function(loc){
                 return React.createElement('option',{key:loc,value:loc},loc);
               })
             )
@@ -23124,7 +23124,7 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
 
   var DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   var MEETING_TYPES = [['physical','In Person 📍'],['zoom','Zoom 💻'],['hybrid','Hybrid 🌐']];
-  var CAMPUSES = [['hope-place-port-allen','HOPE Place Thibodaux'],['hope-place-port-allen','HOPE Place Port Allen'],['hope-place-port-allen','HOPE Place Port Allen'],['polr-place-port-allen','Port Allen']];
+  var CAMPUSES = [['hope-place-port-allen','HOPE Place Port Allen'],['hope-place-port-allen','HOPE Place Port Allen'],['hope-place-port-allen','HOPE Place Port Allen'],['polr-place-port-allen','Port Allen']];
 
   var inp = function(val, onChange, placeholder) {
     return React.createElement('input',{type:'text',value:val||'',onChange:onChange,placeholder:placeholder,style:{width:'100%',padding:'0.65rem 0.85rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}});
@@ -23169,7 +23169,7 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
         ),
         React.createElement('div',{style:{gridColumn:'1/-1'}},
           React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.35rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Location'),
-          inp(form.location, setF('location'), '501-A St. Mary St, Thibodaux...')
+          inp(form.location, setF('location'), '12883 Hwy 190 West, Port Allen LA 70767...')
         ),
         (form.meetingType==='zoom'||form.meetingType==='hybrid') && React.createElement('div',{style:{gridColumn:'1/-1'}},
           React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.35rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Zoom Link'),
@@ -23208,7 +23208,7 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
       React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'SCHEDULED MEETINGS')),
       (meetings.length === 0
         ? [
-            {id:'m0',name:'HOPE Place Thibodaux — Daily',day:'Mon–Sat',startTime:'7:00 AM',endTime:'8:00 AM',location:'501-A St. Mary St, Thibodaux',campus:'hope-place-port-allen',meetingType:'physical',isRecurring:true},
+            {id:'m0',name:'HOPE Place Port Allen',day:'Mon–Sat',startTime:'7:00 AM',endTime:'8:00 AM',location:'12883 Hwy 190 West, Port Allen LA 70767',campus:'hope-place-port-allen',meetingType:'physical',isRecurring:true},
             {id:'m1',name:'HOP Wednesday Night',day:'Wednesday',startTime:'7:00 PM',endTime:'8:30 PM',location:'12883 Hwy 190 West, Port Allen LA 70767',campus:'hope-place-port-allen',meetingType:'physical',isRecurring:true},
             {id:'m2',name:'POLR Port Allen',day:'Monday & Friday',startTime:'6:00 PM',endTime:'7:00 PM',location:'12883 Hwy 190 W, Port Allen',campus:'polr-place-port-allen',meetingType:'physical',isRecurring:true},
           ]
@@ -23575,7 +23575,7 @@ function HousingBuilder({
   const _useState26 = useState({
       name: '',
       beds: 4,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Mixed',
       monthlyRate: 100
     }),
@@ -23615,7 +23615,7 @@ function HousingBuilder({
     setForm({
       name: '',
       beds: 4,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Mixed',
       monthlyRate: 100
     });
@@ -24013,7 +24013,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
     : camp ? donations.filter(function(d){ return d.campus === camp || d.campus === 'General'; })
     : donations;
   var totalIn  = myDonations.reduce(function(a, d){ return a + (d.amount || 0); }, 0);
-  var CAMPUSES = ['HOPE Place Thibodaux','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen','All Campuses'];
+  var CAMPUSES = ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen','All Campuses'];
   // Live expenses from ledger + program fees; seed data as fallback when empty
   var ledgerExpenses = (platform.ledger||[])
     .filter(function(t){ return t.type==='expense' || (t.amount!=null && t.amount < 0); })
@@ -24025,10 +24025,10 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
       note:     t.description || t.note || ''
     }; });
   var EXPENSES = ledgerExpenses.length > 0 ? ledgerExpenses : [
-    {campus:'HOPE Place Thibodaux',     category:'Housing Upgrades',    amount:4200, date:'Mar 2026', note:'Flooring + paint — House Alpha & Beta'},
+    {campus:'HOPE Place Port Allen',     category:'Housing Upgrades',    amount:4200, date:'Mar 2026', note:'Flooring + paint — House Alpha & Beta'},
     {campus:'HOPE Place Port Allen',category:'Housing Upgrades',  amount:2800, date:'Mar 2026', note:'HVAC service + security lighting'},
     {campus:'HOPE Place Port Allen',  category:'Program Supplies',   amount:680,  date:'Mar 2026', note:'Step curriculum packets + devotionals'},
-    {campus:'HOPE Place @ Port Allen',  category:'Campus Launch',       amount:1200, date:'Feb 2026', note:'Meeting space setup + signage'},
+    {campus:'HOPE Place Port Allen',  category:'Campus Launch',       amount:1200, date:'Feb 2026', note:'Meeting space setup + signage'},
     {campus:'All Campuses',             category:'Assurance Fund',      amount:2400, date:'Mar 2026', note:'8% reserve from housing payments'},
     {campus:'All Campuses',             category:'Workforce Initiative',amount:950,  date:'Mar 2026', note:'Job fair + employer packet printing'},
   ];
@@ -24571,7 +24571,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
             React.createElement('div',{style:{fontSize:'0.62rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.1em',color:'var(--dmuted)',marginBottom:'0.3rem'}},'Campus'),
             React.createElement('select',{value:expForm.campus,onChange:setEF('campus'),
               style:{width:'100%',padding:'0.6rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none'}},
-              ['All Campuses','HOPE Place Thibodaux','HOPE Place @ Port Allen','HOPE Place Port Allen','HOPE Place Port Allen']
+              ['All Campuses','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen']
                 .map(function(c){return React.createElement('option',{key:c},c);})
             )
           ),
@@ -25182,7 +25182,7 @@ function CampusesBuilder({
   };
   const defaultCampuses = [{
     id: 'c-1',
-    name: 'HOPE Place Thibodaux',
+    name: 'HOPE Place Port Allen',
     city: 'Thibodaux',
     parish: 'Lafourche',
     active: true,
@@ -25468,7 +25468,7 @@ function AnnouncementsBuilder({
       fontFamily: 'var(--font-body)',
       fontSize: '0.83rem'
     }
-  }, ['All Members', 'HOPE Place Thibodaux', 'HOPE Place Port Allen', 'Port Allen', 'Leaders Only', 'Ambassadors'].map(function (a) {
+  }, ['All Members', 'HOPE Place Port Allen', 'HOPE Place Port Allen', 'Port Allen', 'Leaders Only', 'Ambassadors'].map(function (a) {
     return /*#__PURE__*/React.createElement("option", {
       key: a
     }, a);
@@ -27794,7 +27794,7 @@ function TestimonyEditor({
       title: '',
       type: 'testimony',
       body: '',
-      campus: (session === null || session === void 0 ? void 0 : session.campus) || 'HOPE Place Thibodaux',
+      campus: (session === null || session === void 0 ? void 0 : session.campus) || 'HOPE Place Port Allen',
       program: '',
       tags: ''
     }),
@@ -27994,7 +27994,7 @@ function TestimonyEditor({
       fontFamily: 'var(--font-body)',
       fontSize: '0.83rem'
     }
-  }, ['HOPE Place Thibodaux', 'HOPE Place Port Allen', 'HOPE Place Port Allen', 'HOPE Place Port Allen'].map(function (c) {
+  }, ['HOPE Place Port Allen', 'HOPE Place Port Allen', 'HOPE Place Port Allen', 'HOPE Place Port Allen'].map(function (c) {
     return /*#__PURE__*/React.createElement("option", {
       key: c
     }, c);
@@ -28099,7 +28099,7 @@ function ExpansionMissions({ platform, update, toast, session, setActive }) {
   var _s1=useState('board'),    view=_s1[0],    setView=_s1[1];
   var _s2=useState(null),       selMission=_s2[0], setSelMission=_s2[1];
   var _s3=useState(false),      creating=_s3[0],   setCreating=_s3[1];
-  var _s4=useState({type:'',location:'',campus:'Thibodaux',priority:'High',deadline:'',expectedImpact:'',notes:''}),
+  var _s4=useState({type:'',location:'',campus:'Port Allen',priority:'High',deadline:'',expectedImpact:'',notes:''}),
     form=_s4[0], setForm=_s4[1];
 
   var missions = platform.expansionMissions || [];
@@ -28655,7 +28655,7 @@ function MemberCalendar({
         return ev && toast({
           icon: '📅',
           title: "March ".concat(d),
-          body: d === 20 ? 'Drug Test — 8-10 AM' : d === 23 ? 'Housing Payment Due — $100' : d === 25 ? 'HOP Thibodaux 7PM' : 'POLR Meeting'
+          body: d === 20 ? 'Drug Test — 8-10 AM' : d === 23 ? 'Housing Payment Due — $100' : d === 25 ? 'HOPE Place Port Allen 7PM' : 'POLR Meeting'
         });
       },
       style: {
@@ -28694,7 +28694,7 @@ function MemberProfile({ platform, update, session, toast }) {
   var _s1=useState({
     name:(session&&session.name)||'',
     email:(session&&session.email)||'',
-    campus:(session&&session.campus)||'HOPE Place Thibodaux',
+    campus:(session&&session.campus)||'HOPE Place Port Allen',
     phone:'', bio:'', sobrietyPublic:false, shareBreakthroughs:true,
     allowMentorContact:true, notifyMilestones:true
   }), form=_s1[0], setForm=_s1[1];
@@ -28803,7 +28803,7 @@ function MemberProfile({ platform, update, session, toast }) {
         React.createElement('div',null,inp('name','Full Name','text','')),
         React.createElement('div',null,inp('email','Email','email','')),
         React.createElement('div',null,inp('phone','Phone','tel','985-...')),
-        React.createElement('div',null,React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'0.35rem'}},React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em'}},'Campus'),React.createElement('select',{value:form.campus,onChange:setF('campus'),style:{padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',width:'100%'}},['HOPE Place Thibodaux','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen'].map(function(loc){return React.createElement('option',{key:loc,value:loc},loc);})))),
+        React.createElement('div',null,React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'0.35rem'}},React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em'}},'Campus'),React.createElement('select',{value:form.campus,onChange:setF('campus'),style:{padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',width:'100%'}},['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen'].map(function(loc){return React.createElement('option',{key:loc,value:loc},loc);})))),
         React.createElement('div',{style:{gridColumn:'1/-1'}},
           React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.35rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Personal Bio (shared only with your mentor)'),
           React.createElement('textarea',{value:form.bio,onChange:setF('bio'),rows:3,placeholder:'A brief note about yourself — your story, your goals, what brought you here...',style:{width:'100%',padding:'0.65rem 0.85rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',resize:'vertical',lineHeight:1.65,boxSizing:'border-box'}})
@@ -29202,8 +29202,8 @@ function AuditLog({ platform, session }) {
   // Merge with seed entries so it's never empty
   var SEED = [
     {id:'al-s1',actor:'HOPETTD',action:'SYSTEM_INITIALIZED',entityType:'platform',entityId:'polr-hq',before:null,after:{version:'2026.03'},timestamp:'2026-03-28T08:00:00.000Z',campus:'All'},
-    {id:'al-s2',actor:'HOPEHQ',action:'MEETING_ATTENDANCE_MARKED',entityType:'meeting',entityId:'m1',before:null,after:{date:'2026-03-28',count:6},timestamp:'2026-03-28T07:15:00.000Z',campus:'HOPE Place Thibodaux'},
-    {id:'al-s3',actor:'HOPEHQ',action:'DRUG_TEST_RECORDED',entityType:'resident',entityId:'r3',before:null,after:{result:'negative',date:'2026-03-27'},timestamp:'2026-03-27T14:30:00.000Z',campus:'HOPE Place Thibodaux'},
+    {id:'al-s2',actor:'HOPEHQ',action:'MEETING_ATTENDANCE_MARKED',entityType:'meeting',entityId:'m1',before:null,after:{date:'2026-03-28',count:6},timestamp:'2026-03-28T07:15:00.000Z',campus:'HOPE Place Port Allen'},
+    {id:'al-s3',actor:'HOPEHQ',action:'DRUG_TEST_RECORDED',entityType:'resident',entityId:'r3',before:null,after:{result:'negative',date:'2026-03-27'},timestamp:'2026-03-27T14:30:00.000Z',campus:'HOPE Place Port Allen'},
     {id:'al-s4',actor:'HOPETTD',action:'CONTRACT_GENERATED',entityType:'invoice',entityId:'inv001',before:null,after:{client:'Hope Recovery',plan:'growth'},timestamp:'2026-03-26T11:00:00.000Z',campus:'External'},
     {id:'al-s5',actor:'HOPEHQ',action:'TESTIMONY_APPROVED',entityType:'testimony',entityId:'t1',before:{status:'pending'},after:{status:'published'},timestamp:'2026-03-25T16:45:00.000Z',campus:'All'},
   ];
@@ -29294,10 +29294,10 @@ function ContactConfigPanel({ platform, update, toast, session }) {
 
   var CAMPUSES = ['hope-place-port-allen','hope-place-port-allenodaux','hope-place-port-allen','port-allen'];
   var CAMPUS_LABELS = {
-    'hope-place-port-allen':'HOPE Place Thibodaux',
+    'hope-place-port-allen':'HOPE Place Port Allen',
     'hope-place-port-allenodaux':'HOPE Place Port Allen',
     'hope-place-port-allen':'HOPE Place Port Allen',
-    'port-allen':'HOPE Place @ Port Allen'
+    'port-allen':'HOPE Place Port Allen'
   };
 
   var _tab = React.useState('hq');
@@ -29527,7 +29527,7 @@ function ContactConfigPanel({ platform, update, toast, session }) {
           React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)',marginBottom:'0.65rem'}},
             'What level of detail appears in reports sent to Transportation, Thrift, and Food partners'),
           React.createElement('div',{style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
-            [['campus','Campus totals only — "3 vehicles donated to HOPE Place Thibodaux"'],
+            [['campus','Campus totals only — "3 vehicles donated to HOPE Place Port Allen"'],
              ['count', 'Count only — "3 members received vehicles this quarter"'],
              ['full',  'Full detail — member names visible (requires member consent)'],
             ].map(function(opt) {
@@ -29552,8 +29552,8 @@ function ContactConfigPanel({ platform, update, toast, session }) {
           React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)',marginBottom:'0.65rem'}},
             'How to describe recipients in partner thank-you reports and receipts'),
           React.createElement('div',{style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
-            [['anonymous', '"A member in recovery at HOPE Place Thibodaux received this vehicle"'],
-             ['campus',    '"A resident of HOPE Place Thibodaux received this vehicle"'],
+            [['anonymous', '"A member in recovery at HOPE Place Port Allen received this vehicle"'],
+             ['campus',    '"A resident of HOPE Place Port Allen received this vehicle"'],
              ['role',      '"A workforce-track member in their 4th month of recovery received this vehicle"'],
             ].map(function(opt) {
               var active = privForm.inKindReportStyle === opt[0];
@@ -29796,25 +29796,25 @@ const SAYINGS = ['Our greatest testimony isn\'t just words, but how we <strong>w
 const MEETINGS_DATA = [{
   day: 'Mon–Sat',
   time: '7:00 AM',
-  name: 'HOPE Place Thibodaux — Daily',
-  location: '501-A St. Mary St, Thibodaux',
+  name: 'HOPE Place Port Allen',
+  location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: 'Drug Court Certified'
 }, {
   day: 'Wednesday',
   time: '6:30 PM',
-  name: 'HOP Thibodaux — Check-In',
+  name: 'HOPE Place Port Allen — Check-In',
   location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: 'Childcare Available'
 }, {
   day: 'Wednesday',
   time: '7:00 PM',
-  name: 'HOP Thibodaux — Worship + Lesson',
+  name: 'HOPE Place Port Allen — Worship + Lesson',
   location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: ''
 }, {
   day: 'Wednesday',
   time: '8:00 PM',
-  name: 'HOP Thibodaux — Open Share',
+  name: 'HOPE Place Port Allen — Open Share',
   location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: ''
 }, {
@@ -29828,12 +29828,12 @@ const MEETINGS_DATA = [{
   day: 'Wednesday',
   time: '7:00 PM',
   name: 'HOPE Place Port Allen',
-  location: 'Larose, LA',
+  location: 'Port Allen, LA',
   note: ''
 }];
 const CAMPUSES = [{
   slug: 'hope-place-port-allen',
-  name: 'HOPE Place Thibodaux',
+  name: 'HOPE Place Port Allen',
   location: 'Thibodaux, LA · West Baton Rouge Parish',
   badge: 'active',
   badgeLabel: 'Flagship',
@@ -29871,7 +29871,7 @@ const CAMPUSES = [{
   slug: 'hope-place-port-allen',
   name: 'HOPE Place Port Allen',
   zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-core',
-  location: 'Larose, LA',
+  location: 'Port Allen, LA',
   badge: 'active',
   badgeLabel: 'Active',
   desc: 'Serving the Golden Meadow corridor with weekly recovery meetings.',
@@ -30741,7 +30741,7 @@ function HomePage({
     name: 'HOPE Place',
     loc: 'Thibodaux',
     type: 'Recovery Center · Est. 2004',
-    address: '501-A St. Mary St, Thibodaux LA 70301',
+    address: '12883 Hwy 190 West, Port Allen LA 70767 LA 70301',
     sch: 'Mon–Sat · <span>7:00 AM</span>'
   }, {
     name: 'HOPE Place Port Allen',
@@ -30941,7 +30941,7 @@ function HomePage({
       color: 'var(--gold2)',
       marginBottom: '1.25rem'
     }
-  }, "HOPE Recovery: Hold on Pain Ends"), [['📞', 'Phone', '225-333-0330'], ['✉️', 'Email', 'bro.chuck.edwards@gmail.com'], ['📍', 'HOPE Place', '501-A St. Mary St, Thibodaux LA 70301'], ['🌐', 'Website', 'www.{HOPE_WEBSITE}']].map(function ([icon, label, val]) {
+  }, "HOPE Recovery: Hold on Pain Ends"), [['📞', 'Phone', '225-333-0330'], ['✉️', 'Email', 'bro.chuck.edwards@gmail.com'], ['📍', 'HOPE Place', '12883 Hwy 190 West, Port Allen LA 70767 LA 70301'], ['🌐', 'Website', 'www.{HOPE_WEBSITE}']].map(function ([icon, label, val]) {
     return /*#__PURE__*/React.createElement("div", {
       key: label,
       className: "contact-item"
