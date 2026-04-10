@@ -553,11 +553,11 @@ var CONTACT_CONFIG_DEFAULT = {
   hq: {
     name:    'HOPE Recovery: Hold on Pain Ends',
     shortName: 'HOPE',
-    phone:   '225-333-0330',
-    email:   'bro.chuck.edwards@gmail.com',
+    phone:   '{HOPE_PHONE}',
+    email:   'admin@hopenetwork.com',
     website: 'hopenetwork.com',
-    address: 'Port Allen, Louisiana',
-    tagline: 'Walk it out faithfully.'
+    address: 'Thibodaux, Louisiana',
+    tagline: 'Walk well.'
   },
   // Per-campus overrides (keyed by campus slug)
   campuses: {
@@ -628,11 +628,11 @@ function resolveContact(text, platform, campusKey, session) {
   var cfg = getContactConfig(platform, campusKey, session);
   return text
     .replace(/\{HOPE_NAME\}/g,    cfg.name    || 'HOPE Recovery: Hold on Pain Ends')
-    .replace(/\{HOPE_PHONE\}/g,   cfg.phone   || '225-333-0330')
-    .replace(/\{HOPE_EMAIL\}/g,   cfg.email   || 'bro.chuck.edwards@gmail.com')
+    .replace(/\{HOPE_PHONE\}/g,   cfg.phone   || '{HOPE_PHONE}')
+    .replace(/\{HOPE_EMAIL\}/g,   cfg.email   || 'admin@hopenetwork.com')
     .replace(/\{HOPE_WEBSITE\}/g, cfg.website || 'hopenetwork.com')
-    .replace(/\{POLR_ADDRESS\}/g, cfg.address || 'Port Allen, Louisiana')
-    .replace(/\{POLR_TAGLINE\}/g, cfg.tagline || 'Walk it out faithfully.');
+    .replace(/\{POLR_ADDRESS\}/g, cfg.address || 'Thibodaux, Louisiana')
+    .replace(/\{POLR_TAGLINE\}/g, cfg.tagline || 'Walk well.');
 }
 
 // Expose globally for use anywhere in app
@@ -925,7 +925,7 @@ const SYSTEM_ACCOUNTS = {
     campus: 'All Campuses',
     title: 'Executive Director'
   },
-  'bro.chuck.edwards@gmail.com': {
+  '{HOPE_EMAIL}': {
     password: 'ACTS2:38',
     role: 'admin',
     name: 'POLR HQ Admin',
@@ -1178,7 +1178,7 @@ const AI_GUIDANCE = {
       priority: 'P2',
       icon: '📖',
       title: 'Read a Testimony Article',
-      desc: '"The Father Is Already Running" — 5 min read. Many people said this was their turning point.',
+      desc: '"The God Who Waits for You" — 5 min read. Many people said this was their turning point.',
       action: 'Read'
     }, {
       priority: 'P3',
@@ -1252,7 +1252,7 @@ function initPlatformState() {
     }],
     blogPosts: [{
       id: 'b1',
-      title: 'The Father Is Already Running',
+      title: 'The God Who Waits for You',
       category: 'Scripture',
       author: 'Chuck Edwards',
       date: 'Mar 18, 2026',
@@ -1266,7 +1266,7 @@ function initPlatformState() {
       author: 'HOPE Staff',
       date: 'Mar 12, 2026',
     readTime: '5 min read',
-    body: "Repentance isn\'t crying at an altar. It\'s waking up Monday and making a different choice than you made last Monday.\n\nWe have sold people a version of repentance that requires a dramatic moment — the altar call, the breakdown, the spiritual earthquake. And because people expect the earthquake, they wait for it. And while they wait, they keep using.\n\nIn the Greek, the word is metanoia. Change of mind. Not change of emotion — change of direction.\n\nStep Four is an act of repentance. It's not glamorous. You sit at a table with a piece of paper and you write down every resentment, every fear, every person you've harmed. You stare at your own patterns until you can't pretend they aren't patterns anymore. That is metanoia. That is the change of mind that makes the change of life possible.\n\nChuck Edwards didn't find sobriety at an altar. He found it in a moment of exhaustion so complete that there was nothing left to argue with God about. That too is repentance. Not performance — collapse. Not drama — surrender.\n\nIf you're waiting to feel sorry enough to change, you'll wait forever. The feeling follows the decision. Make the decision. Walk it out. Feel it later.\n\nWalk it out faithfully."
+    body: "Repentance isn\'t crying at an altar. It\'s waking up Monday and making a different choice than you made last Monday.\n\nWe have sold people a version of repentance that requires a dramatic moment — the altar call, the breakdown, the spiritual earthquake. And because people expect the earthquake, they wait for it. And while they wait, they keep using.\n\nIn the Greek, the word is metanoia. Change of mind. Not change of emotion — change of direction.\n\nStep Four is an act of repentance. It's not glamorous. You sit at a table with a piece of paper and you write down every resentment, every fear, every person you've harmed. You stare at your own patterns until you can't pretend they aren't patterns anymore. That is metanoia. That is the change of mind that makes the change of life possible.\n\nChuck Edwards didn't find sobriety at an altar. He found it in a moment of exhaustion so complete that there was nothing left to argue with God about. That too is repentance. Not performance — collapse. Not drama — surrender.\n\nIf you're waiting to feel sorry enough to change, you'll wait forever. The feeling follows the decision. Make the decision. Walk it out. Feel it later.\n\nWalk well."
   }],
     programs: [{
       id: 'p1',
@@ -1498,29 +1498,29 @@ function initPlatformState() {
     contactRoutes: [{
       id: 'polr-place-thibodaux',
       name: 'HOPE Place Thibodaux',
-      email: 'bro.chuck.edwards@gmail.com',
-      phone: '225-333-0330',
+      email: '{HOPE_EMAIL}',
+      phone: '{HOPE_PHONE}',
       leader: 'Director',
       queue: []
     }, {
       id: 'polr-place-hop-thib',
       name: 'HOP — Thibodaux',
-      email: 'hop.thibodaux@hopenetwork.com',
-      phone: '225-333-0330',
+      email: 'hop.thibodaux@{HOPE_WEBSITE}',
+      phone: '{HOPE_PHONE}',
       leader: 'Campus Lead',
       queue: []
     }, {
       id: 'polr-place-hop-larose',
       name: 'HOP — Larose',
-      email: 'hop.larose@hopenetwork.com',
-      phone: '225-333-0330',
+      email: 'hop.larose@{HOPE_WEBSITE}',
+      phone: '{HOPE_PHONE}',
       leader: 'Campus Lead',
       queue: []
     }, {
       id: 'polr-place-port-allen',
       name: 'HOPE Place Port Allen',
-      email: 'portallen@hopenetwork.com',
-      phone: '225-333-0330',
+      email: 'portallen@{HOPE_WEBSITE}',
+      phone: '{HOPE_PHONE}',
       leader: 'TBD',
       queue: []
     }],
@@ -1556,9 +1556,9 @@ function initPlatformState() {
     terminology: {        // White-label terminology map
       networkName:'HOPE Recovery Network', campusName:'HOPE Place', houseName:'HOPE House',
       reflectionName:'POLR Reflection', pointsName:'POLR Points',
-      signaturePhrase:'Walk it out faithfully.', adminTitle:'HOPE Director',
+      signaturePhrase:'Walk well.', adminTitle:'HOPE Director',
       staffTitle:'Ambassador', programName:'12-Step Recovery',
-      siteDomain:'hopenetwork.com', orgName:'HOPE Recovery: Hold on Pain Ends'
+      siteDomain:'{HOPE_WEBSITE}', orgName:'HOPE Recovery: Hold on Pain Ends'
     }
   };
   try {
@@ -1759,7 +1759,7 @@ function generateMoneyFlowDiagram() {
 
   '<\/div>' +
 
-  '<div class="fn">HOPE Recovery Network Platform — Money Flow Diagram — HOPE Recovery, Inc. — hopenetwork.com — Confidential. Internal use only.<\/div>' +
+  '<div class="fn">HOPE Recovery Network Platform — Money Flow Diagram — HOPE Recovery, Inc. — {HOPE_WEBSITE} — Confidential. Internal use only.<\/div>' +
   '<\/body><\/html>';
   var w=window.open('','_blank','width=1200,height=900');
   if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
@@ -1921,7 +1921,7 @@ function generateChainOfCommandDiagram() {
   }).join('') +
   '<\/div><\/div>' +
 
-  '<div class="fn">HOPE Recovery Network Platform — Chain of Command — HOPE Recovery, Inc. — hopenetwork.com — Confidential. Internal use only.<\/div>' +
+  '<div class="fn">HOPE Recovery Network Platform — Chain of Command — HOPE Recovery, Inc. — {HOPE_WEBSITE} — Confidential. Internal use only.<\/div>' +
   '<\/body><\/html>';
   var w=window.open('','_blank','width=1200,height=900');
   if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
@@ -2546,7 +2546,7 @@ function AIGuidancePanel({
           'Check In':'residents','Follow Up':'residents','Schedule':'my-calendar',
           'Complete':'house-mother','Confirm':'workforce','Remind':'workforce',
           'Respond':'employers','Update':'growth-profile','Read Now':'step-lessons',
-          'View Progress':'my-progress','Find Meeting':'guest-meetings','Read':'hopeinmotion',
+          'View Progress':'my-progress','Find Meeting':'guest-meetings','Read':'walkwell',
           'Journal':'guest-journal','Connect':'guest-mentor'
         };
         return markDone(i, navMap[task.action]);
@@ -2747,8 +2747,8 @@ function ResourcesLibrary({ platform, update, toast, session }) {
 
   const CATS = ['all','Step Work','Housing','Employment','Legal Aid','Health & Recovery','Faith & Scripture','Forms & Documents'];
   const DEFAULTS = [
-    { id:'r1', title:'HOPE Member Binder', cat:'Step Work', type:'PDF', description:'Complete member resource packet with all 12 steps, reflections, and prayers.', url:'https://hopenetwork.com/member-binder', downloads:142, addedBy:'Admin', addedAt:'2024-01-01' },
-    { id:'r2', title:'Housing Application Form', cat:'Housing', type:'Form', description:'Official HOPE House application — print or complete digitally.', url:'https://hopenetwork.com/housing-application', downloads:87, addedBy:'Admin', addedAt:'2024-01-01' },
+    { id:'r1', title:'HOPE Member Binder', cat:'Step Work', type:'PDF', description:'Complete member resource packet with all 12 steps, reflections, and prayers.', url:'https://{HOPE_WEBSITE}/member-binder', downloads:142, addedBy:'Admin', addedAt:'2024-01-01' },
+    { id:'r2', title:'Housing Application Form', cat:'Housing', type:'Form', description:'Official HOPE House application — print or complete digitally.', url:'https://{HOPE_WEBSITE}/housing-application', downloads:87, addedBy:'Admin', addedAt:'2024-01-01' },
     { id:'r3', title:'Recovery Employment Guide', cat:'Employment', type:'PDF', description:'Resume tips, interview prep, and employer contact list for members.', url:'#', downloads:64, addedBy:'Admin', addedAt:'2024-01-01' },
     { id:'r4', title:'SAMHSA National Helpline', cat:'Health & Recovery', type:'Link', description:'Free confidential treatment referral — 1-800-662-4357. 24/7.', url:'https://www.samhsa.gov/find-help/national-helpline', downloads:29, addedBy:'Admin', addedAt:'2024-01-01' },
     { id:'r5', title:'Louisiana Legal Aid', cat:'Legal Aid', type:'Link', description:'Free civil legal services for low-income Louisiana residents.', url:'https://legalservicesla.org', downloads:18, addedBy:'Admin', addedAt:'2024-01-01' },
@@ -3135,7 +3135,7 @@ function EventsBuilder({ platform, update, toast, session }) {
   var shareEvent = function(evt) {
     var text = evt.title + ' — ' + (evt.date || '') + (evt.startTime ? ' at ' + evt.startTime : '') + (evt.location ? ' · ' + evt.location : '') + ' · HOPE Recovery: Hold on Pain Ends';
     if (navigator.share) {
-      navigator.share({ title: evt.title, text: text, url: 'https://hopenetwork.com' }).catch(function(){});
+      navigator.share({ title: evt.title, text: text, url: 'https://{HOPE_WEBSITE}' }).catch(function(){});
     } else {
       navigator.clipboard && navigator.clipboard.writeText(text);
       toast({ icon:'✨', title:'Copied to clipboard', body:'Share link ready to paste' });
@@ -3909,7 +3909,7 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
       title: '', author: (session&&session.name)||'HOPE Staff', duration: '45 min',
       status: 'draft', // draft | review | doctrine_review | approved | archived
       header: { orgName:'HOPE Recovery: Hold on Pain Ends', stepLabel:'Step '+selStep, date:new Date().toLocaleDateString() },
-      footer: { text:'"Walk it out faithfully." — HOPE Recovery · hopenetwork.com · 225-333-0330', show:true },
+      footer: { text:'"Walk well." — {HOPE_NAME} · {HOPE_WEBSITE} · {HOPE_PHONE}', show:true },
       sections: [
         { id:'s1',  type:'scripture',   label:'Key Scripture',          content:'', ref:'', scriptureId:'', order:0 },
         { id:'s2',  type:'reflection',  label:'POLR Opening Reflection', content:'', order:1 },
@@ -6995,9 +6995,9 @@ function HouseMotherDashboard({ platform, update, updateInList, toast, session }
         React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'CRISIS CONTACT CHAIN')),
         React.createElement('div',{className:'d-card-body'},
           [
-            {name:'HOPE Director',title:'Director & Founder',phone:'225-333-0330',role:'primary',priority:'#1 — Contact Immediately'},
+            {name:'HOPE Director',title:'Director & Founder',phone:'{HOPE_PHONE}',role:'primary',priority:'#1 — Contact Immediately'},
             {name:'HOPE Place Leader',title:'Group Chair on Duty',phone:'On call',role:'secondary',priority:'#2 — Simultaneous'},
-            {name:'Admin Team',title:'bro.chuck.edwards@gmail.com',phone:'Notification',role:'secondary',priority:'#3 — Simultaneous'},
+            {name:'Admin Team',title:'{HOPE_EMAIL}',phone:'Notification',role:'secondary',priority:'#3 — Simultaneous'},
             {name:'911 / Emergency',title:'Law Enforcement / EMS',phone:'911',role:'emergency',priority:'If immediate safety risk'},
           ].map(function(contact,i){
             return React.createElement('div',{key:i,style:{display:'flex',justifyContent:'space-between',padding:'0.85rem 0',borderBottom:'1px solid var(--bdr)',alignItems:'center'}},
@@ -7830,7 +7830,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
      leaseExpiry:'2027-02-01', rentCapPct:3, rightOfFirstRefusal:true,
      resaleDocReady:true, lastInspection:'2026-02-15',
     },
-    {id:'pp2', partnerName:'Mary Trosclair', contactName:'Mary Trosclair', phone:'985-555-2002', email:'bro.chuck.edwards@gmail.com',
+    {id:'pp2', partnerName:'Mary Trosclair', contactName:'Mary Trosclair', phone:'985-555-2002', email:'{HOPE_EMAIL}',
      propertyAddress:'2201 Canal Blvd', city:'Thibodaux', state:'LA', beds:2, bathrooms:1, squareFt:'900',
      contributionPath:'charitable-donation', marketRent:'800', partnerRent:'0', occupancyMonths:10,
      tier:'legacy', yearsActive:4, livesHoused:14, reunifications:4, jobsEnabled:9, graduates:6,
@@ -8894,7 +8894,7 @@ var detectRisk = function(text) {
 // Seed community posts
 var SEED_POSTS = [
   { id:'cp1', authorName:'Angela M.', authorInitial:'A', postType:'breakthrough', visibility:'public', body:'Got the call today — I start work Monday. 47 days clean. God is real.', ts: Date.now()-3600000*2, reactions:{pray:3,strong:7,proud:12,growth:4,seen:6}, comments:[{author:'Marcus W.',text:'LETS GO ANGELA! 🔥',ts:Date.now()-3500000},{author:'House Mother',text:'So proud of you. This is what obedience looks like.',ts:Date.now()-3400000}], flagged:false, pinned:true, peerScore:5 },
-  { id:'cp2', authorName:'Tamika W.', authorInitial:'T', postType:'breakthrough', visibility:'public', body:'My daughter hugged me for the first time in 14 months yesterday. I cried for an hour. I didn\'t think I\'d ever get that back.', ts: Date.now()-86400000, reactions:{pray:8,strong:4,proud:15,growth:9,seen:11}, comments:[{author:'Director',text:'Tamika — this is why we do what we do. Walk it out faithfully.',ts:Date.now()-85000000}], flagged:false, pinned:true, peerScore:8 },
+  { id:'cp2', authorName:'Tamika W.', authorInitial:'T', postType:'breakthrough', visibility:'public', body:'My daughter hugged me for the first time in 14 months yesterday. I cried for an hour. I didn\'t think I\'d ever get that back.', ts: Date.now()-86400000, reactions:{pray:8,strong:4,proud:15,growth:9,seen:11}, comments:[{author:'Director',text:'Tamika — this is why we do what we do. Walk well.',ts:Date.now()-85000000}], flagged:false, pinned:true, peerScore:8 },
   { id:'cp3', authorName:'Anonymous', authorInitial:'?', postType:'prayer', visibility:'house', body:'Struggling tonight. Old neighborhood called. I didn\'t answer. Please pray.', ts: Date.now()-7200000, reactions:{pray:12,seen:9,strong:5}, comments:[{author:'Angela M.',text:'Praying right now. You made the right choice.',ts:Date.now()-7100000},{author:'House Mother',text:'Coming to check on you. Be right there.',ts:Date.now()-7050000}], flagged:false, pinned:false, peerScore:0 },
   { id:'cp4', authorName:'Marcus W.', authorInitial:'M', postType:'gratitude', visibility:'public', body:'28 days. Grateful for this house, this community, and the men who showed me it was possible. I see it now.', ts: Date.now()-172800000, reactions:{pray:6,strong:9,proud:8,growth:12,seen:7}, comments:[], flagged:false, pinned:false, peerScore:3 },
 ];
@@ -9189,11 +9189,11 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
             onClick:function(){
               var shareTypes={testimony:'testimony',breakthrough:'breakthrough moment',gratitude:'gratitude',job:'job update'};
               var typeLabel=shareTypes[p.postType]||p.postType;
-              var shareText='Sharing my '+typeLabel+': "'+p.body.slice(0,120)+(p.body.length>120?'...':'')+'" — HOPE Recovery: Hold on Pain Ends · hopenetwork.com · Walk it out faithfully. 🙏';
+              var shareText='Sharing my '+typeLabel+': "'+p.body.slice(0,120)+(p.body.length>120?'...':'')+'" — HOPE Recovery: Hold on Pain Ends · {HOPE_WEBSITE} · Walk well. 🙏';
               var warningMsg='⚠️ Public Share Warning\n\nThis will post to '+arguments[0]+' with your name visible.\n\nYour sobriety journey is yours. Only share what you are comfortable with publicly.\n\nProceed?';
               if(window.confirm(warningMsg.replace('arguments[0]','Facebook'))){
                 if(navigator.share){
-                  navigator.share({title:'My Recovery Journey',text:shareText,url:'https://hopenetwork.com'});
+                  navigator.share({title:'My Recovery Journey',text:shareText,url:'https://{HOPE_WEBSITE}'});
                 } else {
                   navigator.clipboard&&navigator.clipboard.writeText(shareText);
                   toast({icon:'📋',title:'Copied to clipboard',body:'Paste into Facebook, Twitter, or any app'});
@@ -9207,7 +9207,7 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
       // Guest CTA instead of comments
       isGuest&&React.createElement('div',{style:{padding:'0.5rem 1rem',borderTop:'1px solid var(--bdr)',display:'flex',justifyContent:'space-between',alignItems:'center'}},
         React.createElement('span',{style:{fontSize:'0.72rem',color:'var(--dmuted)',fontStyle:'italic'}},'This is a member-only conversation'),
-        React.createElement('button',{style:{padding:'0.3rem 0.75rem',borderRadius:8,background:'var(--gold)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.72rem'}},'Join HOPE')
+        React.createElement('button',{style:{padding:'0.3rem 0.75rem',borderRadius:8,background:'var(--gold)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.72rem'}},'Join POLR')
       ),
       // Comments (members only)
       !isGuest&&isExpanded && React.createElement('div',{style:{padding:'0 1rem 1rem',borderTop:'1px solid var(--bdr)'}},
@@ -9401,7 +9401,7 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
 
 // ══════════════════════════════════════════════════════════════════════
 // TESTIMONY APPROVAL PIPELINE
-// Community → Review Queue → Website HOPE In Motion Page
+// Community → Review Queue → Website Walk Well Page
 // ══════════════════════════════════════════════════════════════════════
 
 // ─── Testimony Review Queue — admin panel ───
@@ -9458,7 +9458,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
     update('testimonyNotes', notes);
 
     if (decision==='approved') {
-      // Build published testimony object for HOPE In Motion page
+      // Build published testimony object for Walk Well page
       var photo = (platform.memberPhotos||{})[sub.author];
       var published = {
         id: 'pub_'+sub.sourceId,
@@ -9486,12 +9486,12 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
       update('notifications', [...(platform.notifications||[]), {
         id:'notif_pub_'+Date.now(),
         title:'✨ Your story has been published!',
-        body:'Your '+sub.category+' post has been approved and is now on the HOPE HOPE In Motion page. Thank you for sharing your testimony.',
+        body:'Your '+sub.category+' post has been approved and is now on the HOPE Walk Well page. Thank you for sharing your testimony.',
         type:'celebration', target:sub.author,
         sentAt:new Date().toISOString(), requireResponse:false, responses:[]
       }]);
 
-      toast({icon:'✅',title:'Published to HOPE In Motion!',body:sub.title+' is now live on hopenetwork.com'});
+      toast({icon:'✅',title:'Published to Walk Well!',body:sub.title+' is now live on {HOPE_WEBSITE}'});
     } else if (decision==='revision') {
       update('notifications', [...(platform.notifications||[]), {
         id:'notif_rev_'+Date.now(),
@@ -9521,7 +9521,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
       React.createElement('div',{className:'d-card',style:{marginBottom:'1.25rem',border:'2px solid rgba(200,145,58,0.2)'}},
         React.createElement('div',{className:'d-card-head'},
           React.createElement('span',{className:'d-card-title'},'📄 WEBSITE PREVIEW'),
-          React.createElement('span',{style:{fontSize:'0.65rem',color:'var(--dmuted)'}},'How this appears on hopenetwork.com/hopeinmotion')
+          React.createElement('span',{style:{fontSize:'0.65rem',color:'var(--dmuted)'}},'How this appears on {HOPE_WEBSITE}/walkwell')
         ),
         React.createElement('div',{style:{padding:'1.5rem',background:'white',margin:'0 1rem 1rem',borderRadius:10,color:'#1a1a2a'}},
           React.createElement('div',{style:{display:'inline-block',padding:'0.2rem 0.65rem',borderRadius:20,background:'rgba(200,145,58,0.1)',fontSize:'0.65rem',fontWeight:700,color:'#c8913a',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}},s.cat||s.category),
@@ -9540,7 +9540,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
               return para.trim() && React.createElement('p',{key:i,style:{marginBottom:'0.75rem'}},para);
             })
           ),
-          React.createElement('div',{style:{borderTop:'2px solid #c8913a',marginTop:'1.5rem',paddingTop:'0.75rem',textAlign:'center',fontStyle:'italic',fontSize:'0.82rem',color:'#888'}},'"Walk it out faithfully." — HOPE Recovery: Hold on Pain Ends · hopenetwork.com')
+          React.createElement('div',{style:{borderTop:'2px solid #c8913a',marginTop:'1.5rem',paddingTop:'0.75rem',textAlign:'center',fontStyle:'italic',fontSize:'0.82rem',color:'#888'}},'"Walk well." — HOPE Recovery: Hold on Pain Ends · {HOPE_WEBSITE}')
         )
       ),
 
@@ -10373,7 +10373,7 @@ function PitchBuilder({ platform, toast, session }) {
                   '<div style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 3.5rem;background:rgba(0,0,0,0.4);">'+
                     '<div style="display:flex;align-items:center;gap:0.75rem;">'+
                       '<div style="width:28px;height:28px;border-radius:50%;background:#c8913a;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#0c1a2e;">P</div>'+
-                      '<div><div style="font-size:0.75rem;font-weight:700;color:white;font-family:Arial,sans-serif;">HOPE Recovery: Hold on Pain Ends</div><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);font-family:Arial,sans-serif;">hopenetwork.com · 225-333-0330</div></div>'+
+                      '<div><div style="font-size:0.75rem;font-weight:700;color:white;font-family:Arial,sans-serif;">HOPE Recovery: Hold on Pain Ends</div><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);font-family:Arial,sans-serif;">{HOPE_WEBSITE} · {HOPE_PHONE}</div></div>'+
                     '</div>'+
                     '<div style="text-align:right;background:rgba(200,145,58,0.15);border:1px solid rgba(200,145,58,0.3);padding:0.6rem 1.25rem;border-radius:8px;">'+
                       '<div style="font-size:1.5rem;font-weight:700;color:#c8913a;font-family:Georgia,serif;line-height:1;">'+(sl.stat||'')+'</div>'+
@@ -11081,7 +11081,7 @@ function GuestRecoveryPanel({ platform, toast, session, setActive }) {
       React.createElement("div",{style:{fontFamily:"var(--font-serif)",fontSize:"1.1rem",color:"var(--dtxt)",marginBottom:"0.5rem",fontWeight:600}},"Apply for Support"),
       React.createElement("div",{style:{fontSize:"0.85rem",color:"var(--dmuted)",marginBottom:"1rem",lineHeight:1.65}},"Whether you need housing, mentorship, workforce help, or just someone to talk to. No cost. No membership required to ask."),
       React.createElement("div",{style:{display:"flex",gap:"0.75rem",justifyContent:"center",flexWrap:"wrap"}},
-        React.createElement("a",{href:"tel:225-333-0330",style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"var(--bg3)",border:"1px solid var(--bdr2)",color:"var(--gold)",fontWeight:700,fontSize:"0.9rem",textDecoration:"none"}},"Call 225-333-0330"),
+        React.createElement("a",{href:"tel:{HOPE_PHONE}",style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"var(--bg3)",border:"1px solid var(--bdr2)",color:"var(--gold)",fontWeight:700,fontSize:"0.9rem",textDecoration:"none"}},"Call {HOPE_PHONE}"),
         React.createElement("button",{onClick:function(){if(typeof setActive==="function")setActive("guest-mentor");},style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"rgba(46,196,160,0.1)",border:"1px solid rgba(46,196,160,0.2)",color:"var(--l4)",cursor:"pointer",fontWeight:700,fontSize:"0.9rem"}},"Request a Mentor"),
         React.createElement("button",{onClick:function(){if(typeof setActive==="function")setActive("guest-signup");},style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"linear-gradient(135deg,var(--gold),#8b5e2a)",color:"var(--navy)",border:"none",cursor:"pointer",fontWeight:700,fontFamily:"var(--font-serif)"}},"Create Free Account →")
       )
@@ -12295,7 +12295,7 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
      metrics:['Recidivism reduction','Employment at 6 months','Housing stability','Program completions'],
      narrative:['Reentry model','Criminal justice partnership','Trauma-informed approach','12-month outcome projections'],
      status:'eligible',polrFit:92,
-     tip:'A 21-year ministry founding story is the narrative. Court-referred members = documented reentry population. Connect with the DA office to formalize the pipeline first.'},
+     tip:'A 30-year ministry founding story is the narrative. Court-referred members = documented reentry population. Connect with the DA office to formalize the pipeline first.'},
     {id:'samhsa_rcsp',name:'SAMHSA — Recovery Community Support Program',agency:'SAMHSA / HHS',
      amount:'$150,000–$400,000',cycle:'2-year — biennial RFP',type:'Federal',
      eligibility:'Recovery community organizations providing peer support, employment, and housing services.',
@@ -13721,7 +13721,7 @@ function BizWhiteLabelConfig({ platform, update, toast, setActive }) {
     React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(252,129,129,0.06)',border:'1px solid rgba(252,129,129,0.2)',borderRadius:10,marginBottom:'1.5rem'}},
       React.createElement('div',{style:{fontWeight:700,color:'#fc8181',fontSize:'0.82rem',marginBottom:'0.3rem'}},'\U0001f512 HOPE CONTENT PROTECTION'),
       React.createElement('div',{style:{fontSize:'0.78rem',color:'var(--dmuted)',lineHeight:1.65}},
-        'White-label deployments automatically exclude: HOPE 12-step adapted content, Chuck Edwards testimony, HOPE In Motion Blog posts, hopenetwork.com branding, and all HOPE-copyrighted curriculum. Client receives platform structure, workflow logic, and all non-HOPE content only.'
+        'White-label deployments automatically exclude: HOPE 12-step adapted content, Chuck Edwards testimony, Walk Well blog posts, {HOPE_WEBSITE} branding, and all HOPE-copyrighted curriculum. Client receives platform structure, workflow logic, and all non-POLR content only.'
       )
     ),
     // Client selector
@@ -14090,7 +14090,7 @@ function BizContractGen({ platform, update, toast, setActive }) {
     add(line);
     add('SECTION 11 — WHITE-LABEL & CONTENT PROTECTIONS');
     add(line);
-    add('11.1 HOPE Content Exclusion: All white-label deployments exclude and must not include: (a) HOPE 12-step adapted curriculum; (b) founding testimony and biographical content of HOPE principals; (c) HOPE In Motion Blog content and branding; (d) hopenetwork.com branding and contact information. Such content remains the exclusive property of HOPE Recovery, Inc. and is not licensed under this Agreement.');
+    add('11.1 HOPE Content Exclusion: All white-label deployments exclude and must not include: (a) HOPE 12-step adapted curriculum; (b) founding testimony and biographical content of HOPE principals; (c) Walk Well blog content and branding; (d) {HOPE_WEBSITE} branding and contact information. Such content remains the exclusive property of HOPE Recovery, Inc. and is not licensed under this Agreement.');
     add('11.2 No Affiliation Representation: Licensee shall not represent, imply, or suggest that its services, programs, or platform are endorsed by, affiliated with, derived from, or operated in connection with HOPE Recovery, Inc. or its principals.'+( form.polrCarveOut?' This restriction applies to third-party Licensees only and does not apply to the Licensor\'s own operational engagement with HOPE Recovery, Inc., which is governed by a separate Consulting Services Agreement executed concurrently with this Agreement.':'')+"'");
     add('11.3 Proprietary Notices: Licensee may brand the Platform under its own name but shall not remove, alter, obscure, or modify any proprietary notices embedded in the Platform code or operational interface.');
     add('11.4 Licensor Attribution: Licensor reserves the right to identify Licensee as a licensed platform user in Licensor\'s promotional materials unless Licensee provides written objection within 30 days of this Agreement.');
@@ -14244,7 +14244,7 @@ function BizContractGen({ platform, update, toast, setActive }) {
       '<div class="bt"><span class="sl">Underpayment Penalty:<\/span> Deficiency >5% triggers 2%\/month interest plus audit costs.<\/div>',
       f.liquidatedDamages?'<div class="sh">SECTION 9 &mdash; LIQUIDATED DAMAGES<\/div><table><tr><th>Breach<\/th><th>Damages<\/th><\/tr><tr><td>Reverse engineering or IP theft<\/td><td>$'+f.ldAmount.toLocaleString()+' per incident + injunctive relief<\/td><\/tr><tr><td>Intentional misreporting<\/td><td>3x underpaid royalties, min $'+Math.round(f.ldAmount/2).toLocaleString()+'<\/td><\/tr><tr><td>Non-compete violation<\/td><td>$'+f.ldAmount.toLocaleString()+'\/month of violation<\/td><\/tr><tr><td>Non-circumvention violation<\/td><td>Full remaining-term royalties, min $'+(f.ldAmount*2).toLocaleString()+'<\/td><\/tr><\/table>':'',
       '<div class="sh">SECTION 10 &mdash; WHITE-LABEL PROTECTIONS<\/div>',
-      '<div class="bt">Excluded from all deployments: HOPE 12-step curriculum, founding testimony, HOPE In Motion content, and hopenetwork.com branding. These remain exclusive property of HOPE Recovery, Inc. Licensee may not represent affiliation with HOPE or its principals.<\/div>',
+      '<div class="bt">Excluded from all deployments: HOPE 12-step curriculum, founding testimony, Walk Well content, and {HOPE_WEBSITE} branding. These remain exclusive property of HOPE Recovery, Inc. Licensee may not represent affiliation with HOPE or its principals.<\/div>',
       '<div class="sh">SECTION 11 &mdash; TERM &amp; TERMINATION<\/div>',
       '<div class="bt">Term: '+f.termYears+' year'+(f.termYears>1?'s':'')+', auto-renewing 1-year periods with 90 days notice to exit. Termination for non-payment: 10 days notice. All unpaid amounts due immediately on termination. Setup fees non-refundable. Non-compete and IP protections survive indefinitely.<\/div>',
       '<div class="sh">SECTIONS 12\u201314 &mdash; CONFIDENTIALITY, GOVERNING LAW, MISCELLANEOUS<\/div>',
@@ -14514,7 +14514,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var _se=React.useState(null),      selEvent=_se[0],  setSelEvent=_se[1];
   var _sf=React.useState({
     houseName:'New HOPE Place', address:'', city:'Thibodaux', state:'LA',
-    openDate:'', director:'HOPE Director', beds:8, phone:'225-333-0330',
+    openDate:'', director:'HOPE Director', beds:8, phone:'{HOPE_PHONE}',
     theme:'navy', videoUrl:'', videoCTA:'Scan to Watch Our Story', videoPlatform:'youtube'
   }), houseForm=_sf[0], setHouseForm=_sf[1];
   var _sfb=React.useState({
@@ -14530,12 +14530,12 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var SEED_CLIENTS = ['Hope Recovery Ministries','Redeemer House New Orleans','Acadiana Recovery Network','Gulf Coast Reentry Collaborative'];
 
   var QR_TYPES = [
-    {id:'polr',    label:'POLR Website',      url:'https://hopenetwork.com',           cta:'Learn About POLR'},
-    {id:'signup',  label:'Member Signup',      url:'https://hopenetwork.com/platform',  cta:'Scan to Join Free'},
-    {id:'meeting', label:'Find a Meeting',     url:'https://hopenetwork.com/#meetings', cta:'Find a Meeting Near You'},
-    {id:'donate',  label:'Donate',             url:'https://hopenetwork.com/donate',    cta:'Support the Mission'},
+    {id:'polr',    label:'POLR Website',      url:'https://{HOPE_WEBSITE}',           cta:'Learn About POLR'},
+    {id:'signup',  label:'Member Signup',      url:'https://{HOPE_WEBSITE}/platform',  cta:'Scan to Join Free'},
+    {id:'meeting', label:'Find a Meeting',     url:'https://{HOPE_WEBSITE}/#meetings', cta:'Find a Meeting Near You'},
+    {id:'donate',  label:'Donate',             url:'https://{HOPE_WEBSITE}/donate',    cta:'Support the Mission'},
     {id:'wl',         label:'White-Label Client',    url:'https://[client].com',                    cta:'Scan to Get Started'},
-    {id:'reflection',  label:'Private Reflection',   url:'https://hopenetwork.com/platform#journal', cta:'Private · Free · No Account Needed'},
+    {id:'reflection',  label:'Private Reflection',   url:'https://{HOPE_WEBSITE}/platform#journal', cta:'Private · Free · No Account Needed'},
   ];
   var selQRObj = QR_TYPES.find(function(q){return q.id===selQR;})||QR_TYPES[0];
   var qrURL = selQR==='wl'&&selClient?
@@ -14573,8 +14573,8 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   // ── House poster ──
   var openHousePoster = function(cfg) {
     var org = cfg&&cfg.isWL&&selClient?selClient:'HOPE Recovery: Hold on Pain Ends';
-    var url = cfg&&cfg.isWL&&selClient?qrURL:'https://hopenetwork.com/platform';
-    var ph  = cfg&&cfg.isWL&&selClient?'Contact us for info':'225-333-0330';
+    var url = cfg&&cfg.isWL&&selClient?qrURL:'https://{HOPE_WEBSITE}/platform';
+    var ph  = cfg&&cfg.isWL&&selClient?'Contact us for info':'{HOPE_PHONE}';
     var sub = cfg&&cfg.isWL&&selClient?'Recovery Support Ministry':'Healing and hope for the hurting';
     var html = [
       '<!DOCTYPE html><html><head><meta charset="utf-8"><title>House Poster<\/title>',
@@ -14704,10 +14704,10 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '<\/div>',
       '<div class="bottom">',
         '<div class="bot-brand">HOPE Recovery: Hold on Pain Ends<\/div>',
-        '<div class="bot-contact">hopenetwork.com<br>225-333-0330 \u00b7 bro.chuck.edwards@gmail.com<\/div>',
+        '<div class="bot-contact">{HOPE_WEBSITE}<br>{HOPE_PHONE} \u00b7 {HOPE_EMAIL}<\/div>',
       '<\/div>',
       '<script>window.onload=function(){',
-        'new QRCode(document.getElementById("qr"),{text:"https://hopenetwork.com/platform",',
+        'new QRCode(document.getElementById("qr"),{text:"https://{HOPE_WEBSITE}/platform",',
         'width:120,height:120,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
         'setTimeout(function(){window.print();},1000);',
       '};<\/script><\/body><\/html>'
@@ -14772,10 +14772,10 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '<\/div>',
       '<div class="bottom">',
         '<div class="bot-org">HOPE Recovery: Hold on Pain Ends<\/div>',
-        '<div class="bot-contact">hopenetwork.com \u00b7 225-333-0330<br>Free \u00b7 Open to Everyone<\/div>',
+        '<div class="bot-contact">{HOPE_WEBSITE} \u00b7 {HOPE_PHONE}<br>Free \u00b7 Open to Everyone<\/div>',
       '<\/div>',
       '<script>window.onload=function(){',
-        'new QRCode(document.getElementById("qr"),{text:"https://hopenetwork.com/platform",',
+        'new QRCode(document.getElementById("qr"),{text:"https://{HOPE_WEBSITE}/platform",',
         'width:110,height:110,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
         'setTimeout(function(){window.print();},1000);',
       '};<\/script><\/body><\/html>'
@@ -14789,7 +14789,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var openOpeningSoonPoster = function() {
     var f = houseForm;
     // Use video URL as QR destination if provided
-    var qrTarget = f.videoUrl && f.videoUrl.trim() ? f.videoUrl.trim() : 'https://hopenetwork.com/platform';
+    var qrTarget = f.videoUrl && f.videoUrl.trim() ? f.videoUrl.trim() : 'https://{HOPE_WEBSITE}/platform';
     var qrLabel  = f.videoUrl && f.videoUrl.trim() ? (f.videoCTA||'Scan to Watch Our Story') : '+qrLabel+';
     var html = [
       '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Opening Soon<\/title>',
@@ -14855,12 +14855,12 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
         '<\/div>',
       '<\/div>',
       '<div class="bot-bar">',
-        '<div class="bot-text">hopenetwork.com<\/div>',
+        '<div class="bot-text">{HOPE_WEBSITE}<\/div>',
         '<div class="bot-text">Est. 2004 \u00b7 South Louisiana \u00b7 501(c)(3) Nonprofit<\/div>',
         '<div class="bot-text">'+f.phone+'<\/div>',
       '<\/div>',
       '<script>window.onload=function(){',
-        'new QRCode(document.getElementById("qr"),{text:"https://hopenetwork.com/platform",',
+        'new QRCode(document.getElementById("qr"),{text:"https://{HOPE_WEBSITE}/platform",',
         'width:110,height:110,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
         'setTimeout(function(){window.print();},1200);',
       '};<\/script><\/body><\/html>'
@@ -14872,24 +14872,24 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
 
   // ── Facebook post generator ──
   var generateFBPost = function(item, type) {
-    var text, shareURL = 'https://hopenetwork.com';
+    var text, shareURL = 'https://{HOPE_WEBSITE}';
     if(type==='meeting'&&item){
       text = '\uD83D\uDCCD HOPE Meeting — '+item.name+'\n\n\uD83D\uDDD3 '+item.day+' at '+item.time+'\n\uD83D\uDCCD '+item.location+'\n\n'+
         'Free and open to everyone. No commitment required. Come as you are.\n\n'+
         '\u2764\uFE0F Christ-centered recovery \u00b7 12-step biblical program \u00b7 Peer mentorship\n\n'+
         '\uD83D\uDCF1 Scan the QR code on our website to create a free account and find all meetings.\n\n'+
-        '\uD83D\uDCDE 225-333-0330 \u00b7 hopenetwork.com\n\n'+
+        '\uD83D\uDCDE {HOPE_PHONE} \u00b7 {HOPE_WEBSITE}\n\n'+
         '#Recovery #SoberLiving #POLRNetwork #SouthLouisiana #ChristCentered #12Steps #FreePrograms';
-      shareURL = 'https://hopenetwork.com/#meetings';
+      shareURL = 'https://{HOPE_WEBSITE}/#meetings';
     } else if(type==='event'&&item){
       text = '\uD83C\uDF89 HOPE EVENT: '+item.title+'\n\n'+
         '\uD83D\uDDD3 '+(item.date||'Coming soon')+' at '+(item.time||'TBD')+'\n'+
         '\uD83D\uDCCD '+(item.location||'POLR Campus')+'\n\n'+
         (item.description||'Join the HOPE recovery community for this special event. Free and open to everyone.')+'\n\n'+
-        '\uD83D\uDD17 Register free at hopenetwork.com\n'+
-        '\uD83D\uDCDE 225-333-0330\n\n'+
+        '\uD83D\uDD17 Register free at {HOPE_WEBSITE}\n'+
+        '\uD83D\uDCDE {HOPE_PHONE}\n\n'+
         '#POLRNetwork #RecoveryCommunity #SouthLouisiana #FreeEvent #HopeAndHealing';
-      shareURL = 'https://hopenetwork.com';
+      shareURL = 'https://{HOPE_WEBSITE}';
     } else if(type==='opening'){
       text = '\uD83C\uDFE0 COMING SOON: '+houseForm.houseName+' in '+houseForm.city+', '+houseForm.state+'!\n\n'+
         'HOPE Recovery: Hold on Pain Ends is expanding. A new HOPE Place is opening its doors in '+houseForm.city+
@@ -14899,7 +14899,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
         '\uD83D\uDCBC Workforce placement support\n'+
         '\u2764\uFE0F 12-Step Christ-centered recovery program\n\n'+
         'Free for everyone. Always.\n\n'+
-        '\uD83D\uDCDE '+houseForm.phone+' \u00b7 hopenetwork.com\n\n'+
+        '\uD83D\uDCDE '+houseForm.phone+' \u00b7 {HOPE_WEBSITE}\n\n'+
         '#POLRNetwork #NewPOLRPlace #'+houseForm.city.replace(/\s+/g,'')+' #RecoveryHousing #SoberLiving #Louisiana';
     } else {
       text = '\uD83D\uDD4A\uFE0F HOPE Recovery: Hold on Pain Ends is here.\n\n'+
@@ -14910,7 +14910,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
         '\u2714 Safe Recovery Housing\n'+
         '\u2714 Peer Mentorship\n\n'+
         '"Healing and hope for the hurting"\n\n'+
-        '\uD83D\uDCDE 225-333-0330 \u00b7 hopenetwork.com\n\n'+
+        '\uD83D\uDCDE {HOPE_PHONE} \u00b7 {HOPE_WEBSITE}\n\n'+
         '#POLRNetwork #Recovery #SouthLouisiana #FreePrograms #ChristCentered #Hope';
     }
     // Open Facebook sharer
@@ -15050,7 +15050,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
             ),
             ...[['address','Street Address','text','501 Main St'],['city','City','text','Baton Rouge'],
                 ['state','State','text','LA'],['director','Director Name','text','HOPE Director'],
-                ['beds','Beds Available','number','8'],['phone','Contact Phone','tel','225-333-0330'],
+                ['beds','Beds Available','number','8'],['phone','Contact Phone','tel','{HOPE_PHONE}'],
                 ['openDate','Opening Date','text','May 1, 2026']
             ].map(function(f){
               return React.createElement('div',{key:f[0]},
@@ -15181,12 +15181,12 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.85rem'}},
             [
-              {id:'polr-place-thibodaux', name:'HOPE Place Thibodaux',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',        city:'Thibodaux'},
-              {id:'polr-place-hop-thib',  name:'HOPE Place @ HOP Thibodaux',   phone:'225-333-0330', email:'hop.thibodaux@hopenetwork.com', city:'Thibodaux'},
-              {id:'polr-place-hop-larose',name:'HOPE Place @ HOP Larose',      phone:'225-333-0330', email:'hop.larose@hopenetwork.com',    city:'Larose'},
-              {id:'polr-place-port-allen',name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'portallen@hopenetwork.com',     city:'Port Allen'},
+              {id:'polr-place-thibodaux', name:'HOPE Place Thibodaux',         phone:'{HOPE_PHONE}', email:'{HOPE_EMAIL}',        city:'Thibodaux'},
+              {id:'polr-place-hop-thib',  name:'HOPE Place @ HOP Thibodaux',   phone:'{HOPE_PHONE}', email:'hop.thibodaux@{HOPE_WEBSITE}', city:'Thibodaux'},
+              {id:'polr-place-hop-larose',name:'HOPE Place @ HOP Larose',      phone:'{HOPE_PHONE}', email:'hop.larose@{HOPE_WEBSITE}',    city:'Larose'},
+              {id:'polr-place-port-allen',name:'HOPE Place Port Allen',         phone:'{HOPE_PHONE}', email:'portallen@{HOPE_WEBSITE}',     city:'Port Allen'},
             ].map(function(campus){
-              var campusURL = 'https://hopenetwork.com/platform?campus='+campus.id+'#journal';
+              var campusURL = 'https://{HOPE_WEBSITE}/platform?campus='+campus.id+'#journal';
               return React.createElement('div',{key:campus.id,className:'d-card',style:{border:'1px solid rgba(46,196,160,0.2)'}},
                 React.createElement('div',{className:'d-card-head'},
                   React.createElement('div',null,
@@ -15293,7 +15293,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
                             '<\/div>',
                             '<div class="verse">&ldquo;Come unto me, all ye that labour and are heavy laden, and I will give you rest.&rdquo; — Matthew 11:28 KJV<\/div>',
                           '<\/div>',
-                          '<div class="bottom"><div class="bot-text">hopenetwork.com · Free · Confidential · No Commitment · HOPE Recovery: Hold on Pain Ends Est. 2004<\/div><\/div>',
+                          '<div class="bottom"><div class="bot-text">{HOPE_WEBSITE} · Free · Confidential · No Commitment · HOPE Recovery: Hold on Pain Ends Est. 2004<\/div><\/div>',
                           '<script>window.onload=function(){',
                             'new QRCode(document.getElementById("qr"),{text:"'+url+'",',
                             'width:160,height:160,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
@@ -15308,7 +15308,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
                     React.createElement('button',{
                       onClick:(function(camp){return function(){
                         var text = '🔒 Something private for you.\n\nNo login. No account. No phone number. Just a quiet space to be honest with yourself.\n\nHOPE Recovery: Hold on Pain Ends built a free private reflection tool for anyone who needs it. Whether you are ready to ask for help or just trying to figure out where you stand.\n\n✔ Takes 5 minutes\n✔ Completely private — nothing leaves your phone\n✔ No commitment. No judgment. No cost.\n\nIf you want to talk after, we are here.\n📞 '+camp.phone+'\n📍 '+camp.name+'\n\n#Privacy #Recovery #YouAreNotAlone #SouthLouisiana #POLRNetwork #FreeHelp';
-                        var shareURL = 'https://hopenetwork.com/platform?campus='+camp.id+'#journal';
+                        var shareURL = 'https://{HOPE_WEBSITE}/platform?campus='+camp.id+'#journal';
                         var fbURL = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareURL)+'&quote='+encodeURIComponent(text.substring(0,500));
                         window.open(fbURL,'_blank','width=600,height=500');
                         try{navigator.clipboard.writeText(text);}catch(e){}
@@ -15327,7 +15327,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       // Legal / language note
       React.createElement('div',{style:{padding:'0.85rem 1.1rem',background:'rgba(255,255,255,0.03)',border:'1px solid var(--bdr)',borderRadius:10,fontSize:'0.78rem',color:'var(--dmuted)',lineHeight:1.7}},
         React.createElement('span',{style:{fontWeight:700,color:'var(--dtxt)'}},'⚠️ Language Guidance: '),
-        '"Private Reflection" is the recommended term on all materials. Avoid "assessment," "evaluation," or "screening" which carry clinical or legal implications in behavioral health contexts. The tool is explicitly a self-reflection journal, not a diagnostic instrument. HOPE makes no clinical claims and the tool contains no recommendation that can be construed as medical advice. If a person indicates they are in crisis, the tool directs them to call 225-333-0330 or 988.'
+        '"Private Reflection" is the recommended term on all materials. Avoid "assessment," "evaluation," or "screening" which carry clinical or legal implications in behavioral health contexts. The tool is explicitly a self-reflection journal, not a diagnostic instrument. HOPE makes no clinical claims and the tool contains no recommendation that can be construed as medical advice. If a person indicates they are in crisis, the tool directs them to call {HOPE_PHONE} or 988.'
       )
     )
 
@@ -15348,9 +15348,9 @@ function BizTerminologyMapper({ platform, update, toast, setActive }) {
   var terms = platform.terminology || {
     networkName:'HOPE Recovery Network', campusName:'HOPE Place', houseName:'HOPE House',
     reflectionName:'POLR Reflection', pointsName:'POLR Points',
-    signaturePhrase:'Walk it out faithfully.', adminTitle:'HOPE Director',
+    signaturePhrase:'Walk well.', adminTitle:'HOPE Director',
     staffTitle:'Ambassador', programName:'12-Step Recovery',
-    siteDomain:'hopenetwork.com', orgName:'HOPE Recovery: Hold on Pain Ends'
+    siteDomain:'{HOPE_WEBSITE}', orgName:'HOPE Recovery: Hold on Pain Ends'
   };
 
   var _sl = React.useState(null), selClient=_sl[0], setSelClient=_sl[1];
@@ -15364,15 +15364,15 @@ function BizTerminologyMapper({ platform, update, toast, setActive }) {
     {key:'houseName',       label:'Recovery House Name',    placeholder:'HOPE House',               desc:'e.g. "Recovery Home" — used in housing panel and resident records'},
     {key:'reflectionName',  label:'Reflection Tool Name',   placeholder:'POLR Reflection',          desc:'e.g. "Hope Reflection" — used in QR codes and poster copy'},
     {key:'pointsName',      label:'Points / Rewards Name',  placeholder:'POLR Points',              desc:'e.g. "Hope Credits" — used in milestone and reward systems'},
-    {key:'signaturePhrase', label:'Signature Phrase',        placeholder:'Walk it out faithfully.',               desc:'e.g. "Walk in Hope." — email sign-offs, certificate footers, toasts'},
+    {key:'signaturePhrase', label:'Signature Phrase',        placeholder:'Walk well.',               desc:'e.g. "Walk in Hope." — email sign-offs, certificate footers, toasts'},
     {key:'adminTitle',      label:'Admin / Director Title',  placeholder:'HOPE Director',            desc:'e.g. "Executive Director" — replaces "HOPE Director" in notifications'},
     {key:'staffTitle',      label:'Staff / Mentor Title',    placeholder:'Ambassador',               desc:'e.g. "Recovery Coach" — replaces "Ambassador" in pipeline and nav'},
     {key:'programName',     label:'Recovery Program Name',   placeholder:'12-Step Recovery',         desc:'e.g. "Hope Steps" — used in education, meetings, and step tracking'},
-    {key:'siteDomain',      label:'Website Domain',          placeholder:'hopenetwork.com',          desc:'Used in QR poster footers, contract templates, and email copy'},
+    {key:'siteDomain',      label:'Website Domain',          placeholder:'{HOPE_WEBSITE}',          desc:'Used in QR poster footers, contract templates, and email copy'},
   ];
 
   var PRESET_CLIENTS = [
-    {name:'POLR (Default)',     terms:{networkName:'HOPE Recovery Network',campusName:'HOPE Place',houseName:'HOPE House',reflectionName:'POLR Reflection',pointsName:'POLR Points',signaturePhrase:'Walk it out faithfully.',adminTitle:'HOPE Director',staffTitle:'Ambassador',programName:'12-Step Recovery',siteDomain:'hopenetwork.com',orgName:'HOPE Recovery: Hold on Pain Ends'}},
+    {name:'POLR (Default)',     terms:{networkName:'HOPE Recovery Network',campusName:'HOPE Place',houseName:'HOPE House',reflectionName:'POLR Reflection',pointsName:'POLR Points',signaturePhrase:'Walk well.',adminTitle:'HOPE Director',staffTitle:'Ambassador',programName:'12-Step Recovery',siteDomain:'{HOPE_WEBSITE}',orgName:'HOPE Recovery: Hold on Pain Ends'}},
     {name:'Hope Recovery',      terms:{networkName:'Hope Network',campusName:'Hope House',houseName:'Hope Home',reflectionName:'Hope Reflection',pointsName:'Hope Points',signaturePhrase:'Walk in Hope.',adminTitle:'Executive Director',staffTitle:'Recovery Coach',programName:'Hope Steps',siteDomain:'hoperecovery.org',orgName:'Hope Recovery Ministries'}},
     {name:'New Life Ministry',  terms:{networkName:'New Life Network',campusName:'New Life Place',houseName:'New Life House',reflectionName:'New Life Journal',pointsName:'New Life Credits',signaturePhrase:'Live new.',adminTitle:'Ministry Director',staffTitle:'Life Coach',programName:'New Life Steps',siteDomain:'newlifeministry.org',orgName:'New Life Recovery Ministry'}},
     {name:'Redeemer House',     terms:{networkName:'Redeemer Network',campusName:'Redeemer House',houseName:'Redeemer Home',reflectionName:'Redeemer Reflection',pointsName:'Redeemer Points',signaturePhrase:'Redeemed and walking.',adminTitle:'House Director',staffTitle:'Peer Mentor',programName:'Redemption Steps',siteDomain:'redeemerhouse.org',orgName:'Redeemer House Ministries'}},
@@ -16094,7 +16094,7 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
   var _sm=React.useState({
     enabled:true, pct:10, label:'POLR Revenue Share',
     payeeName:'HOPE Recovery, Inc.',
-    payeeEmail:'bro.chuck.edwards@gmail.com',
+    payeeEmail:'{HOPE_EMAIL}',
     payeePayPal:'', notes:'10% of all white-label platform licensing revenue'
   }), cfg=_sm[0], setCfg=_sm[1];
   var setC=function(k){return function(e){setCfg(function(p){return Object.assign({},p,{[k]:e.target.type==='checkbox'?e.target.checked:e.target.value});});};};
@@ -16324,7 +16324,7 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
           ),
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Payee Email'),
-            React.createElement('input',{value:cfg.payeeEmail,onChange:setC('payeeEmail'),placeholder:'bro.chuck.edwards@gmail.com',
+            React.createElement('input',{value:cfg.payeeEmail,onChange:setC('payeeEmail'),placeholder:'{HOPE_EMAIL}',
               style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}})
           ),
           React.createElement('div',null,
@@ -17571,7 +17571,7 @@ function MemberWalkPanel({ platform, update, session, toast }) {
     writeAudit(platform,update,session&&session.username||'member','PROMOTION_REQUESTED',
       'resident',myRecord&&myRecord.id||'demo',{stage:walkStage},{requestedStage:nextStage&&nextStage.id});
     setRequesting(false); setEvidence('');
-    toast({icon:'📋',title:'Advancement request submitted',body:'Your request has been sent to your House Mother and Director for review. Walk it out faithfully.'});
+    toast({icon:'📋',title:'Advancement request submitted',body:'Your request has been sent to your House Mother and Director for review. Walk well.'});
   };
 
   return React.createElement('div',null,
@@ -17994,9 +17994,9 @@ function WorkforcePlacementDashboard({ platform, update, session, toast, setActi
       '<hr class="gold" style="margin-top:14px">',
       '<div class="sg">',
         '<div class="sb"><div class="sbh">EMPLOYER<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:3px">'+(emp.name||'[Employer Name]')+'<\/p><p style="font-size:8pt;color:#64748b;margin-bottom:8px">'+(emp.contact||'')+(emp.email?' &middot; '+emp.email:'')+'<\/p><div class="sl2"><\/div><p class="slb">Authorized Signature &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>',
-        '<div class="sb"><div class="sbh">PATH OF LIFE RECOVERY, INC.<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:3px">HOPE Recovery, Inc.<\/p><p style="font-size:8pt;color:#64748b;margin-bottom:8px">Director &middot; bro.chuck.edwards@gmail.com &middot; 225-333-0330<\/p><div class="sl2"><\/div><p class="slb">Authorized Signature &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>',
+        '<div class="sb"><div class="sbh">PATH OF LIFE RECOVERY, INC.<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:3px">HOPE Recovery, Inc.<\/p><p style="font-size:8pt;color:#64748b;margin-bottom:8px">Director &middot; {HOPE_EMAIL} &middot; {HOPE_PHONE}<\/p><div class="sl2"><\/div><p class="slb">Authorized Signature &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>',
       '<\/div>',
-      '<div class="fn">Employer Partnership Agreement &mdash; '+tierObj.label+' &mdash; HOPE Recovery, Inc. &mdash; hopenetwork.com &mdash; Review with counsel before execution. This agreement does not constitute legal advice.<\/div>',
+      '<div class="fn">Employer Partnership Agreement &mdash; '+tierObj.label+' &mdash; HOPE Recovery, Inc. &mdash; {HOPE_WEBSITE} &mdash; Review with counsel before execution. This agreement does not constitute legal advice.<\/div>',
       '<\/body><\/html>',
     ].join('');
     var w=window.open('','_blank','width=960,height=780');
@@ -18767,8 +18767,8 @@ function ModuleControlCenter({ platform, update, session, toast }) {
                 '<div class="metrics"><h3>Key Metrics & Outcomes<\/h3><ul>'+
                 page.metrics.map(function(m){return '<li>'+m+'<\/li>';}).join('')+
                 '<\/ul><\/div>'+
-                '<div class="footer">HOPE Recovery, Inc. &middot; hopenetwork.com &middot; bro.chuck.edwards@gmail.com &middot; 225-333-0330<br>'+
-                'This document is prepared for employer and partner information. Walk it out faithfully.<\/div>'+
+                '<div class="footer">HOPE Recovery, Inc. &middot; {HOPE_WEBSITE} &middot; {HOPE_EMAIL} &middot; {HOPE_PHONE}<br>'+
+                'This document is prepared for employer and partner information. Walk well.<\/div>'+
                 '<\/body><\/html>';
               var w=window.open('','_blank','width=960,height=780');
               if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
@@ -18861,7 +18861,7 @@ var triggerPlacementInvoice = function(platform, update, residentName, employerN
     taxClass:'taxable', taxLabel:'Taxable Revenue',
     split:split, description:'Workforce Placement Fee — '+residentName+' @ '+employerName,
     contractRequired:true, paymentBlocked:false,
-    memo:'Net 30. WOTC documentation included. Questions: bro.chuck.edwards@gmail.com'
+    memo:'Net 30. WOTC documentation included. Questions: {HOPE_EMAIL}'
   };
   // Add to invoices[]
   update('invoices', [...(platform.invoices||[]), invoice]);
@@ -19324,7 +19324,7 @@ function ZeffyDonationForm({ platform, update, toast }) {
         ),
         React.createElement('div',null,
           React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Campaign (optional)'),
-          React.createElement('input',{value:form.campaign||'',onChange:setF('campaign'),placeholder:'e.g. HOPE In Motion 2026',
+          React.createElement('input',{value:form.campaign||'',onChange:setF('campaign'),placeholder:'e.g. Walk Well 2026',
             style:{width:'100%',padding:'0.55rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none',boxSizing:'border-box'}})
         )
       ),
@@ -19371,10 +19371,10 @@ var DEFAULT_SITE_CONFIG = {
   primaryColor: '#0c1a2e',
   accentColor: '#c8913a',
   logoText: 'HOPE',
-  domain: 'hopenetwork.com',
-  phone: '225-333-0330',
-  email: 'bro.chuck.edwards@gmail.com',
-  address: 'Port Allen, Louisiana',
+  domain: '{HOPE_WEBSITE}',
+  phone: '{HOPE_PHONE}',
+  email: '{HOPE_EMAIL}',
+  address: 'Thibodaux, Louisiana',
   pastorQuote: '',
   pastorName: '',
   // Which public sections to show on homepage
@@ -19452,7 +19452,7 @@ function SiteConfigManager({ platform, update, session, toast, setActive }) {
     var slug = 'campus-'+(camp.slug||camp.name.toLowerCase().replace(/\s+/g,'-'));
     allConfigs.push(Object.assign({}, DEFAULT_SITE_CONFIG, {
       slug:slug, type:'campus', name:camp.name, address:camp.address||camp.city||'',
-      phone:camp.phone||'225-333-0330', domain:'hopenetwork.com/'+slug,
+      phone:camp.phone||'{HOPE_PHONE}', domain:'{HOPE_WEBSITE}/'+slug,
     }, siteConfigs[slug] || {}));
   });
   (platform.licenseClients||[]).forEach(function(client) {
@@ -19601,10 +19601,10 @@ function SiteConfigEditor({ cfg, platform, update, session, toast, saveCfg, enab
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.65rem',marginBottom:'0.75rem'}},
           inp('Site / Location Name','name','text','e.g. HOPE Place Baton Rouge'),
           inp('Network / Brand Name','networkName','text','e.g. HOPE Recovery Network'),
-          inp('Website Domain','domain','text','hopenetwork.com'),
-          inp('Phone','phone','tel','225-333-0330'),
-          inp('Email','email','email','bro.chuck.edwards@gmail.com'),
-          inp('Address / City','address','text','Port Allen, Louisiana')
+          inp('Website Domain','domain','text','{HOPE_WEBSITE}'),
+          inp('Phone','phone','tel','{HOPE_PHONE}'),
+          inp('Email','email','email','{HOPE_EMAIL}'),
+          inp('Address / City','address','text','Thibodaux, Louisiana')
         ),
         React.createElement('div',{style:{marginBottom:'0.75rem'}},
           inp('Hero Headline (large text on homepage)','heroHeadline','text','A New Walk Begins Here')),
@@ -19817,7 +19817,7 @@ function GuestMeetingsPanel({ platform, toast, session }) {
         React.createElement('div',{style:{fontSize:'0.9rem',color:'var(--dtxt)',marginBottom:'0.5rem',fontFamily:'var(--font-serif)'}},'Not ready for a meeting? That\'s okay.'),
         React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)'}},
           'Call or text our team: ',
-          React.createElement('a',{href:'tel:225-333-0330',style:{color:'var(--gold)',fontWeight:700,textDecoration:'none'}},'225-333-0330')
+          React.createElement('a',{href:'tel:{HOPE_PHONE}',style:{color:'var(--gold)',fontWeight:700,textDecoration:'none'}},'{HOPE_PHONE}')
         )
       )
     )
@@ -20021,7 +20021,7 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
       'You are not who you were. Keep going.',
       'Every person who walked out of HOPE started with a moment like this one.',
     ];
-    var enc=risk.crisis?'You are not alone. What you\'re feeling is real — and there is help. Please call 988. HOPE is also here: 225-333-0330.':risk.relapse?'You had the courage to be honest. That honesty is the first act of recovery. Don\'t run — reach out. HOPE has people who have walked this exact road.':risk.housing?'Housing instability is a crisis HOPE responds to directly. Call 225-333-0330 today.':affs[Math.floor(Math.random()*affs.length)];
+    var enc=risk.crisis?'You are not alone. What you\'re feeling is real — and there is help. Please call 988. HOPE is also here: {HOPE_PHONE}.':risk.relapse?'You had the courage to be honest. That honesty is the first act of recovery. Don\'t run — reach out. HOPE has people who have walked this exact road.':risk.housing?'Housing instability is a crisis HOPE responds to directly. Call {HOPE_PHONE} today.':affs[Math.floor(Math.random()*affs.length)];
     var newStreak=streak+1;
     var nextStep=(stepNum%12)+1;
     var entry={id:'j'+Date.now(),step:stepNum,theme:currentModel.theme,answers:Object.assign({},answers),action:answers[18]||answers[6]||'',risk:risk,encouragement:enc,ts:new Date().toISOString(),streak:newStreak};
@@ -20058,7 +20058,7 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
         React.createElement('div',{style:{fontWeight:700,color:'#fc8181',marginBottom:'0.4rem',fontFamily:'var(--font-serif)'}},'⚠️ A Note Before You Go'),
         React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dtxt)',lineHeight:1.75}},r.encouragement),
         r.risk.crisis&&React.createElement('div',{style:{marginTop:'0.75rem',fontWeight:700,color:'#fc8181'}},
-          '988 Suicide & Crisis Lifeline: ',React.createElement('a',{href:'tel:988',style:{color:'#fc8181'}},'988'),'  ·  POLR: ',React.createElement('a',{href:'tel:225-333-0330',style:{color:'var(--gold)'}},'225-333-0330')
+          '988 Suicide & Crisis Lifeline: ',React.createElement('a',{href:'tel:988',style:{color:'#fc8181'}},'988'),'  ·  POLR: ',React.createElement('a',{href:'tel:{HOPE_PHONE}',style:{color:'var(--gold)'}},'{HOPE_PHONE}')
         )
       ),
       !r.risk.crisis&&!r.risk.relapse&&!r.risk.housing&&React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,marginBottom:'1.25rem',fontStyle:'italic',fontFamily:'var(--font-serif)',fontSize:'0.9rem',color:'var(--dtxt)',lineHeight:1.75}},
@@ -20114,19 +20114,19 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
         React.createElement('div',{style:{fontSize:'0.82rem',fontWeight:600,color:'var(--dtxt)',marginBottom:'0.65rem'}},'Connect with a Group Chair or Director in your area:'),
         React.createElement('div',{style:{display:'flex',gap:'0.65rem',flexWrap:'wrap',justifyContent:'center',marginBottom:'0.85rem'}},
           [
-            {name:'HOPE Place Thibodaux',     phone:'225-333-0330', href:'tel:225-333-0330'},
-            {name:'HOPE Place @ HOP Thibodaux',      phone:'225-333-0330', href:'tel:225-333-0330'},
-            {name:'HOPE Place @ HOP Larose',         phone:'225-333-0330', href:'tel:225-333-0330'},
-            {name:'Port Allen',         phone:'225-333-0330', href:'tel:225-333-0330'},
+            {name:'HOPE Place Thibodaux',     phone:'{HOPE_PHONE}', href:'tel:{HOPE_PHONE}'},
+            {name:'HOPE Place @ HOP Thibodaux',      phone:'{HOPE_PHONE}', href:'tel:{HOPE_PHONE}'},
+            {name:'HOPE Place @ HOP Larose',         phone:'{HOPE_PHONE}', href:'tel:{HOPE_PHONE}'},
+            {name:'Port Allen',         phone:'{HOPE_PHONE}', href:'tel:{HOPE_PHONE}'},
           ].map(function(loc){
             return React.createElement('a',{key:loc.name,href:loc.href,
               style:{padding:'0.45rem 0.85rem',borderRadius:8,background:'rgba(200,145,58,0.08)',border:'1px solid rgba(200,145,58,0.2)',color:'var(--gold)',fontWeight:600,fontSize:'0.8rem',textDecoration:'none',whiteSpace:'nowrap'}},
               loc.name,' · ',loc.phone);
           })
         ),
-        React.createElement('a',{href:'mailto:bro.chuck.edwards@gmail.com',
+        React.createElement('a',{href:'mailto:{HOPE_EMAIL}',
           style:{display:'inline-block',padding:'0.55rem 1.5rem',borderRadius:8,background:'rgba(139,124,248,0.1)',border:'1px solid rgba(139,124,248,0.2)',color:'var(--l1)',fontWeight:700,fontSize:'0.85rem',textDecoration:'none'}},
-          '✉️ Email a Director — bro.chuck.edwards@gmail.com')
+          '✉️ Email a Director — {HOPE_EMAIL}')
       )
     );
   }
@@ -20213,7 +20213,7 @@ function GuestMentorPanel({ platform, update, toast }) {
     React.createElement('div',{style:{fontSize:'3rem',marginBottom:'1rem'}},'🙏'),
     React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.4rem',color:'var(--dtxt)',marginBottom:'0.5rem'}},'Request received.'),
     React.createElement('div',{style:{color:'var(--dmuted)',fontSize:'0.9rem',lineHeight:1.65,maxWidth:480,margin:'0 auto'}},'A HOPE Group Chair or Director will reach out to you at the contact you provided. You don\'t have to have it together. That\'s exactly why we\'re here.'),
-    React.createElement('div',{style:{marginTop:'1.25rem',fontSize:'0.85rem',color:'var(--gold)',fontWeight:700}},'While you wait: call 225-333-0330 or visit any meeting \u2014 no appointment needed.')
+    React.createElement('div',{style:{marginTop:'1.25rem',fontSize:'0.85rem',color:'var(--gold)',fontWeight:700}},'While you wait: call {HOPE_PHONE} or visit any meeting \u2014 no appointment needed.')
   );
 
   return React.createElement('div',null,
@@ -20392,7 +20392,7 @@ function GuestGuidePanel({ platform, toast, session, setActive, setPage }) {
   var provision = null;
   try { provision = JSON.parse(localStorage.getItem('hope_provision') || 'null'); } catch(e) {}
   var orgName = (provision && provision.orgName) ? provision.orgName : 'HOPE Recovery: Hold on Pain Ends';
-  var cfg = window.POLR_CONTACT ? window.POLR_CONTACT.get(platform) : { phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', website:'hopenetwork.com' };
+  var cfg = window.POLR_CONTACT ? window.POLR_CONTACT.get(platform) : { phone:'{HOPE_PHONE}', email:'{HOPE_EMAIL}', website:'{HOPE_WEBSITE}' };
 
   var STEPS = [
     { num: 1, icon: '🤝', color: 'var(--l2)',
@@ -20575,7 +20575,7 @@ function GuestDonatePanel({ platform, toast, update, session, setActive }) {
   try { provision = JSON.parse(localStorage.getItem('hope_provision') || 'null'); } catch(e) {}
   var orgName = (provision && provision.orgName) ? provision.orgName : 'HOPE Recovery: Hold on Pain Ends';
   var cfg = window.POLR_CONTACT ? window.POLR_CONTACT.get(platform) : {
-    phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', website:'hopenetwork.com'
+    phone:'{HOPE_PHONE}', email:'{HOPE_EMAIL}', website:'{HOPE_WEBSITE}'
   };
 
   // Live metrics from platform state
@@ -21490,10 +21490,10 @@ function Dashboard({
     }
   }, {
     icon: '✍️',
-    label: 'HOPE In Motion Blog',
+    label: 'Walk Well Blog',
     hint: 'Blog',
     fn: function () {
-      return setPage('hopeinmotion');
+      return setPage('walkwell');
     }
   }, {
     icon: '🤝',
@@ -24181,7 +24181,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
           React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',fontWeight:700,color:'var(--gold)'}},'HOPE Recovery: Hold on Pain Ends'),
           React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},'Charitable Contribution Receipt'),
           React.createElement('div',{style:{fontSize:'0.7rem',color:'var(--dmuted)',marginTop:'0.2rem'}},
-            'hopenetwork.com  ·  225-333-0330  ·  bro.chuck.edwards@gmail.com')
+            '{HOPE_WEBSITE}  ·  {HOPE_PHONE}  ·  {HOPE_EMAIL}')
         ),
         // Receipt details grid
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem 1.5rem',marginBottom:'1.25rem'}},
@@ -25153,7 +25153,7 @@ function CampusesBuilder({
     toast({
       icon: '🌱',
       title: 'Campus Created!',
-      body: "".concat(form.name, " has been added to the network. Walk it out faithfully.")
+      body: "".concat(form.name, " has been added to the network. Walk well.")
     });
     setForm({
       name: '',
@@ -25994,7 +25994,7 @@ function MyLessonsPanel({ platform, toast }) {
         React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.6rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'1rem'}},platform.members&&platform.members[0]?platform.members[0].name:'HOPE Member'),
         React.createElement('div',{style:{borderTop:'1px solid rgba(200,145,58,0.25)',paddingTop:'1rem',marginTop:'0.5rem'}},
           React.createElement('div',{style:{fontSize:'0.72rem',color:'rgba(255,255,255,0.4)'}},getContactConfig(platform).name + ' \u00b7 Director ' + new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})),
-          React.createElement('div',{style:{fontSize:'0.65rem',color:'rgba(255,255,255,0.3)',marginTop:'0.2rem'}},'\u00a9 ' + new Date().getFullYear() + ' HOPE Recovery, Inc. \u00b7 hopenetwork.com')
+          React.createElement('div',{style:{fontSize:'0.65rem',color:'rgba(255,255,255,0.3)',marginTop:'0.2rem'}},'\u00a9 ' + new Date().getFullYear() + ' HOPE Recovery, Inc. \u00b7 {HOPE_WEBSITE}')
         )
       ),
       React.createElement('div',{style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}},
@@ -27824,7 +27824,7 @@ function TestimonyEditor({
     toast({
       icon: '🙌',
       title: 'Submitted!',
-      body: 'Your submission is pending admin review. Walk it out faithfully.'
+      body: 'Your submission is pending admin review. Walk well.'
     });
     setSubmitted(true);
   };
@@ -27855,7 +27855,7 @@ function TestimonyEditor({
       color: 'var(--dmuted)',
       marginBottom: '1.5rem'
     }
-  }, "Your testimony is pending admin review. It will appear on the HOPE In Motion Blog when approved."), /*#__PURE__*/React.createElement("button", {
+  }, "Your testimony is pending admin review. It will appear on the Walk Well blog when approved."), /*#__PURE__*/React.createElement("button", {
     onClick: function () {
       return setSubmitted(false);
     },
@@ -27882,7 +27882,7 @@ function TestimonyEditor({
     className: "lvh-title"
   }, "Submit Testimony / Report"), /*#__PURE__*/React.createElement("div", {
     className: "lvh-sub"
-  }, "Share what God is doing in your life. All submissions go to admin for review before publishing to the HOPE In Motion Blog.")), /*#__PURE__*/React.createElement("div", {
+  }, "Share what God is doing in your life. All submissions go to admin for review before publishing to the Walk Well blog.")), /*#__PURE__*/React.createElement("div", {
     className: "d-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "d-card-head"
@@ -28506,7 +28506,7 @@ function StepsTracker({
     if (!completed[n]) toast({
       icon: '⭐',
       title: "Step ".concat(n, " Complete!"),
-      body: 'Your plan has been updated. Walk it out faithfully.'
+      body: 'Your plan has been updated. Walk well.'
     });
   };
   return /*#__PURE__*/React.createElement(BuilderShell, {
@@ -28716,7 +28716,7 @@ function MemberProfile({ platform, update, session, toast }) {
     }
     setTimeout(function(){
       setSaving(false);
-      toast({icon:'✅',title:'Profile saved',body:'Your profile has been updated. Walk it out faithfully.'});
+      toast({icon:'✅',title:'Profile saved',body:'Your profile has been updated. Walk well.'});
     },500);
   };
 
@@ -29266,9 +29266,9 @@ function ContactConfigPanel({ platform, update, toast, session }) {
   var cfg = platform.contactConfig || {};
   var hq  = Object.assign({
     name:'HOPE Recovery: Hold on Pain Ends', shortName:'HOPE',
-    phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',
-    website:'hopenetwork.com', address:'Port Allen, Louisiana',
-    tagline:'Walk it out faithfully.'
+    phone:'{HOPE_PHONE}', email:'{HOPE_EMAIL}',
+    website:'hopenetwork.com', address:'Thibodaux, Louisiana',
+    tagline:'Walk well.'
   }, cfg.hq || {});
 
   var campusCfgs = cfg.campuses || {};
@@ -29355,7 +29355,7 @@ function ContactConfigPanel({ platform, update, toast, session }) {
       React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',fontFamily:'var(--font-mono)',marginBottom:'0.2rem'}},'SYSTEM CONFIGURATION'),
       React.createElement('h2',{style:{fontFamily:'var(--font-serif)',color:'var(--dtxt)',fontWeight:600}},'Contact & Branding'),
       React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.6,marginTop:'0.25rem'}},
-        'Control all phone numbers, emails, URLs, and privacy settings across the entire platform. These values replace all 225-333-0330, bro.chuck.edwards@gmail.com, and hopenetwork.com tokens throughout the system.'
+        'Control all phone numbers, emails, URLs, and privacy settings across the entire platform. These values replace all {HOPE_PHONE}, {HOPE_EMAIL}, and {HOPE_WEBSITE} tokens throughout the system.'
       )
     ),
 
@@ -29390,19 +29390,19 @@ function ContactConfigPanel({ platform, update, toast, session }) {
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem 1.25rem'}},
           FIELD('Organization Name',hqForm.name,setHQField('name'),'HOPE Recovery: Hold on Pain Ends'),
           FIELD('Short Name',hqForm.shortName,setHQField('shortName'),'HOPE'),
-          FIELD('Phone Number',hqForm.phone,setHQField('phone'),'225-333-0330','Appears on all documents, receipts, and footers','tel'),
-          FIELD('Email Address',hqForm.email,setHQField('email'),'bro.chuck.edwards@gmail.com','Primary contact email throughout platform','email'),
+          FIELD('Phone Number',hqForm.phone,setHQField('phone'),'985.224.7421','Appears on all documents, receipts, and footers','tel'),
+          FIELD('Email Address',hqForm.email,setHQField('email'),'admin@hopenetwork.com','Primary contact email throughout platform','email'),
           FIELD('Website URL',hqForm.website,setHQField('website'),'hopenetwork.com','Without https:// — added automatically'),
-          FIELD('Physical Address',hqForm.address,setHQField('address'),'Port Allen, Louisiana'),
+          FIELD('Physical Address',hqForm.address,setHQField('address'),'Thibodaux, Louisiana'),
           React.createElement('div',{style:{gridColumn:'1/-1'}},
-            FIELD('Footer Tagline',hqForm.tagline,setHQField('tagline'),'"Walk it out faithfully."','Appears in lesson footers and certificates')
+            FIELD('Footer Tagline',hqForm.tagline,setHQField('tagline'),'"Walk well."','Appears in lesson footers and certificates')
           )
         ),
         React.createElement('div',{style:{marginTop:'1rem',padding:'0.85rem 1rem',background:'rgba(200,145,58,0.06)',
           border:'1px solid rgba(200,145,58,0.18)',borderRadius:9,fontSize:'0.78rem',color:'var(--dmuted)'}},
           React.createElement('span',{style:{fontWeight:700,color:'var(--gold)'}},'Preview: '),
-          '"', hqForm.tagline||'Walk it out faithfully.', '" — ', hqForm.name||'HOPE Recovery: Hold on Pain Ends',
-          ' · ', hqForm.website||'hopenetwork.com', ' · ', hqForm.phone||'225-333-0330'
+          '"', hqForm.tagline||'Walk well.', '" — ', hqForm.name||'HOPE Recovery: Hold on Pain Ends',
+          ' · ', hqForm.website||'hopenetwork.com', ' · ', hqForm.phone||'985.224.7421'
         ),
         React.createElement('button',{onClick:saveHQ,className:'btn-primary',style:{marginTop:'1rem',fontSize:'0.88rem'}},
           '✅ Save HQ Contact Info')
@@ -29572,8 +29572,8 @@ function SettingsPanel({
   const _useState42 = useState({
       siteName: 'HOPE Recovery Network',
       tagline: 'Healing and hope for the hurting',
-      contactEmail: 'bro.chuck.edwards@gmail.com',
-      contactPhone: '225-333-0330',
+      contactEmail: '{HOPE_EMAIL}',
+      contactPhone: '{HOPE_PHONE}',
       termsVersion: '2026-02',
       aiEnabled: true,
       maintenanceMode: false
@@ -29719,7 +29719,7 @@ function GuestGuide({
       borderLeft: '3px solid var(--l6)',
       paddingLeft: '1.25rem'
     }
-  }, "\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\" — Matthew 11:28 (KJV)"), [['📅', 'Attend Your First Meeting', 'All HOPE meetings are open, free, and judgment-free. No membership needed. Just show up.', 'Find a Meeting', 'guest-meetings'], ['📖', 'Read the 12 Steps', 'HOPE Recovery\'s biblical 12-step recovery program. Read at your own pace — no commitment required.', 'Read Now', 'steps'], ['✍️', 'HOPE In Motion Blog', 'Daily encouragement, recovery insights, and Scripture-grounded teaching.', 'Read Blog', 'hopeinmotion'], ['💝', 'Support the Ministry', 'Every dollar supports recovery, housing, and campus expansion.', 'Give Now', 'donate'], ['⚡', 'Create an Account', 'Unlock your full member journey — step tracking, meetings, mentorship, and more.', 'Join HOPE', 'guest-signup']].map(function ([icon, title, desc, action, page]) {
+  }, "\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\" — Matthew 11:28 (KJV)"), [['📅', 'Attend Your First Meeting', 'All HOPE meetings are open, free, and judgment-free. No membership needed. Just show up.', 'Find a Meeting', 'guest-meetings'], ['📖', 'Read the 12 Steps', 'POLR\'s biblical 12-step recovery program. Read at your own pace — no commitment required.', 'Read Now', 'steps'], ['✍️', 'Walk Well Blog', 'Daily encouragement, recovery insights, and Scripture-grounded teaching.', 'Read Blog', 'walkwell'], ['💝', 'Support the Ministry', 'Every dollar supports recovery, housing, and campus expansion.', 'Give Now', 'donate'], ['⚡', 'Create an Account', 'Unlock your full member journey — step tracking, meetings, mentorship, and more.', 'Join POLR', 'guest-signup']].map(function ([icon, title, desc, action, page]) {
     return /*#__PURE__*/React.createElement("div", {
       key: title,
       style: {
@@ -29779,13 +29779,44 @@ function GuestGuide({
 // ═══════════════════════════════════════════════════
 // SHARED DATA
 // ═══════════════════════════════════════════════════
-const SAYINGS = ['Our greatest testimony isn\'t just words, but how we <strong>walk it out.</strong>', '<strong>Repentance</strong> is not perfection, but a turning of the heart toward <strong>God.</strong>', '<strong>Blame</strong> keeps us bound; <strong>truth</strong> is what sets us free.', 'Temptation is not the sin, but the moment to <strong>choose the Spirit.</strong>', 'What is <strong>hidden</strong> keeps us sick; what is brought into the <strong>light</strong> brings healing.', 'Freedom is not found in <strong>striving</strong>, but in <strong>surrender.</strong>', 'We don\'t walk this out flawlessly — we walk it out <strong>faithfully.</strong>'];
+const SAYINGS = ['Our greatest testimony is not the <strong>words</strong> we say, but the <strong>lives</strong> we live.', '<strong>Repentance</strong> is not perfection, but a new <strong>direction.</strong>', '<strong>Blame</strong> keeps us stuck; <strong>truth</strong> moves us forward.', 'Temptation isn\'t a sin, but a cue to <strong>walk in the Spirit.</strong>', 'Sometimes what looked like a <strong>setback</strong>, was God setting you up for a new <strong>opportunity.</strong>', 'You don\'t have to have it together to <strong>walk through the door.</strong>', 'Healing isn\'t linear — but every <strong>honest step</strong> counts.'];
 const MEETINGS_DATA = [{
+  day: 'Mon–Sat',
+  time: '7:00 AM',
+  name: 'HOPE Place Thibodaux — Daily',
+  location: '501-A St. Mary St, Thibodaux',
+  note: 'Drug Court Certified'
+}, {
+  day: 'Wednesday',
+  time: '6:30 PM',
+  name: 'HOP Thibodaux — Check-In',
+  location: '2229 Hwy 3185, Thibodaux',
+  note: 'Childcare Available'
+}, {
+  day: 'Wednesday',
+  time: '7:00 PM',
+  name: 'HOP Thibodaux — Worship + Lesson',
+  location: '2229 Hwy 3185, Thibodaux',
+  note: ''
+}, {
+  day: 'Wednesday',
+  time: '8:00 PM',
+  name: 'HOP Thibodaux — Open Share',
+  location: '2229 Hwy 3185, Thibodaux',
+  note: ''
+}, {
   day: 'Monday',
   time: '6:00 PM',
   name: 'HOPE Place Port Allen',
-  location: '12883 Hwy 190 West, Port Allen LA 70767',
-  note: 'Recovery Meeting'
+  zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-port-allen',
+  location: '12883 Hwy 190 West, Port Allen',
+  note: 'New Campus'
+}, {
+  day: 'Wednesday',
+  time: '7:00 PM',
+  name: 'HOPE Place @ HOP Larose',
+  location: 'Larose, LA',
+  note: ''
 }];
 const CAMPUSES = [{
   slug: 'polr-place-thibodaux',
@@ -29796,7 +29827,7 @@ const CAMPUSES = [{
   zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-core',
   desc: 'Our flagship daily meeting center. Certified with Lafourche Drug Court.',
   metrics: [{
-    v: '500+',
+    v: '600+',
     l: 'Lives'
   }, {
     v: '7×/wk',
@@ -29893,7 +29924,7 @@ const PATHWAYS = [{
 const STEPS_DATA = [
   // The 12 Steps of HOPE Recovery: Hold on Pain Ends
   // Adapted from the 12 Steps of AA, biblically focused
-  // \u00a9 HOPE Recovery, Inc. \u2014 hopenetwork.com
+  // \u00a9 HOPE Recovery, Inc. \u2014 {HOPE_WEBSITE}
   {
     n: 1,
     title: 'We Admitted Our Powerlessness',
@@ -29974,7 +30005,7 @@ const LEGAL_DOCS = {
     version: '2026-02',
     content: [{
       h: '1. Who We Are',
-      p: 'HOPE Recovery: Hold on Pain Ends is a Christ-centered, nonprofit recovery ministry in Port Allen, Louisiana. We are not a licensed medical provider, therapist, or addiction treatment center.'
+      p: 'HOPE Recovery: Hold on Pain Ends is a Christ-centered, nonprofit recovery ministry in Thibodaux, Louisiana. We are not a licensed medical provider, therapist, or addiction treatment center.'
     }, {
       h: '2. Faith-Based Mission',
       p: 'All programs are grounded in biblical faith. Participation is voluntary and open to anyone seeking hope and healing.'
@@ -30009,7 +30040,7 @@ const LEGAL_DOCS = {
       p: 'POLR will never sell, rent, or trade your personal information. We do not share recovery status without your explicit consent.'
     }, {
       h: 'Data Security',
-      p: 'We use SSL/TLS encryption. You may request deletion of your data by contacting bro.chuck.edwards@gmail.com.'
+      p: 'We use SSL/TLS encryption. You may request deletion of your data by contacting {HOPE_EMAIL}.'
     }, {
       h: 'Cookies',
       p: 'Session and preference cookies only. No advertising cookies.'
@@ -30050,7 +30081,7 @@ const LEGAL_DOCS = {
       p: 'Arriving impaired, soliciting substances, harassment, violence, sharing another member\'s story without consent.'
     }, {
       h: 'Enforcement',
-      p: 'Violations may result in warning, suspension, or permanent removal. Appeals: bro.chuck.edwards@gmail.com.'
+      p: 'Violations may result in warning, suspension, or permanent removal. Appeals: {HOPE_EMAIL}.'
     }]
   }
 };
@@ -30259,8 +30290,8 @@ function GlobalNav({
     key: 'steps',
     label: '12 Steps'
   }, {
-    key: 'hopeinmotion',
-    label: 'HOPE In Motion'
+    key: 'walkwell',
+    label: 'Walk Well'
   }, {
     key: 'partner',
     label: 'Partner With Us'
@@ -30394,11 +30425,11 @@ function SiteFooter({
     className: "footer-tagline"
   }, "\"Healing and hope for the hurting\" \u2014 Christ-centered recovery ministry serving South Louisiana since 2004."), /*#__PURE__*/React.createElement("div", {
     className: "footer-contact"
-  }, "hopenetwork.com \xB7 225-333-0330 \xB7 bro.chuck.edwards@gmail.com")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, "{HOPE_WEBSITE} \xB7 {HOPE_PHONE} \xB7 {HOPE_EMAIL}")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "footer-col-title"
   }, "Ministry"), /*#__PURE__*/React.createElement("ul", {
     className: "footer-links"
-  }, [['home', 'Our Story'], ['steps', 'The 12 Steps'], ['hopeinmotion', 'HOPE In Motion'], ['partner', 'Partner With Us'], ['donate', 'Donate']].map(function ([k, l]) {
+  }, [['home', 'Our Story'], ['steps', 'The 12 Steps'], ['walkwell', 'Walk Well'], ['partner', 'Partner With Us'], ['donate', 'Donate']].map(function ([k, l]) {
     return /*#__PURE__*/React.createElement("li", {
       key: k
     }, /*#__PURE__*/React.createElement("button", {
@@ -30440,9 +30471,9 @@ function SiteFooter({
     }
   }, "Give Now \u2192"))), /*#__PURE__*/React.createElement("div", {
     className: "footer-bottom"
-  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 HOPE Recovery, Inc. \xB7 Port Allen, Louisiana \xB7 501(c)(3) Nonprofit"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 HOPE Recovery, Inc. \xB7 Thibodaux, Louisiana \xB7 501(c)(3) Nonprofit"), /*#__PURE__*/React.createElement("span", {
     className: "footer-ww"
-  }, "\"Walk it out faithfully.\""))));
+  }, "\"Walk well.\""))));
 }
 
 // ═══ HOME PAGE ═══
@@ -30506,7 +30537,7 @@ function HomePage({
     }
   }, "Member Login")), /*#__PURE__*/React.createElement("div", {
     className: "hero-stats"
-  }, [['500+', 'Est. Lives Touched'], ['21yr', 'Ministry'], ['1', 'Campus'], ['Free', 'Basic Plan']].map(function ([n, l]) {
+  }, [['600+', 'Est. Lives Touched'], ['21yr', 'Ministry'], ['4', 'Campuses'], ['Free', 'Basic Plan']].map(function ([n, l]) {
     return /*#__PURE__*/React.createElement("div", {
       key: l,
       className: "hs"
@@ -30525,7 +30556,7 @@ function HomePage({
     className: "eyebrow"
   }, "Our Story"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, "21 Years of Walking People Into Freedom"), /*#__PURE__*/React.createElement("div", {
+  }, "More Than 30 Years of Walking People Home"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
@@ -30581,7 +30612,7 @@ function HomePage({
       fontSize: '0.78rem',
       color: 'rgba(255,255,255,0.35)'
     }
-  }, "\u2014 Chuck Edwards, Administrator \xB7 HOPE Recovery: Hold on Pain Ends")), /*#__PURE__*/React.createElement("p", {
+  }, "\u2014 Chuck Edwards, Director \xB7 HOPE Recovery: Hold on Pain Ends")), /*#__PURE__*/React.createElement("p", {
     style: {
       fontFamily: 'var(--font-italic)',
       fontSize: '1.05rem',
@@ -30666,9 +30697,9 @@ function HomePage({
     style: {
       color: 'var(--gold)'
     }
-  }, "HOPE In Motion Sayings"), /*#__PURE__*/React.createElement("h2", {
+  }, "Walk Well Sayings"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title light"
-  }, "Walk It Out"), /*#__PURE__*/React.createElement("div", {
+  }, "Words That Walk With You"), /*#__PURE__*/React.createElement("div", {
     className: "sayings-wall"
   }, SAYINGS.slice(0, 4).map(function (s, i) {
     return /*#__PURE__*/React.createElement("div", {
@@ -30689,14 +30720,32 @@ function HomePage({
     className: "eyebrow"
   }, "Find a Meeting"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, "HOPE Recovery Is Open to Everyone"), /*#__PURE__*/React.createElement("p", {
+  }, "POLR Meetings Are Open to Everyone"), /*#__PURE__*/React.createElement("p", {
     className: "section-lead"
   }, "You don't need membership or anything figured out. Just show up. Every seat is for you."), /*#__PURE__*/React.createElement("div", {
     className: "locations-grid"
   }, [{
+    name: 'HOPE Place',
+    loc: 'Thibodaux',
+    type: 'Daily Recovery Center',
+    address: '501-A St. Mary St, Thibodaux LA 70301',
+    sch: 'Mon–Sat · <span>7:00 AM</span>'
+  }, {
+    name: 'HOPE Place @ HOP Thibodaux',
+    loc: 'Thibodaux',
+    type: 'Wednesday Evening',
+    address: '2229 Hwy 3185, Thibodaux LA 70301',
+    sch: 'Wednesday · <span>6:30–9:00 PM</span>'
+  }, {
+    name: 'HOPE Place @ HOP Larose',
+    loc: 'Larose',
+    type: 'Wednesday Evening',
+    address: 'Larose, LA · Lafourche Parish',
+    sch: 'Wednesday · <span>7:00 PM</span>'
+  }, {
     name: 'HOPE Place Port Allen',
     loc: 'Port Allen',
-    type: 'Recovery Center · Est. 2004',
+    type: 'New Campus · 2025',
     address: '12883 Hwy 190 West, Port Allen LA 70767',
     sch: 'Monday · <span>6:00 PM</span>'
   }].map(function (loc) {
@@ -30879,7 +30928,7 @@ function HomePage({
       color: 'var(--gold2)',
       marginBottom: '1.25rem'
     }
-  }, "HOPE Recovery: Hold on Pain Ends"), [['📞', 'Phone', '225-333-0330'], ['✉️', 'Email', 'bro.chuck.edwards@gmail.com'], ['📍', 'HOPE Place', '12883 Hwy 190 West, Port Allen LA 70767'], ['🌐', 'Website', 'www.hopenetwork.com']].map(function ([icon, label, val]) {
+  }, "HOPE Recovery: Hold on Pain Ends"), [['📞', 'Phone', '{HOPE_PHONE}'], ['✉️', 'Email', '{HOPE_EMAIL}'], ['📍', 'HOPE Place', '501-A St. Mary St, Thibodaux LA 70301'], ['🌐', 'Website', 'www.{HOPE_WEBSITE}']].map(function ([icon, label, val]) {
     return /*#__PURE__*/React.createElement("div", {
       key: label,
       className: "contact-item"
@@ -31100,13 +31149,13 @@ function WalkWellPage({
     const posts = [{
     icon: '📖',
     cat: 'Scripture',
-    title: 'The Father Is Already Running',
+    title: 'The God Who Waits for You',
     excerpt: "The parable of the Prodigal Son isn\'t about the son returning — it\'s about the Father running.",
     author: 'Chuck Edwards',
     date: 'Mar 18, 2026',
     readTime: '5 min read',
     featured: true,
-    body: "The parable of the Prodigal Son is the most misnamed story in Scripture. We call it the story of the son who came back. But Jesus told it as the story of a father who ran.\n\nThe son came to himself. He rehearsed his speech. He started the long walk home expecting nothing more than a servant's wage. But the text says the father saw him while he was yet a great way off. Which means the father had been looking. Waiting. Watching the road.\n\nThat is the God we serve.\n\nEvery person who has ever sat in a HOPE meeting has felt the weight of that walk home. The shame rehearsal. The calculations of what you deserve. The bracing for the lecture.\n\nAnd then — running feet. A robe. A ring. A party.\n\nGrace is not a reward for the right posture of repentance. It is a father sprinting down a road. That's the whole point. If you have never felt unworthy of the celebration, you have never understood the parable. And if you have never let yourself receive the celebration, you have not yet finished the story.\n\nThe father didn't check the son's sobriety date. He checked his pulse. He was alive. He was home. That was enough.\n\nWalk it out faithfully. He's been watching the road."
+    body: "The parable of the Prodigal Son is the most misnamed story in Scripture. We call it the story of the son who came back. But Jesus told it as the story of a father who ran.\n\nThe son came to himself. He rehearsed his speech. He started the long walk home expecting nothing more than a servant's wage. But the text says the father saw him while he was yet a great way off. Which means the father had been looking. Waiting. Watching the road.\n\nThat is the God we serve.\n\nEvery person who has ever sat in a HOPE meeting has felt the weight of that walk home. The shame rehearsal. The calculations of what you deserve. The bracing for the lecture.\n\nAnd then — running feet. A robe. A ring. A party.\n\nGrace is not a reward for the right posture of repentance. It is a father sprinting down a road. That's the whole point. If you have never felt unworthy of the celebration, you have never understood the parable. And if you have never let yourself receive the celebration, you have not yet finished the story.\n\nThe father didn't check the son's sobriety date. He checked his pulse. He was alive. He was home. That was enough.\n\nWalk well. He's been watching the road."
   }, {
     icon: '🔥',
     cat: 'Recovery',
@@ -31122,25 +31171,25 @@ function WalkWellPage({
     author: 'Chuck Edwards',
     date: 'Mar 5, 2026',
     readTime: '6 min read',
-    body: "Most people who relapse do so not from lack of willpower but from unfinished step work. Step Four is where they stop.\n\nThe instruction is simple: make a searching and fearless moral inventory. The word 'fearless' is doing a lot of work in that sentence. Because every person who has ever sat down to do Step Four has felt the fear.\n\nFear of what they'll find. Fear of having to share it in Step Five. Fear that what they find will confirm the worst thing they believe about themselves.\n\nHere is what years of walking people through the steps has taught us at HOPE Recovery:\n\nThe things you are most afraid to write down are the things that have the most power over you. And the moment you write them down — just write them, just get them on paper — some of that power begins to drain away.\n\nYou are not taking inventory of who you are. You are taking inventory of what you've been carrying. There is a difference. The inventory is not your identity. It is the weight you've been dragging. Step Four is how you set it down.\n\nDo it with a pastor, mentor, or trusted accountability partner. Do it slowly. Do it honestly. Don't wait until you feel ready. You will never feel ready. Start anyway.\n\nWalk it out faithfully."
+    body: "Most people who relapse do so not from lack of willpower but from unfinished step work. Step Four is where they stop.\n\nThe instruction is simple: make a searching and fearless moral inventory. The word 'fearless' is doing a lot of work in that sentence. Because every person who has ever sat down to do Step Four has felt the fear.\n\nFear of what they'll find. Fear of having to share it in Step Five. Fear that what they find will confirm the worst thing they believe about themselves.\n\nHere is what thirty years of walking people through the steps has taught us at POLR:\n\nThe things you are most afraid to write down are the things that have the most power over you. And the moment you write them down — just write them, just get them on paper — some of that power begins to drain away.\n\nYou are not taking inventory of who you are. You are taking inventory of what you've been carrying. There is a difference. The inventory is not your identity. It is the weight you've been dragging. Step Four is how you set it down.\n\nDo it with a pastor, mentor, or trusted accountability partner. Do it slowly. Do it honestly. Don't wait until you feel ready. You will never feel ready. Start anyway.\n\nWalk well."
   }, {
     icon: '🏠',
     cat: 'Housing',
     title: 'What HOPE House Taught Me',
-    excerpt: 'I came into HOPE House thinking structure was a punishment. I left understanding it was a gift.',
+    excerpt: 'Living in a sober house is where I learned what accountability actually feels like.',
     author: 'Marcus W.',
     date: 'Feb 28, 2026',
     readTime: '4 min read',
-    body: "I came into HOPE House thinking structure was a punishment. I left understanding it was a gift.\n\nCurfew at 10 PM. Drug testing. Chores. Meeting requirements. When they handed me the house rules on my first day, I read them like an inmate reading a sentence.\n\nThree months later I understood.\n\nStructure is not punishment for people in recovery. It is the scaffolding that holds the new building up while the concrete sets. When your decision-making is compromised — and early recovery means your decision-making is compromised — you need an external structure to carry the weight your internal structure can't carry yet.\n\nThe curfew kept me off streets I had no business being on at midnight. The drug testing kept me accountable to something outside my own willpower. The chores taught me that I was part of a household, not just a resident of one. The meeting requirements kept the most important medicine in my life — community — from being optional on the days I most wanted to skip it.\n\nI have been out of HOPE House for two years. I still keep a structure. Not because someone requires it. Because I know what I'm like without it.\n\nIf you're resistant to the structure, that resistance is information. Sit with it. Then show up anyway.\n\nWalk it out faithfully."
+    body: "I came into HOPE House thinking structure was a punishment. I left understanding it was a gift.\n\nCurfew at 10 PM. Drug testing. Chores. Meeting requirements. When they handed me the house rules on my first day, I read them like an inmate reading a sentence.\n\nThree months later I understood.\n\nStructure is not punishment for people in recovery. It is the scaffolding that holds the new building up while the concrete sets. When your decision-making is compromised — and early recovery means your decision-making is compromised — you need an external structure to carry the weight your internal structure can't carry yet.\n\nThe curfew kept me off streets I had no business being on at midnight. The drug testing kept me accountable to something outside my own willpower. The chores taught me that I was part of a household, not just a resident of one. The meeting requirements kept the most important medicine in my life — community — from being optional on the days I most wanted to skip it.\n\nI have been out of HOPE House for two years. I still keep a structure. Not because someone requires it. Because I know what I'm like without it.\n\nIf you're resistant to the structure, that resistance is information. Sit with it. Then show up anyway.\n\nWalk well."
   }, {
     icon: '🎯',
     cat: 'Leadership',
-    title: 'From Participant to Leader',
+    title: 'From Participant to Group Chair',
     excerpt: "Nobody told me I\'d end up leading a group. Here\'s how it happened.",
     author: 'Angela L.',
     date: 'Feb 20, 2026',
     readTime: '5 min read',
-    body: "The day my leader asked if I\'d consider leading a group, I almost laughed. Eighteen months earlier I had been homeless.\n\nBut that is exactly how HOPE is designed to work. Not a program where the professionals minister to the broken. A community where the people who have walked the path turn around and walk it with the next person.\n\nGroup Chair is not an honor. It's a responsibility. You show up early. You make coffee. You know everyone's name and their story. You notice when someone hasn't been there in two weeks and you reach out — not with a form letter but with a phone call or a visit.\n\nLeadership in recovery is not about having the answers. It's about having walked far enough down the road that you can turn back and say — I know this section. I know where the drop-offs are. Stay close.\n\nEvery Group Chair at HOPE was once a newcomer. Every Campus Leader was once a Group Chair. That is not an accident. That is the design. Because the person most qualified to guide someone out of addiction is not someone who read about addiction in a textbook. It's someone who walked out of it — and chose to come back to the door to hold it open.\n\nIf you are approaching the point where you could lead, start. Not because you're ready. Because readiness is built by doing.\n\nWalk it out faithfully."
+    body: "The day my leader asked if I\'d consider leading a group, I almost laughed. Eighteen months earlier I had been homeless.\n\nBut that is exactly how HOPE is designed to work. Not a program where the professionals minister to the broken. A community where the people who have walked the path turn around and walk it with the next person.\n\nGroup Chair is not an honor. It's a responsibility. You show up early. You make coffee. You know everyone's name and their story. You notice when someone hasn't been there in two weeks and you reach out — not with a form letter but with a phone call or a visit.\n\nLeadership in recovery is not about having the answers. It's about having walked far enough down the road that you can turn back and say — I know this section. I know where the drop-offs are. Stay close.\n\nEvery Group Chair at HOPE was once a newcomer. Every Campus Leader was once a Group Chair. That is not an accident. That is the design. Because the person most qualified to guide someone out of addiction is not someone who read about addiction in a textbook. It's someone who walked out of it — and chose to come back to the door to hold it open.\n\nIf you are approaching the point where you could lead, start. Not because you're ready. Because readiness is built by doing.\n\nWalk well."
   }];
   var allPosts = (typeof getPublishedTestimonies==='function' ? getPublishedTestimonies().map(function(t){return {icon:t.icon||'🙌',cat:t.cat||'Testimony',title:t.title,excerpt:t.body.slice(0,120)+'...',author:t.author,date:t.date||new Date().toLocaleDateString(),readTime:t.readTime||'2 min read',featured:false,body:t.body,isTestimony:true};}) : []).concat(posts);
   const _useState46 = useState(0),
@@ -31167,7 +31216,7 @@ function WalkWellPage({
           React.createElement("button", {
             onClick: function() { setSelectedPost(null); window.scrollTo(0,0); },
             style: { background: "none", border: "none", color: "var(--gold)", cursor: "pointer", fontSize: "0.85rem", marginBottom: "1.25rem", fontFamily: "var(--font-serif)" }
-          }, "← HOPE In Motion Blog"),
+          }, "← Walk Well Blog"),
           React.createElement("div", { style: { display: "inline-block", padding: "0.2rem 0.65rem", background: "rgba(200,145,58,0.2)", borderRadius: 20, fontSize: "0.65rem", fontWeight: 700, color: "var(--gold2)", marginBottom: "0.75rem" } }, sp.cat),
           React.createElement("h1", { style: { fontFamily: "var(--font-serif)", fontSize: "clamp(1.6rem,3.5vw,2.4rem)", fontWeight: 700, color: "white", lineHeight: 1.15, marginBottom: "1rem" } }, sp.title),
           React.createElement("div", { style: { fontSize: "0.8rem", color: "rgba(255,255,255,0.45)" } }, sp.author || "HOPE Staff", " · ", sp.date, sp.readTime ? " · " + sp.readTime : "")
@@ -31179,7 +31228,7 @@ function WalkWellPage({
           : React.createElement("p", { style: { fontFamily: "var(--font-italic)", fontSize: "1.1rem", lineHeight: 1.85, color: "var(--muted)" } }, sp.excerpt),
         React.createElement("div", { style: { borderTop: "2px solid var(--gold)", paddingTop: "2rem", marginTop: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" } },
           React.createElement("button", { onClick: function() { setSelectedPost(null); window.scrollTo(0,0); }, style: { background: "var(--navy)", color: "var(--gold)", border: "none", cursor: "pointer", padding: "0.75rem 1.5rem", borderRadius: 8, fontFamily: "var(--font-serif)", fontWeight: 700 } }, "← Back to Blog"),
-          React.createElement("div", { style: { fontFamily: "var(--font-italic)", fontStyle: "italic", fontSize: "1rem", color: "var(--muted)" } }, "'Walk it out faithfully.'")
+          React.createElement("div", { style: { fontFamily: "var(--font-italic)", fontStyle: "italic", fontSize: "1rem", color: "var(--muted)" } }, "'Walk well.'")
         )
       )
     );
@@ -31218,7 +31267,7 @@ function WalkWellPage({
       color: 'white',
       letterSpacing: '0.04em'
     }
-  }, "HOPE In Motion"), /*#__PURE__*/React.createElement("p", {
+  }, "Walk Well"), /*#__PURE__*/React.createElement("p", {
     style: {
       fontFamily: 'var(--font-italic)',
       fontStyle: 'italic',
@@ -31323,7 +31372,7 @@ function WalkWellPage({
       color: 'white',
       position: 'relative'
     }
-  }, "The Father Is Already Running")), /*#__PURE__*/React.createElement("div", {
+  }, "The God Who Waits for You")), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '1.5rem'
     }
@@ -31654,9 +31703,9 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
               React.createElement('button', {onClick:function(){setPage('platform');},
                 style:{padding:'0.8rem 2rem',borderRadius:10,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'1rem',fontFamily:'var(--font-serif)'}},
                 'Enroll Free \u2192'),
-              React.createElement('a', {href:'tel:225-333-0330',
+              React.createElement('a', {href:'tel:{HOPE_PHONE}',
                 style:{padding:'0.8rem 1.5rem',borderRadius:10,background:'white',border:'1px solid var(--border)',color:'var(--navy)',fontWeight:600,fontSize:'0.9rem',textDecoration:'none'}},
-                'Call 225-333-0330')
+                'Call {HOPE_PHONE}')
             )
           )
         )
@@ -31680,8 +31729,8 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
         React.createElement('div', {style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap',marginTop:'1.75rem'}},
           React.createElement('button', {onClick:function(){setPage('platform');},className:'btn-primary',style:{padding:'0.85rem 2rem',fontSize:'1rem'}},
             'Join Free \u2014 Start Learning \u2192'),
-          React.createElement('a', {href:'tel:225-333-0330',style:{padding:'0.85rem 1.5rem',borderRadius:10,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',color:'white',fontWeight:600,fontSize:'0.9rem',textDecoration:'none'}},
-            'Call 225-333-0330')
+          React.createElement('a', {href:'tel:{HOPE_PHONE}',style:{padding:'0.85rem 1.5rem',borderRadius:10,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',color:'white',fontWeight:600,fontSize:'0.9rem',textDecoration:'none'}},
+            'Call {HOPE_PHONE}')
         )
       )
     ),
@@ -31906,7 +31955,7 @@ function DonatePage({
     className: "hero-sub"
   }, "POLR is a 501(c)(3) nonprofit. 100% of donations support recovery programs, housing, leadership development, and campus expansion."), /*#__PURE__*/React.createElement("div", {
     className: "hero-stats"
-  }, [['1', 'Campus'], ['500+', 'Lives'], ['21yr', 'Ministry'], ['$0', 'Overhead']].map(function ([n, l]) {
+  }, [['4', 'Campuses'], ['600+', 'Lives'], ['21yr', 'Ministry'], ['$0', 'Overhead']].map(function ([n, l]) {
     return /*#__PURE__*/React.createElement("div", {
       key: l,
       className: "hs"
@@ -32027,7 +32076,7 @@ function DonatePage({
       color: 'var(--muted)',
       lineHeight: 1.8
     }
-  }, "HOPE Recovery, Inc. is a registered 501(c)(3) tax-exempt nonprofit. All donations are tax-deductible. Contact bro.chuck.edwards@gmail.com or 225-333-0330 for questions."))), modal && /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery, Inc. is a registered 501(c)(3) tax-exempt nonprofit. All donations are tax-deductible. Contact {HOPE_EMAIL} or {HOPE_PHONE} for questions."))), modal && /*#__PURE__*/React.createElement("div", {
     className: "modal-overlay open",
     onClick: function (e) {
       if (e.target === e.currentTarget) setModal(null);
@@ -32304,7 +32353,7 @@ function PartnerPage({ setPage, toast, page, session, mobileOpen, setMobileOpen 
           React.createElement('div',{style:{fontFamily:'Georgia,serif',fontSize:'1.2rem',fontWeight:700,
             color:'var(--navy,#0a1628)',marginBottom:'0.5rem'}},dt.cta),
           React.createElement('div',{style:{fontSize:'0.85rem',color:'#888',marginBottom:'1.25rem',lineHeight:1.65}},
-            'Contact us at 225-333-0330 or bro.chuck.edwards@gmail.com, or complete the partner inquiry form.'),
+            'Contact us at {HOPE_PHONE} or {HOPE_EMAIL}, or complete the partner inquiry form.'),
           React.createElement('button',{onClick:function(){setDetailType(null);setF('type')({target:{value:dt.id}});},
             style:{padding:'0.85rem 2.5rem',borderRadius:10,background:dt.color,color:'white',
                    border:'none',cursor:'pointer',fontWeight:700,fontSize:'1rem',fontFamily:'Georgia,serif'}},
@@ -32464,7 +32513,7 @@ return React.createElement('div',{style:{minHeight:'100vh',background:'var(--cre
           React.createElement('div',{style:{fontSize:'3rem',marginBottom:'0.75rem'}},'\u2705'),
           React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',fontWeight:700,color:'var(--navy)',marginBottom:'0.4rem'}},'Partnership Request Received'),
           React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--muted)',marginBottom:'1rem',lineHeight:1.65}},
-            'Our team has been notified and will contact you within 24 hours. Your inquiry is now in the HOPE partner dashboard. Walk it out faithfully.'
+            'Our team has been notified and will contact you within 24 hours. Your inquiry is now in the HOPE partner dashboard. Walk well.'
           ),
           React.createElement('button',{onClick:function(){setSubmitted(false);setForm({name:'',org:'',email:'',phone:'',type:'employer',program:'Trade - OSHA-10',size:'',notes:'',referralType:'pipeline-partner'});},
             style:{padding:'0.65rem 1.5rem',borderRadius:9,background:'var(--cream)',border:'1px solid var(--border)',color:'var(--navy)',cursor:'pointer',fontWeight:600}},'Submit Another Inquiry')
@@ -32590,7 +32639,7 @@ function App() {
     session: session,
     mobileOpen: mobileOpen,
     setMobileOpen: setMobileOpen
-  }), page === 'hopeinmotion' && /*#__PURE__*/React.createElement(WalkWellPage, {
+  }), page === 'walkwell' && /*#__PURE__*/React.createElement(WalkWellPage, {
     setPage: navigate,
     page: page,
     session: session,
@@ -33739,7 +33788,7 @@ function mkLesson(id, stepNum, title, sections, body, quiz, journalPrompt, teach
     id: id, stepNum: stepNum, version: 1, title: title,
     author: 'HOPE Staff', duration: '45 min', status: 'approved',
     header: { orgName: 'HOPE Recovery: Hold on Pain Ends', stepLabel: stepNum ? 'Step ' + stepNum : title, date: '2026-01-01' },
-    footer: { text: '"Walk it out faithfully." — HOPE Recovery · hopenetwork.com · 225-333-0330', show: true },
+    footer: { text: '"Walk well." — {HOPE_NAME} · {HOPE_WEBSITE} · {HOPE_PHONE}', show: true },
     sections: sections,
     bodyBlocks: [{ id: 'b1', label: 'Lesson Body', content: body }],
     focusWords: [], teacherNotes: teacherNotes || '', journalLines: 7,
@@ -33802,7 +33851,7 @@ stepLessons['1'] = [mkLesson('seed_s1_l1', 1,
       'Where has your life become unmanageable? Not just with substances — with relationships, with honesty, with keeping commitments? Write one specific thing that happened in the last year that you would not have chosen if you were truly in control. Pray Psalm 139:23-24: "Search me, O God, and know my heart: try me, and know my thoughts: And see if there be any wicked way in me, and lead me in the way everlasting." (KJV)',
       null, 10),
     sec('s12','final','POLR Final Thought',
-      'Walk it out faithfully. One step at a time. "The Lord is my shepherd; I shall not want." (Psalm 23:1 KJV) You are not alone.',
+      'Walk well. One step at a time. "The Lord is my shepherd; I shall not want." (Psalm 23:1 KJV) You are not alone.',
       null, 11),
   ],
   'Step 1 is the foundation of everything. Without it, none of the other steps work.\n\nYou are here because something brought you here — pain, a court order, a family member who gave an ultimatum, your own exhaustion. Whatever it was, it is enough. The reason you arrived does not have to be noble. The decision you make while you are here can be.\n\nThere is a phrase: "I am not the same person I was when I was using." This is partly true — sanctification is real, and Christ transforms us. But Step 1 teaches us not to grow overconfident. The strongholds of the flesh are patient. Temptation does not disappear because you have been clean for 60 days. Apart from Christ, we can do nothing. (John 15:5 KJV)\n\nIn early recovery, many people feel a sudden, false confidence. They feel good. They think: I have this. This is normal. This feeling is not recovery — it is the beginning of recovery. Real recovery is built over time, through the steps, through service, through walking with God. Step 1 is where it starts.',
@@ -34412,7 +34461,7 @@ stepLessons['12'] = [mkLesson('seed_s12_l1', 12,
       'Who is waiting for your Step 12? Who is where you were? Proverbs 11:25 says: "The liberal soul shall be made fat: and he that watereth shall be watered also himself." (KJV) Write the name of one person you can reach toward this week. Write what you would say. Begin with your own story — nothing else is required.',
       null, 10),
     sec('s12','final','POLR Final Thought',
-      '"Having therefore these promises, dearly beloved, let us cleanse ourselves from all filthiness of the flesh and spirit, perfecting holiness in the fear of God." (2 Corinthians 7:1 KJV) The steps are not an end. They are the beginning of a life of increasing holiness, service, and conscious contact with the living God. Walk it out faithfully.',
+      '"Having therefore these promises, dearly beloved, let us cleanse ourselves from all filthiness of the flesh and spirit, perfecting holiness in the fear of God." (2 Corinthians 7:1 KJV) The steps are not an end. They are the beginning of a life of increasing holiness, service, and conscious contact with the living God. Walk well.',
       null, 11),
   ],
   'Step 12 is where recovery becomes ministry.\n\nThe person who has worked the first eleven steps honestly carries something the world cannot manufacture: evidence. Evidence that God transforms. Evidence that the bondage of the flesh is not the final word. Evidence — in a living, breathing, standing-in-front-of-you human being — that what seems impossible is not.\n\n1 Peter 3:15 says: "But sanctify the Lord God in your hearts: and be ready always to give an answer to every man that asketh you a reason of the hope that is in you." (KJV) You now have a reason for your hope. Step 12 asks you to be ready to give it.\n\nCarry the message. Not by preaching — by living. Not by perfection — by honesty. Not by having all the answers — by pointing to the One who does.',
@@ -34550,13 +34599,13 @@ eduCourseLessons['tr-1'] = [
 // ── MINISTRY TRACK ──
 eduCourseLessons['mn-1'] = [
   mkCoursLesson('mn1-l1','mn-1',1,'How to Lead a Recovery Meeting',
-    'A recovery meeting is a sacred space — created for one purpose: giving people what they need to stay alive. Your job as a facilitator is to protect that space and serve the people in it.\n\nBefore the meeting:\n- Arrive 15-20 minutes early. Set up chairs in a circle or rows depending on size. A circle communicates equality.\n- Have literature available: the Word of God (KJV Bible), any HOPE step materials.\n- Know who is speaking or if it is an open share meeting.\n- Pray. Privately. Ask for wisdom and the right words.\n\nOpening the meeting:\n- Welcome everyone. Keep it warm and brief.\n- Announce the group name, purpose, and format.\n- Read the preamble (or have a member read it).\n- Make announcements: time, format, any upcoming events.\n- Introduce the speaker or open for sharing.\n\nDuring the meeting:\n- Your job is to create safety, not to control the content.\n- Hold the space for cross-talk rules (no direct advice, no comments on another\'s share).\n- If someone shares something concerning — crisis, relapse, safety — respond with care, not alarm.\n- Keep time gently. A soft "we\'ll need to wrap up in a minute" is enough.\n\nClosing:\n- Thank the speaker or sharers.\n- Read a closing scripture (suggested: Romans 8:1, Isaiah 40:31, or Philippians 4:6-7 KJV), then close with the Lord\'s Prayer or a pastoral benediction.\n- Remind people: "Walk it out faithfully. The Word of God is true and the steps are proven. Keep coming."\n- Stay after. The newcomer who cannot look anyone in the eye is the one who most needs someone to stay.',
+    'A recovery meeting is a sacred space — created for one purpose: giving people what they need to stay alive. Your job as a facilitator is to protect that space and serve the people in it.\n\nBefore the meeting:\n- Arrive 15-20 minutes early. Set up chairs in a circle or rows depending on size. A circle communicates equality.\n- Have literature available: the Word of God (KJV Bible), any HOPE step materials.\n- Know who is speaking or if it is an open share meeting.\n- Pray. Privately. Ask for wisdom and the right words.\n\nOpening the meeting:\n- Welcome everyone. Keep it warm and brief.\n- Announce the group name, purpose, and format.\n- Read the preamble (or have a member read it).\n- Make announcements: time, format, any upcoming events.\n- Introduce the speaker or open for sharing.\n\nDuring the meeting:\n- Your job is to create safety, not to control the content.\n- Hold the space for cross-talk rules (no direct advice, no comments on another\'s share).\n- If someone shares something concerning — crisis, relapse, safety — respond with care, not alarm.\n- Keep time gently. A soft "we\'ll need to wrap up in a minute" is enough.\n\nClosing:\n- Thank the speaker or sharers.\n- Read a closing scripture (suggested: Romans 8:1, Isaiah 40:31, or Philippians 4:6-7 KJV), then close with the Lord\'s Prayer or a pastoral benediction.\n- Remind people: "Walk well. The Word of God is true and the steps are proven. Keep coming."\n- Stay after. The newcomer who cannot look anyone in the eye is the one who most needs someone to stay.',
     [{q:'Why is a circle the preferred seating arrangement for a recovery meeting?',c:['It is easier to see the speaker','It communicates equality — no one is above anyone else','It allows more people to fit in the room','It is traditional with no specific meaning'],a:1,e:'A circle communicates equality — everyone is on the same level. Recovery works because people who have been through the same thing share with each other. The circle reflects that.'},
      {q:'What is the facilitator\'s primary job during the meeting?',c:['To correct wrong statements about the program','To make sure everyone shares','To create safety for honest sharing — not to control content','To lead a Bible study'],a:2,e:'The facilitator\'s job is to create and protect safety — a space where people can share honestly without judgment or unsolicited advice. Content belongs to the members.'},
      {q:'What should you do after the meeting closes?',c:['Pack up immediately','Stay — the newcomer who cannot look anyone in the eye needs someone to remain','Only stay if you are paid to','Go to the speaker and give feedback'],a:1,e:'Staying after the meeting is often where the real work happens. Newcomers who are too afraid to share often wait until after. The coffee hour after the meeting has saved lives.'}],'35 min'),
 
   mkCoursLesson('mn1-l2','mn-1',2,'Scripture and Recovery — KJV Foundations',
-    'The Bible and recovery speak the same language — the language of surrender, honesty, community, and transformation. The 12 steps were written by people deeply shaped by Christian Scripture.\n\nStep 1 and Powerlessness — Romans 7:18-19: "For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s experience is the universal experience of addiction: the will to change without the power to do so.\n\nStep 2 and Hope — Hebrews 11:1: "Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. Faith and Step 2 are the same movement.\n\nStep 3 and Surrender — Proverbs 3:5-6: "Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives and trust something greater than our own best thinking.\n\nStep 4 and Honesty — Psalm 139:23-24: "Search me, O God, and know my heart: try me, and know my thoughts." David\'s invitation to God to look at everything — even the hard parts.\n\nStep 12 and Service — Matthew 10:8: "Freely ye have received, freely give." The foundation of sponsorship, service, and the principle of paying forward what was given to us.\n\nIn a HOPE meeting: Scripture is not used to judge. It is used to illumine. The person who has never opened a Bible and the person who has walked with it for years can both find something here.',
+    'The Bible and recovery speak the same language — the language of surrender, honesty, community, and transformation. The 12 steps were written by people deeply shaped by Christian Scripture.\n\nStep 1 and Powerlessness — Romans 7:18-19: "For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s experience is the universal experience of addiction: the will to change without the power to do so.\n\nStep 2 and Hope — Hebrews 11:1: "Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. Faith and Step 2 are the same movement.\n\nStep 3 and Surrender — Proverbs 3:5-6: "Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives and trust something greater than our own best thinking.\n\nStep 4 and Honesty — Psalm 139:23-24: "Search me, O God, and know my heart: try me, and know my thoughts." David\'s invitation to God to look at everything — even the hard parts.\n\nStep 12 and Service — Matthew 10:8: "Freely ye have received, freely give." The foundation of sponsorship, service, and the principle of paying forward what was given to us.\n\nIn a HOPE meeting: Scripture is not used to judge. It is used to illumine. The person who has never opened a Bible and the person who has read it for thirty years can both find something here.',
     [{q:'What Scripture is used to illustrate the powerlessness of Step 1?',c:['Psalm 23','Romans 7:18-19','Hebrews 11:1','Matthew 10:8'],a:1,e:'Romans 7:18-19 — Paul\'s description of willing to do good but lacking the power — directly reflects the experience of addiction: the will without the ability.'},
      {q:'What is the Scripture connection to Step 12 (service)?',c:['Proverbs 3:5','Matthew 10:8 — "Freely ye have received, freely give"','Hebrews 11:1','Psalm 139:23'],a:1,e:'Matthew 10:8 — "Freely ye have received, freely give" — is the scriptural foundation for service and sponsorship. What was given to us without cost, we give to others.'},
      {q:'How is Scripture used in a HOPE meeting?',c:['To judge and correct wrong behavior','To decide who is Christian enough to share','To illumine — as a source of wisdom for everyone regardless of background','To replace the 12 steps'],a:2,e:'In HOPE, Scripture is used to illumine — to offer wisdom and perspective that applies to everyone in the room, regardless of their prior relationship with the Bible.'}],'40 min'),
@@ -34848,7 +34897,7 @@ add['tr-4'] = [
 // ─── MN-2: Scripture & Recovery ───────────────────────────────────
 add['mn-2'] = [
   mkL('mn2-l1','mn-2',1,'Scripture and Recovery — KJV Foundations',
-    'The HOPE 12-step program is grounded in Scripture — surrender, honesty, community, and transformation are biblical principles. The path of recovery is the path of sanctification. Every step has its root in the Word of God.\n\nStep 1 — Romans 7:18-19:\n"For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s exact experience of addiction: wanting to stop, being unable to. This is Step 1.\n\nStep 2 — Hebrews 11:1:\n"Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. This is Step 2.\n\nStep 3 — Proverbs 3:5-6:\n"Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives. This is Step 3.\n\nStep 4 — Psalm 139:23-24:\n"Search me, O God, and know my heart." David\'s invitation to honest self-examination. This is Step 4.\n\nStep 5 — James 5:16:\n"Confess your faults one to another, and pray one for another, that ye may be healed." The purpose of Step 5 — speaking secrets to another human being so healing can begin.\n\nStep 12 — Matthew 10:8:\n"Freely ye have received, freely give." The foundation of mentorship and service.\n\nIn a HOPE meeting, Scripture illumines — it does not judge. The person who has never opened a Bible and the person who has walked with it for years can both find wisdom here.',
+    'The HOPE 12-step program is grounded in Scripture — surrender, honesty, community, and transformation are biblical principles. The path of recovery is the path of sanctification. Every step has its root in the Word of God.\n\nStep 1 — Romans 7:18-19:\n"For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s exact experience of addiction: wanting to stop, being unable to. This is Step 1.\n\nStep 2 — Hebrews 11:1:\n"Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. This is Step 2.\n\nStep 3 — Proverbs 3:5-6:\n"Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives. This is Step 3.\n\nStep 4 — Psalm 139:23-24:\n"Search me, O God, and know my heart." David\'s invitation to honest self-examination. This is Step 4.\n\nStep 5 — James 5:16:\n"Confess your faults one to another, and pray one for another, that ye may be healed." The purpose of Step 5 — speaking secrets to another human being so healing can begin.\n\nStep 12 — Matthew 10:8:\n"Freely ye have received, freely give." The foundation of mentorship and service.\n\nIn a HOPE meeting, Scripture illumines — it does not judge. The person who has never opened a Bible and the person who has read it for thirty years can both find wisdom here.',
     [{q:'Which Scripture best illustrates the powerlessness of Step 1?',c:['Psalm 23','Romans 7:18-19','Hebrews 11:1','Matthew 10:8'],a:1,e:'Romans 7:18-19 — Paul\'s description of willing to do good but lacking the power — directly mirrors the experience of addiction: the will without the ability to carry it out.'},
      {q:'What is the scriptural foundation for Step 12 service?',c:['Proverbs 3:5','Matthew 10:8 — "Freely ye have received, freely give"','Hebrews 11:1','James 5:16'],a:1,e:'Matthew 10:8 — "Freely ye have received, freely give" — is the scriptural foundation for mentorship and service. What was given to us without cost, we give to others.'},
      {q:'How is Scripture used in a HOPE meeting?',c:['To judge and correct wrong behavior','To determine who is Christian enough to participate','To illumine — offering wisdom to everyone regardless of their prior relationship with the Bible','To replace the 12 steps'],a:2,e:'In HOPE, Scripture illumines — it offers wisdom that applies to everyone regardless of background. It is not used to judge or exclude. The door is wide enough for everyone.'}],'40 min'),
@@ -34974,17 +35023,17 @@ applySupp();
       }
       return {
         HOPE_NAME:    cfg.name    || 'HOPE Recovery: Hold on Pain Ends',
-        HOPE_PHONE:   cfg.phone   || '225-333-0330',
-        HOPE_EMAIL:   cfg.email   || 'bro.chuck.edwards@gmail.com',
+        HOPE_PHONE:   cfg.phone   || '985.224.7421',
+        HOPE_EMAIL:   cfg.email   || 'admin@hopenetwork.com',
         HOPE_WEBSITE: cfg.website || 'hopenetwork.com',
-        POLR_ADDRESS: cfg.address || 'Port Allen, Louisiana',
-        POLR_TAGLINE: cfg.tagline || 'Walk it out faithfully.'
+        POLR_ADDRESS: cfg.address || 'Thibodaux, Louisiana',
+        POLR_TAGLINE: cfg.tagline || 'Walk well.'
       };
     } catch(e) {
       return {
-        HOPE_NAME: 'HOPE Recovery: Hold on Pain Ends', HOPE_PHONE: '225-333-0330',
-        HOPE_EMAIL: 'bro.chuck.edwards@gmail.com', HOPE_WEBSITE: 'hopenetwork.com',
-        POLR_ADDRESS: 'Port Allen, Louisiana', POLR_TAGLINE: 'Walk it out faithfully.'
+        HOPE_NAME: 'HOPE Recovery: Hold on Pain Ends', HOPE_PHONE: '985.224.7421',
+        HOPE_EMAIL: 'admin@hopenetwork.com', HOPE_WEBSITE: 'hopenetwork.com',
+        POLR_ADDRESS: 'Thibodaux, Louisiana', POLR_TAGLINE: 'Walk well.'
       };
     }
   }
