@@ -5420,8 +5420,8 @@ function WorkforceBuilder({ platform, addToList, removeFromList, updateInList, t
 
   var employers = platform.employers || [
     {id:'e1',name:'BR Facility Services',openings:3,type:'Warehouse/Forklift',location:'Baton Rouge'},
-    {id:'e2',name:'Thibodaux Regional Health',openings:2,type:'Environmental Services',location:'Thibodaux'},
-    {id:'e3',name:'Louisiana Sugarcane Co.',openings:4,type:'Agricultural Labor',location:'Thibodaux'},
+    {id:'e2',name:'Baton Rouge General Health',openings:2,type:'Environmental Services',location:'Port Allen'},
+    {id:'e3',name:'Port Allen Industries',openings:4,type:'Agricultural Labor',location:'Port Allen'},
     {id:'e4',name:'Coastal Workforce Solutions',openings:2,type:'Construction',location:'Houma'},
   ];
 
@@ -7034,7 +7034,7 @@ function HouseMotherDashboard({ platform, update, updateInList, toast, session }
 
   // ── Overview Panel ──
   function HouseOverview() {
-    var houses = platform.housing || [{id:'h1',name:'House Alpha',type:'Men',beds:4,occupied:4,location:'Thibodaux'},{id:'h2',name:'House Beta',type:'Women',beds:4,occupied:3,location:'Thibodaux'},{id:'h3',name:'House Gamma',type:'Mixed',beds:5,occupied:4,location:'Port Allen'}];
+    var houses = platform.housing || [{id:'h1',name:'House Alpha',type:'Men',beds:4,occupied:4,location:'Port Allen'},{id:'h2',name:'House Beta',type:'Women',beds:4,occupied:3,location:'Port Allen'},{id:'h3',name:'House Gamma',type:'Mixed',beds:5,occupied:4,location:'Port Allen'}];
     return React.createElement('div',null,
       React.createElement('div',{style:{marginBottom:'1.25rem'}},
         React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',fontFamily:'var(--font-mono)',marginBottom:'0.2rem'}},'HOUSE MOTHER DASHBOARD'),
@@ -7809,7 +7809,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
   var _p4 = useState(false),        showRegister = _p4[0], setShowRegister = _p4[1];
   var _p5 = useState({
     partnerName:'', contactName:'', phone:'', email:'', propertyAddress:'',
-    city:'Thibodaux', state:'LA', beds:2, bathrooms:1, squareFt:'',
+    city:'Port Allen', state:'LA', beds:2, bathrooms:1, squareFt:'',
     contributionPath:'', marketRent:'', partnerRent:'', occupancyMonths:12,
     propertyValue:'', sponsorName:'', jobLocation:'', reunificationTarget:'',
     notes:''
@@ -7819,8 +7819,8 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
   // DEMO DATA — replaced on first real data import
   // DEMO DATA — replaced on first real import
   var SEED_PARTNERS = [
-    {id:'pp1', partnerName:'Thibodaux Properties LLC', contactName:'Robert Guidry', phone:'985-555-1001', email:'rguidry@thibprops.com',
-     propertyAddress:'814 St. Mary St', city:'Thibodaux', state:'LA', beds:3, bathrooms:2, squareFt:'1200',
+    {id:'pp1', partnerName:'Port Allen Properties LLC', contactName:'Robert Guidry', phone:'985-555-1001', email:'bro.chuck.edwards@gmail.com',
+     propertyAddress:'814 St. Mary St', city:'Port Allen', state:'LA', beds:3, bathrooms:2, squareFt:'1200',
      contributionPath:'mission-discount', marketRent:'950', partnerRent:'500', occupancyMonths:12,
      tier:'ambassador', yearsActive:2, livesHoused:8, reunifications:2, jobsEnabled:5, graduates:3,
      joinedAt:'2024-02-01', active:true, adoptedBy:'',
@@ -7844,12 +7844,12 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
      resaleDocReady:true, lastInspection:'2026-02-15',
     },
     {id:'pp2', partnerName:'Mary Trosclair', contactName:'Mary Trosclair', phone:'985-555-2002', email:'bro.chuck.edwards@gmail.com',
-     propertyAddress:'2201 Canal Blvd', city:'Thibodaux', state:'LA', beds:2, bathrooms:1, squareFt:'900',
+     propertyAddress:'2201 Canal Blvd', city:'Port Allen', state:'LA', beds:2, bathrooms:1, squareFt:'900',
      contributionPath:'charitable-donation', marketRent:'800', partnerRent:'0', occupancyMonths:10,
      tier:'legacy', yearsActive:4, livesHoused:14, reunifications:4, jobsEnabled:9, graduates:6,
-     joinedAt:'2022-06-15', active:true, adoptedBy:'First Baptist Church Thibodaux'},
+     joinedAt:'2022-06-15', active:true, adoptedBy:'First Baptist Church Port Allen'},
     {id:'pp3', partnerName:'Coastal Workforce Group', contactName:'Andre Pitre', phone:'985-555-3003', email:'apitre@coastalwf.com',
-     propertyAddress:'445 N. Canal Blvd', city:'Thibodaux', state:'LA', beds:4, bathrooms:2, squareFt:'1500',
+     propertyAddress:'445 N. Canal Blvd', city:'Port Allen', state:'LA', beds:4, bathrooms:2, squareFt:'1500',
      contributionPath:'workforce-transition', marketRent:'1200', partnerRent:'700', occupancyMonths:8,
      tier:'standard', yearsActive:1, livesHoused:4, reunifications:0, jobsEnabled:4, graduates:1,
      joinedAt:'2025-04-01', active:true, adoptedBy:''},
@@ -7893,7 +7893,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
     });
     update('propertyPartners', [...partners, newPartner]);
     setShowRegister(false);
-    setRegForm({partnerName:'',contactName:'',phone:'',email:'',propertyAddress:'',city:'Thibodaux',state:'LA',beds:2,bathrooms:1,squareFt:'',contributionPath:'',marketRent:'',partnerRent:'',occupancyMonths:12,propertyValue:'',sponsorName:'',jobLocation:'',reunificationTarget:'',notes:''});
+    setRegForm({partnerName:'',contactName:'',phone:'',email:'',propertyAddress:'',city:'Port Allen',state:'LA',beds:2,bathrooms:1,squareFt:'',contributionPath:'',marketRent:'',partnerRent:'',occupancyMonths:12,propertyValue:'',sponsorName:'',jobLocation:'',reunificationTarget:'',notes:''});
     toast({icon:'✅',title:'Property partner registered',body:regForm.partnerName+' added to the network'});
   };
 
@@ -14526,7 +14526,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var _sm=React.useState(null),      selMeeting=_sm[0],setSelMeeting=_sm[1];
   var _se=React.useState(null),      selEvent=_se[0],  setSelEvent=_se[1];
   var _sf=React.useState({
-    houseName:'New HOPE Place', address:'', city:'Thibodaux', state:'LA',
+    houseName:'New HOPE Place', address:'', city:'Port Allen', state:'LA',
     openDate:'', director:'HOPE Director', beds:8, phone:'225-333-0330',
     theme:'navy', videoUrl:'', videoCTA:'Scan to Watch Our Story', videoPlatform:'youtube'
   }), houseForm=_sf[0], setHouseForm=_sf[1];
@@ -15194,8 +15194,8 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.85rem'}},
             [
-              {id:'hope-place-port-allen', name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',        city:'Thibodaux'},
-              {id:'hope-place-port-allen',  name:'HOPE Place Port Allen',   phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', city:'Thibodaux'},
+              {id:'hope-place-port-allen', name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',        city:'Port Allen'},
+              {id:'hope-place-port-allen',  name:'HOPE Place Port Allen',   phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', city:'Port Allen'},
               {id:'hope-place-port-allen',name:'HOPE Place Port Allen',      phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',    city:'Larose'},
               {id:'polr-place-port-allen',name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',     city:'Port Allen'},
             ].map(function(campus){
@@ -25183,7 +25183,7 @@ function CampusesBuilder({
   const defaultCampuses = [{
     id: 'c-1',
     name: 'HOPE Place Port Allen',
-    city: 'Thibodaux',
+    city: 'Port Allen',
     parish: 'Lafourche',
     active: true,
     members: 247,
@@ -25191,7 +25191,7 @@ function CampusesBuilder({
   }, {
     id: 'c-2',
     name: 'HOPE Place Port Allen',
-    city: 'Thibodaux',
+    city: 'Port Allen',
     parish: 'Lafourche',
     active: true,
     members: 80,
