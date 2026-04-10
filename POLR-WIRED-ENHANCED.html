@@ -743,6 +743,31 @@ var POLR_API = {
     revenue:  function()  { return _apiFetch('/licensing/revenue'); },
     add:      function(d) { return _apiFetch('/licensing/partners', { method: 'POST', body: d }); }
   },
+
+  lms: {
+    steps:       function()           { return _apiFetch('/lms/steps'); },
+    courses:     function(step)       { return _apiFetch('/lms/courses' + (step ? '?step=' + step : '')); },
+    lessons:     function(courseId, version) {
+      return _apiFetch('/lms/courses/' + courseId + '/lessons' + (version ? '?version=' + version : ''));
+    },
+    lesson:      function(id, version){ return _apiFetch('/lms/lesson/' + id + (version ? '?version=' + version : '')); },
+    submitForm:  function(lessonId, memberId, answers) {
+      return _apiFetch('/lms/lessons/' + lessonId + '/submit', { method: 'POST', body: { memberId: memberId, answers: answers } });
+    },
+    getSubmission: function(lessonId, memberId) {
+      return _apiFetch('/lms/lessons/' + lessonId + '/submission/' + memberId);
+    },
+    submissions: function(params) {
+      var q = params ? '?' + new URLSearchParams(params).toString() : '';
+      return _apiFetch('/lms/submissions' + q);
+    },
+    classSchedule:       function()  { return _apiFetch('/lms/class-schedule'); },
+    updateClassSchedule: function(d) { return _apiFetch('/lms/class-schedule', { method: 'PUT', body: d }); },
+    memberProgress:      function(memberId) { return _apiFetch('/lms/members/' + memberId + '/personal-progress'); },
+    complete:    function(lessonId, memberId) {
+      return _apiFetch('/lms/lessons/' + lessonId + '/complete', { method: 'POST', body: { memberId: memberId } });
+    }
+  },
   activity: { list: function(n) { return _apiFetch('/activity?limit=' + (n||50)); } },
 
   // ── ACTIONS API (audit-enforced — every action writes to DB) ─────────
@@ -3886,6 +3911,89 @@ var REUSABLE_BLOCKS = {
 // DISCIPLESHIP ENGINE — Master lesson builder with dual render + focus words
 // ══════════════════════════════════════════════════════════════════════
 function DiscipleshipEngine({ platform, update, toast, session }) {
+  // ── Live class schedule state ──
+  var _cs = React.useState(null); var classSchedule = _cs[0], setClassSchedule = _cs[1];
+  var _editCS = React.useState(false); var editCS = _editCS[0], setEditCS = _editCS[1];
+  var _csForm = React.useState({current_step_number:1,topic:'',teacher_notes:'',discussion_questions:['']}); var csForm = _csForm[0], setCsForm = _csForm[1];
+  var _subList = React.useState([]); var submissions = _subList[0], setSubmissions = _subList[1];
+
+  React.useEffect(function() {
+    POLR_API.lms.classSchedule().then(function(cs) {
+      setClassSchedule(cs);
+      if (cs) setCsForm({current_step_number:cs.current_step_number||1,topic:cs.topic||'',teacher_notes:cs.teacher_notes||'',discussion_questions:cs.discussion_questions||['']});
+    }).catch(function(){});
+    if (session && session.level <= 1) {
+      POLR_API.lms.submissions().then(function(r) {
+        setSubmissions(Array.isArray(r) ? r : []);
+      }).catch(function(){});
+    }
+  }, []);
+
+  function saveClassSchedule() {
+    var data = Object.assign({}, csForm, {discussion_questions: csForm.discussion_questions.filter(function(q){return q.trim();})});
+    POLR_API.lms.updateClassSchedule(data).then(function(cs) {
+      setClassSchedule(cs);
+      setEditCS(false);
+      toast({icon:'✅', title:'Class Schedule Updated', body:'Step '+cs.current_step_number+' is now the active class.'});
+    }).catch(function(e){ toast({icon:'❌', title:'Error', body:e.message}); });
+  }
+
+  var dCard = {background:'rgba(255,255,255,0.03)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,padding:'1.25rem',marginBottom:'1rem'};
+  var goldBtn = {padding:'0.6rem 1.25rem',background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',borderRadius:8,fontWeight:700,cursor:'pointer',fontFamily:'var(--font-body)',fontSize:'0.85rem'};
+
+  // Class schedule manager block (prepended to existing DE content)
+  var scheduleBlock = React.createElement('div',null,
+    React.createElement('div',{style:Object.assign({},dCard,{marginBottom:'1.5rem'})},
+      React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.75rem'}},
+        React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.95rem'}},'📅 Live Class Schedule'),
+        session && session.level <= 1 && React.createElement('button',{onClick:function(){setEditCS(!editCS);},style:{padding:'0.35rem 0.85rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'transparent',color:'var(--dmuted)',cursor:'pointer',fontSize:'0.78rem'}},editCS?'Cancel':'Edit')
+      ),
+      editCS ? React.createElement('div',null,
+        React.createElement('div',{style:{marginBottom:'0.75rem'}},
+          React.createElement('label',{style:{display:'block',fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.06em'}},'Current Step (1-12)'),
+          React.createElement('input',{type:'number',min:1,max:12,value:csForm.current_step_number,onChange:function(e){setCsForm(function(f){return Object.assign({},f,{current_step_number:parseInt(e.target.value)||1});});},style:{padding:'0.5rem 0.75rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:7,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',width:80}})
+        ),
+        React.createElement('div',{style:{marginBottom:'0.75rem'}},
+          React.createElement('label',{style:{display:'block',fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.06em'}},'Topic / Title'),
+          React.createElement('input',{type:'text',value:csForm.topic,onChange:function(e){setCsForm(function(f){return Object.assign({},f,{topic:e.target.value});});},placeholder:'e.g. Admitting Powerlessness',style:{width:'100%',padding:'0.5rem 0.75rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:7,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',boxSizing:'border-box'}})
+        ),
+        React.createElement('div',{style:{marginBottom:'0.75rem'}},
+          React.createElement('label',{style:{display:'block',fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.06em'}},'Teacher Notes'),
+          React.createElement('textarea',{rows:3,value:csForm.teacher_notes,onChange:function(e){setCsForm(function(f){return Object.assign({},f,{teacher_notes:e.target.value});});},placeholder:'Notes for this class session...',style:{width:'100%',padding:'0.5rem 0.75rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:7,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',boxSizing:'border-box',resize:'vertical'}})
+        ),
+        React.createElement('div',{style:{marginBottom:'1rem'}},
+          React.createElement('label',{style:{display:'block',fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.06em'}},'Discussion Questions'),
+          csForm.discussion_questions.map(function(q, qi) {
+            return React.createElement('div',{key:qi,style:{display:'flex',gap:'0.5rem',marginBottom:'0.4rem'}},
+              React.createElement('input',{type:'text',value:q,onChange:function(e){setCsForm(function(f){var dqs=f.discussion_questions.slice();dqs[qi]=e.target.value;return Object.assign({},f,{discussion_questions:dqs});});},placeholder:'Question '+(qi+1)+'...',style:{flex:1,padding:'0.45rem 0.65rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:7,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.82rem'}}),
+              qi > 0 && React.createElement('button',{onClick:function(){setCsForm(function(f){var dqs=f.discussion_questions.filter(function(_,i){return i!==qi;});return Object.assign({},f,{discussion_questions:dqs});});},style:{padding:'0.4rem 0.6rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'transparent',color:'#fc8181',cursor:'pointer'}},'×')
+            );
+          }),
+          React.createElement('button',{onClick:function(){setCsForm(function(f){return Object.assign({},f,{discussion_questions:f.discussion_questions.concat([''])});});},style:{padding:'0.35rem 0.75rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'transparent',color:'var(--dmuted)',cursor:'pointer',fontSize:'0.78rem',marginTop:'0.25rem'}},'+ Add Question')
+        ),
+        React.createElement('button',{onClick:saveClassSchedule,style:goldBtn},'Save Class Schedule')
+      ) : classSchedule ? React.createElement('div',null,
+        React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dtxt)',marginBottom:'0.3rem'}},'Step '+classSchedule.current_step_number+': ',React.createElement('strong',null,classSchedule.topic)),
+        classSchedule.teacher_notes && React.createElement('div',{style:{fontSize:'0.78rem',color:'var(--dmuted)',marginBottom:'0.5rem'}},classSchedule.teacher_notes),
+        classSchedule.discussion_questions && (typeof classSchedule.discussion_questions === 'string' ? JSON.parse(classSchedule.discussion_questions) : classSchedule.discussion_questions).map(function(q,qi){
+          return React.createElement('div',{key:qi,style:{fontSize:'0.78rem',color:'var(--dtxt)',padding:'0.3rem 0',borderBottom:'1px solid rgba(255,255,255,0.05)'}},'• '+q);
+        })
+      ) : React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)'}},'No class schedule set yet.')
+    ),
+    submissions.length > 0 && React.createElement('div',{style:Object.assign({},dCard,{marginBottom:'1.5rem'})},
+      React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',marginBottom:'0.75rem',fontSize:'0.95rem'}},'📋 Recent Member Submissions ('+submissions.length+')'),
+      submissions.slice(0,10).map(function(sub) {
+        return React.createElement('div',{key:sub.id,style:{padding:'0.6rem 0.75rem',background:'rgba(255,255,255,0.02)',borderRadius:8,marginBottom:'0.4rem',fontSize:'0.8rem'}},
+          React.createElement('div',{style:{fontWeight:600,color:'var(--dtxt)',marginBottom:'0.15rem'}},(sub.first_name||'')+' '+(sub.last_name||'')+' — '+sub.lesson_title),
+          React.createElement('div',{style:{color:'var(--dmuted)'}},'Step '+sub.step_number+' · Submitted '+new Date(sub.submitted_at).toLocaleDateString())
+        );
+      })
+    )
+  );
+
+  // Store scheduleBlock for use below
+  window.__DE_SCHEDULE_BLOCK = scheduleBlock;
+
   var _s1  = useState('list'),    mode = _s1[0],     setMode = _s1[1];
   var _s2  = useState(1),         selStep = _s2[0],  setSelStep = _s2[1];
   var _s3  = useState(null),      editing = _s3[0],  setEditing = _s3[1];
@@ -21997,9 +22105,10 @@ function Dashboard({
       case 'edu-admin':
         return React.createElement(EduAdminPanel, {platform:platform, update:update, toast:toast, session:previewSession, setActive:setActiveSection});
       case 'my-lessons':
-        return /*#__PURE__*/React.createElement(MyLessonsPanel, {
+        return React.createElement(MyLessonsPanel, {
           platform: platform,
-          toast: toast
+          toast: toast,
+          session: previewSession
         });
       case 'growth-profile':
         return /*#__PURE__*/React.createElement(GrowthProfileBuilder, {
@@ -25827,440 +25936,160 @@ function QuickActionBar({
 }
 
 // ══════════════════════════════════════════════
-// MY LESSONS PANEL (Members+)
+// MY LESSONS PANEL — Live Backend Connected
 // ══════════════════════════════════════════════
-function MyLessonsPanel({ platform, toast }) {
-  var allLessons = platform.stepLessons || {};
-  var published = Object.entries(allLessons).flatMap(function([stepNum, lessons]) {
-    return (lessons || []).filter(function(l){ return l.status === 'published' || l.status === 'approved'; })
-      .map(function(l){ return Object.assign({}, l, {stepNum: parseInt(stepNum)}); });
-  });
+function MyLessonsPanel({ platform, toast, session }) {
+  var _steps = React.useState([]); var steps = _steps[0], setSteps = _steps[1];
+  var _courses = React.useState([]); var courses = _courses[0], setCourses = _courses[1];
+  var _lessons = React.useState([]); var lessons = _lessons[0], setLessons = _lessons[1];
+  var _selCourse = React.useState(null); var selCourse = _selCourse[0], setSelCourse = _selCourse[1];
+  var _selLesson = React.useState(null); var selLesson = _selLesson[0], setSelLesson = _selLesson[1];
+  var _answers = React.useState({}); var answers = _answers[0], setAnswers = _answers[1];
+  var _submitted = React.useState(false); var submitted = _submitted[0], setSubmitted = _submitted[1];
+  var _saving = React.useState(false); var saving = _saving[0], setSaving = _saving[1];
+  var _classSchedule = React.useState(null); var classSchedule = _classSchedule[0], setClassSchedule = _classSchedule[1];
+  var _progress = React.useState({}); var progress = _progress[0], setProgress = _progress[1];
+  var _loading = React.useState(true); var loading = _loading[0], setLoading = _loading[1];
 
-  // ── Progress state ──
-  var _p1 = React.useState(function(){try{return JSON.parse(localStorage.getItem('polr_lesson_progress')||'{}');}catch{return {};}});
-  var progress = _p1[0], setProgress = _p1[1];
+  var memberId = session && session.userId ? session.userId : (session && session.id ? session.id : null);
 
-  // ── Quiz state ──
-  var _q1 = React.useState(null);   // lesson being quizzed
-  var quizLesson = _q1[0], setQuizLesson = _q1[1];
-  var _q2 = React.useState({});     // {qi: selectedChoice}
-  var quizAnswers = _q2[0], setQuizAnswers = _q2[1];
-  var _q3 = React.useState(null);   // null | 'submitted'
-  var quizState = _q3[0], setQuizState = _q3[1];
-
-  // ── Certificate state ──
-  var _c1 = React.useState(null);   // step number for cert preview
-  var certStep = _c1[0], setCertStep = _c1[1];
-
-  // ── Read lesson expanded view ──
-  var _rl1 = React.useState(null);  // lesson being read in full
-  var readLesson = _rl1[0], setReadLesson = _rl1[1];
-
-  var memberJoinDate = React.useMemo(function(){
-    try{ return new Date(localStorage.getItem('polr_join_date') || new Date().toISOString()); }
-    catch{ return new Date(); }
+  React.useEffect(function() {
+    Promise.all([
+      POLR_API.lms.courses(),
+      POLR_API.lms.classSchedule()
+    ]).then(function(results) {
+      var cs = Array.isArray(results[0]) ? results[0] : (results[0] && results[0].value ? results[0].value : []);
+      setCourses(cs);
+      setClassSchedule(results[1] || null);
+      setLoading(false);
+    }).catch(function(e) { console.warn('LMS load error:', e); setLoading(false); });
   }, []);
 
-  // ── Drip lock check ──
-  var isLocked = function(lesson) {
-    var rt = lesson.releaseType || 'immediate';
-    if (rt === 'immediate') return false;
-    if (rt === 'date') {
-      var rd = lesson.releaseDate ? new Date(lesson.releaseDate) : null;
-      return rd ? new Date() < rd : false;
-    }
-    if (rt === 'step_complete') {
-      var req = lesson.releaseAfterStep;
-      if (!req) return false;
-      var reqLessons = published.filter(function(l){ return l.stepNum === req; });
-      var reqDone = reqLessons.every(function(l){
-        var lp = progress[l.id];
-        return lp && lp.completed && (!l.quiz || !l.quiz.length || (lp.quizPassed));
-      });
-      return !reqDone;
-    }
-    if (rt === 'days_after_join') {
-      var days = lesson.releaseDaysAfter || 7;
-      var unlockDate = new Date(memberJoinDate.getTime() + days*86400000);
-      return new Date() < unlockDate;
-    }
-    return false;
-  };
-
-  var lockReason = function(lesson) {
-    var rt = lesson.releaseType || 'immediate';
-    if (rt === 'date') return 'Available ' + new Date(lesson.releaseDate).toLocaleDateString();
-    if (rt === 'step_complete') return 'Complete all Step ' + lesson.releaseAfterStep + ' lessons first';
-    if (rt === 'days_after_join') {
-      var days = lesson.releaseDaysAfter || 7;
-      var unlockDate = new Date(memberJoinDate.getTime() + days*86400000);
-      var remaining = Math.max(0, Math.ceil((unlockDate - new Date()) / 86400000));
-      return remaining + ' day' + (remaining===1?'':'s') + ' until available';
-    }
-    return 'Locked';
-  };
-
-  // ── Mark complete (with optional quiz requirement) ──
-  var markComplete = function(id, skipQuiz) {
-    var lesson = published.find(function(l){ return l.id===id; });
-    if (lesson && lesson.quiz && lesson.quiz.length > 0 && !skipQuiz) {
-      setQuizLesson(lesson);
-      setQuizAnswers({});
-      setQuizState(null);
-      return;
-    }
-    var updated = Object.assign({}, progress, {[id]: {completed:true, ts:new Date().toISOString(), quizPassed:true}});
-    setProgress(updated);
-    localStorage.setItem('polr_lesson_progress', JSON.stringify(updated));
-    toast({icon:'⭐', title:'Lesson Complete!', body:'Your progress has been saved.'});
-    // Check if all step lessons done → show cert prompt
-    var stepNum = lesson ? lesson.stepNum : null;
-    if (stepNum) {
-      var stepLessons = published.filter(function(l){ return l.stepNum===stepNum; });
-      var allDone = stepLessons.every(function(l){ return updated[l.id] && updated[l.id].completed; });
-      if (allDone) {
-        setTimeout(function(){ setCertStep(stepNum); }, 600);
-        // B8: Auto-post celebration + admin alert on step completion
-        var stepLabel = 'Step ' + stepNum;
-        var mn = 'A member';
-        try { var ss=JSON.parse(localStorage.getItem('polr_session')||'null'); if(ss&&ss.name) mn=ss.name.split(' ')[0]; } catch(e8){}
-        var ann8 = {
-          id:'step_ann_'+Date.now(), body:'🎉 '+mn+' just completed '+stepLabel+' of their 12-Step journey! '+
-            (stepNum===12?'Revelation 12:11 — they overcame by the blood of the Lamb and the word of their testimony. Yours is now a weapon. Use it. ':'Keep walking well. ')+'🙏',
-          postType:'celebration', authorName:'POLR Network', authorLevel:0, visibility:'network',
-          ts:Date.now(), pinned:false, flagged:false, reactions:{}, comments:[]
-        };
-        var alrt8 = {
-          id:'step_alert_'+Date.now(), title:'🎉 Step Complete — '+stepLabel,
-          body:mn+' completed '+stepLabel+'. Consider sending an encouragement message.',
-          type:'info', sentAt:new Date().toISOString(), requireResponse:true,
-          actionYes:'Send encouragement', actionNo:'Noted', responses:[]
-        };
-        try {
-          var st8=JSON.parse(localStorage.getItem('polr_platform_state')||'{}');
-          st8.communityPosts=[ann8].concat(st8.communityPosts||[]).slice(0,200);
-          st8.notifications=[alrt8].concat(st8.notifications||[]).slice(0,500);
-          var ser8=JSON.stringify(st8);
-          localStorage.setItem('polr_platform_state',ser8);
-          localStorage.setItem('polr_platform',ser8);
-        } catch(e8b){}
-      }
-    }
-  };
-
-  // ── Submit quiz ──
-  var submitQuiz = function() {
-    if (!quizLesson || !quizLesson.quiz) return;
-    var total = quizLesson.quiz.length;
-    var correct = quizLesson.quiz.filter(function(q,i){ return quizAnswers[i] === q.correct; }).length;
-    var pct = Math.round(correct/total*100);
-    var passed = pct >= (quizLesson.passingScore||80);
-    setQuizState({total, correct, pct, passed});
-    if (passed) {
-      var updated = Object.assign({}, progress, {
-        [quizLesson.id]: {completed:true, ts:new Date().toISOString(), quizScore:pct, quizPassed:true}
-      });
-      setProgress(updated);
-      localStorage.setItem('polr_lesson_progress', JSON.stringify(updated));
-    }
-  };
-
-  // ── Video embed URL converter ──
-  var embedUrl = function(url) {
-    if (!url) return '';
-    var yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-    if (yt) return 'https://www.youtube.com/embed/' + yt[1];
-    var vm = url.match(/vimeo\.com\/(\d+)/);
-    if (vm) return 'https://player.vimeo.com/video/' + vm[1];
-    return url;
-  };
-
-  var typeIcon = function(t){ return t==='video'?'\uD83C\uDFAC':t==='workbook'?'\uD83D\uDCCB':t==='discussion'?'\uD83D\uDCAC':t==='testimony'?'\uD83D\uDE4C':t==='prayer'?'\uD83D\uDE4F':t==='journal'?'\uD83D\uDCD3':'📖'; };
-  var completedCount = published.filter(function(l){ var lp=progress[l.id]; return lp&&lp.completed; }).length;
-  var pct = published.length ? Math.round(completedCount/published.length*100) : 0;
-
-  // ── CERTIFICATE MODAL ──
-  if (certStep !== null) {
-    var step = (typeof STEPS_DATA !== 'undefined' ? STEPS_DATA : []).find(function(s){ return s.n===certStep; }) || {};
-    return React.createElement('div',{style:{maxWidth:640,margin:'0 auto',padding:'2rem'}},
-      React.createElement('div',{style:{background:'linear-gradient(135deg,#0a0f1a,#162038)',border:'3px solid var(--gold)',borderRadius:16,padding:'2.5rem',textAlign:'center',marginBottom:'1.5rem',position:'relative',overflow:'hidden'}},
-        React.createElement('div',{style:{position:'absolute',inset:0,background:'radial-gradient(ellipse 80% 50% at 50% 0%,rgba(200,145,58,0.1),transparent 60%)',pointerEvents:'none'}}),
-        React.createElement('div',{style:{fontSize:'2.5rem',marginBottom:'0.75rem'}},'\uD83C\uDFC5'),
-        React.createElement('div',{style:{fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.25em',textTransform:'uppercase',color:'var(--gold)',marginBottom:'0.5rem',fontFamily:'var(--font-mono)'}},'PATH OF LIFE RECOVERY'),
-        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.05rem',color:'rgba(255,255,255,0.6)',marginBottom:'0.5rem'}},'\u201cCertificate of Completion\u201d'),
-        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'2.2rem',fontWeight:700,color:'var(--gold)',lineHeight:1.1,marginBottom:'0.25rem'}},'Step ' + certStep),
-        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',color:'var(--dtxt)',marginBottom:'1.25rem'}},step.title||''),
-        React.createElement('div',{style:{fontSize:'0.82rem',color:'rgba(255,255,255,0.5)',marginBottom:'0.35rem'}},'Awarded to'),
-        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.6rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'1rem'}},platform.members&&platform.members[0]?platform.members[0].name:'POLR Member'),
-        React.createElement('div',{style:{borderTop:'1px solid rgba(200,145,58,0.25)',paddingTop:'1rem',marginTop:'0.5rem'}},
-          React.createElement('div',{style:{fontSize:'0.72rem',color:'rgba(255,255,255,0.4)'}},getContactConfig(platform).name + ' \u00b7 Director ' + new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})),
-          React.createElement('div',{style:{fontSize:'0.65rem',color:'rgba(255,255,255,0.3)',marginTop:'0.2rem'}},'\u00a9 ' + new Date().getFullYear() + ' Path of Life Recovery, Inc. \u00b7 {POLR_WEBSITE}')
-        )
-      ),
-      React.createElement('div',{style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}},
-        React.createElement('button',{onClick:function(){window.print();},style:{padding:'0.7rem 1.5rem',borderRadius:10,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontFamily:'var(--font-serif)'}},'🖨 Print Certificate'),
-        React.createElement('button',{onClick:function(){setCertStep(null);},style:{padding:'0.7rem 1.25rem',borderRadius:10,background:'var(--bg3)',border:'1px solid var(--bdr2)',color:'var(--dtxt)',cursor:'pointer',fontWeight:600}},'← Back to Lessons')
-      )
-    );
+  function loadLessons(course) {
+    setSelCourse(course); setSelLesson(null); setAnswers({}); setSubmitted(false);
+    POLR_API.lms.lessons(course.id, 'student').then(function(r) {
+      setLessons(Array.isArray(r) ? r : (r && r.value ? r.value : []));
+    }).catch(function(e) { console.warn('Lessons error:', e); });
   }
 
-  // ── QUIZ MODAL ──
-  if (quizLesson) {
-    var submitted = quizState !== null;
-    return React.createElement('div',{style:{maxWidth:700,margin:'0 auto'}},
-      React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--l1)'}},
-        React.createElement('div',{className:'lvh-tag'},'Self-Grading Quiz'),
-        React.createElement('div',{className:'lvh-title'},quizLesson.title),
-        React.createElement('div',{className:'lvh-sub'},'Answer all questions. ' + (quizLesson.passingScore||80) + '% required to complete this lesson.')
-      ),
-      quizLesson.quiz.map(function(q,qi){
-        var ans = quizAnswers[qi];
-        var correct = q.correct;
-        return React.createElement('div',{key:q.id,className:'d-card',style:{marginBottom:'1rem',border:submitted?(ans===correct?'1px solid rgba(91,196,110,0.4)':'1px solid rgba(239,68,68,0.4)'):'1px solid var(--bdr)'}},
-          React.createElement('div',{className:'d-card-head'},
-            React.createElement('div',{style:{fontWeight:600,color:'var(--dtxt)',fontSize:'0.95rem'}},(qi+1)+'. '+q.question),
-            submitted&&React.createElement('span',{style:{fontSize:'0.75rem',fontWeight:700,color:ans===correct?'var(--l5)':'#fc8181'}},ans===correct?'✓ Correct':'✗ Incorrect')
-          ),
-          React.createElement('div',{className:'d-card-body'},
-            q.choices.map(function(ch,ci){
-              var isSelected = ans===ci;
-              var isCorrect = ci===correct;
-              var bg = submitted ? (isCorrect?'rgba(91,196,110,0.12)':isSelected&&!isCorrect?'rgba(239,68,68,0.1)':'transparent') : (isSelected?'rgba(139,124,248,0.1)':'transparent');
-              var border = submitted ? (isCorrect?'1px solid rgba(91,196,110,0.4)':isSelected&&!isCorrect?'1px solid rgba(239,68,68,0.3)':'1px solid var(--bdr)') : (isSelected?'1px solid var(--l1)':'1px solid var(--bdr)');
-              return React.createElement('div',{key:ci,onClick:function(){if(!submitted)setQuizAnswers(function(a){return Object.assign({},a,{[qi]:ci});});},
-                style:{display:'flex',alignItems:'center',gap:'0.75rem',padding:'0.65rem 0.85rem',borderRadius:9,border:border,background:bg,cursor:submitted?'default':'pointer',marginBottom:'0.4rem',transition:'all 0.15s'}},
-                React.createElement('div',{style:{width:20,height:20,borderRadius:'50%',border:'2px solid '+(isSelected?'var(--l1)':'var(--bdr2)'),background:isSelected?'var(--l1)':'transparent',flexShrink:0}}),
-                React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dtxt)',flex:1}},ch),
-                submitted&&isCorrect&&React.createElement('span',{style:{color:'var(--l5)',fontWeight:700,fontSize:'0.8rem'}},'✓')
-              );
-            }),
-            submitted&&q.explanation&&React.createElement('div',{style:{marginTop:'0.75rem',padding:'0.65rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:8,fontSize:'0.82rem',color:'var(--dtxt)',lineHeight:1.6}},
-              React.createElement('span',{style:{fontWeight:700,color:'var(--l0)'}},'Explanation: '),q.explanation
-            )
-          )
-        );
-      }),
-      !submitted&&React.createElement('div',{style:{textAlign:'center',marginTop:'1rem'}},
-        React.createElement('button',{onClick:submitQuiz,disabled:Object.keys(quizAnswers).length<quizLesson.quiz.length,style:{padding:'0.8rem 2.5rem',borderRadius:10,background:'linear-gradient(135deg,var(--l1),rgba(139,124,248,0.5))',color:'white',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.95rem',opacity:Object.keys(quizAnswers).length<quizLesson.quiz.length?0.5:1}},'Submit Answers')
-      ),
-      submitted&&React.createElement('div',{className:'d-card',style:{marginTop:'1rem',textAlign:'center',border:quizState.passed?'1px solid rgba(91,196,110,0.3)':'1px solid rgba(239,68,68,0.3)'}},
-        React.createElement('div',{className:'d-card-body',style:{padding:'1.5rem'}},
-          React.createElement('div',{style:{fontSize:'3rem',marginBottom:'0.5rem'}},quizState.passed?'🎉':'📚'),
-          React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.4rem',fontWeight:700,color:quizState.passed?'var(--l5)':'var(--gold)',marginBottom:'0.25rem'}},quizState.pct+'%'),
-          React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dtxt)',marginBottom:'0.25rem'}},quizState.correct+' of '+quizState.total+' correct'),
-          React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',marginBottom:'1.25rem'}},quizState.passed?'You passed! Lesson marked complete.':'You need '+((quizLesson.passingScore||80))+'% to pass. Review the lesson and try again.'),
-          React.createElement('div',{style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}},
-            quizState.passed&&React.createElement('button',{onClick:function(){setQuizLesson(null);setQuizState(null);},style:{padding:'0.65rem 1.5rem',borderRadius:9,background:'linear-gradient(135deg,var(--l5),rgba(91,196,110,0.5))',color:'#0a0f1a',border:'none',cursor:'pointer',fontWeight:700}},'✓ Continue'),
-            !quizState.passed&&React.createElement('button',{onClick:function(){setQuizAnswers({});setQuizState(null);},style:{padding:'0.65rem 1.5rem',borderRadius:9,background:'var(--l0b)',border:'1px solid rgba(212,168,83,0.3)',color:'var(--l0)',cursor:'pointer',fontWeight:700}},'Retake Quiz'),
-            React.createElement('button',{onClick:function(){setQuizLesson(null);setQuizState(null);},style:{padding:'0.65rem 1rem',borderRadius:9,background:'var(--bg3)',border:'1px solid var(--bdr2)',color:'var(--dmuted)',cursor:'pointer'}},'← Back')
-          )
-        )
-      )
-    );
+  function openLesson(lesson) {
+    setSelLesson(lesson); setAnswers({}); setSubmitted(false);
+    if (memberId) {
+      POLR_API.lms.getSubmission(lesson.id, memberId).then(function(r) {
+        if (r && r.submitted && r.answers) {
+          setAnswers(typeof r.answers === 'string' ? JSON.parse(r.answers) : r.answers);
+          setSubmitted(true);
+        }
+      }).catch(function(){});
+    }
   }
 
-  // ── FULL LESSON READER MODAL ──
-  if (readLesson) {
-    return React.createElement('div', {style:{maxWidth:780, margin:'0 auto'}},
-      React.createElement('button', {onClick:function(){ setReadLesson(null); },
-        style:{marginBottom:'1.25rem', padding:'0.45rem 0.85rem', borderRadius:8,
-               border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dmuted)',
-               cursor:'pointer', fontSize:'0.82rem'}}, '← Back to My Lessons'),
+  function submitForm() {
+    if (!memberId) { toast({icon:'⚠️', title:'Sign In Required', body:'Please log in to submit lessons.'}); return; }
+    setSaving(true);
+    POLR_API.lms.submitForm(selLesson.id, memberId, answers).then(function() {
+      setSubmitted(true); setSaving(false);
+      toast({icon:'✅', title:'Lesson Submitted!', body:'Your answers have been saved.'});
+      setProgress(function(p) { var n=Object.assign({},p); n[selLesson.id]=true; return n; });
+    }).catch(function(e) { setSaving(false); toast({icon:'❌', title:'Submit Failed', body:e.message||'Please try again.'}); });
+  }
 
-      React.createElement('div', {className:'d-card'},
-        React.createElement('div', {className:'d-card-head', style:{justifyContent:'space-between', flexWrap:'wrap', gap:'0.5rem'}},
-          React.createElement('div', null,
-            React.createElement('div', {className:'d-card-title'}, 'Step ' + readLesson.stepNum),
-            React.createElement('div', {style:{fontFamily:'var(--font-serif)', fontSize:'1.15rem', fontWeight:600, color:'var(--dtxt)', marginTop:'0.15rem'}}, readLesson.title)
-          ),
-          React.createElement('div', {style:{display:'flex', gap:'0.5rem', alignItems:'center'}},
-            React.createElement('span', {style:{fontSize:'0.68rem', color:'var(--dmuted)'}}, readLesson.duration || '45 min'),
-            !progress[readLesson.id]?.completed && React.createElement('button', {
-              onClick:function(){ markComplete(readLesson.id); setReadLesson(null); },
-              style:{padding:'0.4rem 0.9rem', borderRadius:8, background:'linear-gradient(135deg,var(--l5),rgba(91,196,110,0.5))',
-                     color:'#0a0f1a', border:'none', cursor:'pointer', fontWeight:700, fontSize:'0.8rem'}},
-              progress[readLesson.id]?.completed ? '✓ Done' : '✓ Mark Complete')
-          )
+  var formFields = [];
+  if (selLesson && selLesson.form_fields) {
+    try { formFields = typeof selLesson.form_fields === 'string' ? JSON.parse(selLesson.form_fields) : selLesson.form_fields; }
+    catch(e) { formFields = []; }
+  }
+
+  var dCard = {background:'rgba(255,255,255,0.03)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,padding:'1.25rem',marginBottom:'1rem'};
+  var goldBtn = {padding:'0.6rem 1.25rem',background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',borderRadius:8,fontWeight:700,cursor:'pointer',fontFamily:'var(--font-body)',fontSize:'0.85rem'};
+  var outBtn = {padding:'0.5rem 1rem',background:'transparent',color:'var(--dmuted)',border:'1px solid var(--bdr2)',borderRadius:8,cursor:'pointer',fontSize:'0.82rem'};
+
+  if (loading) return React.createElement('div',{style:{padding:'3rem',textAlign:'center',color:'var(--dmuted)'}},
+    React.createElement('div',{style:{fontSize:'1.5rem',marginBottom:'0.5rem'}},'📖'),'Loading your curriculum...');
+
+  // Lesson detail view
+  if (selLesson) {
+    return React.createElement('div',{style:{maxWidth:720,margin:'0 auto',padding:'1rem'}},
+      React.createElement('button',{onClick:function(){setSelLesson(null);setAnswers({});setSubmitted(false);},style:Object.assign({},outBtn,{marginBottom:'1rem'})},'← Back to Lessons'),
+      React.createElement('div',{style:dCard},
+        React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.3rem'}},'Day '+selLesson.day_number+' · '+selLesson.xp_value+' XP'),
+        React.createElement('h2',{style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',color:'var(--dtxt)',marginBottom:'0.75rem',fontWeight:700}},selLesson.title),
+        selLesson.scripture_reference && React.createElement('div',{style:{padding:'0.75rem 1rem',background:'rgba(200,145,58,0.06)',borderRadius:8,marginBottom:'1rem',borderLeft:'3px solid var(--gold)'}},
+          React.createElement('div',{style:{fontSize:'0.7rem',color:'var(--gold)',fontWeight:700,marginBottom:'0.3rem'}},selLesson.scripture_reference),
+          React.createElement('div',{style:{fontStyle:'italic',color:'var(--dtxt)',fontSize:'0.88rem',lineHeight:1.6}},'"'+selLesson.scripture_text+'"')
         ),
-        React.createElement('div', {className:'d-card-body'},
-
-          // Scripture block
-          readLesson.sections && readLesson.sections.filter(function(s){ return s.type==='scripture' && s.content; }).map(function(s){
-            return React.createElement('div', {key:s.id, style:{
-              background:'rgba(200,145,58,0.07)', border:'1px solid rgba(200,145,58,0.2)',
-              borderLeft:'3px solid var(--gold)', borderRadius:'0 10px 10px 0',
-              padding:'1rem 1.25rem', marginBottom:'1.5rem',
-              fontFamily:'var(--font-italic)', fontStyle:'italic',
-              fontSize:'1rem', color:'var(--dtxt)', lineHeight:1.75
-            }},
-              '\u201c', s.content, '\u201d',
-              React.createElement('div', {style:{fontSize:'0.72rem', fontWeight:700, fontStyle:'normal',
-                color:'var(--gold)', letterSpacing:'0.1em', textTransform:'uppercase', marginTop:'0.4rem'}}, s.ref || '')
-            );
-          }),
-
-          // Main body content
-          readLesson.bodyBlocks && readLesson.bodyBlocks.filter(function(b){ return b.content; }).map(function(b, idx){
-            return React.createElement('div', {key:b.id||idx, style:{
-              fontSize:'0.95rem', color:'var(--dtxt)', lineHeight:1.85,
-              marginBottom:'1.25rem', whiteSpace:'pre-wrap'
-            }}, b.content);
-          }),
-
-          // All content sections (except scripture already shown)
-          readLesson.sections && readLesson.sections
-            .filter(function(s){ return s.type !== 'scripture' && s.content; })
-            .sort(function(a,b){ return (a.order||0)-(b.order||0); })
-            .map(function(s){
-              var SECTION_COLORS = {reflection:'var(--l2)',insight:'var(--l4)',truth:'var(--l5)',
-                principle:'var(--l1)',quote:'var(--gold)',example:'var(--l3)',reality:'#fc8181',
-                observation:'var(--dmuted)',hope:'var(--l5)',reflect:'var(--l2)',final:'var(--gold)'};
-              var color = SECTION_COLORS[s.type] || 'var(--dmuted)';
-              return React.createElement('div', {key:s.id, style:{marginBottom:'1.25rem'}},
-                React.createElement('div', {style:{
-                  fontSize:'0.6rem', fontWeight:700, letterSpacing:'0.18em',
-                  textTransform:'uppercase', color:color,
-                  fontFamily:'var(--font-mono)', marginBottom:'0.4rem'
-                }}, s.label || s.type.toUpperCase()),
-                React.createElement('div', {style:{
-                  fontSize:'0.95rem', color:'var(--dtxt)', lineHeight:1.8,
-                  fontFamily: s.type==='quote' ? 'var(--font-italic)' : 'var(--font-body)',
-                  fontStyle: s.type==='quote' ? 'italic' : 'normal',
-                  borderLeft: '2px solid ' + color + '44', paddingLeft:'0.9rem'
-                }},
-                  s.type==='quote' ? ('\u201c' + s.content + '\u201d') : s.content,
-                  s.attribution && React.createElement('div', {style:{
-                    fontSize:'0.72rem', fontStyle:'normal', fontWeight:700,
-                    color:color, marginTop:'0.3rem', letterSpacing:'0.05em'
-                  }}, '\u2014 ' + s.attribution)
-                )
-              );
-            }),
-
-          // Journal prompt
-          readLesson.journalPrompt && React.createElement('div', {style:{
-            marginTop:'1.5rem', padding:'1.25rem 1.5rem',
-            background:'rgba(59,158,245,0.06)', border:'1px solid rgba(59,158,245,0.2)',
-            borderLeft:'3px solid var(--l2)', borderRadius:'0 10px 10px 0'
-          }},
-            React.createElement('div', {style:{fontSize:'0.62rem', fontWeight:700, letterSpacing:'0.14em',
-              textTransform:'uppercase', color:'var(--l2)', fontFamily:'var(--font-mono)', marginBottom:'0.5rem'
-            }}, 'Journal Reflection'),
-            React.createElement('div', {style:{fontSize:'0.92rem', color:'var(--dtxt)', lineHeight:1.75,
-              fontFamily:'var(--font-italic)', fontStyle:'italic'
-            }}, readLesson.journalPrompt),
-            Array.from({length: readLesson.journalLines || 5}).map(function(_,i){
-              return React.createElement('div', {key:i, style:{
-                height:'1px', background:'rgba(59,158,245,0.15)', margin:'1rem 0'
-              }});
-            })
-          ),
-
-          // Mark complete / quiz button at bottom
-          React.createElement('div', {style:{marginTop:'2rem', display:'flex', gap:'0.75rem', flexWrap:'wrap'}},
-            !progress[readLesson.id]?.completed && React.createElement('button', {
-              onClick:function(){ markComplete(readLesson.id); setReadLesson(null); },
-              className:'btn-primary', style:{fontSize:'0.88rem'}
-            }, readLesson.quiz && readLesson.quiz.length > 0 ? '📝 Take Quiz to Complete' : '✓ Mark Complete'),
-            progress[readLesson.id]?.completed && React.createElement('div', {style:{
-              padding:'0.6rem 1.25rem', borderRadius:8,
-              background:'rgba(91,196,110,0.1)', border:'1px solid rgba(91,196,110,0.3)',
-              color:'var(--l5)', fontWeight:700, fontSize:'0.85rem'
-            }}, '✅ Completed')
-          )
-        )
+        selLesson.body && React.createElement('div',{style:{color:'var(--dtxt)',lineHeight:1.8,fontSize:'0.92rem',marginBottom:'1.25rem',whiteSpace:'pre-wrap'}},selLesson.body)
+      ),
+      formFields.length > 0 && React.createElement('div',{style:dCard},
+        React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',marginBottom:'1rem',fontSize:'0.95rem'}},'📝 Reflection Questions'),
+        submitted && React.createElement('div',{style:{padding:'0.65rem 1rem',background:'rgba(91,196,110,0.08)',border:'1px solid rgba(91,196,110,0.2)',borderRadius:8,marginBottom:'1rem',fontSize:'0.82rem',color:'var(--l5)'}},'✅ You have already submitted this lesson. Your answers are shown below.'),
+        formFields.map(function(field, fi) {
+          var val = answers['q'+fi] || '';
+          var inp;
+          if (field.type === 'textarea') {
+            inp = React.createElement('textarea',{rows:4,value:val,disabled:submitted,onChange:function(e){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=e.target.value;return n;});},placeholder:field.placeholder||'',style:{width:'100%',padding:'0.7rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:8,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',resize:'vertical',boxSizing:'border-box'}});
+          } else if (field.type === 'radio' && field.options) {
+            inp = React.createElement('div',{style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
+              field.options.map(function(opt){return React.createElement('button',{key:opt,disabled:submitted,onClick:function(){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=opt;return n;});},style:{padding:'0.45rem 1rem',borderRadius:8,border:'1px solid '+(val===opt?'var(--gold)':'var(--bdr2)'),background:val===opt?'rgba(200,145,58,0.1)':'var(--bg3)',color:val===opt?'var(--gold)':'var(--dmuted)',cursor:submitted?'default':'pointer',fontWeight:val===opt?700:400,fontSize:'0.82rem'}},opt);}));
+          } else if (field.type === 'date') {
+            inp = React.createElement('input',{type:'date',value:val,disabled:submitted,onChange:function(e){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=e.target.value;return n;});},style:{padding:'0.6rem 0.8rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:8,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem'}});
+          } else {
+            inp = React.createElement('input',{type:'text',value:val,disabled:submitted,onChange:function(e){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=e.target.value;return n;});},placeholder:field.placeholder||'',style:{width:'100%',padding:'0.6rem 0.8rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:8,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',boxSizing:'border-box'}});
+          }
+          return React.createElement('div',{key:fi,style:{marginBottom:'1.25rem'}},
+            React.createElement('div',{style:{fontSize:'0.82rem',fontWeight:600,color:'var(--dtxt)',marginBottom:'0.4rem'}},field.label),inp);
+        }),
+        !submitted && React.createElement('button',{onClick:submitForm,disabled:saving,style:Object.assign({},goldBtn,{marginTop:'0.5rem'})},saving?'Saving...':'Submit Lesson ✓')
       )
     );
   }
 
-  // ── MAIN LESSON LIST VIEW ──
-  return React.createElement('div',null,
-    React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--l5)'}},
-      React.createElement('div',{className:'lvh-tag'},'Learning Center'),
-      React.createElement('div',{className:'lvh-title'},'My Lessons'),
-      React.createElement('div',{className:'lvh-sub'},'Step-by-step lessons, video teachings, quizzes, and certifications for every step of your recovery journey.')
+  // Course/lesson list
+  if (selCourse) {
+    return React.createElement('div',{style:{maxWidth:720,margin:'0 auto',padding:'1rem'}},
+      React.createElement('button',{onClick:function(){setSelCourse(null);setLessons([]);},style:Object.assign({},outBtn,{marginBottom:'1rem'})},'← Back to Steps'),
+      React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.15rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'0.25rem'}},selCourse.title),
+      React.createElement('div',{style:{fontSize:'0.8rem',color:'var(--dmuted)',marginBottom:'1.25rem'}},'Step '+selCourse.step_number+' · '+lessons.length+' lessons'),
+      lessons.length === 0
+        ? React.createElement('div',{style:{textAlign:'center',padding:'2rem',color:'var(--dmuted)'}},'📭 Loading lessons...')
+        : lessons.map(function(lesson) {
+          var done = progress[lesson.id];
+          return React.createElement('div',{key:lesson.id,style:Object.assign({},dCard,{cursor:'pointer',display:'flex',alignItems:'center',gap:'1rem'}),onClick:function(){openLesson(lesson);}},
+            React.createElement('div',{style:{width:36,height:36,borderRadius:'50%',background:done?'rgba(91,196,110,0.15)':'rgba(200,145,58,0.1)',border:'1px solid '+(done?'rgba(91,196,110,0.3)':'rgba(200,145,58,0.2)'),display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.8rem',fontWeight:700,color:done?'var(--l5)':'var(--gold)',flexShrink:0}},done?'✓':lesson.day_number),
+            React.createElement('div',{style:{flex:1}},
+              React.createElement('div',{style:{fontWeight:600,color:'var(--dtxt)',fontSize:'0.9rem',marginBottom:'0.15rem'}},lesson.title),
+              React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},lesson.scripture_reference+' · '+lesson.xp_value+' XP')
+            ),
+            React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},done?'✅':'→'));
+        })
+    );
+  }
+
+  // Step browser
+  return React.createElement('div',{style:{maxWidth:720,margin:'0 auto',padding:'1rem'}},
+    classSchedule && React.createElement('div',{style:Object.assign({},dCard,{background:'rgba(200,145,58,0.06)',borderLeft:'3px solid var(--gold)',marginBottom:'1.5rem'})},
+      React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.25rem'}},'📅 This Week\'s Live Class'),
+      React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.95rem',marginBottom:'0.15rem'}},'Step '+classSchedule.current_step_number+': '+classSchedule.topic),
+      (classSchedule.discussion_questions && (typeof classSchedule.discussion_questions === 'string' ? JSON.parse(classSchedule.discussion_questions) : classSchedule.discussion_questions).length > 0) && React.createElement('div',{style:{marginTop:'0.5rem'}},
+        React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',marginBottom:'0.3rem'}},'Discussion:'),
+        (typeof classSchedule.discussion_questions === 'string' ? JSON.parse(classSchedule.discussion_questions) : classSchedule.discussion_questions)
+          .map(function(q,qi){return React.createElement('div',{key:qi,style:{fontSize:'0.8rem',color:'var(--dtxt)',marginBottom:'0.2rem',paddingLeft:'0.75rem'}},'• '+q);})
+      )
     ),
-    React.createElement('div',{className:'d-card',style:{marginBottom:'1.25rem'}},
-      React.createElement('div',{className:'d-card-body',style:{display:'flex',alignItems:'center',gap:'1.5rem',flexWrap:'wrap'}},
-        React.createElement('div',{style:{flex:1,minWidth:180}},
-          React.createElement('div',{style:{display:'flex',justifyContent:'space-between',marginBottom:'0.35rem'}},
-            React.createElement('span',{style:{fontSize:'0.78rem',fontWeight:600,color:'var(--dtxt)'}},'Overall Completion'),
-            React.createElement('span',{style:{fontSize:'0.75rem',fontFamily:'var(--font-mono)',color:'var(--l5)'}},pct+'%')
-          ),
-          React.createElement('div',{className:'progress-bar'},React.createElement('div',{className:'progress-fill',style:{width:pct+'%'}})),
-          React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginTop:'0.35rem'}},completedCount+' of '+published.length+' lessons completed')
-        ),
-        React.createElement('div',{style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
-          [['📖','Devotionals'],['🎬','Videos'],['📋','Workbooks'],['🧠','Quizzes']].map(function([icon,label]){
-            return React.createElement('div',{key:label,style:{padding:'0.4rem .75rem',background:'rgba(255,255,255,0.03)',border:'1px solid var(--bdr)',borderRadius:8,textAlign:'center'}},
-              React.createElement('div',{style:{fontSize:'0.9rem',marginBottom:'0.15rem'}},icon),
-              React.createElement('div',{style:{fontSize:'0.62rem',color:'var(--dmuted)'}},label)
+    React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.2rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'0.25rem'}},'📖 Your Personal Curriculum'),
+    React.createElement('div',{style:{fontSize:'0.8rem',color:'var(--dmuted)',marginBottom:'1.25rem'}},'Your lessons progress at your own pace, separate from the live class schedule.'),
+    courses.length === 0
+      ? React.createElement('div',{style:{textAlign:'center',padding:'2rem',color:'var(--dmuted)'}},'📚 Loading courses...')
+      : React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}},
+          courses.map(function(course){
+            return React.createElement('div',{key:course.id,style:Object.assign({},dCard,{cursor:'pointer',margin:0}),onClick:function(){loadLessons(course);}},
+              React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Step '+course.step_number),
+              React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.88rem',marginBottom:'0.2rem'}},course.title),
+              React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},course.lesson_count+' lessons'),
+              React.createElement('div',{style:{marginTop:'0.65rem',fontSize:'0.75rem',color:'var(--gold)'}},'Open →')
             );
           })
         )
-      )
-    ),
-    published.length===0?React.createElement('div',{className:'d-card'},
-      React.createElement('div',{className:'d-card-body',style:{textAlign:'center',padding:'2.5rem'}},
-        React.createElement('div',{style:{fontSize:'2rem',marginBottom:'0.75rem'}},'🎓'),
-        React.createElement('div',{style:{fontSize:'0.88rem',fontWeight:600,color:'var(--dtxt)',marginBottom:'0.4rem'}},'No lessons published yet'),
-        React.createElement('div',{style:{fontSize:'0.78rem',color:'var(--dmuted)'}},'Your admin is building lessons for each step. Check back soon.')
-      )
-    ):React.createElement('div',null,
-      Array.from(new Set(published.map(function(l){return l.stepNum;}))).sort(function(a,b){return a-b;}).map(function(stepNum){
-        var stepLessons = published.filter(function(l){return l.stepNum===stepNum;});
-        var step = (typeof STEPS_DATA!=='undefined'?STEPS_DATA:[]).find(function(s){return s.n===stepNum;})||{};
-        var stepDone = stepLessons.filter(function(l){var lp=progress[l.id];return lp&&lp.completed;}).length;
-        var allStepDone = stepDone===stepLessons.length&&stepLessons.length>0;
-        return React.createElement('div',{key:stepNum,className:'d-card',style:{marginBottom:'1rem'}},
-          React.createElement('div',{className:'d-card-head',style:{justifyContent:'space-between'}},
-            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'0.75rem'}},
-              React.createElement('div',{style:{width:28,height:28,borderRadius:'50%',background:'var(--l0b)',border:'1px solid rgba(212,168,83,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'var(--font-serif)',fontSize:'0.8rem',fontWeight:700,color:'var(--l0)',flexShrink:0}},stepNum),
-              React.createElement('div',{className:'d-card-title',style:{'--acc':'var(--l0)'}},'Step '+stepNum+' \u2014 '+step.title)
-            ),
-            React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'0.75rem'}},
-              React.createElement('div',{style:{fontSize:'0.68rem',fontFamily:'var(--font-mono)',color:'var(--dmuted)'}},stepDone+'/'+stepLessons.length+' done'),
-              allStepDone&&React.createElement('button',{onClick:function(){setCertStep(stepNum);},style:{padding:'0.25rem 0.7rem',borderRadius:6,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.72rem'}},'🏅 Certificate')
-            )
-          ),
-          React.createElement('div',{className:'d-card-body'},
-            stepLessons.map(function(lesson){
-              var lp = progress[lesson.id];
-              var done = lp&&lp.completed;
-              var locked = isLocked(lesson);
-              var hasQuiz = lesson.quiz&&lesson.quiz.length>0;
-              var hasVideo = !!lesson.videoUrl;
-              var hasImage = !!lesson.imageUrl;
-              return React.createElement('div',{key:lesson.id,className:'lesson-card',style:{opacity:locked?0.55:done?.6:1,background:locked?'rgba(0,0,0,0.05)':done?'rgba(91,196,110,0.04)':'rgba(255,255,255,0.02)',borderColor:locked?'var(--bdr)':done?'rgba(91,196,110,0.2)':'var(--bdr)'}},
-                React.createElement('div',{className:'lesson-icon',style:{background:locked?'rgba(0,0,0,0.1)':done?'rgba(91,196,110,0.15)':'rgba(255,255,255,0.05)'}},locked?'🔒':done?'✅':typeIcon(lesson.type)),
-                React.createElement('div',{className:'lesson-meta'},
-                  React.createElement('div',{className:'lesson-title',style:{textDecoration:done?'line-through':undefined}},lesson.title),
-                  React.createElement('div',{className:'lesson-sub'},
-                    lesson.type,' · ',lesson.duration,' · ',lesson.author,
-                    hasQuiz&&React.createElement('span',{style:{marginLeft:'0.4rem',padding:'0.1rem 0.4rem',borderRadius:4,background:'rgba(139,124,248,0.15)',color:'var(--l1)',fontSize:'0.65rem',fontWeight:700}},'Quiz'),
-                    hasVideo&&React.createElement('span',{style:{marginLeft:'0.4rem',padding:'0.1rem 0.4rem',borderRadius:4,background:'rgba(59,158,245,0.15)',color:'var(--l2)',fontSize:'0.65rem',fontWeight:700}},'Video'),
-                    lp&&lp.quizScore!=null&&React.createElement('span',{style:{marginLeft:'0.4rem',padding:'0.1rem 0.4rem',borderRadius:4,background:'rgba(91,196,110,0.12)',color:'var(--l5)',fontSize:'0.65rem',fontWeight:700}},lp.quizScore+'%')
-                  ),
-                  lesson.scripture&&React.createElement('div',{style:{fontSize:'0.7rem',fontStyle:'italic',color:'var(--l0)',fontFamily:'var(--font-italic)',marginBottom:'0.35rem'}},lesson.scripture,' \u2014 ',lesson.ref),
-                  locked&&React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',fontWeight:600,marginTop:'0.2rem'}},'\uD83D\uDD12 '+lockReason(lesson)),
-                  !locked&&hasImage&&React.createElement('img',{src:lesson.imageUrl,alt:'',style:{width:'100%',maxHeight:120,objectFit:'cover',borderRadius:6,marginBottom:'0.4rem',marginTop:'0.3rem'},onError:function(e){e.target.style.display='none;';}}),
-                  !locked&&lesson.body&&React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)',lineHeight:1.45,marginBottom:'0.5rem',maxHeight:50,overflow:'hidden'}},lesson.body.substring(0,140),'\u2026'),
-                  !locked&&hasVideo&&React.createElement('div',{style:{position:'relative',paddingBottom:'40%',height:0,overflow:'hidden',borderRadius:7,marginBottom:'0.4rem'}},
-                    React.createElement('iframe',{src:embedUrl(lesson.videoUrl),style:{position:'absolute',top:0,left:0,width:'100%',height:'100%',border:0,borderRadius:7},allowFullScreen:true,allow:'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture'})
-                  )
-                ),
-                !locked&&React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'0.35rem',flexShrink:0}},
-                  React.createElement('button',{onClick:function(){ setReadLesson(lesson); },style:{padding:'0.28rem .7rem',borderRadius:5,background:'rgba(59,158,245,0.1)',border:'1px solid rgba(59,158,245,0.25)',color:'var(--l2)',fontSize:'0.7rem',fontWeight:600,cursor:'pointer',fontFamily:'var(--font-body)',whiteSpace:'nowrap'}}, '\uD83D\uDCD6 Read'),
-                  !done&&React.createElement('button',{onClick:function(){markComplete(lesson.id);},style:{padding:'0.28rem .7rem',borderRadius:5,background:hasQuiz?'rgba(139,124,248,0.1)':'var(--l5b)',border:hasQuiz?'1px solid rgba(139,124,248,0.25)':'1px solid rgba(91,196,110,0.25)',color:hasQuiz?'var(--l1)':'var(--l5)',fontSize:'0.7rem',fontWeight:600,cursor:'pointer',fontFamily:'var(--font-body)',whiteSpace:'nowrap'}},hasQuiz?'\uD83E\uDDE0 Take Quiz':'Mark Done \u2713'),
-                  done&&hasQuiz&&React.createElement('button',{onClick:function(){setQuizLesson(lesson);setQuizAnswers({});setQuizState(null);},style:{padding:'0.28rem .7rem',borderRadius:5,background:'rgba(139,124,248,0.08)',border:'1px solid rgba(139,124,248,0.2)',color:'var(--l1)',fontSize:'0.7rem',cursor:'pointer',fontFamily:'var(--font-body)',whiteSpace:'nowrap'}},'Retake Quiz'),
-                  lesson.body&&React.createElement('button',{onClick:function(){toast({icon:'\uD83D\uDCE5',title:'Lesson Ready',body:'"'+lesson.title+'" \u2014 right-click to save this page.'}); },style:{padding:'0.28rem .7rem',borderRadius:5,border:'1px solid var(--bdr2)',background:'transparent',color:'var(--dmuted)',fontSize:'0.7rem',cursor:'pointer',fontFamily:'var(--font-body)'}},'Download')
-                )
-              );
-            })
-          )
-        );
-      })
-    )
   );
 }
 
