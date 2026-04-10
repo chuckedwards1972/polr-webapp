@@ -25845,144 +25845,44 @@ function QuickActionBar({
 // MY LESSONS PANEL (Members+)
 // ══════════════════════════════════════════════
 function MyLessonsPanel({ platform, toast, session }) {
-  var _c = React.useState([]); var courses = _c[0], setCourses = _c[1];
-  var _l = React.useState([]); var lessons = _l[0], setLessons = _l[1];
-  var _sc = React.useState(null); var selCourse = _sc[0], setSelCourse = _sc[1];
-  var _sl = React.useState(null); var selLesson = _sl[0], setSelLesson = _sl[1];
-  var _an = React.useState({}); var answers = _an[0], setAnswers = _an[1];
-  var _sub = React.useState(false); var submitted = _sub[0], setSubmitted = _sub[1];
-  var _sav = React.useState(false); var saving = _sav[0], setSaving = _sav[1];
-  var _cs = React.useState(null); var classSchedule = _cs[0], setClassSchedule = _cs[1];
-  var _pr = React.useState({}); var progress = _pr[0], setProgress = _pr[1];
-  var _ld = React.useState(true); var loading = _ld[0], setLoading = _ld[1];
-  var memberId = session && (session.userId || session.id) || null;
-  var dCard = {background:'rgba(255,255,255,0.03)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,padding:'1.25rem',marginBottom:'1rem'};
-  var goldBtn = {padding:'0.6rem 1.25rem',background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',borderRadius:8,fontWeight:700,cursor:'pointer',fontFamily:'var(--font-body)',fontSize:'0.85rem'};
-  var outBtn = {padding:'0.5rem 1rem',background:'transparent',color:'var(--dmuted)',border:'1px solid var(--bdr2)',borderRadius:8,cursor:'pointer',fontSize:'0.82rem'};
+  var _st = React.useState(true); var loading = _st[0], setLoading = _st[1];
+  var _co = React.useState([]); var courses = _co[0], setCourses = _co[1];
+  var _er = React.useState(null); var error = _er[0], setError = _er[1];
 
   React.useEffect(function() {
-    Promise.all([POLR_API.lms.courses(), POLR_API.lms.classSchedule()])
-      .then(function(r) {
-        var cs = Array.isArray(r[0]) ? r[0] : (r[0] && r[0].value ? r[0].value : []);
-        setCourses(cs);
-        setClassSchedule(r[1] || null);
-        setLoading(false);
-      }).catch(function() { setLoading(false); });
+    fetch('https://polr-backend-production.up.railway.app/api/lms/courses', {
+      headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('polr_token') || '') }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var cs = Array.isArray(data) ? data : (data && data.value ? data.value : []);
+      setCourses(cs);
+      setLoading(false);
+    })
+    .catch(function(e) {
+      setError(e.message);
+      setLoading(false);
+    });
   }, []);
 
-  function loadLessons(course) {
-    setSelCourse(course); setSelLesson(null); setAnswers({}); setSubmitted(false);
-    POLR_API.lms.lessons(course.id).then(function(r) {
-      setLessons(Array.isArray(r) ? r : (r && r.value ? r.value : []));
-    }).catch(function() {});
-  }
+  var card = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(200,145,58,0.15)', borderRadius: 12, padding: '1.25rem', marginBottom: '0.75rem' };
 
-  function openLesson(lesson) {
-    setSelLesson(lesson); setAnswers({}); setSubmitted(false);
-    if (memberId) {
-      POLR_API.lms.getSubmission(lesson.id, memberId).then(function(r) {
-        if (r && r.submitted) {
-          var ans = r.answers;
-          setAnswers(typeof ans === 'string' ? JSON.parse(ans) : (ans || {}));
-          setSubmitted(true);
-        }
-      }).catch(function() {});
-    }
-  }
+  if (loading) return React.createElement('div', { style: { padding: '2rem', textAlign: 'center', color: 'var(--dmuted)' } }, 'Loading curriculum...');
+  if (error) return React.createElement('div', { style: { padding: '2rem', color: '#fc8181' } }, 'Error: ' + error);
 
-  function submitForm() {
-    if (!memberId) { toast({icon:'⚠️', title:'Sign In Required', body:'Please log in to submit.'}); return; }
-    setSaving(true);
-    POLR_API.lms.submitForm(selLesson.id, memberId, answers).then(function() {
-      setSubmitted(true); setSaving(false);
-      toast({icon:'✅', title:'Lesson Submitted!', body:'Your answers have been saved.'});
-      setProgress(function(p) { var n = Object.assign({}, p); n[selLesson.id] = true; return n; });
-    }).catch(function(e) { setSaving(false); toast({icon:'❌', title:'Error', body: e.message || 'Please try again.'}); });
-  }
-
-  var formFields = [];
-  if (selLesson && selLesson.form_fields) {
-    try { formFields = typeof selLesson.form_fields === 'string' ? JSON.parse(selLesson.form_fields) : selLesson.form_fields; }
-    catch(e) { formFields = []; }
-  }
-
-  if (loading) return React.createElement('div', {style:{padding:'3rem',textAlign:'center',color:'var(--dmuted)'}},
-    '📖 Loading your curriculum...');
-
-  // Lesson detail
-  if (selLesson) return React.createElement('div', {style:{maxWidth:720,margin:'0 auto',padding:'1rem'}},
-    React.createElement('button', {onClick:function(){setSelLesson(null);}, style:Object.assign({},outBtn,{marginBottom:'1rem'})}, '← Back'),
-    React.createElement('div', {style:dCard},
-      React.createElement('div', {style:{fontSize:'0.68rem',color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.3rem'}}, 'Day ' + selLesson.day_number + ' · ' + selLesson.xp_value + ' XP'),
-      React.createElement('h2', {style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',color:'var(--dtxt)',marginBottom:'0.75rem',fontWeight:700}}, selLesson.title),
-      selLesson.scripture_reference && React.createElement('div', {style:{padding:'0.75rem 1rem',background:'rgba(200,145,58,0.06)',borderRadius:8,marginBottom:'1rem',borderLeft:'3px solid var(--gold)'}},
-        React.createElement('div', {style:{fontSize:'0.7rem',color:'var(--gold)',fontWeight:700,marginBottom:'0.3rem'}}, selLesson.scripture_reference),
-        React.createElement('div', {style:{fontStyle:'italic',color:'var(--dtxt)',fontSize:'0.88rem',lineHeight:1.6}}, '"' + selLesson.scripture_text + '"')
-      ),
-      selLesson.body && React.createElement('div', {style:{color:'var(--dtxt)',lineHeight:1.8,fontSize:'0.92rem',whiteSpace:'pre-wrap'}}, selLesson.body)
-    ),
-    formFields.length > 0 && React.createElement('div', {style:dCard},
-      React.createElement('div', {style:{fontWeight:700,color:'var(--dtxt)',marginBottom:'1rem'}}, '📝 Reflection Questions'),
-      submitted && React.createElement('div', {style:{padding:'0.65rem',background:'rgba(91,196,110,0.08)',border:'1px solid rgba(91,196,110,0.2)',borderRadius:8,marginBottom:'1rem',fontSize:'0.82rem',color:'var(--l5)'}}, '✅ Submitted successfully.'),
-      formFields.map(function(field, fi) {
-        var val = answers['q' + fi] || '';
-        var inp;
-        if (field.type === 'textarea') {
-          inp = React.createElement('textarea', {rows:4,value:val,disabled:submitted,onChange:function(e){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=e.target.value;return n;});},placeholder:field.placeholder||'',style:{width:'100%',padding:'0.7rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:8,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',resize:'vertical',boxSizing:'border-box'}});
-        } else if (field.type === 'radio' && field.options) {
-          inp = React.createElement('div', {style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
-            field.options.map(function(opt) {
-              return React.createElement('button', {key:opt,disabled:submitted,onClick:function(){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=opt;return n;});},style:{padding:'0.45rem 1rem',borderRadius:8,border:'1px solid '+(val===opt?'var(--gold)':'var(--bdr2)'),background:val===opt?'rgba(200,145,58,0.1)':'var(--bg3)',color:val===opt?'var(--gold)':'var(--dmuted)',cursor:submitted?'default':'pointer',fontWeight:val===opt?700:400,fontSize:'0.82rem'}}, opt);
-            }));
-        } else {
-          inp = React.createElement('input', {type:field.type||'text',value:val,disabled:submitted,onChange:function(e){setAnswers(function(a){var n=Object.assign({},a);n['q'+fi]=e.target.value;return n;});},placeholder:field.placeholder||'',style:{width:'100%',padding:'0.6rem 0.8rem',background:'rgba(255,255,255,0.04)',border:'1px solid var(--bdr2)',borderRadius:8,color:'var(--dtxt)',fontFamily:'var(--font-body)',fontSize:'0.85rem',boxSizing:'border-box'}});
-        }
-        return React.createElement('div', {key:fi,style:{marginBottom:'1.25rem'}},
-          React.createElement('div', {style:{fontSize:'0.82rem',fontWeight:600,color:'var(--dtxt)',marginBottom:'0.4rem'}}, field.label),
-          inp);
-      }),
-      !submitted && React.createElement('button', {onClick:submitForm,disabled:saving,style:Object.assign({},goldBtn,{marginTop:'0.5rem'})}, saving ? 'Saving...' : 'Submit Lesson ✓')
-    )
-  );
-
-  // Lesson list
-  if (selCourse) return React.createElement('div', {style:{maxWidth:720,margin:'0 auto',padding:'1rem'}},
-    React.createElement('button', {onClick:function(){setSelCourse(null);setLessons([]);}, style:Object.assign({},outBtn,{marginBottom:'1rem'})}, '← Back to Steps'),
-    React.createElement('div', {style:{fontFamily:'var(--font-serif)',fontSize:'1.15rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'0.25rem'}}, selCourse.title),
-    React.createElement('div', {style:{fontSize:'0.8rem',color:'var(--dmuted)',marginBottom:'1.25rem'}}, 'Step ' + selCourse.step_number + ' · ' + lessons.length + ' lessons'),
-    lessons.length === 0
-      ? React.createElement('div', {style:{textAlign:'center',padding:'2rem',color:'var(--dmuted)'}}, '📭 Loading lessons...')
-      : lessons.map(function(lesson) {
-          var done = progress[lesson.id];
-          return React.createElement('div', {key:lesson.id,style:Object.assign({},dCard,{cursor:'pointer',display:'flex',alignItems:'center',gap:'1rem'}),onClick:function(){openLesson(lesson);}},
-            React.createElement('div', {style:{width:36,height:36,borderRadius:'50%',background:done?'rgba(91,196,110,0.15)':'rgba(200,145,58,0.1)',border:'1px solid '+(done?'rgba(91,196,110,0.3)':'rgba(200,145,58,0.2)'),display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.8rem',fontWeight:700,color:done?'var(--l5)':'var(--gold)',flexShrink:0}}, done ? '✓' : String(lesson.day_number)),
-            React.createElement('div', {style:{flex:1}},
-              React.createElement('div', {style:{fontWeight:600,color:'var(--dtxt)',fontSize:'0.9rem',marginBottom:'0.15rem'}}, lesson.title),
-              React.createElement('div', {style:{fontSize:'0.72rem',color:'var(--dmuted)'}}, lesson.scripture_reference + ' · ' + lesson.xp_value + ' XP')
-            ),
-            React.createElement('span', {style:{fontSize:'0.75rem',color:'var(--dmuted)'}}, done ? '✅' : '→')
-          );
-        })
-  );
-
-  // Course browser
-  return React.createElement('div', {style:{maxWidth:720,margin:'0 auto',padding:'1rem'}},
-    classSchedule && React.createElement('div', {style:Object.assign({},dCard,{background:'rgba(200,145,58,0.06)',borderLeft:'3px solid var(--gold)',marginBottom:'1.5rem'})},
-      React.createElement('div', {style:{fontSize:'0.68rem',color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.25rem'}}, '📅 This Week\'s Live Class'),
-      React.createElement('div', {style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.95rem'}}, 'Step ' + classSchedule.current_step_number + ': ' + (classSchedule.topic || ''))
-    ),
-    React.createElement('div', {style:{fontFamily:'var(--font-serif)',fontSize:'1.2rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'0.25rem'}}, '📖 Your Personal Curriculum'),
-    React.createElement('div', {style:{fontSize:'0.8rem',color:'var(--dmuted)',marginBottom:'1.25rem'}}, 'Your lessons progress at your own pace, independent of the live class schedule.'),
-    React.createElement('div', {style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}},
-      courses.map(function(course) {
-        return React.createElement('div', {key:course.id,style:Object.assign({},dCard,{cursor:'pointer',margin:0}),onClick:function(){loadLessons(course);}},
-          React.createElement('div', {style:{fontSize:'0.65rem',color:'var(--gold)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}}, 'Step ' + course.step_number),
-          React.createElement('div', {style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.88rem',marginBottom:'0.2rem'}}, course.title),
-          React.createElement('div', {style:{fontSize:'0.72rem',color:'var(--dmuted)'}}, course.lesson_count + ' lessons'),
-          React.createElement('div', {style:{marginTop:'0.65rem',fontSize:'0.75rem',color:'var(--gold)'}}, 'Open →')
-        );
-      })
-    )
+  return React.createElement('div', { style: { maxWidth: 700, margin: '0 auto', padding: '1rem' } },
+    React.createElement('div', { style: { fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--dtxt)', marginBottom: '1.25rem' } }, 'Your Personal Curriculum'),
+    courses.length === 0
+      ? React.createElement('div', { style: { textAlign: 'center', padding: '2rem', color: 'var(--dmuted)' } }, 'No courses found.')
+      : React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' } },
+          courses.map(function(c) {
+            return React.createElement('div', { key: c.id, style: card },
+              React.createElement('div', { style: { fontSize: '0.65rem', color: 'var(--gold)', textTransform: 'uppercase', marginBottom: '0.25rem' } }, 'Step ' + c.step_number),
+              React.createElement('div', { style: { fontWeight: 700, color: 'var(--dtxt)', fontSize: '0.88rem', marginBottom: '0.2rem' } }, c.title),
+              React.createElement('div', { style: { fontSize: '0.72rem', color: 'var(--dmuted)' } }, c.lesson_count + ' lessons')
+            );
+          })
+        )
   );
 }
 
