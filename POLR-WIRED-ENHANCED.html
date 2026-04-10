@@ -4129,7 +4129,19 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
     var label={draft:'Saved draft',review:'Submitted for review',approved:'Approved & published',archived:'Archived'}[newStatus||'draft']||'Saved';
     toast({icon:'✅',title:label,body:'"'+lesson.title+'" — Step '+selStep});
     if(newStatus==='approved'||newStatus==='review'){setMode('list');setEditing(null);}
-  };
+  
+    // Wire to Railway backend
+    var _tok = sessionStorage.getItem('hope_session') || localStorage.getItem('hope_session');
+    var _parsed = _tok ? (function(){try{return JSON.parse(_tok);}catch(e){return null;}}()) : null;
+    var _token = _parsed && (_parsed.token || _parsed.jwt);
+    if (_token) {
+      fetch(window.POLR_API_BASE + '/lms/lesson-submission', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+_token},
+        body: JSON.stringify({lesson_id:toSave.id,step_number:selStep,title:toSave.title,status:newStatus||toSave.status||'draft',content:toSave.sections||[],submitted_at:new Date().toISOString()})
+      }).then(function(r){return r.json();}).then(function(d){if(d&&d.id)console.log('[LMS] Synced to Railway:',d.id);}).catch(function(e){console.warn('[LMS] Backend sync failed (offline ok):',e.message);});
+    }
+};
 
   var SECTION_COLORS = {scripture:'#c8913a',reflection:'#3b9ef5',insight:'#2ec4a0',truth:'#5bc46e',principle:'#8b7cf8',quote:'#d4a853',example:'#e8704a',reality:'#fc8181',observation:'#8899b0',hope:'#5bc46e',reflect:'#3b9ef5',final:'#c8913a',video:'#3b9ef5',image:'#2ec4a0',quiz:'#8b7cf8'};
   var STATUS_META = {draft:{c:'#f6ad55',bg:'rgba(246,173,85,0.1)',label:'Draft'},review:{c:'var(--l2)',bg:'rgba(59,158,245,0.1)',label:'Under Review'},doctrine_review:{c:'var(--l1)',bg:'rgba(139,124,248,0.1)',label:'Doctrine Review'},approved:{c:'var(--l5)',bg:'rgba(91,196,110,0.1)',label:'Approved'},archived:{c:'var(--dmuted)',bg:'rgba(255,255,255,0.04)',label:'Archived'}};
