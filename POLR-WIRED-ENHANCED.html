@@ -4136,7 +4136,7 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
     var _parsed = _tok ? (function(){try{return JSON.parse(_tok);}catch(e){return null;}}()) : null;
     var _token = _parsed && (_parsed.token || _parsed.jwt);
     if (_token) {
-      fetch(window.POLR_API_BASE + '/lms/lesson-submission', {
+      fetch(window.POLR_API_BASE + '/lms/lessons/' + toSave.id + '/submit', {
         method: 'POST',
         headers: {'Content-Type':'application/json','Authorization':'Bearer '+_token},
         body: JSON.stringify({lesson_id:toSave.id,step_number:selStep,title:toSave.title,status:newStatus||toSave.status||'draft',content:toSave.sections||[],submitted_at:new Date().toISOString()})
