@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-04-11T22:33:17.684Z",
+  "results": [
+    {
+      "name": "Site loads",
+      "status": "PASS"
+    },
+    {
+      "name": "No white screen",
+      "status": "PASS"
+    },
+    {
+      "name": "HOPE branding present",
+      "status": "PASS"
+    },
+    {
+      "name": "Port Allen location shown",
+      "status": "PASS"
+    },
+    {
+      "name": "Railway backend responds",
+      "status": "PASS"
+    },
+    {
+      "name": "Mobile viewport ok",
+      "status": "PASS"
+    }
+  ],
+  "passed": 6,
+  "failed": 0
+}
