@@ -10,8 +10,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -22,28 +26,16 @@ jobs:
         run: |
           npm init -y
           npm install playwright
-          npx playwright install chromium
+          npx playwright install chromium --with-deps
 
       - name: Run Tests
+        id: run_tests
         run: node tests/hope.test.js
         continue-on-error: true
 
       - name: Update Memory
         run: node evolution/memory-engine.js
         continue-on-error: true
-
-      - name: Send Email on Failure
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.GMAIL_USER }}
-          password: ${{ secrets.GMAIL_PASS }}
-          subject: 'HOPE Platform Test FAILED'
-          to: bro.chuck.edwards@gmail.com
-          from: HOPE Platform Tests
-          body: 'One or more tests failed on the HOPE Recovery platform. Check GitHub Actions for details: https://github.com/chuckedwards1972/polr-webapp/actions'
 
       - name: Commit Memory Update
         run: |
@@ -53,3 +45,17 @@ jobs:
           git diff --staged --quiet || git commit -m 'Test run memory update'
           git push
         continue-on-error: true
+
+      - name: Send Email on Failure
+        if: steps.run_tests.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_PASS }}
+          subject: 'HOPE Platform Test FAILED'
+          to: bro.chuck.edwards@gmail.com
+          from: HOPE Platform Tests
+          body: 'One or more tests failed. Check: https://github.com/chuckedwards1972/polr-webapp/actions'
