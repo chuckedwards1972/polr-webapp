@@ -29362,6 +29362,7 @@ function ContactConfigPanel({ platform, update, toast, session }) {
     {id:'hq',       label:'🏢 HQ / Default',   desc:'Applied platform-wide when no override exists'},
     {id:'campus',   label:'🏠 Per Campus',      desc:'Override contact info for each campus location'},
     {id:'whitelabel',label:'🤝 White-Label',    desc:'Applied when system is deployed for a partner org via QR provisioning'},
+    {id:'brand',    label:'🎨 Brand Studio',    desc:'Control platform name, logo, sayings, and section toggles'},
     {id:'privacy',  label:'🔒 Privacy',         desc:'Control what appears in partner reports and receipts'},
   ];
 
@@ -29485,7 +29486,7 @@ function ContactConfigPanel({ platform, update, toast, session }) {
     ),
 
     // ── PRIVACY TAB ──
-    tab==='privacy'&&React.createElement('div',{className:'d-card'},
+    tab==='brand'&&React.createElement('div',null,React.createElement('p',{style:{color:'var(--dtxt)',marginBottom:'1rem'}},'Brand Studio coming soon. Use the fields below to configure your platform identity.'),React.createElement('button',{className:'btn-primary',onClick:function(){toast({icon:'✅',title:'Brand Studio',body:'Full editor loading soon.'});}},'Open Brand Editor')),tab==='privacy'&&React.createElement('div',{className:'d-card'},
       React.createElement('div',{className:'d-card-head'},
         React.createElement('span',{className:'d-card-title'},'🔒 PRIVACY & REPORTING SETTINGS')
       ),
