@@ -12,10 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -45,8 +48,9 @@ jobs:
 
       - name: Commit Memory Update
         run: |
-          git config user.name 'hope-test-engine'
-          git config user.email 'tests@hopenetwork.com'
+          git config --global user.name 'hope-test-engine'
+          git config --global user.email 'tests@hopenetwork.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/chuckedwards1972/polr-webapp.git
           git add evolution/
           git diff --staged --quiet || git commit -m 'Test run memory update'
           git push
