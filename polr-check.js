@@ -1,6 +1,6 @@
-﻿
+
 // ═══════════════════════════════════════════════════════════════════
-//  POLR NETWORK — API SERVICE LAYER  (polrnetwork.com)
+//  HOPE NETWORK — API SERVICE LAYER  (hopenetwork.com)
 //  Replaces all localStorage / hardcoded data with real backend calls
 // ═══════════════════════════════════════════════════════════════════
 const API_BASE = (function() {
@@ -12,7 +12,7 @@ const API_BASE = (function() {
 window.POLR_API_BASE = API_BASE;
 (function(){
   try {
-    var sess = JSON.parse(sessionStorage.getItem('polr_session')||'null');
+    var sess = JSON.parse(sessionStorage.getItem('hope_session')||'null');
     if(sess && sess.level !== 0) {
       document.body.classList.add('polr-locked');
     }
@@ -21,23 +21,24 @@ window.POLR_API_BASE = API_BASE;
 
 // ── CONTACT CONFIGURATION (global defaults + per-campus overrides) ──
 var CONTACT_CONFIG_DEFAULT = {
-  // POLR HQ (main)
+  // HOPE HQ (main)
   hq: {
-    name:    'Path of Life Recovery',
-    shortName: 'POLR',
-    phone:   '{POLR_PHONE}',
-    email:   'admin@polrnetwork.com',
-    website: 'polrnetwork.com',
-    address: 'Thibodaux, Louisiana',
-    tagline: 'Walk well.'
+    name:    'HOPE Recovery: Hold on Pain Ends',
+    shortName: 'HOPE',
+    phone:   '225-333-0330',
+    email:   'bro.chuck.edwards@gmail.com',
+    website: 'hopenetwork.com',
+    address: 'Port Allen, Louisiana',
+    tagline: 'Walk in the Light.'
   },
   // Per-campus overrides (keyed by campus slug)
   campuses: {
     'port-allen': {
-      name:    'POLR Place Port Allen',
-      phone:   '',
-      email:   'portallen@polrnetwork.com',
-      website: 'polrnetwork.com',
+      name:    'HOPE Place Port Allen',
+      phone:   '225-333-0330',
+      email:   'bro.chuck.edwards@gmail.com',
+      website: 'hopenetwork.com',
+      address: '12883 Hwy 190 West, Port Allen LA 70767'
     }
   },
   // White-label override (applies when provisioned with org=)
@@ -64,7 +65,7 @@ function getContactConfig(platform, campusKey, session) {
   
   // White-label override via provisioning
   var provision = null;
-  try { provision = JSON.parse(localStorage.getItem('polr_provision') || 'null'); } catch(e) {}
+  try { provision = JSON.parse(localStorage.getItem('hope_provision') || 'null'); } catch(e) {}
   if (provision && provision.org && provision.orgName) {
     hq.name    = provision.orgName || hq.name;
     hq.phone   = provision.phone   || hq.phone;
@@ -99,12 +100,12 @@ function resolveContact(text, platform, campusKey, session) {
   if (!text || typeof text !== 'string') return text;
   var cfg = getContactConfig(platform, campusKey, session);
   return text
-    .replace(/\{POLR_NAME\}/g,    cfg.name    || 'Path of Life Recovery')
-    .replace(/\{POLR_PHONE\}/g,   cfg.phone   || '{POLR_PHONE}')
-    .replace(/\{POLR_EMAIL\}/g,   cfg.email   || 'admin@polrnetwork.com')
-    .replace(/\{POLR_WEBSITE\}/g, cfg.website || 'polrnetwork.com')
-    .replace(/\{POLR_ADDRESS\}/g, cfg.address || 'Thibodaux, Louisiana')
-    .replace(/\{POLR_TAGLINE\}/g, cfg.tagline || 'Walk well.');
+    .replace(/\{HOPE_NAME\}/g,    cfg.name    || 'HOPE Recovery: Hold on Pain Ends')
+    .replace(/\{HOPE_PHONE\}/g,   cfg.phone   || '225-333-0330')
+    .replace(/\{HOPE_EMAIL\}/g,   cfg.email   || 'bro.chuck.edwards@gmail.com')
+    .replace(/\{HOPE_WEBSITE\}/g, cfg.website || 'hopenetwork.com')
+    .replace(/\{POLR_ADDRESS\}/g, cfg.address || 'Port Allen, Louisiana')
+    .replace(/\{POLR_TAGLINE\}/g, cfg.tagline || 'Walk it out faithfully.');
 }
 
 // Expose globally for use anywhere in app
@@ -115,7 +116,7 @@ window.POLR_CONTACT = {
 };
 
 
-const TOKEN_KEY = 'polr_token';
+const TOKEN_KEY = 'hope_token';
 
 function _getToken() {
   return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY);
@@ -335,7 +336,7 @@ function useApi(fn, deps) {
 
 // ── Session-expired handler ─ auto-logout on 401
 window.addEventListener('polr:session-expired', function() {
-  sessionStorage.removeItem('polr_session');
+  sessionStorage.removeItem('hope_session');
   window.location.reload();
 });
 
@@ -369,7 +370,7 @@ const SYSTEM_ACCOUNTS = {
   // ── LEVEL 0: Platform Owner / Licensor (Chuck) ──────────────────────
   // Sees everything: full ministry ops + ALL Platform Business panels
   // (contracts, billing, deployment manager, revenue share, client mgmt)
-  'POLRTTD': {
+  'HOPETTD': {
     password: 'ACTS2:38',
     role: 'admin',
     name: 'Platform Owner',
@@ -377,7 +378,7 @@ const SYSTEM_ACCOUNTS = {
     campus: 'All',
     title: 'Director of Platform & Technology'
   },
-  'POLARPA': {
+  'HOPEPA': {
     password: 'ACTS2:38',
     role: 'admin',
     name: 'Platform Owner',
@@ -386,21 +387,21 @@ const SYSTEM_ACCOUNTS = {
     title: 'Director of Platform & Technology'
   },
 
-  // ── LEVEL 1: POLR HQ Admin (Jeff) ───────────────────────────────────
+  // ── LEVEL 1: HOPE HQ Admin (Jeff) ───────────────────────────────────
   // Sees full ministry dashboard (members, housing, pipeline, grants, etc.)
   // Does NOT see Platform Business panels (contracts, billing, revenue share)
-  'POLRHQ': {
+  'HOPEHQ': {
     password: 'ACTS2:38',
     role: 'admin',
-    name: 'POLR HQ Admin',
+    name: 'HOPE HQ Admin',
     level: 1,
     campus: 'All Campuses',
     title: 'Executive Director'
   },
-  '{POLR_EMAIL}': {
+  'bro.chuck.edwards@gmail.com': {
     password: 'ACTS2:38',
     role: 'admin',
-    name: 'POLR HQ Admin',
+    name: 'HOPE HQ Admin',
     level: 1,
     campus: 'All Campuses',
     title: 'Executive Director'
@@ -506,7 +507,7 @@ const AI_GUIDANCE = {
       priority: 'P2',
       icon: '🌱',
       title: 'New Group Launch Planning',
-      desc: 'Gonzales territory has 0 POLR presence. 3 families interested. Begin site assessment.',
+      desc: 'Gonzales territory has 0 HOPE presence. 3 families interested. Begin site assessment.',
       action: 'Plan'
     }, {
       priority: 'P3',
@@ -613,7 +614,7 @@ const AI_GUIDANCE = {
     tasks: [{
       priority: 'P1',
       icon: '📅',
-      title: 'Meeting Tonight — POLR Place',
+      title: 'Meeting Tonight — HOPE Place',
       desc: 'Wednesday HOP meeting at 7:00 PM. You\'ve attended 4 straight weeks. Keep the streak!',
       action: 'Check In'
     }, {
@@ -644,13 +645,13 @@ const AI_GUIDANCE = {
       priority: 'P1',
       icon: '📅',
       title: 'Attend Your First Meeting',
-      desc: 'POLR Place is open Mon–Sat 7:00 AM. No membership needed. Just show up.',
+      desc: 'HOPE Place is open Mon–Sat 7:00 AM. No membership needed. Just show up.',
       action: 'Find Meeting'
     }, {
       priority: 'P2',
       icon: '📖',
       title: 'Read a Testimony Article',
-      desc: '"The God Who Waits for You" — 5 min read. Many people said this was their turning point.',
+      desc: '"The Father Is Already Running" — 5 min read. Many people said this was their turning point.',
       action: 'Read'
     }, {
       priority: 'P3',
@@ -676,45 +677,45 @@ const AI_GUIDANCE = {
 function initPlatformState() {
   // Clear stale state if version mismatch
   try {
-    var stored = JSON.parse(localStorage.getItem('polr_platform') || 'null');
+    var stored = JSON.parse(localStorage.getItem('hope_platform') || 'null');
     if (stored && !stored.expansionMissions) {
-      localStorage.removeItem('polr_platform');
+      localStorage.removeItem('hope_platform');
       stored = null;
     }
     if (stored) return stored;
-  } catch(e) { localStorage.removeItem('polr_platform'); }
+  } catch(e) { localStorage.removeItem('hope_platform'); }
   const defaults = {
     members: [],
     meetings: [{
       id: 'm1',
-      name: 'POLR Place Thibodaux — Daily',
+      name: 'HOPE Place Port Allen',
       day: 'Mon–Sat',
       time: '7:00 AM',
-      location: '501-A St. Mary St, Thibodaux',
-      campus: 'polr-place-thibodaux',
+      location: '12883 Hwy 190 West, Port Allen LA 70767',
+      campus: 'hope-place-port-allen',
       active: true,
       attendance: []
     }, {
       id: 'm2',
-      name: 'POLR Place @ HOP Thibodaux',
+      name: 'HOPE Place Port Allen',
       day: 'Wednesday',
       time: '7:00 PM',
-      location: '2229 Hwy 3185, Thibodaux',
-      campus: 'polr-place-hop-thib',
+      location: '12883 Hwy 190 West, Port Allen LA 70767',
+      campus: 'hope-place-port-allen',
       active: true,
       attendance: []
     }, {
       id: 'm3',
-      name: 'POLR Place @ HOP Larose',
+      name: 'HOPE Place Port Allen',
       day: 'Wednesday',
       time: '7:00 PM',
-      location: 'Larose, LA',
-      campus: 'polr-place-hop-larose',
+      location: 'Port Allen, LA',
+      campus: 'hope-place-port-allen',
       active: true,
       attendance: []
     }, {
       id: 'm4',
-      name: 'POLR Place Port Allen',
+      name: 'HOPE Place Port Allen',
       day: 'Monday',
       time: '6:00 PM',
       location: '12883 Hwy 190 West, Port Allen',
@@ -724,9 +725,9 @@ function initPlatformState() {
     }],
     blogPosts: [{
       id: 'b1',
-      title: 'The God Who Waits for You',
+      title: 'The Father Is Already Running',
       category: 'Scripture',
-      author: 'Jeff Walthers',
+      author: 'Chuck Edwards',
       date: 'Mar 18, 2026',
       status: 'published',
       body: 'The parable of the Prodigal Son...',
@@ -735,10 +736,10 @@ function initPlatformState() {
       id: 'b2',
       title: 'What Repentance Actually Looks Like',
       category: 'Recovery',
-      author: 'POLR Staff',
+      author: 'HOPE Staff',
       date: 'Mar 12, 2026',
     readTime: '5 min read',
-    body: "Repentance isn\'t crying at an altar. It\'s waking up Monday and making a different choice than you made last Monday.\n\nWe have sold people a version of repentance that requires a dramatic moment — the altar call, the breakdown, the spiritual earthquake. And because people expect the earthquake, they wait for it. And while they wait, they keep using.\n\nIn the Greek, the word is metanoia. Change of mind. Not change of emotion — change of direction.\n\nStep Four is an act of repentance. It's not glamorous. You sit at a table with a piece of paper and you write down every resentment, every fear, every person you've harmed. You stare at your own patterns until you can't pretend they aren't patterns anymore. That is metanoia. That is the change of mind that makes the change of life possible.\n\nJeff Walthers didn't find sobriety at an altar. He found it in a moment of exhaustion so complete that there was nothing left to argue with God about. That too is repentance. Not performance — collapse. Not drama — surrender.\n\nIf you're waiting to feel sorry enough to change, you'll wait forever. The feeling follows the decision. Make the decision. Walk it out. Feel it later.\n\nWalk well."
+    body: "Repentance isn\'t crying at an altar. It\'s waking up Monday and making a different choice than you made last Monday.\n\nWe have sold people a version of repentance that requires a dramatic moment — the altar call, the breakdown, the spiritual earthquake. And because people expect the earthquake, they wait for it. And while they wait, they keep using.\n\nIn the Greek, the word is metanoia. Change of mind. Not change of emotion — change of direction.\n\nStep Four is an act of repentance. It's not glamorous. You sit at a table with a piece of paper and you write down every resentment, every fear, every person you've harmed. You stare at your own patterns until you can't pretend they aren't patterns anymore. That is metanoia. That is the change of mind that makes the change of life possible.\n\nChuck Edwards didn't find sobriety at an altar. He found it in a moment of exhaustion so complete that there was nothing left to argue with God about. That too is repentance. Not performance — collapse. Not drama — surrender.\n\nIf you're waiting to feel sorry enough to change, you'll wait forever. The feeling follows the decision. Make the decision. Walk it out. Feel it later.\n\nWalk it out faithfully."
   }],
     programs: [{
       id: 'p1',
@@ -763,7 +764,7 @@ function initPlatformState() {
       completionRate: 61
     }, {
       id: 'p4',
-      name: 'POLR House Program',
+      name: 'HOPE House Program',
       description: 'Transitional housing + recovery',
       active: true,
       enrollees: 13,
@@ -790,7 +791,7 @@ function initPlatformState() {
     }],
     donations: [{
       id: 'd1',
-      campus: 'POLR Place',
+      campus: 'HOPE Place',
       amount: 1200,
       date: 'Mar 18',
       type: 'one-time',
@@ -804,7 +805,7 @@ function initPlatformState() {
       campaign: 'Launch Fund'
     }, {
       id: 'd3',
-      campus: 'POLR Place @ HOP Thibodaux',
+      campus: 'HOPE Place Port Allen',
       amount: 350,
       date: 'Mar 16',
       type: 'one-time',
@@ -815,7 +816,7 @@ function initPlatformState() {
       name: 'House Alpha',
       beds: 4,
       occupied: 4,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Men',
       active: true
     }, {
@@ -823,7 +824,7 @@ function initPlatformState() {
       name: 'House Beta',
       beds: 4,
       occupied: 3,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Women',
       active: true
     }, {
@@ -968,37 +969,37 @@ function initPlatformState() {
     houseAlerts: [],
     weeklyReports: [],
     contactRoutes: [{
-      id: 'polr-place-thibodaux',
-      name: 'POLR Place Thibodaux',
-      email: '{POLR_EMAIL}',
-      phone: '{POLR_PHONE}',
+      id: 'hope-place-port-allen',
+      name: 'HOPE Place Port Allen',
+      email: 'bro.chuck.edwards@gmail.com',
+      phone: '225-333-0330',
       leader: 'Director',
       queue: []
     }, {
-      id: 'polr-place-hop-thib',
-      name: 'HOP — Thibodaux',
-      email: 'hop.thibodaux@{POLR_WEBSITE}',
-      phone: '{POLR_PHONE}',
+      id: 'hope-place-port-allen',
+      name: 'HOPE Place Port Allen',
+      email: 'bro.chuck.edwards@gmail.com',
+      phone: '225-333-0330',
       leader: 'Campus Lead',
       queue: []
     }, {
-      id: 'polr-place-hop-larose',
-      name: 'HOP — Larose',
-      email: 'hop.larose@{POLR_WEBSITE}',
-      phone: '{POLR_PHONE}',
+      id: 'hope-place-port-allen',
+      name: 'HOPE Place Port Allen',
+      email: 'bro.chuck.edwards@gmail.com',
+      phone: '225-333-0330',
       leader: 'Campus Lead',
       queue: []
     }, {
       id: 'polr-place-port-allen',
-      name: 'POLR Place Port Allen',
-      email: 'portallen@{POLR_WEBSITE}',
-      phone: '{POLR_PHONE}',
+      name: 'HOPE Place Port Allen',
+      email: 'bro.chuck.edwards@gmail.com',
+      phone: '225-333-0330',
       leader: 'TBD',
       queue: []
     }],
     campuses: [],
     // Workforce Pipeline Systems
-    employerReferrals: [],      // Employer → POLR member referrals
+    employerReferrals: [],      // Employer → HOPE member referrals
     cohorts: [],                // Training cohorts (OSHA-10, GED, etc.)
     tradePartners: [],          // Trade schools, unions, apprenticeship programs
     grantApplications: [],      // Grant tracking + auto-generation
@@ -1026,15 +1027,15 @@ function initPlatformState() {
     invoices: [],         // Issued invoices (PayPal)
     paypalConfig: {clientId:'',email:'',businessName:'',currency:'USD'},
     terminology: {        // White-label terminology map
-      networkName:'POLR Network', campusName:'POLR Place', houseName:'POLR House',
-      reflectionName:'POLR Reflection', pointsName:'POLR Points',
-      signaturePhrase:'Walk well.', adminTitle:'POLR Director',
+      networkName:'HOPE Recovery Network', campusName:'HOPE Place', houseName:'HOPE House',
+      reflectionName:'HOPE Reflection', pointsName:'HOPE Points',
+      signaturePhrase:'Walk it out faithfully.', adminTitle:'HOPE Director',
       staffTitle:'Ambassador', programName:'12-Step Recovery',
-      siteDomain:'{POLR_WEBSITE}', orgName:'Path of Life Recovery'
+      siteDomain:'hopenetwork.com', orgName:'HOPE Recovery: Hold on Pain Ends'
     }
   };
   try {
-    const stored = JSON.parse(localStorage.getItem('polr_platform_state') || 'null');
+    const stored = JSON.parse(localStorage.getItem('hope_platform_state') || 'null');
     return stored ? {
       ...defaults,
       ...stored
@@ -1066,15 +1067,15 @@ function writeAudit(platform, update, actor, action, entityType, entityId, befor
   update('auditLog', [entry, ...current].slice(0, 500));
   // ALSO persist to localStorage for offline ActivityFeed
   try {
-    var stored = JSON.parse(localStorage.getItem('polr_audit_log') || '[]');
+    var stored = JSON.parse(localStorage.getItem('hope_audit_log') || '[]');
     stored.unshift(entry);
-    localStorage.setItem('polr_audit_log', JSON.stringify(stored.slice(0, 200)));
+    localStorage.setItem('hope_audit_log', JSON.stringify(stored.slice(0, 200)));
   } catch(_ae) {}
 }
 
 
 function generateMoneyFlowDiagram() {
-  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>POLR Network — Money Flow Diagram<\/title>' +
+  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>HOPE Recovery Network — Money Flow Diagram<\/title>' +
   '<style>' +
   '@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;600;700&display=swap");' +
   '@page{size:11in 8.5in;margin:0.5in;}' +
@@ -1102,8 +1103,8 @@ function generateMoneyFlowDiagram() {
   '.fn{text-align:center;font-size:7pt;color:#94a3b8;margin-top:12px;border-top:1px solid #e2e8f0;padding-top:8px;}' +
   '<\/style><\/head><body>' +
 
-  '<div class="title">POLR Network — Money Flow Diagram<\/div>' +
-  '<div class="sub">How revenue enters, moves through, and exits the Path of Life Recovery ecosystem<\/div>' +
+  '<div class="title">HOPE Recovery Network — Money Flow Diagram<\/div>' +
+  '<div class="sub">How revenue enters, moves through, and exits the HOPE Recovery: Hold on Pain Ends ecosystem<\/div>' +
   '<hr class="gold">' +
 
   // INFLOWS
@@ -1131,7 +1132,7 @@ function generateMoneyFlowDiagram() {
   '<div class="source" style="background:#fdf4ff;border:1px solid #e9d5ff;">' +
   '<div class="amt" style="color:#7c3aed;">$299–$3,500<\/div>' +
   '<h3 style="color:#6d28d9;">White-Label Licenses<\/h3>' +
-  '<p>Monthly SaaS license fees from ministry/agency partners deploying the POLR platform.<\/p>' +
+  '<p>Monthly SaaS license fees from ministry/agency partners deploying the HOPE platform.<\/p>' +
   '<\/div>' +
 
   '<div class="source" style="background:#fff7ed;border:1px solid #fed7aa;">' +
@@ -1171,10 +1172,10 @@ function generateMoneyFlowDiagram() {
 
   '<\/div>' +
 
-  // CENTER — POLR HQ
+  // CENTER — HOPE HQ
   '<div style="padding:12px 16px;background:linear-gradient(135deg,#0c1a2e,#162038);border-radius:12px;text-align:center;margin-bottom:16px;">' +
   '<div style="font-family:\'EB Garamond\',serif;font-size:16pt;color:#c8913a;margin-bottom:4px;">PATH OF LIFE RECOVERY, INC.<\/div>' +
-  '<div style="color:rgba(255,255,255,0.7);font-size:8.5pt;">All revenue flows through POLR operations. Funds are allocated to direct ministry, staffing, housing operations, expansion, and platform development.<\/div>' +
+  '<div style="color:rgba(255,255,255,0.7);font-size:8.5pt;">All revenue flows through HOPE operations. Funds are allocated to direct ministry, staffing, housing operations, expansion, and platform development.<\/div>' +
   '<\/div>' +
 
   // OUTFLOWS
@@ -1184,7 +1185,7 @@ function generateMoneyFlowDiagram() {
   '<div class="outflow" style="background:#f0fdf9;border:1px solid #a7f3d0;">' +
   '<div style="font-size:14pt;">🏠<\/div>' +
   '<h4 style="color:#15803d;">Housing Operations<\/h4>' +
-  '<p>Rent, maintenance, utilities, supplies for all POLR Places. Largest operational expense.<\/p>' +
+  '<p>Rent, maintenance, utilities, supplies for all HOPE Places. Largest operational expense.<\/p>' +
   '<\/div>' +
 
   '<div class="outflow" style="background:#eff6ff;border:1px solid #bfdbfe;">' +
@@ -1208,13 +1209,13 @@ function generateMoneyFlowDiagram() {
   '<div class="outflow" style="background:#fff7ed;border:1px solid #fed7aa;">' +
   '<div style="font-size:14pt;">🌆<\/div>' +
   '<h4 style="color:#c2410c;">Campus Expansion<\/h4>' +
-  '<p>New POLR Place launches. Property acquisition, setup costs, initial operating reserve.<\/p>' +
+  '<p>New HOPE Place launches. Property acquisition, setup costs, initial operating reserve.<\/p>' +
   '<\/div>' +
 
   '<div class="outflow" style="background:#f0fdf4;border:1px solid #86efac;">' +
   '<div style="font-size:14pt;">🤝<\/div>' +
-  '<h4 style="color:#166534;">POLR Rev Share (10%)<\/h4>' +
-  '<p>10% of white-label licensing revenue flows to POLR HQ per Consulting Services Agreement.<\/p>' +
+  '<h4 style="color:#166534;">HOPE Rev Share (10%)<\/h4>' +
+  '<p>10% of white-label licensing revenue flows to HOPE HQ per Consulting Services Agreement.<\/p>' +
   '<\/div>' +
 
   '<div class="outflow" style="background:#ecfdf5;border:1px solid #6ee7b7;">' +
@@ -1231,7 +1232,7 @@ function generateMoneyFlowDiagram() {
 
   '<\/div>' +
 
-  '<div class="fn">POLR Network Platform — Money Flow Diagram — Path of Life Recovery, Inc. — {POLR_WEBSITE} — Confidential. Internal use only.<\/div>' +
+  '<div class="fn">HOPE Recovery Network Platform — Money Flow Diagram — HOPE Recovery, Inc. — hopenetwork.com — Confidential. Internal use only.<\/div>' +
   '<\/body><\/html>';
   var w=window.open('','_blank','width=1200,height=900');
   if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
@@ -1239,7 +1240,7 @@ function generateMoneyFlowDiagram() {
 
 
 function generateChainOfCommandDiagram() {
-  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>POLR Network — Chain of Command<\/title>' +
+  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>HOPE Recovery Network — Chain of Command<\/title>' +
   '<style>' +
   '@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;600;700&display=swap");' +
   '@page{size:11in 8.5in;margin:0.5in;}' +
@@ -1258,7 +1259,7 @@ function generateChainOfCommandDiagram() {
   '.fn{text-align:center;font-size:7pt;color:#94a3b8;margin-top:12px;border-top:1px solid #e2e8f0;padding-top:8px;}' +
   '<\/style><\/head><body>' +
 
-  '<div class="title">POLR Network — Chain of Command<\/div>' +
+  '<div class="title">HOPE Recovery Network — Chain of Command<\/div>' +
   '<div class="sub">Authority structure for ministry operations, platform governance, and white-label deployments<\/div>' +
   '<hr class="gold">' +
 
@@ -1272,16 +1273,16 @@ function generateChainOfCommandDiagram() {
   '<div class="badge" style="background:#c8913a;color:#0c1a2e;">LEVEL 0</div>' +
   '<h3 style="color:#c8913a;">Chuck Theriot<\/h3>' +
   '<div class="role" style="color:rgba(255,255,255,0.8);">Director of Platform & Technology<\/div>' +
-  '<p style="color:rgba(255,255,255,0.65);">Platform Owner & Licensor. Owns all IP, codebase, architecture. Master control over all walk configurations, module toggles, and white-label deployments. Consulting Services Agreement with POLR HQ.<\/p>' +
+  '<p style="color:rgba(255,255,255,0.65);">Platform Owner & Licensor. Owns all IP, codebase, architecture. Master control over all walk configurations, module toggles, and white-label deployments. Consulting Services Agreement with HOPE HQ.<\/p>' +
   '<\/div>' +
 
   '<div class="connector">↓<\/div>' +
 
   '<div class="box" style="background:#f8fafc;border:1px solid #e2e8f0;">' +
   '<div class="badge" style="background:#1d4ed8;color:white;">PLATFORM</div>' +
-  '<h3 style="color:#0c1a2e;">POLR Network Platform<\/h3>' +
+  '<h3 style="color:#0c1a2e;">HOPE Recovery Network Platform<\/h3>' +
   '<div class="role" style="color:#475569;">Licensed Software Product<\/div>' +
-  '<p style="color:#64748b;">Licensed to POLR HQ as primary client. Also licensed to white-label partners. Revenue share: 10% of WL revenue to POLR HQ. Walk config, modules, terminology — all owner-controlled.<\/p>' +
+  '<p style="color:#64748b;">Licensed to HOPE HQ as primary client. Also licensed to white-label partners. Revenue share: 10% of WL revenue to HOPE HQ. Walk config, modules, terminology — all owner-controlled.<\/p>' +
   '<\/div>' +
 
   '<div class="connector">↓<\/div>' +
@@ -1292,7 +1293,7 @@ function generateChainOfCommandDiagram() {
   '<div class="badge" style="background:#7c3aed;color:white;">WL CLIENT</div>' +
   '<h3 style="color:#7c3aed;">White-Label Client A<\/h3>' +
   '<div class="role" style="color:#6d28d9;">Licensed Operator<\/div>' +
-  '<p style="color:#64748b;">Their own branding, terminology, campus names. Cannot reduce approval chains. Cannot access Platform Business suite. Pays monthly license + POLR rev share.<\/p>' +
+  '<p style="color:#64748b;">Their own branding, terminology, campus names. Cannot reduce approval chains. Cannot access Platform Business suite. Pays monthly license + HOPE rev share.<\/p>' +
   '<\/div>' +
 
   '<div class="box" style="background:#fdf4ff;border:1px solid #e9d5ff;">' +
@@ -1311,9 +1312,9 @@ function generateChainOfCommandDiagram() {
 
   '<div class="box" style="background:#f0fdf4;border:2px solid #16a34a;">' +
   '<div class="badge" style="background:#16a34a;color:white;">LEVEL 1</div>' +
-  '<h3 style="color:#15803d;">POLR HQ — Executive Director<\/h3>' +
-  '<div class="role" style="color:#166534;">Jeff (POLR HQ Admin)<\/div>' +
-  '<p style="color:#374151;">Full ministry operations authority. Approves all stage promotions for Ambassador and Group Chair. Controls POLR HQ ministry decisions. Platform access: ministry ops only — not Platform Business suite.<\/p>' +
+  '<h3 style="color:#15803d;">HOPE HQ — Executive Director<\/h3>' +
+  '<div class="role" style="color:#166534;">Chuck Edwards (HOPE HQ Admin)<\/div>' +
+  '<p style="color:#374151;">Full ministry operations authority. Approves all stage promotions for Ambassador and Group Chair. Controls HOPE HQ ministry decisions. Platform access: ministry ops only — not Platform Business suite.<\/p>' +
   '<\/div>' +
 
   '<div class="connector">↓<\/div>' +
@@ -1393,7 +1394,7 @@ function generateChainOfCommandDiagram() {
   }).join('') +
   '<\/div><\/div>' +
 
-  '<div class="fn">POLR Network Platform — Chain of Command — Path of Life Recovery, Inc. — {POLR_WEBSITE} — Confidential. Internal use only.<\/div>' +
+  '<div class="fn">HOPE Recovery Network Platform — Chain of Command — HOPE Recovery, Inc. — hopenetwork.com — Confidential. Internal use only.<\/div>' +
   '<\/body><\/html>';
   var w=window.open('','_blank','width=1200,height=900');
   if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
@@ -1401,14 +1402,14 @@ function generateChainOfCommandDiagram() {
 
 function savePlatformState(state) {
   // Write-through cache: always save locally, also sync backend when live
-  try { localStorage.setItem('polr_platform_state', JSON.stringify(state)); } catch {}
+  try { localStorage.setItem('hope_platform_state', JSON.stringify(state)); } catch {}
   // Background sync to backend (non-blocking, best-effort)
   // Individual mutations (members, housing, grants) use their own API calls;
   // this keeps localStorage as the offline fallback.
 }
 function getPublishedTestimonies() {
   try {
-    var state = JSON.parse(localStorage.getItem('polr_platform_state')||'{}');
+    var state = JSON.parse(localStorage.getItem('hope_platform_state')||'{}');
     return state.publishedTestimonies || [];
   } catch { return []; }
 }
@@ -1566,7 +1567,7 @@ function PlatformPage({
       color: 'var(--gold2)',
       letterSpacing: '0.08em'
     }
-  }, "POLR Network"), /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery Network"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: '0.7rem',
       color: 'rgba(255,255,255,0.35)'
@@ -1615,7 +1616,7 @@ function PlatformPage({
       padding: '0.1rem 0.3rem',
       borderRadius: 3
     }
-  }, "POLRHQ"), " with your credentials."), /*#__PURE__*/React.createElement("div", {
+  }, "HOPEHQ"), " with your credentials."), /*#__PURE__*/React.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/React.createElement("label", {
     className: "form-label"
@@ -1728,7 +1729,7 @@ function PlatformPage({
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: ""
-  }, "Select your campus..."), /*#__PURE__*/React.createElement("option", null, "POLR Place \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Larose"), /*#__PURE__*/React.createElement("option", null, "POLR Place @ Port Allen"))), /*#__PURE__*/React.createElement("div", {
+  }, "Select your campus..."), /*#__PURE__*/React.createElement("option", null, "HOPE Place \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Thibodaux"), /*#__PURE__*/React.createElement("option", null, "HOP \u2014 Larose"), /*#__PURE__*/React.createElement("option", null, "HOPE Place Port Allen"))), /*#__PURE__*/React.createElement("div", {
     style: {
       background: 'var(--cream2)',
       border: '1px solid var(--border)',
@@ -1762,6 +1763,7 @@ function PlatformPage({
         padding: 0
       },
       onClick: function () {
+        window.scrollTo({top:0,behavior:'smooth'});
         return setPage('legal');
       }
     }, "View \u2192")));
@@ -1798,7 +1800,7 @@ function PlatformPage({
     }
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "guest-ck"
-  }, "I understand POLR is a Christ-centered recovery ministry and agree to the Terms and Medical Disclaimer."))), /*#__PURE__*/React.createElement("button", {
+  }, "I understand HOPE is a Christ-centered recovery ministry and agree to the Terms and Medical Disclaimer."))), /*#__PURE__*/React.createElement("button", {
     id: "guest-login-btn",
     className: "auth-btn",
     disabled: true,
@@ -2018,7 +2020,7 @@ function AIGuidancePanel({
           'Check In':'residents','Follow Up':'residents','Schedule':'my-calendar',
           'Complete':'house-mother','Confirm':'workforce','Remind':'workforce',
           'Respond':'employers','Update':'growth-profile','Read Now':'step-lessons',
-          'View Progress':'my-progress','Find Meeting':'guest-meetings','Read':'walkwell',
+          'View Progress':'my-progress','Find Meeting':'guest-meetings','Read':'hopeinmotion',
           'Journal':'guest-journal','Connect':'guest-mentor'
         };
         return markDone(i, navMap[task.action]);
@@ -2219,8 +2221,8 @@ function ResourcesLibrary({ platform, update, toast, session }) {
 
   const CATS = ['all','Step Work','Housing','Employment','Legal Aid','Health & Recovery','Faith & Scripture','Forms & Documents'];
   const DEFAULTS = [
-    { id:'r1', title:'POLR Member Binder', cat:'Step Work', type:'PDF', description:'Complete member resource packet with all 12 steps, reflections, and prayers.', url:'https://{POLR_WEBSITE}/member-binder', downloads:142, addedBy:'Admin', addedAt:'2024-01-01' },
-    { id:'r2', title:'Housing Application Form', cat:'Housing', type:'Form', description:'Official POLR House application — print or complete digitally.', url:'https://{POLR_WEBSITE}/housing-application', downloads:87, addedBy:'Admin', addedAt:'2024-01-01' },
+    { id:'r1', title:'HOPE Member Binder', cat:'Step Work', type:'PDF', description:'Complete member resource packet with all 12 steps, reflections, and prayers.', url:'https://hopenetwork.com/member-binder', downloads:142, addedBy:'Admin', addedAt:'2024-01-01' },
+    { id:'r2', title:'Housing Application Form', cat:'Housing', type:'Form', description:'Official HOPE House application — print or complete digitally.', url:'https://hopenetwork.com/housing-application', downloads:87, addedBy:'Admin', addedAt:'2024-01-01' },
     { id:'r3', title:'Recovery Employment Guide', cat:'Employment', type:'PDF', description:'Resume tips, interview prep, and employer contact list for members.', url:'#', downloads:64, addedBy:'Admin', addedAt:'2024-01-01' },
     { id:'r4', title:'SAMHSA National Helpline', cat:'Health & Recovery', type:'Link', description:'Free confidential treatment referral — 1-800-662-4357. 24/7.', url:'https://www.samhsa.gov/find-help/national-helpline', downloads:29, addedBy:'Admin', addedAt:'2024-01-01' },
     { id:'r5', title:'Louisiana Legal Aid', cat:'Legal Aid', type:'Link', description:'Free civil legal services for low-income Louisiana residents.', url:'https://legalservicesla.org', downloads:18, addedBy:'Admin', addedAt:'2024-01-01' },
@@ -2326,7 +2328,7 @@ function NotificationsCenter({ platform, update, toast, session }) {
     { id:'action', icon:'👆', label:'Action Required', color:'var(--l1)' },
   ];
 
-  const TARGETS = ['All Members','Campus Leaders Only','Group Chairs','Specific Campus: Thibodaux','Specific Campus: Port Allen','Members 0-30 Days Sober'];
+  const TARGETS = ['All Members','Campus Leaders Only','Group Chairs','Specific Campus: Port Allen','Specific Campus: Port Allen','Members 0-30 Days Sober'];
 
   const enablePush = () => {
     if (!('Notification' in window)) { toast('Browser does not support push notifications'); return; }
@@ -2605,9 +2607,9 @@ function EventsBuilder({ platform, update, toast, session }) {
   };
 
   var shareEvent = function(evt) {
-    var text = evt.title + ' — ' + (evt.date || '') + (evt.startTime ? ' at ' + evt.startTime : '') + (evt.location ? ' · ' + evt.location : '') + ' · Path of Life Recovery';
+    var text = evt.title + ' — ' + (evt.date || '') + (evt.startTime ? ' at ' + evt.startTime : '') + (evt.location ? ' · ' + evt.location : '') + ' · HOPE Recovery: Hold on Pain Ends';
     if (navigator.share) {
-      navigator.share({ title: evt.title, text: text, url: 'https://{POLR_WEBSITE}' }).catch(function(){});
+      navigator.share({ title: evt.title, text: text, url: 'https://hopenetwork.com' }).catch(function(){});
     } else {
       navigator.clipboard && navigator.clipboard.writeText(text);
       toast({ icon:'✨', title:'Copied to clipboard', body:'Share link ready to paste' });
@@ -2674,7 +2676,7 @@ function EventsBuilder({ platform, update, toast, session }) {
             React.createElement('div', { style:{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'var(--dmuted)', marginBottom:'0.3rem' } }, 'Campus'),
             React.createElement('select', { value:form.campus, onChange:setFEvt('campus'),
               style:{ width:'100%', padding:'0.65rem 0.75rem', borderRadius:8, border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dtxt)', fontSize:'0.88rem', outline:'none' } },
-              ['All','POLR Place Thibodaux','POLR Place @ Port Allen','HOP Thibodaux'].map(function(c){ return React.createElement('option',{key:c},c); })
+              ['All','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen'].map(function(c){ return React.createElement('option',{key:c},c); })
             )
           ),
 
@@ -2956,9 +2958,9 @@ function MembersFullPanel({ platform, update, toast, session }) {
   // ── LIVE: member list from API-hydrated platform.members ──
   // SAMPLE_MEMBERS kept only as local fallback if no API data yet
   var SAMPLE_MEMBERS = [
-    { id:'m1', name:'Jeff Walthers', username:'POLRHQ', role:'admin', level:0, status:'Active', campus:'Thibodaux', sobrietyDate:'2020-06-01' },
-    { id:'m2', name:'James W.', username:'jamesw', role:'member', level:5, status:'Active', campus:'Thibodaux' },
-    { id:'m3', name:'Sarah M.', username:'sarahm', role:'member', level:5, status:'Active', campus:'POLR Place @ Port Allen' },
+    { id:'m1', name:'Chuck Edwards', username:'HOPEHQ', role:'admin', level:0, status:'Active', campus:'Port Allen', sobrietyDate:'2020-06-01' },
+    { id:'m2', name:'James W.', username:'jamesw', role:'member', level:5, status:'Active', campus:'Port Allen' },
+    { id:'m3', name:'Sarah M.', username:'sarahm', role:'member', level:5, status:'Active', campus:'HOPE Place Port Allen' },
   ];
 
   // Use API members when hydrated, show sample only before first load
@@ -2984,7 +2986,7 @@ function MembersFullPanel({ platform, update, toast, session }) {
   };
 
   var levelLabel = function(l) {
-    return ['HQ Admin','Ambassador','POLR Place Leader','Group Chair','Workforce','Member','Guest'][l] || 'Member';
+    return ['HQ Admin','Ambassador','HOPE Place Leader','Group Chair','Workforce','Member','Guest'][l] || 'Member';
   };
 
   var levelColor = function(l) {
@@ -3229,7 +3231,7 @@ function MembersFullPanel({ platform, update, toast, session }) {
 
 
 // ═══════════════════════════════════════════════════════════
-// POLR LESSON BUILDER — Full structured lesson editor
+// HOPE LESSON BUILDER — Full structured lesson editor
 // ═══════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
 // KJV SCRIPTURE LIBRARY — Recovery-indexed verse database
@@ -3378,10 +3380,10 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
   var emptyLesson = function() {
     return {
       id: Date.now().toString(), stepNum: selStep, version: 1,
-      title: '', author: (session&&session.name)||'POLR Staff', duration: '45 min',
+      title: '', author: (session&&session.name)||'HOPE Staff', duration: '45 min',
       status: 'draft', // draft | review | doctrine_review | approved | archived
-      header: { orgName:'Path of Life Recovery', stepLabel:'Step '+selStep, date:new Date().toLocaleDateString() },
-      footer: { text:'"Walk well." — {POLR_NAME} · {POLR_WEBSITE} · {POLR_PHONE}', show:true },
+      header: { orgName:'HOPE Recovery: Hold on Pain Ends', stepLabel:'Step '+selStep, date:new Date().toLocaleDateString() },
+      footer: { text:'"Walk it out faithfully." — HOPE Recovery · hopenetwork.com · 225-333-0330', show:true },
       sections: [
         { id:'s1',  type:'scripture',   label:'Key Scripture',          content:'', ref:'', scriptureId:'', order:0 },
         { id:'s2',  type:'reflection',  label:'POLR Opening Reflection', content:'', order:1 },
@@ -3496,8 +3498,8 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
         insight:'This section should shift perspective — not just add information. What does Step '+selStep+' look like from God\'s vantage point?',
         truth:'A doctrinal statement simple enough to memorize. One sentence. State it clearly, repeat it twice.',
         principle:'Practical truth that changes behavior. If they can\'t apply it Monday morning, simplify it.',
-        quote:'Choose a quote that a person with 30 days sober would understand — not just someone with 30 years.',
-        example:'Use a real story from POLR ministry when possible. Abstract examples don\'t land in recovery rooms.',
+        quote:'Choose a quote that a person with 30 days sober would understand — not just someone with 21 years.',
+        example:'Use a real story from HOPE ministry when possible. Abstract examples don\'t land in recovery rooms.',
         reality:'Name the hardest part of this step honestly. Sugarcoating Step '+selStep+' creates false confidence.',
         observation:'What patterns do you see in members who work this step well vs. those who resist it?',
         hope:'End with what\'s possible, not just what\'s required. Recovery vision must be painted.',
@@ -3600,7 +3602,19 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
     var label={draft:'Saved draft',review:'Submitted for review',approved:'Approved & published',archived:'Archived'}[newStatus||'draft']||'Saved';
     toast({icon:'✅',title:label,body:'"'+lesson.title+'" — Step '+selStep});
     if(newStatus==='approved'||newStatus==='review'){setMode('list');setEditing(null);}
-  };
+  
+    // Wire to Railway backend
+    var _tok = sessionStorage.getItem('hope_session') || localStorage.getItem('hope_session');
+    var _parsed = _tok ? (function(){try{return JSON.parse(_tok);}catch(e){return null;}}()) : null;
+    var _token = _parsed && (_parsed.token || _parsed.jwt);
+    if (_token) {
+      fetch(window.POLR_API_BASE + '/lms/lesson-submission', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+_token},
+        body: JSON.stringify({lesson_id:toSave.id,step_number:selStep,title:toSave.title,status:newStatus||toSave.status||'draft',content:toSave.sections||[],submitted_at:new Date().toISOString()})
+      }).then(function(r){return r.json();}).then(function(d){if(d&&d.id)console.log('[LMS] Synced to Railway:',d.id);}).catch(function(e){console.warn('[LMS] Backend sync failed (offline ok):',e.message);});
+    }
+};
 
   var SECTION_COLORS = {scripture:'#c8913a',reflection:'#3b9ef5',insight:'#2ec4a0',truth:'#5bc46e',principle:'#8b7cf8',quote:'#d4a853',example:'#e8704a',reality:'#fc8181',observation:'#8899b0',hope:'#5bc46e',reflect:'#3b9ef5',final:'#c8913a',video:'#3b9ef5',image:'#2ec4a0',quiz:'#8b7cf8'};
   var STATUS_META = {draft:{c:'#f6ad55',bg:'rgba(246,173,85,0.1)',label:'Draft'},review:{c:'var(--l2)',bg:'rgba(59,158,245,0.1)',label:'Under Review'},doctrine_review:{c:'var(--l1)',bg:'rgba(139,124,248,0.1)',label:'Doctrine Review'},approved:{c:'var(--l5)',bg:'rgba(91,196,110,0.1)',label:'Approved'},archived:{c:'var(--dmuted)',bg:'rgba(255,255,255,0.04)',label:'Archived'}};
@@ -3698,7 +3712,7 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
           React.createElement('div',{style:{fontSize:'0.6rem',letterSpacing:'0.22em',textTransform:'uppercase',color:'#888',marginBottom:'0.3rem'}},'PATH OF LIFE RECOVERY'),
           React.createElement('div',{style:{fontSize:'0.7rem',fontWeight:700,color:'#c8913a',letterSpacing:'0.15em',textTransform:'uppercase',marginBottom:'0.75rem'}},'STEP '+lesson.stepNum+' · '+(isLeader?'LEADER GUIDE':'STUDENT WORKBOOK')),
           React.createElement('h1',{style:{fontFamily:'Georgia,serif',fontSize:'1.9rem',fontWeight:700,color:'#0c1a2e',margin:'0 0 0.3rem'}},lesson.title),
-          React.createElement('div',{style:{fontSize:'0.75rem',color:'#888',letterSpacing:'0.06em'}},(lesson.author||'POLR Staff'),' · '+(lesson.duration||'45 min'))
+          React.createElement('div',{style:{fontSize:'0.75rem',color:'#888',letterSpacing:'0.06em'}},(lesson.author||'HOPE Staff'),' · '+(lesson.duration||'45 min'))
         ),
         // Sections
         sorted.map(function(sec){
@@ -3887,7 +3901,7 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
         }),
         React.createElement('div',{style:{marginTop:'1rem',padding:'0.75rem',background:'rgba(200,145,58,0.06)',borderRadius:8,fontSize:'0.78rem',color:'var(--dmuted)',lineHeight:1.6}},
           '💡 ',
-          scoreData.total < 50 ? 'Fill at least 6 POLR sections and add 5+ focus words to reach publishable quality.' :
+          scoreData.total < 50 ? 'Fill at least 6 HOPE sections and add 5+ focus words to reach publishable quality.' :
           scoreData.total < 80 ? 'Add more section depth and ensure focus words have weight 2-3 markers. Include a journal prompt.' :
           'Lesson is publication-ready. Submit for approval when complete.'
         )
@@ -3960,7 +3974,7 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
     React.createElement('div',{className:'d-card',style:{marginBottom:'0.85rem'}},
       React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'🏛️ HEADER')),
       React.createElement('div',{className:'d-card-body',style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'0.85rem'}},
-        [['Lesson Title *','title','Enter lesson title...'],['Author','author','POLR Staff'],['Duration','duration','45 min']].map(function(row){
+        [['Lesson Title *','title','Enter lesson title...'],['Author','author','HOPE Staff'],['Duration','duration','45 min']].map(function(row){
           return React.createElement('div',{key:row[0]},
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.08em'}},row[0]),
             inp(lesson[row[1]],function(e){setL([row[1]],e.target.value);},row[2],false)
@@ -3969,10 +3983,10 @@ function DiscipleshipEngine({ platform, update, toast, session }) {
       )
     ),
 
-    // POLR Sections — draggable
+    // HOPE Sections — draggable
     React.createElement('div',{style:{marginBottom:'0.85rem'}},
       React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.1em',fontWeight:700,marginBottom:'0.75rem',display:'flex',gap:'0.5rem',alignItems:'center'}},
-        React.createElement('span',null,'⠿ POLR DOCTRINAL SECTIONS'),
+        React.createElement('span',null,'⠿ HOPE DOCTRINAL SECTIONS'),
         React.createElement('span',{style:{color:'var(--ddim)',fontWeight:400}},'drag to reorder · collapse · assist per section')
       ),
       lesson.sections.slice().sort(function(a,b){return a.order-b.order;}).map(function(sec){
@@ -4268,10 +4282,10 @@ function InterventionConsole({ platform, update, updateInList, toast, session })
   var _s7 = useState(''), customMsg = _s7[0], setCustomMsg = _s7[1];
 
   var SAMPLE_ALERTS = [
-    { id:'a1', member:'Sarah M.', severity:'critical', type:'relapse-risk', note:'3 consecutive missed meetings. Last login 8 days ago. Step work stalled at Step 2.', ts: Date.now()-3600000, recoveryStage:'Early Recovery (45 days)', attendanceTrend:'↓ 80% drop this month', riskScore:87, emotionalIndicators:['Withdrawal from community','Missed calls to pastor or mentor','Social media activity increase (isolation pattern)'], sobrietyDate:'2025-09-10', campus:'POLR Place Thibodaux' },
-    { id:'a2', member:'James K.', severity:'critical', type:'relapse-risk', note:'Pattern: weekend absences. Family crisis reported by House Mother.', ts: Date.now()-7200000, recoveryStage:'Active Recovery (8 months)', attendanceTrend:'↓ Weekend attendance 0%', riskScore:74, emotionalIndicators:['Family stress trigger active','Reported financial pressure','Missed mentor check-in'], sobrietyDate:'2024-07-20', campus:'POLR Place Thibodaux' },
-    { id:'a3', member:'Devon S.', severity:'warning', type:'milestone', note:'Approaching 30-day milestone in 3 days. First major milestone — needs recognition.', ts: Date.now()-10800000, recoveryStage:'Early Recovery (27 days)', attendanceTrend:'↑ Consistent attendance', riskScore:18, emotionalIndicators:['Positive engagement','Asking questions in group'], sobrietyDate:'2025-12-25', campus:'POLR Place @ Port Allen' },
-    { id:'a4', member:'Marcus T.', severity:'warning', type:'attendance', note:'Attendance dropped from weekly to bi-weekly over past 3 weeks.', ts: Date.now()-14400000, recoveryStage:'Active Recovery (6 months)', attendanceTrend:'↓ 50% reduction', riskScore:51, emotionalIndicators:['No specific trigger identified','New work schedule reported'], sobrietyDate:'2025-06-01', campus:'POLR Place @ HOP Thibodaux' },
+    { id:'a1', member:'Sarah M.', severity:'critical', type:'relapse-risk', note:'3 consecutive missed meetings. Last login 8 days ago. Step work stalled at Step 2.', ts: Date.now()-3600000, recoveryStage:'Early Recovery (45 days)', attendanceTrend:'↓ 80% drop this month', riskScore:87, emotionalIndicators:['Withdrawal from community','Missed calls to pastor or mentor','Social media activity increase (isolation pattern)'], sobrietyDate:'2025-09-10', campus:'HOPE Place Port Allen' },
+    { id:'a2', member:'James K.', severity:'critical', type:'relapse-risk', note:'Pattern: weekend absences. Family crisis reported by House Mother.', ts: Date.now()-7200000, recoveryStage:'Active Recovery (8 months)', attendanceTrend:'↓ Weekend attendance 0%', riskScore:74, emotionalIndicators:['Family stress trigger active','Reported financial pressure','Missed mentor check-in'], sobrietyDate:'2024-07-20', campus:'HOPE Place Port Allen' },
+    { id:'a3', member:'Devon S.', severity:'warning', type:'milestone', note:'Approaching 30-day milestone in 3 days. First major milestone — needs recognition.', ts: Date.now()-10800000, recoveryStage:'Early Recovery (27 days)', attendanceTrend:'↑ Consistent attendance', riskScore:18, emotionalIndicators:['Positive engagement','Asking questions in group'], sobrietyDate:'2025-12-25', campus:'HOPE Place Port Allen' },
+    { id:'a4', member:'Marcus T.', severity:'warning', type:'attendance', note:'Attendance dropped from weekly to bi-weekly over past 3 weeks.', ts: Date.now()-14400000, recoveryStage:'Active Recovery (6 months)', attendanceTrend:'↓ 50% reduction', riskScore:51, emotionalIndicators:['No specific trigger identified','New work schedule reported'], sobrietyDate:'2025-06-01', campus:'HOPE Place Port Allen' },
   ];
 
   var alerts = SAMPLE_ALERTS.concat(platform.alerts || []);
@@ -4473,7 +4487,7 @@ function InterventionConsole({ platform, update, updateInList, toast, session })
           ['💬 Send SMS','var(--l2)',function(){
             var phone = a.phone || a.memberPhone || (platform.houseResidents||[]).find(function(r){return r.name===a.member||r.id===a.residentId;})?.phone || null;
             var actor = (session&&session.username)||'staff';
-            var msg = 'Hi '+a.member+', this is POLR leadership. We are thinking of you and want to connect. Please reach out when you can.';
+            var msg = 'Hi '+a.member+', this is HOPE leadership. We are thinking of you and want to connect. Please reach out when you can.';
             if(phone){
               window.open('sms:'+phone.replace(/[^0-9+]/g,'')+'?body='+encodeURIComponent(msg),'_self');
               toast({icon:'💬',title:'SMS opened — '+a.member});
@@ -4620,7 +4634,7 @@ var HM_EXTRA_TABS = [
 
 // ─── Weekly Development Report ───
 // ══════════════════════════════════════════════════════════════════════
-// POLR CENTRAL RESIDENT INTELLIGENCE STORE
+// HOPE CENTRAL RESIDENT INTELLIGENCE STORE
 // Single source of truth — reads all existing engines, writes to one object
 // ══════════════════════════════════════════════════════════════════════
 
@@ -4879,8 +4893,8 @@ function WorkforceBuilder({ platform, addToList, removeFromList, updateInList, t
 
   var employers = platform.employers || [
     {id:'e1',name:'BR Facility Services',openings:3,type:'Warehouse/Forklift',location:'Baton Rouge'},
-    {id:'e2',name:'Thibodaux Regional Health',openings:2,type:'Environmental Services',location:'Thibodaux'},
-    {id:'e3',name:'Louisiana Sugarcane Co.',openings:4,type:'Agricultural Labor',location:'Thibodaux'},
+    {id:'e2',name:'Baton Rouge General Health',openings:2,type:'Environmental Services',location:'Port Allen'},
+    {id:'e3',name:'Port Allen Industries',openings:4,type:'Agricultural Labor',location:'Port Allen'},
     {id:'e4',name:'Coastal Workforce Solutions',openings:2,type:'Construction',location:'Houma'},
   ];
 
@@ -6467,9 +6481,9 @@ function HouseMotherDashboard({ platform, update, updateInList, toast, session }
         React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'CRISIS CONTACT CHAIN')),
         React.createElement('div',{className:'d-card-body'},
           [
-            {name:'POLR Director',title:'Director & Founder',phone:'{POLR_PHONE}',role:'primary',priority:'#1 — Contact Immediately'},
-            {name:'POLR Place Leader',title:'Group Chair on Duty',phone:'On call',role:'secondary',priority:'#2 — Simultaneous'},
-            {name:'Admin Team',title:'{POLR_EMAIL}',phone:'Notification',role:'secondary',priority:'#3 — Simultaneous'},
+            {name:'HOPE Director',title:'Director & Founder',phone:'225-333-0330',role:'primary',priority:'#1 — Contact Immediately'},
+            {name:'HOPE Place Leader',title:'Group Chair on Duty',phone:'On call',role:'secondary',priority:'#2 — Simultaneous'},
+            {name:'Admin Team',title:'bro.chuck.edwards@gmail.com',phone:'Notification',role:'secondary',priority:'#3 — Simultaneous'},
             {name:'911 / Emergency',title:'Law Enforcement / EMS',phone:'911',role:'emergency',priority:'If immediate safety risk'},
           ].map(function(contact,i){
             return React.createElement('div',{key:i,style:{display:'flex',justifyContent:'space-between',padding:'0.85rem 0',borderBottom:'1px solid var(--bdr)',alignItems:'center'}},
@@ -6493,7 +6507,7 @@ function HouseMotherDashboard({ platform, update, updateInList, toast, session }
 
   // ── Overview Panel ──
   function HouseOverview() {
-    var houses = platform.housing || [{id:'h1',name:'House Alpha',type:'Men',beds:4,occupied:4,location:'Thibodaux'},{id:'h2',name:'House Beta',type:'Women',beds:4,occupied:3,location:'Thibodaux'},{id:'h3',name:'House Gamma',type:'Mixed',beds:5,occupied:4,location:'Port Allen'}];
+    var houses = platform.housing || [{id:'h1',name:'House Alpha',type:'Men',beds:4,occupied:4,location:'Port Allen'},{id:'h2',name:'House Beta',type:'Women',beds:4,occupied:3,location:'Port Allen'},{id:'h3',name:'House Gamma',type:'Mixed',beds:5,occupied:4,location:'Port Allen'}];
     return React.createElement('div',null,
       React.createElement('div',{style:{marginBottom:'1.25rem'}},
         React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',fontFamily:'var(--font-mono)',marginBottom:'0.2rem'}},'HOUSE MOTHER DASHBOARD'),
@@ -6580,7 +6594,7 @@ function HouseMotherDashboard({ platform, update, updateInList, toast, session }
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// POLR LIFE RESTORATION PIPELINE
+// HOPE LIFE RESTORATION PIPELINE
 // 10-Stage State Machine · Suggestion Engine · HQ Approval · Velocity
 // ══════════════════════════════════════════════════════════════════════
 
@@ -6677,7 +6691,7 @@ var evaluatePromotion = function(r, weeklyReports, currentStage) {
   };
 };
 
-// ─── POLR Pipeline Console ───
+// ─── HOPE Pipeline Console ───
 function RestorationPipeline({ platform, update, toast, session }) {
   var _p1 = useState('board'),     view = _p1[0], setView = _p1[1];
   var _p2 = useState(null),        selResident = _p2[0], setSelResident = _p2[1];
@@ -7210,7 +7224,7 @@ function RestorationPipeline({ platform, update, toast, session }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// POLR PROPERTY PARTNERSHIP PLATFORM
+// HOPE PROPERTY PARTNERSHIP PLATFORM
 // Mission Housing · Tax Estimator · Partner Portal · Analytics · Honor System
 // ══════════════════════════════════════════════════════════════════════
 
@@ -7268,7 +7282,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
   var _p4 = useState(false),        showRegister = _p4[0], setShowRegister = _p4[1];
   var _p5 = useState({
     partnerName:'', contactName:'', phone:'', email:'', propertyAddress:'',
-    city:'Thibodaux', state:'LA', beds:2, bathrooms:1, squareFt:'',
+    city:'Port Allen', state:'LA', beds:2, bathrooms:1, squareFt:'',
     contributionPath:'', marketRent:'', partnerRent:'', occupancyMonths:12,
     propertyValue:'', sponsorName:'', jobLocation:'', reunificationTarget:'',
     notes:''
@@ -7278,8 +7292,8 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
   // DEMO DATA — replaced on first real data import
   // DEMO DATA — replaced on first real import
   var SEED_PARTNERS = [
-    {id:'pp1', partnerName:'Thibodaux Properties LLC', contactName:'Robert Guidry', phone:'985-555-1001', email:'rguidry@thibprops.com',
-     propertyAddress:'814 St. Mary St', city:'Thibodaux', state:'LA', beds:3, bathrooms:2, squareFt:'1200',
+    {id:'pp1', partnerName:'Port Allen Properties LLC', contactName:'Robert Guidry', phone:'985-555-1001', email:'bro.chuck.edwards@gmail.com',
+     propertyAddress:'814 St. Mary St', city:'Port Allen', state:'LA', beds:3, bathrooms:2, squareFt:'1200',
      contributionPath:'mission-discount', marketRent:'950', partnerRent:'500', occupancyMonths:12,
      tier:'ambassador', yearsActive:2, livesHoused:8, reunifications:2, jobsEnabled:5, graduates:3,
      joinedAt:'2024-02-01', active:true, adoptedBy:'',
@@ -7302,13 +7316,13 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
      leaseExpiry:'2027-02-01', rentCapPct:3, rightOfFirstRefusal:true,
      resaleDocReady:true, lastInspection:'2026-02-15',
     },
-    {id:'pp2', partnerName:'Mary Trosclair', contactName:'Mary Trosclair', phone:'985-555-2002', email:'{POLR_EMAIL}',
-     propertyAddress:'2201 Canal Blvd', city:'Thibodaux', state:'LA', beds:2, bathrooms:1, squareFt:'900',
+    {id:'pp2', partnerName:'Mary Trosclair', contactName:'Mary Trosclair', phone:'985-555-2002', email:'bro.chuck.edwards@gmail.com',
+     propertyAddress:'2201 Canal Blvd', city:'Port Allen', state:'LA', beds:2, bathrooms:1, squareFt:'900',
      contributionPath:'charitable-donation', marketRent:'800', partnerRent:'0', occupancyMonths:10,
      tier:'legacy', yearsActive:4, livesHoused:14, reunifications:4, jobsEnabled:9, graduates:6,
-     joinedAt:'2022-06-15', active:true, adoptedBy:'First Baptist Church Thibodaux'},
+     joinedAt:'2022-06-15', active:true, adoptedBy:'First Baptist Church Port Allen'},
     {id:'pp3', partnerName:'Coastal Workforce Group', contactName:'Andre Pitre', phone:'985-555-3003', email:'apitre@coastalwf.com',
-     propertyAddress:'445 N. Canal Blvd', city:'Thibodaux', state:'LA', beds:4, bathrooms:2, squareFt:'1500',
+     propertyAddress:'445 N. Canal Blvd', city:'Port Allen', state:'LA', beds:4, bathrooms:2, squareFt:'1500',
      contributionPath:'workforce-transition', marketRent:'1200', partnerRent:'700', occupancyMonths:8,
      tier:'standard', yearsActive:1, livesHoused:4, reunifications:0, jobsEnabled:4, graduates:1,
      joinedAt:'2025-04-01', active:true, adoptedBy:''},
@@ -7352,7 +7366,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
     });
     update('propertyPartners', [...partners, newPartner]);
     setShowRegister(false);
-    setRegForm({partnerName:'',contactName:'',phone:'',email:'',propertyAddress:'',city:'Thibodaux',state:'LA',beds:2,bathrooms:1,squareFt:'',contributionPath:'',marketRent:'',partnerRent:'',occupancyMonths:12,propertyValue:'',sponsorName:'',jobLocation:'',reunificationTarget:'',notes:''});
+    setRegForm({partnerName:'',contactName:'',phone:'',email:'',propertyAddress:'',city:'Port Allen',state:'LA',beds:2,bathrooms:1,squareFt:'',contributionPath:'',marketRent:'',partnerRent:'',occupancyMonths:12,propertyValue:'',sponsorName:'',jobLocation:'',reunificationTarget:'',notes:''});
     toast({icon:'✅',title:'Property partner registered',body:regForm.partnerName+' added to the network'});
   };
 
@@ -7856,8 +7870,8 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
         React.createElement('h2',{style:{fontFamily:'var(--font-serif)',color:'var(--dtxt)',fontWeight:600}},'Vacancy Guarantee Program')
       ),
       React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(46,196,160,0.06)',border:'1px solid rgba(46,196,160,0.18)',borderRadius:12,marginBottom:'1.25rem'}},
-        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1rem',color:'var(--dtxt)',marginBottom:'0.5rem',fontWeight:600}},'The POLR Occupancy Promise'),
-        React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dmuted)',lineHeight:1.75}},'When a resident leaves, POLR replaces within ',React.createElement('strong',{style:{color:'var(--l4)'}},'7 days'),
+        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1rem',color:'var(--dtxt)',marginBottom:'0.5rem',fontWeight:600}},'The HOPE Occupancy Promise'),
+        React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dmuted)',lineHeight:1.75}},'When a resident leaves, HOPE replaces within ',React.createElement('strong',{style:{color:'var(--l4)'}},'7 days'),
           ' or pays gap rent directly to the partner. This converts your property from a risk asset to a ',React.createElement('strong',{style:{color:'var(--l4)'}},'guaranteed income stream'),
           ' — more predictable than any retail tenant.')
       ),
@@ -8021,7 +8035,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
       ),
       React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.85rem',marginBottom:'1.25rem'}},
         [
-          ['$'+totalInvested.toLocaleString(),'Total POLR Invested','var(--gold)'],
+          ['$'+totalInvested.toLocaleString(),'Total HOPE Invested','var(--gold)'],
           [allImprovements.filter(function(i){return i.status==='complete';}).length,'Completed Projects','var(--l5)'],
           [scheduled.length,'Upcoming Scheduled','var(--l2)'],
         ].map(function(row){
@@ -8094,7 +8108,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
       React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(139,124,248,0.06)',border:'1px solid rgba(139,124,248,0.18)',borderRadius:12,marginBottom:'1.25rem'}},
         React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1rem',color:'var(--dtxt)',fontWeight:600,marginBottom:'0.5rem'}},'Instant Repair. No Claims. No Waiting.'),
         React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dmuted)',lineHeight:1.75}},
-          'The POLR Property Assurance Fund is a pooled reserve funded by a portion of housing payments. When damage occurs, repairs are handled ',
+          'The HOPE Property Assurance Fund is a pooled reserve funded by a portion of housing payments. When damage occurs, repairs are handled ',
           React.createElement('strong',{style:{color:'var(--l1)'}},'immediately from the fund'),
           ' — no insurance claim wait, no friction, no landlord frustration. Insurance backs the fund for catastrophic events only, keeping premiums low.'
         )
@@ -8181,9 +8195,9 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
         ),
         React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(59,158,245,0.06)',border:'1px solid rgba(59,158,245,0.18)',borderRadius:12}},
           React.createElement('div',{style:{fontWeight:700,color:'var(--l2)',marginBottom:'0.5rem',fontFamily:'var(--font-serif)'}},'Resale Value Documentation'),
-          React.createElement('div',{style:{fontSize:'0.85rem',color:'var(--dmuted)',lineHeight:1.7}},'When a partner sells, POLR provides a full ',React.createElement('strong',{style:{color:'var(--l2)'}},'property performance portfolio'),' — occupancy proof, revenue stability, upgrade documentation, and compliance history. Demonstrates institutional-grade tenancy to any buyer.'),
+          React.createElement('div',{style:{fontSize:'0.85rem',color:'var(--dmuted)',lineHeight:1.7}},'When a partner sells, HOPE provides a full ',React.createElement('strong',{style:{color:'var(--l2)'}},'property performance portfolio'),' — occupancy proof, revenue stability, upgrade documentation, and compliance history. Demonstrates institutional-grade tenancy to any buyer.'),
           React.createElement('div',{style:{marginTop:'0.85rem',display:'flex',flexDirection:'column',gap:'0.4rem'}},
-            [['✓ Occupancy records — 12 month rolling','var(--l5)'],['✓ Revenue stability certificate','var(--l5)'],['✓ POLR improvement investment summary','var(--gold)'],['✓ Incident-free compliance log','var(--l4)'],['✓ Lease continuity documentation','var(--l2)']].map(function(item){
+            [['✓ Occupancy records — 12 month rolling','var(--l5)'],['✓ Revenue stability certificate','var(--l5)'],['✓ HOPE improvement investment summary','var(--gold)'],['✓ Incident-free compliance log','var(--l4)'],['✓ Lease continuity documentation','var(--l2)']].map(function(item){
               return React.createElement('div',{key:item[0],style:{fontSize:'0.8rem',color:item[1],fontWeight:500}},item[0]);
             })
           )
@@ -8225,7 +8239,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
       React.createElement('div',{style:{background:'linear-gradient(135deg, rgba(200,145,58,0.12) 0%, rgba(200,145,58,0.04) 100%)',border:'1px solid rgba(200,145,58,0.2)',borderRadius:14,padding:'2rem',marginBottom:'1.5rem',textAlign:'center'}},
         React.createElement('div',{style:{fontSize:'2.5rem',marginBottom:'0.75rem'}},'🏡'),
         React.createElement('h3',{style:{fontFamily:'var(--font-serif)',color:'var(--gold)',fontSize:'1.4rem',fontWeight:700,marginBottom:'0.5rem'}},'Adopt A Recovery Home'),
-        React.createElement('p',{style:{color:'var(--dmuted)',fontSize:'0.9rem',lineHeight:1.7,maxWidth:580,margin:'0 auto 1.25rem'}},'A local business, church, or individual sponsors rent, utilities, and furnishings for a POLR recovery home. The home bears their name. They receive a full impact dashboard showing every life housed, every sobriety milestone, every family restored.'),
+        React.createElement('p',{style:{color:'var(--dmuted)',fontSize:'0.9rem',lineHeight:1.7,maxWidth:580,margin:'0 auto 1.25rem'}},'A local business, church, or individual sponsors rent, utilities, and furnishings for a HOPE recovery home. The home bears their name. They receive a full impact dashboard showing every life housed, every sobriety milestone, every family restored.'),
         React.createElement('div',{style:{display:'flex',justifyContent:'center',gap:'1.5rem',flexWrap:'wrap'}},
           [['🏠','Sponsor the Rent'],['💡','Cover Utilities'],['🛋️','Furnish the Home'],['📊','Track the Impact']].map(function(item){
             return React.createElement('div',{key:item[0],style:{textAlign:'center',padding:'0.75rem 1rem',background:'rgba(0,0,0,0.2)',borderRadius:8,minWidth:110}},
@@ -8314,7 +8328,7 @@ function PropertyPartnershipPlatform({ platform, update, toast, session }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// POLR COMMUNITY WALL — Safe Recovery Social Layer
+// HOPE COMMUNITY WALL — Safe Recovery Social Layer
 // ══════════════════════════════════════════════════════════════════════
 
 var POST_TYPES = [
@@ -8366,7 +8380,7 @@ var detectRisk = function(text) {
 // Seed community posts
 var SEED_POSTS = [
   { id:'cp1', authorName:'Angela M.', authorInitial:'A', postType:'breakthrough', visibility:'public', body:'Got the call today — I start work Monday. 47 days clean. God is real.', ts: Date.now()-3600000*2, reactions:{pray:3,strong:7,proud:12,growth:4,seen:6}, comments:[{author:'Marcus W.',text:'LETS GO ANGELA! 🔥',ts:Date.now()-3500000},{author:'House Mother',text:'So proud of you. This is what obedience looks like.',ts:Date.now()-3400000}], flagged:false, pinned:true, peerScore:5 },
-  { id:'cp2', authorName:'Tamika W.', authorInitial:'T', postType:'breakthrough', visibility:'public', body:'My daughter hugged me for the first time in 14 months yesterday. I cried for an hour. I didn\'t think I\'d ever get that back.', ts: Date.now()-86400000, reactions:{pray:8,strong:4,proud:15,growth:9,seen:11}, comments:[{author:'Director',text:'Tamika — this is why we do what we do. Walk well.',ts:Date.now()-85000000}], flagged:false, pinned:true, peerScore:8 },
+  { id:'cp2', authorName:'Tamika W.', authorInitial:'T', postType:'breakthrough', visibility:'public', body:'My daughter hugged me for the first time in 14 months yesterday. I cried for an hour. I didn\'t think I\'d ever get that back.', ts: Date.now()-86400000, reactions:{pray:8,strong:4,proud:15,growth:9,seen:11}, comments:[{author:'Director',text:'Tamika — this is why we do what we do. Walk it out faithfully.',ts:Date.now()-85000000}], flagged:false, pinned:true, peerScore:8 },
   { id:'cp3', authorName:'Anonymous', authorInitial:'?', postType:'prayer', visibility:'house', body:'Struggling tonight. Old neighborhood called. I didn\'t answer. Please pray.', ts: Date.now()-7200000, reactions:{pray:12,seen:9,strong:5}, comments:[{author:'Angela M.',text:'Praying right now. You made the right choice.',ts:Date.now()-7100000},{author:'House Mother',text:'Coming to check on you. Be right there.',ts:Date.now()-7050000}], flagged:false, pinned:false, peerScore:0 },
   { id:'cp4', authorName:'Marcus W.', authorInitial:'M', postType:'gratitude', visibility:'public', body:'28 days. Grateful for this house, this community, and the men who showed me it was possible. I see it now.', ts: Date.now()-172800000, reactions:{pray:6,strong:9,proud:8,growth:12,seen:7}, comments:[], flagged:false, pinned:false, peerScore:3 },
 ];
@@ -8560,7 +8574,7 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
         React.createElement('div',{style:{display:'flex',gap:'1rem',marginTop:'0.75rem',marginBottom:'0.85rem',flexWrap:'wrap',alignItems:'center'}},
           // Visibility
           React.createElement('div',{style:{display:'flex',gap:'0.3rem'}},
-            [['house','🏠 House Only'],['campus','🌆 Campus'],['global','🌐 POLR Network'],['public','🌍 Public Feed']].map(function(v){
+            [['house','🏠 House Only'],['campus','🌆 Campus'],['global','🌐 HOPE Recovery Network'],['public','🌍 Public Feed']].map(function(v){
               return React.createElement('button',{key:v[0],onClick:function(){
                 if(v[0]==='public'){
                   if(['struggle','prayer','parenting'].includes(newPost.postType)){
@@ -8661,11 +8675,11 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
             onClick:function(){
               var shareTypes={testimony:'testimony',breakthrough:'breakthrough moment',gratitude:'gratitude',job:'job update'};
               var typeLabel=shareTypes[p.postType]||p.postType;
-              var shareText='Sharing my '+typeLabel+': "'+p.body.slice(0,120)+(p.body.length>120?'...':'')+'" — Path of Life Recovery · {POLR_WEBSITE} · Walk well. 🙏';
+              var shareText='Sharing my '+typeLabel+': "'+p.body.slice(0,120)+(p.body.length>120?'...':'')+'" — HOPE Recovery: Hold on Pain Ends · hopenetwork.com · Walk it out faithfully. 🙏';
               var warningMsg='⚠️ Public Share Warning\n\nThis will post to '+arguments[0]+' with your name visible.\n\nYour sobriety journey is yours. Only share what you are comfortable with publicly.\n\nProceed?';
               if(window.confirm(warningMsg.replace('arguments[0]','Facebook'))){
                 if(navigator.share){
-                  navigator.share({title:'My Recovery Journey',text:shareText,url:'https://{POLR_WEBSITE}'});
+                  navigator.share({title:'My Recovery Journey',text:shareText,url:'https://hopenetwork.com'});
                 } else {
                   navigator.clipboard&&navigator.clipboard.writeText(shareText);
                   toast({icon:'📋',title:'Copied to clipboard',body:'Paste into Facebook, Twitter, or any app'});
@@ -8679,7 +8693,7 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
       // Guest CTA instead of comments
       isGuest&&React.createElement('div',{style:{padding:'0.5rem 1rem',borderTop:'1px solid var(--bdr)',display:'flex',justifyContent:'space-between',alignItems:'center'}},
         React.createElement('span',{style:{fontSize:'0.72rem',color:'var(--dmuted)',fontStyle:'italic'}},'This is a member-only conversation'),
-        React.createElement('button',{style:{padding:'0.3rem 0.75rem',borderRadius:8,background:'var(--gold)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.72rem'}},'Join POLR')
+        React.createElement('button',{style:{padding:'0.3rem 0.75rem',borderRadius:8,background:'var(--gold)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.72rem'}},'Join HOPE')
       ),
       // Comments (members only)
       !isGuest&&isExpanded && React.createElement('div',{style:{padding:'0 1rem 1rem',borderTop:'1px solid var(--bdr)'}},
@@ -8873,7 +8887,7 @@ function CommunityWall({ platform, update, session, toast, setActive, level }) {
 
 // ══════════════════════════════════════════════════════════════════════
 // TESTIMONY APPROVAL PIPELINE
-// Community → Review Queue → Website Walk Well Page
+// Community → Review Queue → Website HOPE In Motion Page
 // ══════════════════════════════════════════════════════════════════════
 
 // ─── Testimony Review Queue — admin panel ───
@@ -8906,7 +8920,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
     return {
       id: 'dt_'+t.id, sourceType:'direct', sourceId:t.id,
       title: t.title || 'Member Testimony', body: t.body,
-      author: t.author || 'POLR Member', authorInitial: (t.author||'M')[0],
+      author: t.author || 'HOPE Member', authorInitial: (t.author||'M')[0],
       category: t.type||'testimony', campus: t.campus||'',
       submittedAt: t.createdAt||Date.now(),
       status: (platform.testimonyDecisions||{})[t.id] || 'pending',
@@ -8930,7 +8944,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
     update('testimonyNotes', notes);
 
     if (decision==='approved') {
-      // Build published testimony object for Walk Well page
+      // Build published testimony object for HOPE In Motion page
       var photo = (platform.memberPhotos||{})[sub.author];
       var published = {
         id: 'pub_'+sub.sourceId,
@@ -8958,12 +8972,12 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
       update('notifications', [...(platform.notifications||[]), {
         id:'notif_pub_'+Date.now(),
         title:'✨ Your story has been published!',
-        body:'Your '+sub.category+' post has been approved and is now on the POLR Walk Well page. Thank you for sharing your testimony.',
+        body:'Your '+sub.category+' post has been approved and is now on the HOPE HOPE In Motion page. Thank you for sharing your testimony.',
         type:'celebration', target:sub.author,
         sentAt:new Date().toISOString(), requireResponse:false, responses:[]
       }]);
 
-      toast({icon:'✅',title:'Published to Walk Well!',body:sub.title+' is now live on {POLR_WEBSITE}'});
+      toast({icon:'✅',title:'Published to HOPE In Motion!',body:sub.title+' is now live on hopenetwork.com'});
     } else if (decision==='revision') {
       update('notifications', [...(platform.notifications||[]), {
         id:'notif_rev_'+Date.now(),
@@ -8993,7 +9007,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
       React.createElement('div',{className:'d-card',style:{marginBottom:'1.25rem',border:'2px solid rgba(200,145,58,0.2)'}},
         React.createElement('div',{className:'d-card-head'},
           React.createElement('span',{className:'d-card-title'},'📄 WEBSITE PREVIEW'),
-          React.createElement('span',{style:{fontSize:'0.65rem',color:'var(--dmuted)'}},'How this appears on {POLR_WEBSITE}/walkwell')
+          React.createElement('span',{style:{fontSize:'0.65rem',color:'var(--dmuted)'}},'How this appears on hopenetwork.com/hopeinmotion')
         ),
         React.createElement('div',{style:{padding:'1.5rem',background:'white',margin:'0 1rem 1rem',borderRadius:10,color:'#1a1a2a'}},
           React.createElement('div',{style:{display:'inline-block',padding:'0.2rem 0.65rem',borderRadius:20,background:'rgba(200,145,58,0.1)',fontSize:'0.65rem',fontWeight:700,color:'#c8913a',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.75rem'}},s.cat||s.category),
@@ -9012,7 +9026,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
               return para.trim() && React.createElement('p',{key:i,style:{marginBottom:'0.75rem'}},para);
             })
           ),
-          React.createElement('div',{style:{borderTop:'2px solid #c8913a',marginTop:'1.5rem',paddingTop:'0.75rem',textAlign:'center',fontStyle:'italic',fontSize:'0.82rem',color:'#888'}},'"Walk well." — Path of Life Recovery · {POLR_WEBSITE}')
+          React.createElement('div',{style:{borderTop:'2px solid #c8913a',marginTop:'1.5rem',paddingTop:'0.75rem',textAlign:'center',fontStyle:'italic',fontSize:'0.82rem',color:'#888'}},'"Walk it out faithfully." — HOPE Recovery: Hold on Pain Ends · hopenetwork.com')
         )
       ),
 
@@ -9096,7 +9110,7 @@ function TestimonyReviewQueue({ platform, update, toast, session }) {
 
 
 // ══════════════════════════════════════════════════════════════════════
-// POLR GROWTH FORECAST ENGINE
+// HOPE GROWTH FORECAST ENGINE
 // Strategic Intelligence — Momentum · Expansion · Leadership · Territory
 // ══════════════════════════════════════════════════════════════════════
 
@@ -9181,9 +9195,9 @@ var predictLeadershipEmergence = function(platform) {
 };
 
 var CAMPUS_CONFIGS = [
-  { id:'thibodaux', name:'POLR Place Thibodaux', icon:'🏛️', region:'Lafourche/Terrebonne', lat:29.80, lng:-90.82 },
-  { id:'hop-thib',  name:'HOP — Thibodaux',        icon:'✝️', region:'Lafourche',             lat:29.79, lng:-90.81 },
-  { id:'polr-place-hop-larose',name:'HOP — Larose',            icon:'🙏', region:'Lafourche South',       lat:29.57, lng:-90.38 },
+  { id:'thibodaux', name:'HOPE Place Port Allen', icon:'🏛️', region:'Lafourche/Terrebonne', lat:29.80, lng:-90.82 },
+  { id:'hop-thib',  name:'HOPE Place Port Allen',        icon:'✝️', region:'Lafourche',             lat:29.79, lng:-90.81 },
+  { id:'hope-place-port-allen',name:'HOPE Place Port Allen',            icon:'🙏', region:'Lafourche South',       lat:29.57, lng:-90.38 },
   { id:'polr-place-port-allen',name:'Port Allen',              icon:'🌆', region:'West Baton Rouge',      lat:30.45, lng:-91.21 },
 ];
 
@@ -9236,7 +9250,7 @@ function GrowthForecastEngine({ platform, update, toast, session, setActive }) {
           React.createElement('div',{style:{fontSize:'0.62rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.1em',marginTop:'0.3rem'}},'Network Momentum')
         ),
         React.createElement('div',{style:{flex:1}},
-          React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'0.5rem'}},'POLR Network'),
+          React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'0.5rem'}},'HOPE Recovery Network'),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'0.5rem',marginBottom:'0.85rem'}},
             [['Attendance',globalMomentum.attendance,25],['Engagement',globalMomentum.engagement,25],['Leadership',globalMomentum.leadership,25],['Housing',globalMomentum.housing,10],['Donor',globalMomentum.donor,15]].map(function(row){
               var pct=Math.round(row[1]/row[2]*100);
@@ -9306,7 +9320,7 @@ function GrowthForecastEngine({ platform, update, toast, session, setActive }) {
   var TerritoryMap = function() {
     var priColors={High:'#fc8181',Medium:'var(--gold)',Low:'var(--l4)'};
     return React.createElement('div',null,
-      React.createElement('div',{style:{marginBottom:'1rem',padding:'0.75rem 1rem',background:'rgba(139,124,248,0.06)',border:'1px solid rgba(139,124,248,0.15)',borderRadius:10,fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.65}},'🗺️ Territorial intelligence based on parish-level need assessment, current campus coverage, and growth signal modeling. Zones where demand exceeds current POLR reach.'),
+      React.createElement('div',{style:{marginBottom:'1rem',padding:'0.75rem 1rem',background:'rgba(139,124,248,0.06)',border:'1px solid rgba(139,124,248,0.15)',borderRadius:10,fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.65}},'🗺️ Territorial intelligence based on parish-level need assessment, current campus coverage, and growth signal modeling. Zones where demand exceeds current HOPE reach.'),
 
       // Active campuses
       React.createElement('div',{style:{marginBottom:'1.25rem'}},
@@ -9530,7 +9544,7 @@ function GrowthForecastEngine({ platform, update, toast, session, setActive }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// POLR PIPELINE PRESENTATION BUILDER
+// HOPE PIPELINE PRESENTATION BUILDER
 // Strategic influence generator — 5 partner types, live data, print mode
 // ══════════════════════════════════════════════════════════════════════
 function PitchBuilder({ platform, toast, session }) {
@@ -9568,7 +9582,7 @@ function PitchBuilder({ platform, toast, session }) {
     var campuses         = 4;
     var meetingsPerWeek  = (platform.meetings||[]).length || 9;
     var testimony        = testimonies[0] || {body:"God gave me back my children. Two years ago I had nothing. Today I have everything that matters.", author:"Angela M.", cat:"Testimony"};
-    var testimony2       = testimonies[1] || {body:"I have 14 months clean. I have a job. I have my own apartment. POLR gave me a blueprint when I couldn't see a future.", author:"Marcus W.", cat:"Breakthrough"};
+    var testimony2       = testimonies[1] || {body:"I have 14 months clean. I have a job. I have my own apartment. HOPE gave me a blueprint when I couldn't see a future.", author:"Marcus W.", cat:"Breakthrough"};
 
     return { totalMembers,daysSoberAvg,graduations,workforceReady,jobsPlaced,reunifications,hotelBeds,momentum,leaders,donorTotal,donorCount,campuses,meetingsPerWeek,testimony,testimony2,employerCount:employers.length||6,partnerCount:partners.length||3 };
   })();
@@ -9579,8 +9593,8 @@ function PitchBuilder({ platform, toast, session }) {
     {id:'housing',  icon:'🏠', label:'Housing Partner',     color:'var(--gold)',desc:'Mission-aligned property partnership with full support'},
     {id:'donor',    icon:'💛', label:'Donor / Funder',      color:'var(--l5)', desc:'Impact-backed giving with full transparency'},
     {id:'city',     icon:'🌆', label:'City / Agency',       color:'var(--l3)', desc:'Community restoration with measurable public benefit'},
-    {id:'tradeschool',icon:'🎓', label:'Trade School MOU',    color:'var(--l2)', desc:'Reduced tuition agreement and referral pipeline for POLR members'},
-    {id:'union',    icon:'🔨', label:'Union / Apprenticeship',color:'var(--gold)',desc:'Fast-track application pipeline for POLR workforce candidates'},
+    {id:'tradeschool',icon:'🎓', label:'Trade School MOU',    color:'var(--l2)', desc:'Reduced tuition agreement and referral pipeline for HOPE members'},
+    {id:'union',    icon:'🔨', label:'Union / Apprenticeship',color:'var(--gold)',desc:'Fast-track application pipeline for HOPE workforce candidates'},
     {id:'grantfunder',icon:'💰', label:'Grant Funder',        color:'var(--l5)', desc:'Outcome-backed funding pitch with live platform data'},
     {id:'sponsor',  icon:'🏭', label:'Corporate Sponsor',    color:'var(--l4)', desc:'Named cohort sponsorship with WOTC documentation and ROI'},
     {id:'courtda',  icon:'⚖️', label:'Court / DA Partnership',color:'var(--l3)', desc:'Court-referred member pipeline with compliance reporting'},
@@ -9597,72 +9611,72 @@ function PitchBuilder({ platform, toast, session }) {
 
     var DECKS = {
       church:[
-        { tag:'The Need',    headline:'Recovery is knocking on your doors.', body:'Nationally, 1 in 8 adults is bound by patterns of addiction and substance misuse. In '+city+', the need is immediate — and the church is uniquely positioned to answer it. POLR has served '+M.totalMembers+' individuals across '+M.campuses+' campuses.', stat:M.totalMembers, statLabel:'Lives Served', icon:'🙏' },
+        { tag:'The Need',    headline:'Recovery is knocking on your doors.', body:'Nationally, 1 in 8 adults is bound by patterns of addiction and substance misuse. In '+city+', the need is immediate — and the church is uniquely positioned to answer it. HOPE has served '+M.totalMembers+' individuals across '+M.campuses+' campuses.', stat:M.totalMembers, statLabel:'Lives Served', icon:'🙏' },
         { tag:'What We Do',  headline:'A proven, pastor-aligned recovery system.', body:'POLR is a Christ-centered, 12-step recovery program meeting '+M.meetingsPerWeek+' times weekly across Southern Louisiana. We integrate Scripture, accountability, mentorship, and workforce development into every stage of restoration.', stat:M.daysSoberAvg, statLabel:'Avg Days Sober', icon:'📖' },
-        { tag:'Your Role',   headline:'Host a meeting. Transform a neighborhood.', body:'Hosting a weekly POLR meeting at '+t+' costs nothing and changes everything. We supply the curriculum, the leadership, and the accountability structure. You supply the room. Together we supply the hope.', stat:M.meetingsPerWeek, statLabel:'Weekly Meetings', icon:'🏛️' },
-        { tag:'Real Results',headline:'"'+testimony+'"', body:'— '+author+', POLR Graduate · '+M.graduations+' program graduates · '+M.reunifications+' family reunifications · '+M.leaders+' active ministry leaders', stat:M.graduations, statLabel:'Graduates', icon:'🌟' },
-        { tag:'Next Step',   headline:form.cta||'Host POLR at '+t+' starting this month.', body:'We will train your facilitators, provide all materials, and support your congregation every step. One meeting per week. Lifetime impact.', stat:'1 Meeting', statLabel:'Changes Everything', icon:'✅', isCTA:true },
+        { tag:'Your Role',   headline:'Host a meeting. Transform a neighborhood.', body:'Hosting a weekly HOPE meeting at '+t+' costs nothing and changes everything. We supply the curriculum, the leadership, and the accountability structure. You supply the room. Together we supply the hope.', stat:M.meetingsPerWeek, statLabel:'Weekly Meetings', icon:'🏛️' },
+        { tag:'Real Results',headline:'"'+testimony+'"', body:'— '+author+', HOPE Graduate · '+M.graduations+' program graduates · '+M.reunifications+' family reunifications · '+M.leaders+' active ministry leaders', stat:M.graduations, statLabel:'Graduates', icon:'🌟' },
+        { tag:'Next Step',   headline:form.cta||'Host HOPE at '+t+' starting this month.', body:'We will train your facilitators, provide all materials, and support your congregation every step. One meeting per week. Lifetime impact.', stat:'1 Meeting', statLabel:'Changes Everything', icon:'✅', isCTA:true },
       ],
       employer:[
-        { tag:'The Workforce Gap', headline:'Reliability is the hardest thing to hire.', body:'Turnover costs U.S. employers $8,000–$28,000 per position. POLR workforce candidates have completed structured behavioral accountability, drug testing, and professional development — before they ever walk into your interview.', stat:M.jobsPlaced, statLabel:'Jobs Placed', icon:'📊' },
-        { tag:'Our Candidates',   headline:M.workforceReady+' job-ready candidates. Pre-screened. Motivated.', body:'Every POLR workforce candidate has: consistent drug testing on record, House Mother behavioral assessment, transformation score tracking, and active mentorship. These are not just qualified — they are invested.', stat:M.workforceReady, statLabel:'Ready Now', icon:'💼' },
+        { tag:'The Workforce Gap', headline:'Reliability is the hardest thing to hire.', body:'Turnover costs U.S. employers $8,000–$28,000 per position. HOPE workforce candidates have completed structured behavioral accountability, drug testing, and professional development — before they ever walk into your interview.', stat:M.jobsPlaced, statLabel:'Jobs Placed', icon:'📊' },
+        { tag:'Our Candidates',   headline:M.workforceReady+' job-ready candidates. Pre-screened. Motivated.', body:'Every HOPE workforce candidate has: consistent drug testing on record, House Mother behavioral assessment, transformation score tracking, and active mentorship. These are not just qualified — they are invested.', stat:M.workforceReady, statLabel:'Ready Now', icon:'💼' },
         { tag:'The Partnership',  headline:'Hire once. Retain for years.', body:'POLR employer partners get direct access to candidates, retention monitoring, stress indicator tracking, and ongoing workforce coordinator support. Our job is to make sure your hire succeeds — not just to fill a position.', stat:M.employerCount, statLabel:'Active Partners', icon:'🤝' },
         { tag:'Proof',            headline:'"'+testimony+'"', body:'— '+author+' · Average workforce retention: 14 months · '+M.jobsPlaced+' placements in Southern Louisiana', stat:M.daysSoberAvg+'d', statLabel:'Avg Sobriety', icon:'🔥' },
-        { tag:'Join the Network', headline:form.cta||'Reserve interview slots for POLR candidates.', body:'List your open positions with us. We match candidates by location, skillset, and reliability score. No cost, no commitment until you hire. Community goodwill included.', stat:'No Cost', statLabel:'To Partner', icon:'✅', isCTA:true },
+        { tag:'Join the Network', headline:form.cta||'Reserve interview slots for HOPE candidates.', body:'List your open positions with us. We match candidates by location, skillset, and reliability score. No cost, no commitment until you hire. Community goodwill included.', stat:'No Cost', statLabel:'To Partner', icon:'✅', isCTA:true },
       ],
       housing:[
         { tag:'The Need',      headline:'Recovery housing is the missing piece.', body:'There is more demand for structured recovery housing in Southern Louisiana than there are beds. POLR\'s housing network currently has '+M.hotelBeds+' beds across '+M.partnerCount+' properties. We need '+city+' landlords to expand that mission.', stat:M.hotelBeds, statLabel:'Current Beds', icon:'🏠' },
         { tag:'How It Works',  headline:'Structured residents. Supervised living. Rent stability.', body:'POLR residents pay consistent program fees. Every home has a dedicated House Mother providing daily oversight, behavioral tracking, drug testing coordination, and incident documentation. You receive a professional operations partner — not just a tenant.', stat:'100%', statLabel:'Supervised', icon:'🛡️' },
         { tag:'Your Benefit',  headline:'Mission-aligned. Financially stable. Professionally managed.', body:'POLR property partners receive: monthly occupancy reporting, annual tax documentation, charitable contribution certification, donor recognition, and full platform access to see the impact of their property. Est. tax advantage: $'+Math.round((850-400)*12*0.28/100)*100+'–$'+Math.round((850-400)*12*0.37/100)*100+'/yr.', stat:'$'+Math.round((850-400)*12*0.28/100)*100+'–$'+Math.round((850-400)*12*0.37/100)*100, statLabel:'Est. Tax Advantage/yr', icon:'💰' },
         { tag:'Proof',         headline:'"'+metrics.testimony2.body.slice(0,150)+'..."', body:'— '+metrics.testimony2.author+' · '+M.reunifications+' family reunifications enabled by stable housing', stat:M.reunifications, statLabel:'Families Restored', icon:'👨‍👩‍👧' },
-        { tag:'Partner Today', headline:form.cta||'List your property with POLR.', body:'Registration takes 10 minutes. We handle the rest — placement, oversight, reporting, and recognition. Walk well alongside us.', stat:M.partnerCount, statLabel:'Partners Joined', icon:'✅', isCTA:true },
+        { tag:'Partner Today', headline:form.cta||'List your property with HOPE.', body:'Registration takes 10 minutes. We handle the rest — placement, oversight, reporting, and recognition. Walk well alongside us.', stat:M.partnerCount, statLabel:'Partners Joined', icon:'✅', isCTA:true },
       ],
       donor:[
-        { tag:'The Stakes',    headline:'Every dollar deployed. Every life documented.', body:'POLR is not asking for donations. POLR is offering documented transformation. '+M.totalMembers+' lives served. '+M.graduations+' graduates. '+M.reunifications+' families reunited. Every outcome tracked, every story verifiable.', stat:'$'+Math.round(M.donorTotal/Math.max(1,M.totalMembers)).toLocaleString(), statLabel:'Cost Per Life Served', icon:'📊' },
-        { tag:'The Impact',    headline:'Your investment buys permanence.', body:'The POLR platform tracks every resident from intake through independence. You can see the journey — sobriety milestones, job placements, step completions, family reunification — in real time. This is not faith-based giving. This is faith-backed evidence.', stat:M.momentum+'%', statLabel:'Network Momentum', icon:'📈' },
+        { tag:'The Stakes',    headline:'Every dollar deployed. Every life documented.', body:'POLR is not asking for donations. HOPE is offering documented transformation. '+M.totalMembers+' lives served. '+M.graduations+' graduates. '+M.reunifications+' families reunited. Every outcome tracked, every story verifiable.', stat:'$'+Math.round(M.donorTotal/Math.max(1,M.totalMembers)).toLocaleString(), statLabel:'Cost Per Life Served', icon:'📊' },
+        { tag:'The Impact',    headline:'Your investment buys permanence.', body:'The HOPE platform tracks every resident from intake through independence. You can see the journey — sobriety milestones, job placements, step completions, family reunification — in real time. This is not faith-based giving. This is faith-backed evidence.', stat:M.momentum+'%', statLabel:'Network Momentum', icon:'📈' },
         { tag:'The Need',      headline:'Expansion requires resource.', body:'We have '+M.leaders+' emerging leaders ready to plant new campuses. We have '+M.workforceReady+' workforce candidates who need placement support. We have families waiting for reunion. The infrastructure is built. The fuel is funding.', stat:M.leaders, statLabel:'Leaders Ready', icon:'🚀' },
         { tag:'Proof',         headline:'"'+testimony+'"', body:'— '+author+' · Total community investment to date: $'+M.donorTotal.toLocaleString()+' across '+M.donorCount+' donors', stat:M.donorCount, statLabel:'Active Donors', icon:'💛' },
         { tag:'Give Now',      headline:form.cta||'Sponsor a resident. Fund a campus. Change a family.', body:'Monthly gifts start at any level. Designated giving for housing, workforce, or campus expansion available. All gifts acknowledged with impact reporting.', stat:'Tax Deductible', statLabel:'501(c)(3) Verified', icon:'✅', isCTA:true },
       ],
       city:[
         { tag:'The Data',      headline:'Recovery saves cities money.', body:'Every person cycling through the justice system costs Louisiana taxpayers $35,000+/year. POLR\'s recovery model has maintained '+M.daysSoberAvg+'-day average sobriety among active residents — reducing recidivism, emergency services cost, and family court caseloads.', stat:M.totalMembers, statLabel:'Diverted from System', icon:'🌆' },
-        { tag:'The Model',     headline:'Structured. Supervised. Scalable.', body:'POLR operates a fully documented recovery ecosystem across '+M.campuses+' campuses: daily behavioral tracking, drug testing, workforce development, housing management, and family reunification — all on a single platform with full audit trails.', stat:M.campuses, statLabel:'Active POLR Places', icon:'🏛️' },
+        { tag:'The Model',     headline:'Structured. Supervised. Scalable.', body:'POLR operates a fully documented recovery ecosystem across '+M.campuses+' campuses: daily behavioral tracking, drug testing, workforce development, housing management, and family reunification — all on a single platform with full audit trails.', stat:M.campuses, statLabel:'Active HOPE Places', icon:'🏛️' },
         { tag:'The Expansion', headline:'Demand exceeds current capacity in '+city+'.', body:'Growth Forecast intelligence indicates immediate expansion opportunity. We have leadership candidates ready, employer partners willing, and housing network scalable. What we need is community partnership.', stat:M.momentum+'%', statLabel:'Expansion Confidence', icon:'📡' },
         { tag:'Proof',         headline:'"'+testimony+'"', body:'— '+author+' · '+M.jobsPlaced+' jobs placed · '+M.reunifications+' families restored · '+M.graduations+' program graduates', stat:M.reunifications, statLabel:'Families Reunified', icon:'👨‍👩‍👧' },
-        { tag:'Partnership',   headline:form.cta||'Formalize a community partnership with POLR.', body:'MOU available. Reporting infrastructure in place. Public benefit documentation for grant applications. We are ready to be your recovery partner — not just a nonprofit in your jurisdiction.', stat:'MOU Ready', statLabel:'Partnership Framework', icon:'✅', isCTA:true },
+        { tag:'Partnership',   headline:form.cta||'Formalize a community partnership with HOPE.', body:'MOU available. Reporting infrastructure in place. Public benefit documentation for grant applications. We are ready to be your recovery partner — not just a nonprofit in your jurisdiction.', stat:'MOU Ready', statLabel:'Partnership Framework', icon:'✅', isCTA:true },
       ],
       tradeschool:[
-        {tag:'The Opportunity', headline:'Every campus POLR opens needs a trade school partner.',
-         body:'South Louisiana is facing a critical skilled trades shortage. '+(M.totalMembers)+' individuals have come through POLR programs ready for structured training. We need a credentialed academic partner to deliver it. Fletcher, Sowela, and BRCC are all within our service region.',
+        {tag:'The Opportunity', headline:'Every campus HOPE opens needs a trade school partner.',
+         body:'South Louisiana is facing a critical skilled trades shortage. '+(M.totalMembers)+' individuals have come through HOPE programs ready for structured training. We need a credentialed academic partner to deliver it. Fletcher, Sowela, and BRCC are all within our service region.',
          stat:M.workforceReady, statLabel:'Trade-Ready Candidates', icon:'📚'},
         {tag:'What We Bring',   headline:'Pre-screened. Drug-tested. Mentor-supported.',
-         body:'Every POLR referral arrives at '+t+' with: active sobriety documentation, behavioral assessment, a designated POLR coordinator for retention support, and a motivation to succeed that most traditional students do not have. Our completion rate exceeds the national average for similar programs.',
+         body:'Every HOPE referral arrives at '+t+' with: active sobriety documentation, behavioral assessment, a designated HOPE coordinator for retention support, and a motivation to succeed that most traditional students do not have. Our completion rate exceeds the national average for similar programs.',
          stat:M.daysSoberAvg+'d', statLabel:'Avg Sobriety at Enrollment', icon:'📋'},
         {tag:'The Agreement',   headline:'A simple MOU. Lasting impact.',
-         body:'POLR is proposing a Memorandum of Understanding that provides: reduced or waived tuition for qualifying POLR referrals, monthly enrollment and completion reporting back to POLR for grant documentation, and a named partnership in POLR funding applications that benefits '+t+' directly.',
+         body:'POLR is proposing a Memorandum of Understanding that provides: reduced or waived tuition for qualifying HOPE referrals, monthly enrollment and completion reporting back to HOPE for grant documentation, and a named partnership in HOPE funding applications that benefits '+t+' directly.',
          stat:'MOU', statLabel:'Ready to Sign', icon:'📄'},
         {tag:'The Return',      headline:'Your completion rates go up. Your enrollment numbers go up.',
-         body:'Trade schools receive funding based on enrollment and completion. POLR students are motivated to finish. Our retention coordinator is one call away if a student struggles. You gain students who succeed, and a community partner whose mission amplifies yours.',
+         body:'Trade schools receive funding based on enrollment and completion. HOPE students are motivated to finish. Our retention coordinator is one call away if a student struggles. You gain students who succeed, and a community partner whose mission amplifies yours.',
          stat:M.graduations, statLabel:'Program Graduates', icon:'📊'},
-        {tag:'Next Step',       headline:form.cta||'Schedule a site visit and MOU review with POLR.',
+        {tag:'Next Step',       headline:form.cta||'Schedule a site visit and MOU review with HOPE.',
          body:'One meeting. We tour your programs, you meet our team, and we draft a partnership agreement that costs nothing and opens doors for the people who need them most.',
          stat:'One Meeting', statLabel:'To Start', icon:'✅', isCTA:true},
       ],
       union:[
         {tag:'The Shortage',    headline:'You have open apprenticeship slots. We have the candidates.',
-         body:'The Gulf Coast industrial sector is facing a documented skilled trades crisis. UA Local 60, IBEW, and the Boilermakers are all actively recruiting. POLR has '+M.workforceReady+' individuals who are OSHA-10 certified, drug-tested, and work-ready — right now.',
+         body:'The Gulf Coast industrial sector is facing a documented skilled trades crisis. UA Local 60, IBEW, and the Boilermakers are all actively recruiting. HOPE has '+M.workforceReady+' individuals who are OSHA-10 certified, drug-tested, and work-ready — right now.',
          stat:M.workforceReady, statLabel:'Work-Ready Candidates', icon:'🔨'},
         {tag:'Who We Send',     headline:'Not just qualified. Invested.',
-         body:'Every POLR workforce candidate has completed structured accountability, daily behavioral tracking, and active mentorship. They have proven they can show up. That is the hardest thing to verify in a traditional application. We verify it every day.',
+         body:'Every HOPE workforce candidate has completed structured accountability, daily behavioral tracking, and active mentorship. They have proven they can show up. That is the hardest thing to verify in a traditional application. We verify it every day.',
          stat:M.daysSoberAvg+'d', statLabel:'Avg Sobriety', icon:'🔥'},
         {tag:'The Pipeline',    headline:'POLR handles the wraparound. You handle the trade.',
-         body:'When a POLR member enters your apprenticeship program, our workforce coordinator stays connected for the first 90 days. If something goes sideways, we get a call before you lose the apprentice. Your retention numbers improve. Our outcome metrics improve. Everyone wins.',
+         body:'When a HOPE member enters your apprenticeship program, our workforce coordinator stays connected for the first 90 days. If something goes sideways, we get a call before you lose the apprentice. Your retention numbers improve. Our outcome metrics improve. Everyone wins.',
          stat:'90 Days', statLabel:'Active Retention Support', icon:'🤝'},
-        {tag:'The Ask',        headline:'Fast-track application review for POLR referrals.',
+        {tag:'The Ask',        headline:'Fast-track application review for HOPE referrals.',
          body:'We are not asking for special treatment. We are asking for a fair and expedited review for candidates who arrive pre-screened, drug-documented, and coordinator-supported. One referral agreement. We handle the paperwork.',
          stat:M.jobsPlaced, statLabel:'Previous Placements', icon:'💼'},
-        {tag:'Next Step',       headline:form.cta||'Sign a POLR referral agreement with '+t+'.',
-         body:'One-page agreement. POLR refers, you fast-track review, we both track retention. That is the whole deal.',
+        {tag:'Next Step',       headline:form.cta||'Sign a HOPE referral agreement with '+t+'.',
+         body:'One-page agreement. HOPE refers, you fast-track review, we both track retention. That is the whole deal.',
          stat:'1 Page', statLabel:'Agreement', icon:'✅', isCTA:true},
       ],
       grantfunder:[
@@ -9674,11 +9688,11 @@ function PitchBuilder({ platform, toast, session }) {
          stat:M.jobsPlaced, statLabel:'Jobs Placed', icon:'📊'},
         {tag:'The Model',       headline:'Housing. Recovery. Education. Employment. In sequence.',
          body:'POLR is not a single-service program. It is a full reentry operating system: stabilization housing with House Mother oversight, 12-step biblical recovery, trade and workforce certification, GED preparation, employer placement, and 90-day retention monitoring — all on a single documented platform.',
-         stat:M.campuses, statLabel:'Active POLR Places', icon:'🗺️'},
+         stat:M.campuses, statLabel:'Active HOPE Places', icon:'🗺️'},
         {tag:'Proof',           headline:'"'+M.testimony.body.slice(0,150)+'..."',
          body:'— '+M.testimony.author+' · '+M.reunifications+' family reunifications · '+M.leaders+' ministry leaders developed · '+M.donorCount+' funding partners',
          stat:M.momentum+'%', statLabel:'Network Momentum', icon:'🌟'},
-        {tag:'The Request',     headline:form.cta||'Fund the POLR pipeline. Transform Southern Louisiana.',
+        {tag:'The Request',     headline:form.cta||'Fund the HOPE pipeline. Transform Southern Louisiana.',
          body:'POLR is shovel-ready. Infrastructure built. Platform operational. Employer partners engaged. Trade school MOUs in progress. We are not starting a program. We are scaling one. Your investment deploys on day one.',
          stat:'Day 1', statLabel:'Deployment Ready', icon:'✅', isCTA:true},
       ],
@@ -9687,33 +9701,33 @@ function PitchBuilder({ platform, toast, session }) {
          body:'POLR offers '+t+' the opportunity to sponsor a named training cohort — 8 to 20 individuals going through a specific certification track together. OSHA-10. Home Health Aide. GED Preparation. You name it. You name the cohort. We deliver the graduates.',
          stat:M.workforceReady, statLabel:'Candidates in Pipeline', icon:'🎓'},
         {tag:'Your Return',      headline:'Up to $9,600 per hire in WOTC tax credits.',
-         body:'Employers who hire POLR graduates may qualify for the Work Opportunity Tax Credit — up to $9,600 per qualifying hire. POLR generates all IRS Form 8850 documentation. You hire, we document, the government returns a portion of your payroll cost. Sponsoring a cohort and hiring from it is the highest-ROI workforce investment available in Louisiana right now.',
+         body:'Employers who hire HOPE graduates may qualify for the Work Opportunity Tax Credit — up to $9,600 per qualifying hire. HOPE generates all IRS Form 8850 documentation. You hire, we document, the government returns a portion of your payroll cost. Sponsoring a cohort and hiring from it is the highest-ROI workforce investment available in Louisiana right now.',
          stat:'$9,600', statLabel:'Max WOTC Credit Per Hire', icon:'💰'},
         {tag:'What You Get',     headline:'First access. Named recognition. Documented impact.',
-         body:'Cohort sponsors at '+t+' receive: first hiring rights for all graduates, named cohort recognition in all POLR communications, annual impact report with graduate outcomes, CSR documentation for corporate reporting, and a press release ready to publish on completion day.',
+         body:'Cohort sponsors at '+t+' receive: first hiring rights for all graduates, named cohort recognition in all HOPE communications, annual impact report with graduate outcomes, CSR documentation for corporate reporting, and a press release ready to publish on completion day.',
          stat:M.graduations, statLabel:'Total Graduates to Date', icon:'📋'},
         {tag:'The Numbers',      headline:'$5,000 sends 10 people through OSHA-10.',
-         body:'A single sponsored cohort at the OSHA-10 level covers certification costs for 10 individuals. Average trade wage at placement: $22/hr. Average WOTC credit per hire: $4,800. Net cost of finding a trained, work-ready employee through POLR vs. traditional recruiting: significantly lower.',
+         body:'A single sponsored cohort at the OSHA-10 level covers certification costs for 10 individuals. Average trade wage at placement: $22/hr. Average WOTC credit per hire: $4,800. Net cost of finding a trained, work-ready employee through HOPE vs. traditional recruiting: significantly lower.',
          stat:'$5,000', statLabel:'Sponsors a Full Cohort', icon:'🏭'},
-        {tag:'Partner Now',      headline:form.cta||'Sponsor the next '+t+' POLR cohort.',
+        {tag:'Partner Now',      headline:form.cta||'Sponsor the next '+t+' HOPE cohort.',
          body:'Cohorts launch quarterly. The next cohort starts in 30 days. Sponsorship is first-come. We will have your name on the completion certificate before the quarter ends.',
          stat:'Next Cohort', statLabel:'30 Days', icon:'✅', isCTA:true},
       ],
       courtda:[
-        {tag:'The Problem',     headline:'Recidivism is a resource problem. POLR is the solution.',
-         body:'The average cost of incarceration in Louisiana is $27,000 per person per year. Every POLR participant diverted from re-incarceration saves '+city+' that cost — and produces a taxpaying worker instead. POLR has maintained a '+M.daysSoberAvg+'-day average sobriety among active participants.',
+        {tag:'The Problem',     headline:'Recidivism is a resource problem. HOPE is the solution.',
+         body:'The average cost of incarceration in Louisiana is $27,000 per person per year. Every HOPE participant diverted from re-incarceration saves '+city+' that cost — and produces a taxpaying worker instead. HOPE has maintained a '+M.daysSoberAvg+'-day average sobriety among active participants.',
          stat:'$27,000', statLabel:'Annual Incarceration Cost Avoided', icon:'⚖️'},
-        {tag:'What POLR Offers', headline:'A documented alternative to incarceration.',
-         body:'POLR provides court-referred individuals with: structured housing with daily oversight, 12-step recovery program with attendance verification, drug testing and compliance documentation, workforce development, and a POLR coordinator who reports compliance status to the referring office on request.',
+        {tag:'What HOPE Offers', headline:'A documented alternative to incarceration.',
+         body:'POLR provides court-referred individuals with: structured housing with daily oversight, 12-step recovery program with attendance verification, drug testing and compliance documentation, workforce development, and a HOPE coordinator who reports compliance status to the referring office on request.',
          stat:M.totalMembers, statLabel:'Individuals Served', icon:'📋'},
         {tag:'The Documentation',headline:'Every check-in logged. Every test documented. Full audit trail.',
          body:'POLR operates on a purpose-built platform that logs attendance, drug test results, behavioral incidents, step progress, employment status, and housing stability. Court officers and probation supervisors can receive automated compliance reports. We are not just a program — we are a documentation system.',
-         stat:M.campuses, statLabel:'Documented POLR Places', icon:'📄'},
+         stat:M.campuses, statLabel:'Documented HOPE Places', icon:'📄'},
         {tag:'Proof',           headline:'"'+M.testimony.body.slice(0,150)+'..."',
          body:'— '+M.testimony.author+' · '+M.graduations+' program completions · '+M.jobsPlaced+' employed · Recidivism rate: 8% vs. Louisiana average 43%',
          stat:'8%', statLabel:'Recidivism Rate (vs. 43% avg)', icon:'🌟'},
-        {tag:'The Partnership',  headline:form.cta||'Formalize a court referral agreement with POLR.',
-         body:'One MOU. POLR accepts court-referred individuals, provides structured programming, and delivers automated compliance reports to your office. We have the infrastructure. We need the referral stream.',
+        {tag:'The Partnership',  headline:form.cta||'Formalize a court referral agreement with HOPE.',
+         body:'One MOU. HOPE accepts court-referred individuals, provides structured programming, and delivers automated compliance reports to your office. We have the infrastructure. We need the referral stream.',
          stat:'MOU Ready', statLabel:'Compliance Reporting Included', icon:'✅', isCTA:true},
       ],
     };
@@ -9728,13 +9742,13 @@ function PitchBuilder({ platform, toast, session }) {
   // ── Create partnership record + notify admin ──
   var createPartnershipRecord = function(modeId, label) {
     var modeDescriptions = {
-      church:     'Church Partnership — Host a weekly POLR recovery meeting',
-      employer:   'Workforce Employer — Hire POLR pre-screened candidates',
+      church:     'Church Partnership — Host a weekly HOPE recovery meeting',
+      employer:   'Workforce Employer — Hire HOPE pre-screened candidates',
       housing:    'Housing Partner — Mission-aligned property partnership',
       donor:      'Donor / Funder — Impact-backed financial giving',
       city:       'City / Agency — Community restoration MOU',
-      tradeschool:'Trade School MOU — Reduced tuition referral pipeline for POLR members',
-      union:      'Union / Apprenticeship — Fast-track pipeline for POLR workforce candidates',
+      tradeschool:'Trade School MOU — Reduced tuition referral pipeline for HOPE members',
+      union:      'Union / Apprenticeship — Fast-track pipeline for HOPE workforce candidates',
       grantfunder:'Grant Funder — Outcome-backed funding partnership',
       sponsor:    'Corporate Sponsor — Named cohort sponsorship with WOTC documentation',
       courtda:    'Court / DA Partnership — Court-referred member pipeline with compliance reporting',
@@ -9750,7 +9764,7 @@ function PitchBuilder({ platform, toast, session }) {
       status: 'new',
       source: 'pitch-builder',
       submittedAt: new Date().toISOString(),
-      assignedTo: 'POLR Director'
+      assignedTo: 'HOPE Director'
     };
     update('employerReferrals', [...(platform.employerReferrals||[]), ref]);
     var n = {
@@ -9766,7 +9780,7 @@ function PitchBuilder({ platform, toast, session }) {
     };
     update('notifications', [...(platform.notifications||[]), n]);
     toast({icon:'🤝', title:'Partnership interest recorded',
-      body:(form.target||label)+' added to pipeline. The POLR team has been notified.'});
+      body:(form.target||label)+' added to pipeline. The HOPE team has been notified.'});
   };
 
   // ── Selector screen ──
@@ -9774,7 +9788,7 @@ function PitchBuilder({ platform, toast, session }) {
     React.createElement('div',{style:{marginBottom:'1.5rem'}},
       React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',fontFamily:'var(--font-mono)',marginBottom:'0.2rem'}},'PITCH BUILDER · PARTNERSHIP PRESENTATIONS'),
       React.createElement('h2',{style:{fontFamily:'var(--font-serif)',color:'var(--dtxt)',fontWeight:600}},'Choose Your Partnership Role'),
-      React.createElement('div',{style:{fontSize:'0.85rem',color:'var(--dmuted)',lineHeight:1.65,marginTop:'0.25rem'}},'Each role creates a real record in the POLR dashboard. The POLR team is notified within minutes.')
+      React.createElement('div',{style:{fontSize:'0.85rem',color:'var(--dmuted)',lineHeight:1.65,marginTop:'0.25rem'}},'Each role creates a real record in the HOPE dashboard. The HOPE team is notified within minutes.')
     ),
     React.createElement('div',{style:{marginBottom:'1.25rem',padding:'0.85rem 1rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:10,fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.65}},'Auto-populated with live platform data — '+metrics.totalMembers+' members, '+metrics.graduations+' graduates, '+metrics.jobsPlaced+' jobs placed, $'+metrics.donorTotal.toLocaleString()+' in donations. Select a partner type to generate a presentation.'),
     React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:'1rem',marginBottom:'1.5rem'}},
@@ -9845,7 +9859,7 @@ function PitchBuilder({ platform, toast, session }) {
                   '<div style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 3.5rem;background:rgba(0,0,0,0.4);">'+
                     '<div style="display:flex;align-items:center;gap:0.75rem;">'+
                       '<div style="width:28px;height:28px;border-radius:50%;background:#c8913a;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#0c1a2e;">P</div>'+
-                      '<div><div style="font-size:0.75rem;font-weight:700;color:white;font-family:Arial,sans-serif;">Path of Life Recovery</div><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);font-family:Arial,sans-serif;">{POLR_WEBSITE} · {POLR_PHONE}</div></div>'+
+                      '<div><div style="font-size:0.75rem;font-weight:700;color:white;font-family:Arial,sans-serif;">HOPE Recovery: Hold on Pain Ends</div><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);font-family:Arial,sans-serif;">hopenetwork.com · 225-333-0330</div></div>'+
                     '</div>'+
                     '<div style="text-align:right;background:rgba(200,145,58,0.15);border:1px solid rgba(200,145,58,0.3);padding:0.6rem 1.25rem;border-radius:8px;">'+
                       '<div style="font-size:1.5rem;font-weight:700;color:#c8913a;font-family:Georgia,serif;line-height:1;">'+(sl.stat||'')+'</div>'+
@@ -9929,7 +9943,7 @@ function PitchBuilder({ platform, toast, session }) {
         React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontWeight:700,color:'var(--gold)',fontSize:'1rem',marginBottom:'0.2rem'}},
           '🤝 Ready to move forward with '+(MODES.find(function(m){return m.id===mode;})||{label:mode}).label+'?'),
         React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.6}},
-          'Express interest to create a real partnership record. The POLR team is notified immediately. No commitment required.')
+          'Express interest to create a real partnership record. The HOPE team is notified immediately. No commitment required.')
       ),
       React.createElement('div',{style:{display:'flex',gap:'0.65rem',flexShrink:0,flexWrap:'wrap'}},
         React.createElement('button',{
@@ -9976,7 +9990,7 @@ function PitchBuilder({ platform, toast, session }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// POLR ADAPTIVE RECOVERY PATH SYSTEM
+// HOPE ADAPTIVE RECOVERY PATH SYSTEM
 // Non-linear modular journey — needs profiling, dynamic maps, campus config
 // ══════════════════════════════════════════════════════════════════════
 
@@ -10352,8 +10366,8 @@ function GuestLearningPanel({ platform, toast, session, setActive }) {
      color:"var(--l4)",
      lessons:[
        {title:"Trade Careers That Hire in Recovery", body:"Pipefitters, boilermakers, welders, plant operators. These industries actively recruit from recovery programs. Income: $50,000-$90,000 per year."},
-       {title:"What OSHA-10 Certification Gets You", body:"OSHA-10 is a 10-hour safety course that puts you ahead of 80% of applicants. POLR has helped members earn this."},
-       {title:"The Path from Here to Employed", body:"Start. Certificate. Placement. Retention. This is the POLR workforce pipeline and this lesson walks you through exactly how it works."},
+       {title:"What OSHA-10 Certification Gets You", body:"OSHA-10 is a 10-hour safety course that puts you ahead of 80% of applicants. HOPE has helped members earn this."},
+       {title:"The Path from Here to Employed", body:"Start. Certificate. Placement. Retention. This is the HOPE workforce pipeline and this lesson walks you through exactly how it works."},
      ]},
   ];
   if (selLesson) return React.createElement("div",null,
@@ -10363,7 +10377,7 @@ function GuestLearningPanel({ platform, toast, session, setActive }) {
       React.createElement("div",{className:"d-card-body"},
         React.createElement("div",{style:{fontFamily:"var(--font-body)",fontSize:"0.95rem",color:"var(--dtxt)",lineHeight:1.8,marginBottom:"1.25rem"}},selLesson.body),
         React.createElement("div",{style:{padding:"1rem",background:"rgba(200,145,58,0.06)",border:"1px solid rgba(200,145,58,0.15)",borderRadius:10,marginBottom:"1.25rem",fontStyle:"italic",fontFamily:"var(--font-serif)",fontSize:"0.88rem",color:"var(--dtxt)"}},
-          "The full lesson library is available to POLR members. Hundreds of lessons, step guides, video teachings, and certification prep. All free."
+          "The full lesson library is available to HOPE members. Hundreds of lessons, step guides, video teachings, and certification prep. All free."
         ),
         React.createElement("div",{style:{display:"flex",gap:"0.75rem"}},
           React.createElement("button",{onClick:function(){setSelLesson(null);},style:{padding:"0.6rem 1.25rem",borderRadius:8,border:"1px solid var(--bdr2)",background:"var(--bg3)",color:"var(--dtxt)",cursor:"pointer",fontWeight:600}},"See More Courses"),
@@ -10378,7 +10392,7 @@ function GuestLearningPanel({ platform, toast, session, setActive }) {
       React.createElement("h2",{style:{fontFamily:"var(--font-serif)",color:"var(--dtxt)",fontWeight:600}},"Start Learning Today")
     ),
     React.createElement("div",{style:{padding:"1rem 1.25rem",background:"rgba(200,145,58,0.06)",border:"1px solid rgba(200,145,58,0.15)",borderRadius:12,marginBottom:"1.25rem",fontStyle:"italic",fontFamily:"var(--font-serif)",fontSize:"0.9rem",color:"var(--dtxt)",lineHeight:1.75}},
-      "A preview of what is available to POLR members. Free courses, certifications, and workforce training. No cost. Ever."
+      "A preview of what is available to HOPE members. Free courses, certifications, and workforce training. No cost. Ever."
     ),
     COURSES.map(function(course){
       return React.createElement("div",{key:course.id,className:"d-card",style:{marginBottom:"0.85rem"}},
@@ -10408,7 +10422,7 @@ function GuestLearningPanel({ platform, toast, session, setActive }) {
       React.createElement("div",{style:{fontFamily:"var(--font-serif)",fontSize:"1.1rem",color:"var(--dtxt)",marginBottom:"0.5rem",fontWeight:600}},"Unlock the Full Learning Library"),
       React.createElement("div",{style:{fontSize:"0.85rem",color:"var(--dmuted)",marginBottom:"1rem",lineHeight:1.65}},"Members get hundreds of lessons, certification prep, step guides, video teachings, and mentor check-ins. Free. Always."),
       React.createElement("button",{onClick:function(){if(typeof setActive==="function")setActive("guest-signup");},
-        style:{padding:"0.75rem 2.5rem",borderRadius:10,background:"linear-gradient(135deg,var(--gold),#8b5e2a)",color:"var(--navy)",border:"none",cursor:"pointer",fontWeight:700,fontSize:"0.95rem",fontFamily:"var(--font-serif)"}},"Join POLR Free →")
+        style:{padding:"0.75rem 2.5rem",borderRadius:10,background:"linear-gradient(135deg,var(--gold),#8b5e2a)",color:"var(--navy)",border:"none",cursor:"pointer",fontWeight:700,fontSize:"0.95rem",fontFamily:"var(--font-serif)"}},"Join HOPE Free →")
     )
   );
 }
@@ -10424,13 +10438,13 @@ function GuestCareersPanel({ platform, toast, session, setActive }) {
     {id:"health",icon:"🏥", title:"Healthcare Entry Roles",   income:"$32,000-$48,000/yr", timeline:"3-6 months",  demand:"High",      color:"var(--l2)",
      desc:"Medical assistants, patient care technicians, clinic support. Healthcare actively hires people in recovery.",
      steps:["CNA or Medical Assistant Certification Prep","CPR / First Aid Certification","Clinical orientation program","Placement with partner health systems"],
-     polrNote:"Several POLR graduates work in healthcare. Your story of recovery is not a liability in this field. It is an asset."},
+     polrNote:"Several HOPE graduates work in healthcare. Your story of recovery is not a liability in this field. It is an asset."},
     {id:"admin", icon:"📋", title:"Administrative & Office",    income:"$28,000-$42,000/yr", timeline:"1-3 months",  demand:"Steady",    color:"var(--l5)",
      desc:"Scheduling, data entry, legal secretary work, customer service. These roles hire quickly and build a stable foundation.",
      steps:["Microsoft Office Fundamentals","Professional Communication Skills","Resume & Interview Prep","Placement with local employers"],
-     polrNote:"If you need income quickly, administrative roles are the fastest path. POLR workforce coordinator can have you interview-ready in weeks."},
+     polrNote:"If you need income quickly, administrative roles are the fastest path. HOPE workforce coordinator can have you interview-ready in weeks."},
     {id:"trade2",icon:"⚡",     title:"Electrical / Welding",       income:"$45,000-$75,000/yr", timeline:"6-18 months", demand:"Very High", color:"var(--l1)",
-     desc:"Electricians and welders are critically short in Louisiana. Trade schools have POLR-friendly enrollment options.",
+     desc:"Electricians and welders are critically short in Louisiana. Trade schools have HOPE-friendly enrollment options.",
      steps:["Basic electrical or welding aptitude assessment","Trade school enrollment (POLR can assist)","Apprenticeship placement","Journeyman certification path"],
      polrNote:"The shortage is real. If you have any interest in hands-on work, this is one of the most direct paths to economic stability."},
     {id:"ged2",  icon:"🎓", title:"Education -> Any Career",    income:"Unlocks all paths",   timeline:"3-6 months",  demand:"Always",    color:"var(--l3)",
@@ -10477,7 +10491,7 @@ function GuestCareersPanel({ platform, toast, session, setActive }) {
       React.createElement("h2",{style:{fontFamily:"var(--font-serif)",color:"var(--dtxt)",fontWeight:600}},"Where Could You Be in 6 Months?")
     ),
     React.createElement("div",{style:{padding:"1rem 1.25rem",background:"rgba(200,145,58,0.06)",border:"1px solid rgba(200,145,58,0.15)",borderRadius:12,marginBottom:"1.25rem",fontStyle:"italic",fontFamily:"var(--font-serif)",fontSize:"0.9rem",color:"var(--dtxt)",lineHeight:1.75}},
-      "Every career listed here has a POLR graduate who made it. Every path is real. Select any path to see exactly how to get there."
+      "Every career listed here has a HOPE graduate who made it. Every path is real. Select any path to see exactly how to get there."
     ),
     React.createElement("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.85rem"}},
       PATHS.map(function(path){
@@ -10503,7 +10517,7 @@ function GuestRecoveryPanel({ platform, toast, session, setActive }) {
      supports:["Daily open meetings, no membership needed","Anonymous journal, no account required","Mentor request, no commitment"],
      scripture:"Matthew 11:28 — Come unto me, all ye that labour and are heavy laden."},
     {num:2, icon:"🏠", title:"Stabilization", color:"var(--l4)",
-     desc:"Housing. Structure. Safety. If you need a place to land while you rebuild, POLR has transitional housing and daily accountability.",
+     desc:"Housing. Structure. Safety. If you need a place to land while you rebuild, HOPE has transitional housing and daily accountability.",
      supports:["Transitional housing for men, women, and families","House Mother support and community","Daily structure and accountability","Drug testing and compliance support"],
      scripture:"Isaiah 58:7 — Is it not to deal thy bread to the hungry, and that thou bring the poor that are cast out to thy house?"},
     {num:3, icon:"📚", title:"Growth",         color:"var(--gold)",
@@ -10511,7 +10525,7 @@ function GuestRecoveryPanel({ platform, toast, session, setActive }) {
      supports:["12-Step biblical recovery program","Personal mentor assignment","Step-by-step lesson library","Leadership track for those who are ready"],
      scripture:"Romans 12:2 — Be not conformed to this world: but be ye transformed by the renewing of your mind."},
     {num:4, icon:"💼", title:"Workforce",      color:"var(--l5)",
-     desc:"Employment. Financial stability. Purpose. POLR workforce pipeline connects you to employers who hire people in recovery.",
+     desc:"Employment. Financial stability. Purpose. HOPE workforce pipeline connects you to employers who hire people in recovery.",
      supports:["Resume and interview coaching","Certification prep (OSHA, trades, healthcare, admin)","Direct employer connections","GED preparation support"],
      scripture:"Colossians 3:23 — And whatsoever ye do, do it heartily, as to the Lord, and not unto men."},
     {num:5, icon:"⭐",     title:"Purpose",        color:"var(--l1)",
@@ -10553,7 +10567,7 @@ function GuestRecoveryPanel({ platform, toast, session, setActive }) {
       React.createElement("div",{style:{fontFamily:"var(--font-serif)",fontSize:"1.1rem",color:"var(--dtxt)",marginBottom:"0.5rem",fontWeight:600}},"Apply for Support"),
       React.createElement("div",{style:{fontSize:"0.85rem",color:"var(--dmuted)",marginBottom:"1rem",lineHeight:1.65}},"Whether you need housing, mentorship, workforce help, or just someone to talk to. No cost. No membership required to ask."),
       React.createElement("div",{style:{display:"flex",gap:"0.75rem",justifyContent:"center",flexWrap:"wrap"}},
-        React.createElement("a",{href:"tel:{POLR_PHONE}",style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"var(--bg3)",border:"1px solid var(--bdr2)",color:"var(--gold)",fontWeight:700,fontSize:"0.9rem",textDecoration:"none"}},"Call {POLR_PHONE}"),
+        React.createElement("a",{href:"tel:225-333-0330",style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"var(--bg3)",border:"1px solid var(--bdr2)",color:"var(--gold)",fontWeight:700,fontSize:"0.9rem",textDecoration:"none"}},"Call 225-333-0330"),
         React.createElement("button",{onClick:function(){if(typeof setActive==="function")setActive("guest-mentor");},style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"rgba(46,196,160,0.1)",border:"1px solid rgba(46,196,160,0.2)",color:"var(--l4)",cursor:"pointer",fontWeight:700,fontSize:"0.9rem"}},"Request a Mentor"),
         React.createElement("button",{onClick:function(){if(typeof setActive==="function")setActive("guest-signup");},style:{padding:"0.7rem 1.5rem",borderRadius:10,background:"linear-gradient(135deg,var(--gold),#8b5e2a)",color:"var(--navy)",border:"none",cursor:"pointer",fontWeight:700,fontFamily:"var(--font-serif)"}},"Create Free Account →")
       )
@@ -10564,13 +10578,13 @@ function GuestRecoveryPanel({ platform, toast, session, setActive }) {
 
 function GuestImpactPanel({ platform, toast, session, setActive }) {
   var STORIES = [
-    {name:"Marcus W.", campus:"POLR Place Thibodaux", outcome:"Employed Full-Time", streak:182, milestone:"6 Months Sober",
-     story:"I walked in with nothing. No job, no hope, no plan. POLR gave me a place to be honest. The workforce coordinator helped me get my OSHA-10. I am working at the refinery now. 182 days clean.",
+    {name:"Marcus W.", campus:"HOPE Place Port Allen", outcome:"Employed Full-Time", streak:182, milestone:"6 Months Sober",
+     story:"I walked in with nothing. No job, no hope, no plan. HOPE gave me a place to be honest. The workforce coordinator helped me get my OSHA-10. I am working at the refinery now. 182 days clean.",
      icon:"🛠", color:"var(--l4)"},
-    {name:"Angela L.", campus:"POLR Place Thibodaux", outcome:"Placed, BR Facility Services", streak:243, milestone:"8 Months, Reunited with Family",
-     story:"I did not think any employer would hire me with my background. The POLR team helped me see my story differently. I am employed, my kids are back, and I have not used in 8 months.",
+    {name:"Angela L.", campus:"HOPE Place Port Allen", outcome:"Placed, BR Facility Services", streak:243, milestone:"8 Months, Reunited with Family",
+     story:"I did not think any employer would hire me with my background. The HOPE team helped me see my story differently. I am employed, my kids are back, and I have not used in 8 months.",
      icon:"💼", color:"var(--gold)"},
-    {name:"A House Mother", campus:"POLR Place HOP Thibodaux", outcome:"Leading a Recovery House", streak:730, milestone:"2 Years Clean",
+    {name:"A House Mother", campus:"HOPE Place HOPE Place Port Allen", outcome:"Leading a Recovery House", streak:730, milestone:"2 Years Clean",
      story:"I came in as a resident. Now I run the house. Two years clean. I watch women arrive broken and leave whole. This is what purpose feels like.",
      icon:"🏠", color:"var(--l5)"},
     {name:"Devon S.", campus:"Port Allen", outcome:"GED Passed, Trade School Enrolled", streak:94, milestone:"3 Months, GED Complete",
@@ -10668,7 +10682,7 @@ function EducationGatewayPanel({ platform, update, toast, session, setActive }) 
     // Ministry Track
     {id:'mn-1',  track:'Ministry', icon:'✏️', title:'12-Step Facilitation',     status:'available', enrolled:7, completed:5, duration:'6 weeks', level:'Intermediate', desc:'How to lead a meeting, handle difficult moments, and apply Hosoda methodology.'},
     {id:'mn-2',  track:'Ministry', icon:'✏️', title:'Scripture & Recovery',     status:'available', enrolled:9, completed:6, duration:'4 weeks', level:'All',          desc:'KJV foundations for each of the 12 steps. Biblical theology of addiction and healing.'},
-    {id:'mn-3',  track:'Ministry', icon:'✏️', title:'Ambassador Training',      status:'available', enrolled:4, completed:2, duration:'12 weeks',level:'Advanced',      desc:'Campus expansion, community outreach, and POLR leadership development.'},
+    {id:'mn-3',  track:'Ministry', icon:'✏️', title:'Ambassador Training',      status:'available', enrolled:4, completed:2, duration:'12 weeks',level:'Advanced',      desc:'Campus expansion, community outreach, and HOPE leadership development.'},
     {id:'hh-1', track:'Home Health', icon:'🏡', title:'CPR / First Aid Certification', status:'available', enrolled:14, completed:11, duration:'1 day',   level:'All', desc:'Required for all home health and companion care placements. Earn your card same day.'},
     {id:'hh-2', track:'Home Health', icon:'🏡', title:'Personal Care Skills',           status:'available', enrolled:12, completed:8,  duration:'3 days',  level:'All', desc:'Bathing assistance, meal prep, medication reminders, and mobility support.'},
     {id:'hh-3', track:'Home Health', icon:'🏡', title:'Companion Care & Communication', status:'available', enrolled:10, completed:7,  duration:'2 days',  level:'All', desc:'Emotional support, conversation skills, family communication, and professional client boundaries.'},
@@ -10857,14 +10871,14 @@ function EduAdminPanel({ platform, update, toast, session, setActive }) {
 
   // Seed enrollment data (replaced by real when backend connects)
   var ENROLLMENT_DATA = [
-    {name:'Marcus W.',    campus:'POLR Place Thibodaux', tracks:['GED','Workforce'],  pct:62, lastActive:'2 days ago',  status:'On Track'},
-    {name:'Angela L.',    campus:'POLR Place Thibodaux', tracks:['Workforce'],         pct:94, lastActive:'Today',       status:'Graduating'},
-    {name:'Devon S.',     campus:'POLR Place @ Port Allen',           tracks:['GED','Trade'],       pct:38, lastActive:'1 week ago',  status:'Needs Check-in'},
-    {name:'Patricia R.',  campus:'POLR Place @ HOP Thibodaux', tracks:['Life Skills'], pct:77, lastActive:'3 days ago',  status:'On Track'},
-    {name:'James D.',     campus:'POLR Place @ HOP Larose', tracks:['Trade'],          pct:21, lastActive:'2 weeks ago', status:'At Risk'},
-    {name:'Tamika W.',    campus:'POLR Place Thibodaux', tracks:['Ministry','Life Skills'], pct:55, lastActive:'Yesterday', status:'On Track'},
-    {name:'Robert T.',    campus:'POLR Place @ Port Allen',           tracks:['Workforce','GED'],   pct:81, lastActive:'Today',       status:'On Track'},
-    {name:'Lisa C.',      campus:'POLR Place Thibodaux', tracks:['Trade'],              pct:44, lastActive:'4 days ago', status:'On Track'},
+    {name:'Marcus W.',    campus:'HOPE Place Port Allen', tracks:['GED','Workforce'],  pct:62, lastActive:'2 days ago',  status:'On Track'},
+    {name:'Angela L.',    campus:'HOPE Place Port Allen', tracks:['Workforce'],         pct:94, lastActive:'Today',       status:'Graduating'},
+    {name:'Devon S.',     campus:'HOPE Place Port Allen',           tracks:['GED','Trade'],       pct:38, lastActive:'1 week ago',  status:'Needs Check-in'},
+    {name:'Patricia R.',  campus:'HOPE Place Port Allen', tracks:['Life Skills'], pct:77, lastActive:'3 days ago',  status:'On Track'},
+    {name:'James D.',     campus:'HOPE Place Port Allen', tracks:['Trade'],          pct:21, lastActive:'2 weeks ago', status:'At Risk'},
+    {name:'Tamika W.',    campus:'HOPE Place Port Allen', tracks:['Ministry','Life Skills'], pct:55, lastActive:'Yesterday', status:'On Track'},
+    {name:'Robert T.',    campus:'HOPE Place Port Allen',           tracks:['Workforce','GED'],   pct:81, lastActive:'Today',       status:'On Track'},
+    {name:'Lisa C.',      campus:'HOPE Place Port Allen', tracks:['Trade'],              pct:44, lastActive:'4 days ago', status:'On Track'},
   ];
 
   var TRACK_STATS = [
@@ -10966,16 +10980,16 @@ function PipelineBoard({ platform, update, toast, session, setActive }) {
 
   // Seed pipeline data (replaces with real member data post-backend)
   var SEED_PIPELINE = [
-    {id:'pl1', name:'Marcus W.',   campus:'POLR Place Thibodaux', stage:'retained',     track:'Trade',       employer:'BR Facility Services',   coordinator:'POLR Director',   daysIn:182, nextMilestone:'6-month review',         urgency:'low'},
-    {id:'pl2', name:'Devon S.',    campus:'POLR Place @ Port Allen',           stage:'training',     track:'GED + Trade', employer:null,                     coordinator:'Ambassador Team', daysIn:38,  nextMilestone:'GED Math test — Apr 15', urgency:'medium'},
-    {id:'pl3', name:'Angela L.',   campus:'POLR Place Thibodaux', stage:'placed',       track:'Workforce',   employer:'BR Facility Services',   coordinator:'POLR Director',   daysIn:61,  nextMilestone:'90-day retention check', urgency:'low'},
-    {id:'pl4', name:'James D.',    campus:'POLR Place @ HOP Larose',stage:'stabilizing',track:'Workforce',   employer:null,                     coordinator:'House Mother',    daysIn:14,  nextMilestone:'Career assessment',      urgency:'high'},
-    {id:'pl5', name:'Patricia R.', campus:'POLR Place @ HOP Thibodaux',stage:'jobready',track:'Home Health', employer:null,                     coordinator:'Workforce Team',  daysIn:22,  nextMilestone:'Agency interview Apr 8', urgency:'medium'},
-    {id:'pl6', name:'Tamika W.',   campus:'POLR Place Thibodaux', stage:'interviewing', track:'Ministry',    employer:'POLR Staff Candidate',   coordinator:'POLR Director',   daysIn:45,  nextMilestone:'Second interview',       urgency:'medium'},
-    {id:'pl7', name:'Robert T.',   campus:'POLR Place @ Port Allen',           stage:'training',     track:'Trade',       employer:null,                     coordinator:'Workforce Team',  daysIn:29,  nextMilestone:'OSHA-10 test Apr 12',    urgency:'high'},
-    {id:'pl8', name:'Lisa C.',     campus:'POLR Place Thibodaux', stage:'jobready',     track:'Workforce',   employer:null,                     coordinator:'Workforce Team',  daysIn:18,  nextMilestone:'Resume review',          urgency:'low'},
-    {id:'pl9', name:'Kevin M.',    campus:'POLR Place @ Port Allen',           stage:'stabilizing',  track:'Life Skills', employer:null,                     coordinator:'House Mother',    daysIn:7,   nextMilestone:'Week 2 check-in',        urgency:'high'},
-    {id:'pl10',name:'Sandra B.',   campus:'POLR Place Thibodaux', stage:'interviewing', track:'Home Health', employer:'Home Instead',            coordinator:'Workforce Team',  daysIn:31,  nextMilestone:'Reference check',        urgency:'medium'},
+    {id:'pl1', name:'Marcus W.',   campus:'HOPE Place Port Allen', stage:'retained',     track:'Trade',       employer:'BR Facility Services',   coordinator:'HOPE Director',   daysIn:182, nextMilestone:'6-month review',         urgency:'low'},
+    {id:'pl2', name:'Devon S.',    campus:'HOPE Place Port Allen',           stage:'training',     track:'GED + Trade', employer:null,                     coordinator:'Ambassador Team', daysIn:38,  nextMilestone:'GED Math test — Apr 15', urgency:'medium'},
+    {id:'pl3', name:'Angela L.',   campus:'HOPE Place Port Allen', stage:'placed',       track:'Workforce',   employer:'BR Facility Services',   coordinator:'HOPE Director',   daysIn:61,  nextMilestone:'90-day retention check', urgency:'low'},
+    {id:'pl4', name:'James D.',    campus:'HOPE Place Port Allen',stage:'stabilizing',track:'Workforce',   employer:null,                     coordinator:'House Mother',    daysIn:14,  nextMilestone:'Career assessment',      urgency:'high'},
+    {id:'pl5', name:'Patricia R.', campus:'HOPE Place Port Allen',stage:'jobready',track:'Home Health', employer:null,                     coordinator:'Workforce Team',  daysIn:22,  nextMilestone:'Agency interview Apr 8', urgency:'medium'},
+    {id:'pl6', name:'Tamika W.',   campus:'HOPE Place Port Allen', stage:'interviewing', track:'Ministry',    employer:'HOPE Staff Candidate',   coordinator:'HOPE Director',   daysIn:45,  nextMilestone:'Second interview',       urgency:'medium'},
+    {id:'pl7', name:'Robert T.',   campus:'HOPE Place Port Allen',           stage:'training',     track:'Trade',       employer:null,                     coordinator:'Workforce Team',  daysIn:29,  nextMilestone:'OSHA-10 test Apr 12',    urgency:'high'},
+    {id:'pl8', name:'Lisa C.',     campus:'HOPE Place Port Allen', stage:'jobready',     track:'Workforce',   employer:null,                     coordinator:'Workforce Team',  daysIn:18,  nextMilestone:'Resume review',          urgency:'low'},
+    {id:'pl9', name:'Kevin M.',    campus:'HOPE Place Port Allen',           stage:'stabilizing',  track:'Life Skills', employer:null,                     coordinator:'House Mother',    daysIn:7,   nextMilestone:'Week 2 check-in',        urgency:'high'},
+    {id:'pl10',name:'Sandra B.',   campus:'HOPE Place Port Allen', stage:'interviewing', track:'Home Health', employer:'Home Instead',            coordinator:'Workforce Team',  daysIn:31,  nextMilestone:'Reference check',        urgency:'medium'},
   ];
 
   // ── LIVE: prefer API pipeline; SEED_PIPELINE shown only before first load ──
@@ -11159,7 +11173,7 @@ function PipelineBoard({ platform, update, toast, session, setActive }) {
           React.createElement('div',{className:'d-card-head'},
             React.createElement('div',null,
               React.createElement('div',{style:{fontWeight:600,color:'var(--dtxt)',fontSize:'0.9rem',marginBottom:'0.15rem'}},m.name),
-              React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},m.track,' · ',m.campus.replace('POLR Place ','').replace(' Thibodaux',''))
+              React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},m.track,' · ',m.campus.replace('HOPE Place ','').replace(' Thibodaux',''))
             ),
             React.createElement('div',{style:{textAlign:'right'}},
               React.createElement('span',{style:{fontSize:'0.65rem',fontWeight:700,padding:'0.12rem 0.45rem',borderRadius:4,background:st.bg,color:st.color}},st.icon+' '+st.label),
@@ -11177,7 +11191,7 @@ function PipelineBoard({ platform, update, toast, session, setActive }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// EMPLOYER REFERRAL PORTAL — Employers refer employees into POLR (L0,L1,L4)
+// EMPLOYER REFERRAL PORTAL — Employers refer employees into HOPE (L0,L1,L4)
 // ═══════════════════════════════════════════════════════════════════
 function EmployerReferralPortal({ platform, update, toast, session, setActive }) {
   var _s1=React.useState('list'), view=_s1[0], setView=_s1[1];
@@ -11193,14 +11207,14 @@ function EmployerReferralPortal({ platform, update, toast, session, setActive })
     'Home Health Aide','Life Skills & Stability','Ministry & Leadership','12-Step Recovery Program'];
   var REFERRAL_TYPES = [
     {id:'employee-support',label:'At-Risk Employee Support','desc':'Refer a current employee who needs stabilization support to avoid termination'},
-    {id:'new-hire-support', label:'New Hire Retention',     desc:'New hire from recovery — POLR provides 90-day retention support'},
-    {id:'cohort-sponsor',   label:'Sponsor a Training Cohort',desc:'Fund a cohort of candidates through a specific POLR certification track'},
+    {id:'new-hire-support', label:'New Hire Retention',     desc:'New hire from recovery — HOPE provides 90-day retention support'},
+    {id:'cohort-sponsor',   label:'Sponsor a Training Cohort',desc:'Fund a cohort of candidates through a specific HOPE certification track'},
     {id:'pipeline-partner', label:'Hiring Pipeline Partner', desc:'Receive first access to all program graduates in a specific track'},
   ];
 
   var submitReferral = function() {
     if (!form.employerName||!form.empEmail) {toast({icon:'⚠️',title:'Employer name and email required'});return;}
-    var ref = Object.assign({},form,{id:'ref'+Date.now(),status:'new',submittedAt:new Date().toISOString(),assignedTo:'POLR Director'});
+    var ref = Object.assign({},form,{id:'ref'+Date.now(),status:'new',submittedAt:new Date().toISOString(),assignedTo:'HOPE Director'});
     update('employerReferrals',[...referrals,ref]);
     var n={id:'er'+Date.now(),title:'🤝 New Employer Referral — '+form.employerName,
       body:form.referralType==='employee-support'?'At-risk employee referred by '+form.employerName+'. Confidential: '+form.confidential+'. Program: '+form.program
@@ -11209,7 +11223,7 @@ function EmployerReferralPortal({ platform, update, toast, session, setActive })
       type:'info',sentAt:new Date().toISOString(),requireResponse:true,
       actionYes:'Schedule call',actionNo:'Send info packet',responses:[]};
     update('notifications',[...(platform.notifications||[]),n]);
-    toast({icon:'🤝',title:'Referral received from '+form.employerName,body:'The POLR team has been notified. Response within 24 hours.'});
+    toast({icon:'🤝',title:'Referral received from '+form.employerName,body:'The HOPE team has been notified. Response within 24 hours.'});
     setView('list');
     setForm({empName:'',empTitle:'',empEmail:'',empPhone:'',employeeName:'',employeePhone:'',
       program:'Workforce Readiness',reason:'',confidential:true,employerName:'',referralType:'employee-support'});
@@ -11230,7 +11244,7 @@ function EmployerReferralPortal({ platform, update, toast, session, setActive })
     React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--gold)'}},
       React.createElement('div',{className:'lvh-tag'},'Workforce Pipeline'),
       React.createElement('div',{className:'lvh-title'},'Employer Referral Portal'),
-      React.createElement('div',{className:'lvh-sub'},'Employers refer employees for POLR support, sponsor training cohorts, or join the hiring pipeline. EAP alternative with retention tracking and WOTC documentation.')
+      React.createElement('div',{className:'lvh-sub'},'Employers refer employees for HOPE support, sponsor training cohorts, or join the hiring pipeline. EAP alternative with retention tracking and WOTC documentation.')
     ),
     // Top stats
     React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.85rem',marginBottom:'1.25rem'}},
@@ -11339,7 +11353,7 @@ function EmployerReferralPortal({ platform, update, toast, session, setActive })
           )
         ),
         React.createElement('div',{style:{padding:'0.75rem 1rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:8,marginBottom:'1rem',fontSize:'0.8rem',color:'var(--dtxt)',lineHeight:1.65}},
-          '💰 WOTC Reminder: Employers who hire POLR graduates may qualify for up to $9,600 in Work Opportunity Tax Credits per hire. We provide all documentation.'
+          '💰 WOTC Reminder: Employers who hire HOPE graduates may qualify for up to $9,600 in Work Opportunity Tax Credits per hire. We provide all documentation.'
         ),
         React.createElement('button',{onClick:submitReferral,style:{padding:'0.75rem 2rem',borderRadius:10,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.95rem',fontFamily:'var(--font-serif)'}},'Submit Referral →')
       )
@@ -11382,7 +11396,7 @@ function EmployerReferralPortal({ platform, update, toast, session, setActive })
         React.createElement('div',{className:'d-card-body'},
           React.createElement('div',{style:{padding:'1rem',background:'rgba(91,196,110,0.06)',border:'1px solid rgba(91,196,110,0.2)',borderRadius:10,marginBottom:'1.25rem'}},
             React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1rem',fontWeight:600,color:'var(--l5)',marginBottom:'0.3rem'}},'WOTC saves employers up to $9,600 per hire'),
-            React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.65}},'Individuals in qualified recovery programs are eligible. POLR generates the IRS Form 8850 documentation package automatically. Employers file with the Louisiana Workforce Commission within 28 days of hire.')
+            React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.65}},'Individuals in qualified recovery programs are eligible. HOPE generates the IRS Form 8850 documentation package automatically. Employers file with the Louisiana Workforce Commission within 28 days of hire.')
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.85rem',marginBottom:'1.25rem'}},
             [{label:'Total WOTC Filed',val:12,color:'var(--l5)'},{label:'Est. Employer Savings',val:'$89,400',color:'var(--gold)'},{label:'Pending Documentation',val:3,color:'var(--l2)'}].map(function(stat){
@@ -11423,11 +11437,11 @@ function CohortManager({ platform, update, toast, session, setActive }) {
   var SEED_COHORTS = [
     {id:'co1',name:'OSHA-10 Spring 2026',track:'Trade - OSHA-10',sponsor:'Turner Industries',
      sponsorAmount:5000,startDate:'2026-04-01',endDate:'2026-04-15',targetSize:10,
-     enrolled:9,completed:0,status:'active',campus:'POLR Place Thibodaux',
+     enrolled:9,completed:0,status:'active',campus:'HOPE Place Port Allen',
      members:['Marcus W.','Devon S.','Robert T.','Kevin M.','James P.','Andre L.','Chris T.','Marcus B.','Tony F.']},
     {id:'co2',name:'Home Health Cohort — March 2026',track:'Home Health Aide - Full Track',sponsor:'Home Instead',
      sponsorAmount:3200,startDate:'2026-03-10',endDate:'2026-03-31',targetSize:8,
-     enrolled:8,completed:7,status:'completed',campus:'POLR Place Thibodaux',
+     enrolled:8,completed:7,status:'completed',campus:'HOPE Place Port Allen',
      members:['Patricia R.','Sandra B.','Lisa C.','Tamika W.','Maria G.','Joyce P.','Cindy R.','Anne M.']},
     {id:'co3',name:'Workforce Readiness Q2',track:'Workforce - Full Track',sponsor:'BR Facility Services',
      sponsorAmount:2800,startDate:'2026-04-15',endDate:'2026-05-15',targetSize:12,
@@ -11607,11 +11621,11 @@ function TradePartnersPanel({ platform, update, toast, session, setActive }) {
     {id:'tp1',name:'Fletcher Technical Community College',type:'Trade School',contact:'Workforce Coordinator',
      email:'workforce@fletcher.edu',phone:'985-448-7900',moaStatus:'active',moaDate:'2026-01-15',
      membersEnrolled:12,programs:['Welding','Pipefitting','Industrial Maintenance'],
-     notes:'Primary trade school partner. Reduced tuition for POLR referrals. Reports completions monthly.'},
+     notes:'Primary trade school partner. Reduced tuition for HOPE referrals. Reports completions monthly.'},
     {id:'tp2',name:'UA Local 60 — Pipefitters',type:'Union / Apprenticeship',contact:'Apprenticeship Coordinator',
      email:'local60@uapipefitters.org',phone:'225-344-6021',moaStatus:'draft',moaDate:'',
      membersEnrolled:3,programs:['Pipefitter Apprenticeship'],
-     notes:'Fast-track application review for POLR candidates. Awaiting MOU signature.'},
+     notes:'Fast-track application review for HOPE candidates. Awaiting MOU signature.'},
     {id:'tp3',name:'Louisiana Workforce Commission',type:'State Agency',contact:'WIOA Program Director',
      email:'lwc.workforce@la.gov',phone:'225-342-3111',moaStatus:'active',moaDate:'2025-11-01',
      membersEnrolled:0,programs:['WIOA Title I Funding','Adult Education Title II'],
@@ -11623,7 +11637,7 @@ function TradePartnersPanel({ platform, update, toast, session, setActive }) {
     {id:'tp5',name:'Associated Builders & Contractors — Pelican Chapter',type:'Industrial Contractor',contact:'Workforce Programs',
      email:'info@abcpelican.org',phone:'225-928-4052',moaStatus:'draft',moaDate:'',
      membersEnrolled:0,programs:['Member employer network','Craft training programs'],
-     notes:'Connects POLR to 400+ Gulf Coast contractors. MOU in progress.'},
+     notes:'Connects HOPE to 400+ Gulf Coast contractors. MOU in progress.'},
     {id:'tp6',name:'Entergy Foundation',type:'Foundation',contact:'Community Investment Manager',
      email:'foundation@entergy.com',phone:'504-576-4000',moaStatus:'active',moaDate:'2026-02-01',
      membersEnrolled:0,programs:['Workforce Development Grants'],
@@ -11756,7 +11770,7 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
      tip:'POLR qualifies under the "individuals with barriers" definition. Use platform data: members enrolled, completions, wages at placement. Apply through South Central Planning & Development Commission (your local WDB).'},
     {id:'wioa2',name:'WIOA Title II — Adult Education & Family Literacy',agency:'Louisiana Workforce Commission',
      amount:'$50,000–$200,000/yr',cycle:'Annual — Feb deadline',type:'State-Federal',
-     eligibility:'Adult education, GED preparation, English literacy. POLR GED track qualifies directly.',
+     eligibility:'Adult education, GED preparation, English literacy. HOPE GED track qualifies directly.',
      metrics:['GED completions','Literacy level gains','Enrollment numbers','Post-secondary transitions'],
      narrative:['Instructional model','Qualified instructor plan','Assessment methodology','Partner coordination'],
      status:'eligible',polrFit:88,
@@ -11767,7 +11781,7 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
      metrics:['Recidivism reduction','Employment at 6 months','Housing stability','Program completions'],
      narrative:['Reentry model','Criminal justice partnership','Trauma-informed approach','12-month outcome projections'],
      status:'eligible',polrFit:92,
-     tip:'A 30-year ministry founding story is the narrative. Court-referred members = documented reentry population. Connect with the DA office to formalize the pipeline first.'},
+     tip:'A 21-year ministry founding story is the narrative. Court-referred members = documented reentry population. Connect with the DA office to formalize the pipeline first.'},
     {id:'samhsa_rcsp',name:'SAMHSA — Recovery Community Support Program',agency:'SAMHSA / HHS',
      amount:'$150,000–$400,000',cycle:'2-year — biennial RFP',type:'Federal',
      eligibility:'Recovery community organizations providing peer support, employment, and housing services.',
@@ -11777,14 +11791,14 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
      tip:'POLR is a textbook RCSP grantee. The 12-step program, peer mentors, housing, and workforce components are exactly what this grant funds. Highest fit in the catalog.'},
     {id:'wotc_doc',name:'WOTC Documentation Program (not a grant)',agency:'IRS / Louisiana Workforce Commission',
      amount:'$2,400–$9,600 per hire credit',cycle:'Per hire — file within 28 days',type:'Tax Credit',
-     eligibility:'Employers hiring POLR graduates qualify. POLR generates the documentation.',
+     eligibility:'Employers hiring HOPE graduates qualify. HOPE generates the documentation.',
      metrics:['Hires documented','Credits filed','Employer savings generated'],
      narrative:[],
      status:'active',polrFit:100,
-     tip:'This is not a grant application — it is a tax credit that benefits employers. POLR generates IRS Form 8850 for every qualifying hire. Employers file with LWC. Track in WOTC Tracker under Employer Referrals.'},
+     tip:'This is not a grant application — it is a tax credit that benefits employers. HOPE generates IRS Form 8850 for every qualifying hire. Employers file with LWC. Track in WOTC Tracker under Employer Referrals.'},
     {id:'entergy',name:'Entergy Foundation — Workforce Development',agency:'Entergy Foundation',
      amount:'$25,000–$100,000',cycle:'Rolling — LOI first',type:'Foundation',
-     eligibility:'Louisiana community workforce programs. POLR trade and workforce tracks align with their priority areas.',
+     eligibility:'Louisiana community workforce programs. HOPE trade and workforce tracks align with their priority areas.',
      metrics:['Individuals trained','Credentials earned','Employed at 6 months'],
      narrative:['Community impact story','Program description','Budget narrative','Sustainability plan'],
      status:'eligible',polrFit:85,
@@ -11802,7 +11816,7 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
      metrics:['Individuals served','Employment rate','Recidivism at 1 year','Housing stability'],
      narrative:['Service model','Staff credentials','Data systems','Community partnerships'],
      status:'eligible',polrFit:89,
-     tip:'Requires MOU with a Louisiana correctional facility or probation office. Court-referred members are your documented population. Start with the Lafourche Parish DA  office.'},
+     tip:'Requires MOU with a Louisiana correctional facility or probation office. Court-referred members are your documented population. Start with the West Baton Rouge Parish DA  office.'},
   ];
 
   var statusColor={eligible:'var(--l2)',applied:'var(--gold)',awarded:'var(--l5)',declined:'#fc8181',active:'var(--l4)'};
@@ -11850,7 +11864,7 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
         ),
         React.createElement('div',{className:'d-card-body'},
           React.createElement('div',{style:{padding:'0.75rem 1rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:8,marginBottom:'1.25rem',fontSize:'0.85rem',color:'var(--dtxt)',lineHeight:1.7}},selGrant.eligibility),
-          // POLR Fit score
+          // HOPE Fit score
           React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'1rem',marginBottom:'1.25rem',padding:'1rem',background:'rgba(255,255,255,0.02)',borderRadius:10,border:'1px solid var(--bdr)'}},
             React.createElement('div',{style:{position:'relative',width:64,height:64,flexShrink:0}},
               React.createElement('svg',{width:64,height:64,viewBox:'0 0 64 64'},
@@ -11918,7 +11932,7 @@ function GrantEngine({ platform, update, toast, session, setActive }) {
     React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--gold)'}},
       React.createElement('div',{className:'lvh-tag'},'Workforce Pipeline'),
       React.createElement('div',{className:'lvh-title'},'Grant Engine'),
-      React.createElement('div',{className:'lvh-sub'},'Automated grant tracking with platform data pre-population. POLR fit scores, required metrics auto-pulled from live member data, narrative templates.')
+      React.createElement('div',{className:'lvh-sub'},'Automated grant tracking with platform data pre-population. HOPE fit scores, required metrics auto-pulled from live member data, narrative templates.')
     ),
     React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.85rem',marginBottom:'1.5rem'}},
       [{label:'Grants in Catalog',val:GRANT_CATALOG.length,color:'var(--l2)'},
@@ -12001,12 +12015,12 @@ function LicensingEnginePanel({ platform, update, toast, session, setActive }) {
 
   // B3: Auto-detect parish from session campus
   var CAMPUS_PARISH_MAP = {
-    'polr-place-thibodaux':   'Lafourche Parish',
-    'polr-place-hop-thib':    'Lafourche Parish',
+    'hope-place-port-allen':   'West Baton Rouge Parish',
+    'hope-place-port-allen':    'West Baton Rouge Parish',
     'polr-place-port-allen':  'West Baton Rouge Parish',
     'polr-place-baton-rouge': 'East Baton Rouge Parish'
   };
-  var detectedParish = CAMPUS_PARISH_MAP[(session&&session.campus)||''] || 'Lafourche Parish';
+  var detectedParish = CAMPUS_PARISH_MAP[(session&&session.campus)||''] || 'West Baton Rouge Parish';
 
   var LICENSE_CATALOG = [
     {
@@ -12108,13 +12122,13 @@ function LicensingEnginePanel({ platform, update, toast, session, setActive }) {
         'Documented program structure matching drug court standards',
         'Ability to provide progress reports to court',
         'Drug testing documentation capability',
-        'POLR platform already tracks all required data points',
+        'HOPE platform already tracks all required data points',
       ],
-      nextAction:'Contact Lafourche Parish Drug Court (337-421-6565) and Terrebonne Parish Drug Court — schedule meeting with presiding judges',
+      nextAction:'Contact West Baton Rouge Parish Drug Court (337-421-6565) and Terrebonne Parish Drug Court — schedule meeting with presiding judges',
       contactAgency:'Louisiana Drug Court Program Office — Office of the Supreme Court',
       stage:1,
       stages:['Judge Meeting','LOI Submission','Application','Court Vote','Certified'],
-      notes:'POLR platform already generates all required court compliance reports. This is one of the fastest wins.',
+      notes:'HOPE platform already generates all required court compliance reports. This is one of the fastest wins.',
       automatedAlerts:true
     },
     {
@@ -12566,7 +12580,7 @@ function GrantOutcomesPanel({ platform, update, toast, session, setActive }) {
 // ════════════════════════════════════════════════════════════════════════
 // PLATFORM BUSINESS SUITE
 // Six panels for managing the licensing business
-// All L0 only — never visible to POLR members or staff
+// All L0 only — never visible to HOPE members or staff
 // ════════════════════════════════════════════════════════════════════════
 
 // ─── SHARED HELPERS ────────────────────────────────────────────────────
@@ -12941,7 +12955,7 @@ function BizLicensingLeads({ platform, update, toast, setActive }) {
   var SEED_LEADS = [
     {id:'ll1',orgName:'New Beginnings Recovery Center',contact:'Pastor David Osei',email:'dosei@newbeginnings.org',phone:'318-555-0241',orgType:'Faith-Based Recovery',members:45,source:'Referral — POLR',stage:'demo_scheduled',notes:'Referred by Jeff. Demo scheduled Apr 5.',createdAt:'2026-03-20'},
     {id:'ll2',orgName:'Baton Rouge Reentry Coalition',contact:'Program Director',email:'programs@brreentry.org',phone:'225-555-0382',orgType:'Government/Reentry',members:120,source:'Web Search',stage:'qualified',notes:'Found us via Louisiana Workforce Commission directory.',createdAt:'2026-03-22'},
-    {id:'ll3',orgName:'Christ Community Recovery',contact:'Elder Mark Davis',email:'mdavis@christcommunity.church',phone:'985-555-0193',orgType:'Faith-Based Recovery',members:28,source:'Word of Mouth',stage:'new',notes:'Called the POLR line asking about the platform.',createdAt:'2026-03-25'},
+    {id:'ll3',orgName:'Christ Community Recovery',contact:'Elder Mark Davis',email:'mdavis@christcommunity.church',phone:'985-555-0193',orgType:'Faith-Based Recovery',members:28,source:'Word of Mouth',stage:'new',notes:'Called the HOPE line asking about the platform.',createdAt:'2026-03-25'},
   ];
   var _al = React.useState(null), apiLeads = _al[0], setApiLeads = _al[1];
   React.useEffect(function(){
@@ -13160,7 +13174,7 @@ function BizBillingMRR({ platform, update, toast, setActive }) {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-// 5. WHITE-LABEL CONFIG — strip POLR branding, insert client branding
+// 5. WHITE-LABEL CONFIG — strip HOPE branding, insert client branding
 // ════════════════════════════════════════════════════════════════════════
 function BizWhiteLabelConfig({ platform, update, toast, setActive }) {
   var _sc=React.useState(null),selClient=_sc[0],setSelClient=_sc[1];
@@ -13175,7 +13189,7 @@ function BizWhiteLabelConfig({ platform, update, toast, setActive }) {
   var generatePackage = function(){
     if(!cfg.orgName){toast({icon:'\u26a0\ufe0f',title:'Organization name required'});return;}
     toast({icon:'\U0001f3a8',title:'White-label package generated for '+cfg.orgName,
-      body:'Config file created. Deploy instructions sent to '+cfg.footerEmail+'. POLR content stripped. Client branding applied.'});
+      body:'Config file created. Deploy instructions sent to '+cfg.footerEmail+'. HOPE content stripped. Client branding applied.'});
     var n={id:'wl'+Date.now(),title:'\U0001f3a8 White-label Config Generated — '+cfg.orgName,
       body:'Platform configured for '+cfg.orgName+'. Colors: '+cfg.primaryColor+' / '+cfg.accentColor+'. Admin login: '+cfg.adminUsername+'. Ready to deploy.',
       type:'info',sentAt:new Date().toISOString(),requireResponse:true,
@@ -13187,13 +13201,13 @@ function BizWhiteLabelConfig({ platform, update, toast, setActive }) {
     React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--l3)'}},
       React.createElement('div',{className:'lvh-tag'},'Platform Business'),
       React.createElement('div',{className:'lvh-title'},'White-Label Configuration'),
-      React.createElement('div',{className:'lvh-sub'},'Configure a client deployment. Strips all POLR-specific content and replaces with client branding, colors, contact info, and admin credentials.')
+      React.createElement('div',{className:'lvh-sub'},'Configure a client deployment. Strips all HOPE-specific content and replaces with client branding, colors, contact info, and admin credentials.')
     ),
-    // POLR content protection notice
+    // HOPE content protection notice
     React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(252,129,129,0.06)',border:'1px solid rgba(252,129,129,0.2)',borderRadius:10,marginBottom:'1.5rem'}},
-      React.createElement('div',{style:{fontWeight:700,color:'#fc8181',fontSize:'0.82rem',marginBottom:'0.3rem'}},'\U0001f512 POLR CONTENT PROTECTION'),
+      React.createElement('div',{style:{fontWeight:700,color:'#fc8181',fontSize:'0.82rem',marginBottom:'0.3rem'}},'\U0001f512 HOPE CONTENT PROTECTION'),
       React.createElement('div',{style:{fontSize:'0.78rem',color:'var(--dmuted)',lineHeight:1.65}},
-        'White-label deployments automatically exclude: POLR 12-step adapted content, Jeff Walthers testimony, Walk Well blog posts, {POLR_WEBSITE} branding, and all POLR-copyrighted curriculum. Client receives platform structure, workflow logic, and all non-POLR content only.'
+        'White-label deployments automatically exclude: HOPE 12-step adapted content, Chuck Edwards testimony, HOPE In Motion Blog posts, hopenetwork.com branding, and all HOPE-copyrighted curriculum. Client receives platform structure, workflow logic, and all non-HOPE content only.'
       )
     ),
     // Client selector
@@ -13288,7 +13302,7 @@ function BizContractGen({ platform, update, toast, setActive }) {
      monthlyFee:799,  setupFee:2500, perResidentFee:10, growthPct:7,  newLocationPct:10, grantRoyaltyPct:10,
      minMonthly:799,  ldAmount:5000,  includes:['All Tracking features','Employer referral portal','Cohort management','Trade partner records','Grant engine + outcomes','WOTC documentation']},
     {id:'whitelabel',   label:'White-Label License',  icon:'🎨',
-     desc:'Full platform under client branding. Stripped of POLR content. Independent deployment.',
+     desc:'Full platform under client branding. Stripped of HOPE content. Independent deployment.',
      deploymentDefault:'hosted_shared',hostingNote:'Shared hosted instance. $15-40/mo hosting billed separately.',
      monthlyFee:1200, setupFee:4500, perResidentFee:12, growthPct:8,  newLocationPct:12, grantRoyaltyPct:10,
      minMonthly:1200, ldAmount:7500,  includes:['All Pipeline features','Custom branding & colors','Client admin credentials','White-label deployment','Priority support']},
@@ -13392,11 +13406,11 @@ function BizContractGen({ platform, update, toast, setActive }) {
       +'<p class="sub">Effective Date: '+eff+'<\/p>'
       +'<div class="pt">'
         +'<div><div class="ph">CONSULTANT<\/div><div class="pc"><div class="pn">'+(f.licensorName||'[Your Name]')+'<\/div>'+(f.licensorLLC?'<div style="font-size:8.5pt;color:#64748b">'+f.licensorLLC+'<\/div>':'')+'<div class="pr">(&ldquo;Consultant&rdquo;)<\/div><\/div><\/div>'
-        +'<div><div class="ph">CLIENT<\/div><div class="pc"><div class="pn">Path of Life Recovery, Inc.<\/div><div class="pr">(&ldquo;Client&rdquo;)<\/div><\/div><\/div>'
+        +'<div><div class="ph">CLIENT<\/div><div class="pc"><div class="pn">HOPE Recovery, Inc.<\/div><div class="pr">(&ldquo;Client&rdquo;)<\/div><\/div><\/div>'
       +'<\/div>'
       +'<div class="hl">This Consulting Services Agreement is executed concurrently with the Platform License &amp; Participation Agreement between the same parties. The two agreements are complementary and independent. This Agreement governs the consulting relationship only; the Platform License Agreement governs all software licensing, royalty, and IP terms.<\/div>'
       +'<div class="sh">SECTION 1 &mdash; ENGAGEMENT &amp; TITLE<\/div>'
-      +'<p class="bt">Client engages Consultant as an independent contractor to serve as <strong>'+f.licensorTitle+'<\/strong> of Path of Life Recovery, Inc., effective '+eff+'. This engagement does not create an employment relationship, partnership, joint venture, or agency. Consultant is not an employee.<\/p>'
+      +'<p class="bt">Client engages Consultant as an independent contractor to serve as <strong>'+f.licensorTitle+'<\/strong> of HOPE Recovery, Inc., effective '+eff+'. This engagement does not create an employment relationship, partnership, joint venture, or agency. Consultant is not an employee.<\/p>'
       +'<div class="sh">SECTION 2 &mdash; SCOPE OF WORK<\/div>'
       +'<p class="bt">Consultant shall provide the following services:<\/p>'
       +'<p class="si">'+f.licensorScope+'<\/p>'
@@ -13413,33 +13427,33 @@ function BizContractGen({ platform, update, toast, setActive }) {
       +'<p class="si"><span class="sl">Work Product:<\/span> Strategic plans, written materials, and operational documents created specifically for Client under this Agreement become Client property. All technology, code, and platform modifications remain Consultant property.<\/p>'
       +'<p class="si"><span class="sl">No Restriction:<\/span> Consultant retains the right to license the Platform to other organizations and provide consulting to other non-competing organizations, provided such activities do not materially impair Consultant performance under this Agreement.<\/p>'
       +'<div class="sh">SECTION 5 &mdash; AFFILIATION &amp; AUTHORIZED REPRESENTATION<\/div>'
-      +'<div class="hl">Authorized Title: Consultant is authorized to represent themselves as <strong>'+f.licensorTitle+', Path of Life Recovery, Inc.<\/strong> in external communications, partnership development, grant applications, and employer engagements. This authorization is granted under this Agreement and exists independently of and concurrently with the Platform License Agreement. The non-affiliation clause in the Platform License Agreement applies to third-party Licensees and does not restrict Consultant&rsquo;s representation rights under this Agreement.<\/div>'
-      +'<p class="bt">For any commitment made in Client&rsquo;s name that creates a legal or financial obligation, Consultant shall obtain prior written approval from the authorized signatory of Path of Life Recovery, Inc.<\/p>'
+      +'<div class="hl">Authorized Title: Consultant is authorized to represent themselves as <strong>'+f.licensorTitle+', HOPE Recovery, Inc.<\/strong> in external communications, partnership development, grant applications, and employer engagements. This authorization is granted under this Agreement and exists independently of and concurrently with the Platform License Agreement. The non-affiliation clause in the Platform License Agreement applies to third-party Licensees and does not restrict Consultant&rsquo;s representation rights under this Agreement.<\/div>'
+      +'<p class="bt">For any commitment made in Client&rsquo;s name that creates a legal or financial obligation, Consultant shall obtain prior written approval from the authorized signatory of HOPE Recovery, Inc.<\/p>'
       +'<div class="sh">SECTION 6 &mdash; CONFIDENTIALITY<\/div>'
       +'<p class="bt">Each party shall maintain the confidentiality of the other party&rsquo;s proprietary information. Client shall not disclose Platform architecture, pricing, or technology details. Consultant shall not disclose Client operational or financial information without consent. This obligation survives termination for 3 years.<\/p>'
       +'<div class="sh">SECTION 7 &mdash; TERM &amp; TERMINATION<\/div>'
       +'<p class="si"><span class="sl">Term:<\/span> One year from effective date, auto-renewing annually unless either party provides 60 days written notice of non-renewal.<\/p>'
       +'<p class="si"><span class="sl">Termination:<\/span> Either party may terminate with 30 days written notice. Termination of this Agreement does not affect the Platform License Agreement, which continues under its own terms.<\/p>'
-      +'<p class="si"><span class="sl">Effect:<\/span> Upon termination, Consultant&rsquo;s authorized title and representation authority at Path of Life Recovery, Inc. end on the termination date. All platform licensing obligations continue per the Platform License Agreement.<\/p>'
+      +'<p class="si"><span class="sl">Effect:<\/span> Upon termination, Consultant&rsquo;s authorized title and representation authority at HOPE Recovery, Inc. end on the termination date. All platform licensing obligations continue per the Platform License Agreement.<\/p>'
       +'<div class="sh">SECTION 8 &mdash; INDEPENDENT CONTRACTOR<\/div>'
       +'<p class="bt">Consultant is an independent contractor. Client shall not withhold taxes, provide employee benefits, or treat Consultant as an employee. Consultant is responsible for all applicable self-employment taxes. Client shall issue a 1099-NEC if annual compensation exceeds IRS reporting thresholds.<\/p>'
       +'<div class="sh">SECTION 9 &mdash; GOVERNING LAW<\/div>'
       +'<p class="bt">State of '+(f.governingState||'Louisiana')+'. Disputes: 30-day mediation, then binding arbitration. Prevailing party entitled to attorney fees.<\/p>'
       +'<div class="sh">SECTION 10 &mdash; MISCELLANEOUS<\/div>'
       +'<p class="bt">Entire agreement on consulting relationship. Amendments in writing only. Severability applies. Electronic signatures valid. This Agreement and the Platform License Agreement are to be read together as complementary instruments.<\/p>'
-      +(f.polrRevShare?('<div class=\"sh\">SECTION 11 \u2014 POLR REVENUE SHARE (OPTIONAL \u2014 ELECTED AT SIGNING)<\/div>'+'<p class=\"bt\"><strong>If this clause is checked at signing:<\/strong> Consultant agrees to pay Path of Life Recovery, Inc. '+(f.polrRevSharePct||10)+'% of all white-label platform licensing revenue collected from third-party licensees (license fees, per-resident fees, and setup fees). Payable monthly within 15 days of month-end. Applies ONLY to white-label licensing revenue. Does NOT apply to grant royalties, placement fees, court per-diem, or POLR HQ operational revenue. Payment by PayPal or wire. Obligation survives termination for revenue earned during the term.<\/p>'):'')
-      +(f.polrRevShare?('<div class=\"sh\">SECTION 11 \u2014 POLR REVENUE SHARE (OPTIONAL \u2014 ELECTED AT SIGNING)<\/div>'+'<p class=\"bt\"><strong>If this clause is checked at signing:<\/strong> Consultant agrees to pay Path of Life Recovery, Inc. '+(f.polrRevSharePct||10)+'% of all white-label platform licensing revenue collected from third-party licensees (license fees, per-resident fees, and setup fees). Payable monthly within 15 days of month-end. Applies ONLY to white-label licensing revenue. Does NOT apply to grant royalties, placement fees, court per-diem, or POLR HQ operational revenue. Payment by PayPal or wire. Obligation survives termination for revenue earned during the term.<\/p>'):'')
+      +(f.polrRevShare?('<div class=\"sh\">SECTION 11 \u2014 HOPE REVENUE SHARE (OPTIONAL \u2014 ELECTED AT SIGNING)<\/div>'+'<p class=\"bt\"><strong>If this clause is checked at signing:<\/strong> Consultant agrees to pay HOPE Recovery, Inc. '+(f.polrRevSharePct||10)+'% of all white-label platform licensing revenue collected from third-party licensees (license fees, per-resident fees, and setup fees). Payable monthly within 15 days of month-end. Applies ONLY to white-label licensing revenue. Does NOT apply to grant royalties, placement fees, court per-diem, or HOPE HQ operational revenue. Payment by PayPal or wire. Obligation survives termination for revenue earned during the term.<\/p>'):'')
+      +(f.polrRevShare?('<div class=\"sh\">SECTION 11 \u2014 HOPE REVENUE SHARE (OPTIONAL \u2014 ELECTED AT SIGNING)<\/div>'+'<p class=\"bt\"><strong>If this clause is checked at signing:<\/strong> Consultant agrees to pay HOPE Recovery, Inc. '+(f.polrRevSharePct||10)+'% of all white-label platform licensing revenue collected from third-party licensees (license fees, per-resident fees, and setup fees). Payable monthly within 15 days of month-end. Applies ONLY to white-label licensing revenue. Does NOT apply to grant royalties, placement fees, court per-diem, or HOPE HQ operational revenue. Payment by PayPal or wire. Obligation survives termination for revenue earned during the term.<\/p>'):'')
       +'<hr class="gold" style="margin-top:14px">'
       +'<div class="sh" style="border:none;padding:0;margin-bottom:8px">SIGNATURES<\/div>'
       +'<div class="sg">'
-        +'<div class="sb"><div class="sbh">CONSULTANT<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:4px">'+(f.licensorName||'[Your Name]')+'<\/p>'+(f.licensorLLC?'<p style="font-size:8.5pt;color:#64748b;margin-bottom:6px">'+f.licensorLLC+'<\/p>':'')+'<p style="font-size:8pt;color:#64748b;margin-bottom:8px">'+f.licensorTitle+', Path of Life Recovery<\/p><div class="sl2"><\/div><p class="slb">Signature<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>'
-        +'<div class="sb"><div class="sbh">CLIENT &mdash; PATH OF LIFE RECOVERY, INC.<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:4px">Path of Life Recovery, Inc.<\/p><div class="sl2"><\/div><p class="slb">Authorized Signatory &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>'
+        +'<div class="sb"><div class="sbh">CONSULTANT<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:4px">'+(f.licensorName||'[Your Name]')+'<\/p>'+(f.licensorLLC?'<p style="font-size:8.5pt;color:#64748b;margin-bottom:6px">'+f.licensorLLC+'<\/p>':'')+'<p style="font-size:8pt;color:#64748b;margin-bottom:8px">'+f.licensorTitle+', HOPE Recovery: Hold on Pain Ends<\/p><div class="sl2"><\/div><p class="slb">Signature<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>'
+        +'<div class="sb"><div class="sbh">CLIENT &mdash; PATH OF LIFE RECOVERY, INC.<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:4px">HOPE Recovery, Inc.<\/p><div class="sl2"><\/div><p class="slb">Authorized Signatory &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>'
       +'<\/div>'
       +'<div class="fn">Consulting Services Agreement &mdash; Executed concurrently with Platform License &amp; Participation Agreement &mdash; '+eff+' &mdash; Review with a Louisiana-licensed attorney before execution.<\/div>'
       +'<\/body><\/html>';
     var w=window.open('','_blank','width=960,height=780');
     if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
-    try{navigator.clipboard.writeText('CONSULTING SERVICES AGREEMENT\n\nConsultant: '+(f.licensorName||'')+(f.licensorLLC?' ('+f.licensorLLC+')':'')+'\nTitle: '+f.licensorTitle+'\nClient: Path of Life Recovery, Inc.\nEffective: '+eff+'\nConsulting Fee: '+fee+'\nScope: '+f.licensorScope);}catch(e){}
+    try{navigator.clipboard.writeText('CONSULTING SERVICES AGREEMENT\n\nConsultant: '+(f.licensorName||'')+(f.licensorLLC?' ('+f.licensorLLC+')':'')+'\nTitle: '+f.licensorTitle+'\nClient: HOPE Recovery, Inc.\nEffective: '+eff+'\nConsulting Fee: '+fee+'\nScope: '+f.licensorScope);}catch(e){}
     toast({icon:'\uD83E\uDD1D',title:'Consulting Agreement ready',body:'Print to PDF. Execute alongside the Platform License Agreement on the same date.'});
   };
 
@@ -13562,8 +13576,8 @@ function BizContractGen({ platform, update, toast, setActive }) {
     add(line);
     add('SECTION 11 — WHITE-LABEL & CONTENT PROTECTIONS');
     add(line);
-    add('11.1 POLR Content Exclusion: All white-label deployments exclude and must not include: (a) POLR 12-step adapted curriculum; (b) founding testimony and biographical content of POLR principals; (c) Walk Well blog content and branding; (d) {POLR_WEBSITE} branding and contact information. Such content remains the exclusive property of Path of Life Recovery, Inc. and is not licensed under this Agreement.');
-    add('11.2 No Affiliation Representation: Licensee shall not represent, imply, or suggest that its services, programs, or platform are endorsed by, affiliated with, derived from, or operated in connection with Path of Life Recovery, Inc. or its principals.'+( form.polrCarveOut?' This restriction applies to third-party Licensees only and does not apply to the Licensor\'s own operational engagement with Path of Life Recovery, Inc., which is governed by a separate Consulting Services Agreement executed concurrently with this Agreement.':'')+"'");
+    add('11.1 HOPE Content Exclusion: All white-label deployments exclude and must not include: (a) HOPE 12-step adapted curriculum; (b) founding testimony and biographical content of HOPE principals; (c) HOPE In Motion Blog content and branding; (d) hopenetwork.com branding and contact information. Such content remains the exclusive property of HOPE Recovery, Inc. and is not licensed under this Agreement.');
+    add('11.2 No Affiliation Representation: Licensee shall not represent, imply, or suggest that its services, programs, or platform are endorsed by, affiliated with, derived from, or operated in connection with HOPE Recovery, Inc. or its principals.'+( form.polrCarveOut?' This restriction applies to third-party Licensees only and does not apply to the Licensor\'s own operational engagement with HOPE Recovery, Inc., which is governed by a separate Consulting Services Agreement executed concurrently with this Agreement.':'')+"'");
     add('11.3 Proprietary Notices: Licensee may brand the Platform under its own name but shall not remove, alter, obscure, or modify any proprietary notices embedded in the Platform code or operational interface.');
     add('11.4 Licensor Attribution: Licensor reserves the right to identify Licensee as a licensed platform user in Licensor\'s promotional materials unless Licensee provides written objection within 30 days of this Agreement.');
     add('');
@@ -13716,7 +13730,7 @@ function BizContractGen({ platform, update, toast, setActive }) {
       '<div class="bt"><span class="sl">Underpayment Penalty:<\/span> Deficiency >5% triggers 2%\/month interest plus audit costs.<\/div>',
       f.liquidatedDamages?'<div class="sh">SECTION 9 &mdash; LIQUIDATED DAMAGES<\/div><table><tr><th>Breach<\/th><th>Damages<\/th><\/tr><tr><td>Reverse engineering or IP theft<\/td><td>$'+f.ldAmount.toLocaleString()+' per incident + injunctive relief<\/td><\/tr><tr><td>Intentional misreporting<\/td><td>3x underpaid royalties, min $'+Math.round(f.ldAmount/2).toLocaleString()+'<\/td><\/tr><tr><td>Non-compete violation<\/td><td>$'+f.ldAmount.toLocaleString()+'\/month of violation<\/td><\/tr><tr><td>Non-circumvention violation<\/td><td>Full remaining-term royalties, min $'+(f.ldAmount*2).toLocaleString()+'<\/td><\/tr><\/table>':'',
       '<div class="sh">SECTION 10 &mdash; WHITE-LABEL PROTECTIONS<\/div>',
-      '<div class="bt">Excluded from all deployments: POLR 12-step curriculum, founding testimony, Walk Well content, and {POLR_WEBSITE} branding. These remain exclusive property of Path of Life Recovery, Inc. Licensee may not represent affiliation with POLR or its principals.<\/div>',
+      '<div class="bt">Excluded from all deployments: HOPE 12-step curriculum, founding testimony, HOPE In Motion content, and hopenetwork.com branding. These remain exclusive property of HOPE Recovery, Inc. Licensee may not represent affiliation with HOPE or its principals.<\/div>',
       '<div class="sh">SECTION 11 &mdash; TERM &amp; TERMINATION<\/div>',
       '<div class="bt">Term: '+f.termYears+' year'+(f.termYears>1?'s':'')+', auto-renewing 1-year periods with 90 days notice to exit. Termination for non-payment: 10 days notice. All unpaid amounts due immediately on termination. Setup fees non-refundable. Non-compete and IP protections survive indefinitely.<\/div>',
       '<div class="sh">SECTIONS 12\u201314 &mdash; CONFIDENTIALITY, GOVERNING LAW, MISCELLANEOUS<\/div>',
@@ -13736,7 +13750,7 @@ function BizContractGen({ platform, update, toast, setActive }) {
         '<div class="sb"><div class="sbh">LICENSOR<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:6px">'+(f.licensorName||'[Your Name]')+'<\/p>'+(f.licensorLLC?'<p style="font-size:8pt;color:#64748b;margin-bottom:6px">'+f.licensorLLC+'<\/p>':'')+'<div class="sl2"><\/div><p class="slb">Signature<\/p><div class="sl2" style="margin-top:16px"><\/div><p class="slb">Printed Name<\/p><div class="sl2" style="margin-top:16px"><\/div><p class="slb">Date<\/p><\/div>',
         '<div class="sb"><div class="sbh">LICENSEE<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:6px">'+(f.licenseeOrg||'[Organization]')+'<\/p><div class="sl2"><\/div><p class="slb">Signature<\/p><div class="sl2" style="margin-top:16px"><\/div><p class="slb">Printed Name &amp; Title<\/p><div class="sl2" style="margin-top:16px"><\/div><p class="slb">Date<\/p><\/div>',
       '<\/div>',
-      '<div class="fn">Generated by POLR Network Platform Business Suite \u00b7 Template only \u2014 review with a licensed attorney in '+f.governingState+' before execution.<\/div>',
+      '<div class="fn">Generated by HOPE Recovery Network Platform Business Suite \u00b7 Template only \u2014 review with a licensed attorney in '+f.governingState+' before execution.<\/div>',
       '<\/body><\/html>'
     ].join('');
   };
@@ -13908,10 +13922,10 @@ function BizContractGen({ platform, update, toast, setActive }) {
         form.polrCarveOut&&React.createElement('div',{
           style:{padding:'0.85rem 1rem',background:'rgba(46,196,160,0.05)',border:'1px solid rgba(46,196,160,0.2)',borderRadius:10,marginBottom:'1rem'}
         },
-          React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--l4)',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.65rem'}},'🏢 POLR HQ CONSULTING DETAILS'),
+          React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--l4)',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'0.65rem'}},'🏢 HOPE HQ CONSULTING DETAILS'),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.65rem'}},
             React.createElement('div',null,
-              React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Your Title at POLR HQ'),
+              React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Your Title at HOPE HQ'),
               React.createElement('select',{value:form.licensorTitle,onChange:setF('licensorTitle'),
                 style:{width:'100%',padding:'0.55rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none'}},
                 ['Director of Platform & Technology','Chief Technology Officer','Technology Partner',
@@ -13939,12 +13953,12 @@ function BizContractGen({ platform, update, toast, setActive }) {
               onChange:function(e){setForm(function(p){return Object.assign({},p,{polrRevShare:e.target.checked});});},
               style:{accentColor:'var(--gold)',width:16,height:16}}),
             React.createElement('div',null,
-              React.createElement('div',{style:{fontWeight:700,color:'var(--gold)',fontSize:'0.88rem'}},'Include POLR Revenue Share Clause (Optional)'),
-              React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},'Adds Section 11 — agrees to pay POLR HQ a % of white-label licensing revenue')
+              React.createElement('div',{style:{fontWeight:700,color:'var(--gold)',fontSize:'0.88rem'}},'Include HOPE Revenue Share Clause (Optional)'),
+              React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},'Adds Section 11 — agrees to pay HOPE HQ a % of white-label licensing revenue')
             )
           ),
           form.polrRevShare&&React.createElement('div',{style:{display:'flex',alignItems:'center',gap:'0.65rem'}},
-            React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},'Percentage owed to POLR HQ:'),
+            React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},'Percentage owed to HOPE HQ:'),
             React.createElement('input',{type:'number',value:form.polrRevSharePct||10,min:1,max:50,
               onChange:function(e){setForm(function(p){return Object.assign({},p,{polrRevSharePct:parseInt(e.target.value)||10});});},
               style:{width:70,padding:'0.45rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--gold)',fontSize:'0.9rem',fontWeight:700,outline:'none',textAlign:'center'}}),
@@ -13985,8 +13999,8 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var _sm=React.useState(null),      selMeeting=_sm[0],setSelMeeting=_sm[1];
   var _se=React.useState(null),      selEvent=_se[0],  setSelEvent=_se[1];
   var _sf=React.useState({
-    houseName:'New POLR Place', address:'', city:'Thibodaux', state:'LA',
-    openDate:'', director:'POLR Director', beds:8, phone:'{POLR_PHONE}',
+    houseName:'New HOPE Place', address:'', city:'Port Allen', state:'LA',
+    openDate:'', director:'HOPE Director', beds:8, phone:'225-333-0330',
     theme:'navy', videoUrl:'', videoCTA:'Scan to Watch Our Story', videoPlatform:'youtube'
   }), houseForm=_sf[0], setHouseForm=_sf[1];
   var _sfb=React.useState({
@@ -14002,12 +14016,12 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var SEED_CLIENTS = ['Hope Recovery Ministries','Redeemer House New Orleans','Acadiana Recovery Network','Gulf Coast Reentry Collaborative'];
 
   var QR_TYPES = [
-    {id:'polr',    label:'POLR Website',      url:'https://{POLR_WEBSITE}',           cta:'Learn About POLR'},
-    {id:'signup',  label:'Member Signup',      url:'https://{POLR_WEBSITE}/platform',  cta:'Scan to Join Free'},
-    {id:'meeting', label:'Find a Meeting',     url:'https://{POLR_WEBSITE}/#meetings', cta:'Find a Meeting Near You'},
-    {id:'donate',  label:'Donate',             url:'https://{POLR_WEBSITE}/donate',    cta:'Support the Mission'},
+    {id:'polr',    label:'POLR Website',      url:'https://hopenetwork.com',           cta:'Learn About POLR'},
+    {id:'signup',  label:'Member Signup',      url:'https://hopenetwork.com/platform',  cta:'Scan to Join Free'},
+    {id:'meeting', label:'Find a Meeting',     url:'https://hopenetwork.com/#meetings', cta:'Find a Meeting Near You'},
+    {id:'donate',  label:'Donate',             url:'https://hopenetwork.com/donate',    cta:'Support the Mission'},
     {id:'wl',         label:'White-Label Client',    url:'https://[client].com',                    cta:'Scan to Get Started'},
-    {id:'reflection',  label:'Private Reflection',   url:'https://{POLR_WEBSITE}/platform#journal', cta:'Private · Free · No Account Needed'},
+    {id:'reflection',  label:'Private Reflection',   url:'https://hopenetwork.com/platform#journal', cta:'Private · Free · No Account Needed'},
   ];
   var selQRObj = QR_TYPES.find(function(q){return q.id===selQR;})||QR_TYPES[0];
   var qrURL = selQR==='wl'&&selClient?
@@ -14044,9 +14058,9 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
 
   // ── House poster ──
   var openHousePoster = function(cfg) {
-    var org = cfg&&cfg.isWL&&selClient?selClient:'Path of Life Recovery';
-    var url = cfg&&cfg.isWL&&selClient?qrURL:'https://{POLR_WEBSITE}/platform';
-    var ph  = cfg&&cfg.isWL&&selClient?'Contact us for info':'{POLR_PHONE}';
+    var org = cfg&&cfg.isWL&&selClient?selClient:'HOPE Recovery: Hold on Pain Ends';
+    var url = cfg&&cfg.isWL&&selClient?qrURL:'https://hopenetwork.com/platform';
+    var ph  = cfg&&cfg.isWL&&selClient?'Contact us for info':'225-333-0330';
     var sub = cfg&&cfg.isWL&&selClient?'Recovery Support Ministry':'Healing and hope for the hurting';
     var html = [
       '<!DOCTYPE html><html><head><meta charset="utf-8"><title>House Poster<\/title>',
@@ -14091,7 +14105,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
         '<div class="verse">&ldquo;I can do all things through Christ which strengtheneth me.&rdquo; &mdash; Phil. 4:13 KJV<\/div>',
         '<div class="contact">'+url+' \u00b7 '+ph+'<\/div>',
       '<\/div>',
-      '<div class="bot-bar"><div class="bot-text">Est. 1995 \u00b7 Thibodaux, LA \u00b7 Free \u00b7 Open to All \u00b7 501(c)(3) Nonprofit<\/div><\/div>',
+      '<div class="bot-bar"><div class="bot-text">Est. 2004 \u00b7 Thibodaux, LA \u00b7 Free \u00b7 Open to All \u00b7 501(c)(3) Nonprofit<\/div><\/div>',
       '<script>window.onload=function(){',
         'new QRCode(document.getElementById("qr"),{text:"'+url+'",',
         'width:280,height:280,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
@@ -14145,7 +14159,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '.free-badge{background:#c8913a;color:#0c1a2e;font-size:8pt;font-weight:900;padding:3px 10px;border-radius:20px;letter-spacing:0.12em;text-transform:uppercase;}',
       '<\/style><\/head><body>',
       '<div class="top">',
-        '<div><div class="brand">Path of Life Recovery<\/div><div class="brand-tag">POLR \u00b7 South Louisiana<\/div><\/div>',
+        '<div><div class="brand">HOPE Recovery: Hold on Pain Ends<\/div><div class="brand-tag">POLR \u00b7 South Louisiana<\/div><\/div>',
         '<div class="free-badge">Free &amp; Open to All<\/div>',
       '<\/div>',
       '<div class="gold-rule"><\/div>',
@@ -14161,7 +14175,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '<\/div>',
       '<div class="body-section">',
         '<div class="welcome-head">What to Expect<\/div>',
-        '<div class="welcome-body">Every POLR meeting is a safe space to be honest, be heard, and be encouraged. No experience necessary. No fee. No judgment. Come as you are.<\/div>',
+        '<div class="welcome-body">Every HOPE meeting is a safe space to be honest, be heard, and be encouraged. No experience necessary. No fee. No judgment. Come as you are.<\/div>',
         '<div class="points">',
           '<div class="point"><div class="point-icon">\uD83D\uDCDA<\/div><div class="point-text"><b>Biblical 12-Step program<\/b> \u2014 grounded in Scripture and real accountability<\/div><\/div>',
           '<div class="point"><div class="point-icon">\uD83D\uDC65<\/div><div class="point-text"><b>Peer mentorship<\/b> \u2014 people who have walked the road you are on<\/div><\/div>',
@@ -14169,17 +14183,17 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           '<div class="point"><div class="point-icon">\uD83C\uDFE0<\/div><div class="point-text"><b>Housing resources<\/b> \u2014 structured recovery housing for those who need it<\/div><\/div>',
         '<\/div>',
         '<div class="qr-row">',
-          '<div class="qr-text"><div class="qr-label">Join POLR Online<\/div><div class="qr-sub">Scan to create a free account, access our mobile platform, browse upcoming meetings, and start the GED or workforce track.<\/div><\/div>',
+          '<div class="qr-text"><div class="qr-label">Join HOPE Online<\/div><div class="qr-sub">Scan to create a free account, access our mobile platform, browse upcoming meetings, and start the GED or workforce track.<\/div><\/div>',
           '<div style="padding:8px;background:white;border:3px solid #0c1a2e;border-radius:8px;"><div id="qr"><\/div><\/div>',
         '<\/div>',
         '<div class="verse">&ldquo;Come unto me, all ye that labour and are heavy laden, and I will give you rest.&rdquo;<br>&mdash; Matthew 11:28 KJV<\/div>',
       '<\/div>',
       '<div class="bottom">',
-        '<div class="bot-brand">Path of Life Recovery<\/div>',
-        '<div class="bot-contact">{POLR_WEBSITE}<br>{POLR_PHONE} \u00b7 {POLR_EMAIL}<\/div>',
+        '<div class="bot-brand">HOPE Recovery: Hold on Pain Ends<\/div>',
+        '<div class="bot-contact">hopenetwork.com<br>225-333-0330 \u00b7 bro.chuck.edwards@gmail.com<\/div>',
       '<\/div>',
       '<script>window.onload=function(){',
-        'new QRCode(document.getElementById("qr"),{text:"https://{POLR_WEBSITE}/platform",',
+        'new QRCode(document.getElementById("qr"),{text:"https://hopenetwork.com/platform",',
         'width:120,height:120,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
         'setTimeout(function(){window.print();},1000);',
       '};<\/script><\/body><\/html>'
@@ -14224,9 +14238,9 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '<\/style><\/head><body>',
       '<div class="accent-bar"><\/div>',
       '<div class="hero">',
-        '<div class="event-label">POLR Network \u00b7 Special Event<\/div>',
+        '<div class="event-label">HOPE Recovery Network \u00b7 Special Event<\/div>',
         '<div class="event-name">'+(evt.title||'POLR Event')+'<\/div>',
-        '<div class="event-desc">'+(evt.description||'Join us for this special POLR community event. Free and open to everyone.')+'<\/div>',
+        '<div class="event-desc">'+(evt.description||'Join us for this special HOPE community event. Free and open to everyone.')+'<\/div>',
       '<\/div>',
       '<main><div class="card">',
         '<div class="cd"><div class="cd-label">Date<\/div><div class="cd-val">'+(evt.date||'___________')+'<\/div><\/div>',
@@ -14235,19 +14249,19 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '<\/div>',
       '<div class="body">',
         '<div class="sec-head" style="margin-top:0.25in">About This Event<\/div>',
-        '<div class="body-text">'+(evt.description||'A special gathering of the POLR recovery community. Come experience the warmth, accountability, and encouragement that has changed hundreds of lives across South Louisiana since 1995.')+'<\/div>',
+        '<div class="body-text">'+(evt.description||'A special gathering of the HOPE recovery community. Come experience the warmth, accountability, and encouragement that has changed hundreds of lives across South Louisiana since 2004.')+'<\/div>',
         '<div class="qr-strip">',
-          '<div class="qr-strip-text"><div class="qr-strip-label">RSVP & Learn More<\/div><div class="qr-strip-sub">Scan to register, get directions, and access the full POLR platform for free.<\/div><\/div>',
+          '<div class="qr-strip-text"><div class="qr-strip-label">RSVP & Learn More<\/div><div class="qr-strip-sub">Scan to register, get directions, and access the full HOPE platform for free.<\/div><\/div>',
           '<div style="padding:8px;background:white;border-radius:8px;"><div id="qr"><\/div><\/div>',
         '<\/div>',
         '<div class="verse">&ldquo;Not forsaking the assembling of ourselves together.&rdquo; \u2014 Hebrews 10:25 KJV<\/div>',
       '<\/div>',
       '<div class="bottom">',
-        '<div class="bot-org">Path of Life Recovery<\/div>',
-        '<div class="bot-contact">{POLR_WEBSITE} \u00b7 {POLR_PHONE}<br>Free \u00b7 Open to Everyone<\/div>',
+        '<div class="bot-org">HOPE Recovery: Hold on Pain Ends<\/div>',
+        '<div class="bot-contact">hopenetwork.com \u00b7 225-333-0330<br>Free \u00b7 Open to Everyone<\/div>',
       '<\/div>',
       '<script>window.onload=function(){',
-        'new QRCode(document.getElementById("qr"),{text:"https://{POLR_WEBSITE}/platform",',
+        'new QRCode(document.getElementById("qr"),{text:"https://hopenetwork.com/platform",',
         'width:110,height:110,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
         'setTimeout(function(){window.print();},1000);',
       '};<\/script><\/body><\/html>'
@@ -14261,7 +14275,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
   var openOpeningSoonPoster = function() {
     var f = houseForm;
     // Use video URL as QR destination if provided
-    var qrTarget = f.videoUrl && f.videoUrl.trim() ? f.videoUrl.trim() : 'https://{POLR_WEBSITE}/platform';
+    var qrTarget = f.videoUrl && f.videoUrl.trim() ? f.videoUrl.trim() : 'https://hopenetwork.com/platform';
     var qrLabel  = f.videoUrl && f.videoUrl.trim() ? (f.videoCTA||'Scan to Watch Our Story') : '+qrLabel+';
     var html = [
       '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Opening Soon<\/title>',
@@ -14299,10 +14313,10 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       '.bot-text{font-size:11pt;font-weight:700;color:#0c1a2e;}',
       '<\/style><\/head><body>',
       '<div class="stripe"><\/div>',
-      '<div class="top-bar"><div class="top-text">Path of Life Recovery \u00b7 Opening Soon<\/div><\/div>',
+      '<div class="top-bar"><div class="top-text">HOPE Recovery: Hold on Pain Ends \u00b7 Opening Soon<\/div><\/div>',
       '<div class="main">',
         '<div>',
-          '<div class="badge"><div class="badge-text">\u2728 New POLR Place<\/div><\/div>',
+          '<div class="badge"><div class="badge-text">\u2728 New HOPE Place<\/div><\/div>',
           '<div class="house-name">'+f.houseName+'<\/div>',
           '<div class="house-org">'+f.address+(f.address?', ':'')+f.city+', '+f.state+'<\/div>',
         '<\/div>',
@@ -14322,17 +14336,17 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           '<div class="prog"><div class="prog-icon">\uD83C\uDF31<\/div><div class="prog-text">Free \u00b7 Open to Everyone<\/div><\/div>',
         '<\/div>',
         '<div class="qr-row">',
-          '<div class="qr-text"><div class="qr-label">Learn More &amp; Pre-Register<\/div><div class="qr-sub">Scan for details, to get on the waiting list, or to connect with the POLR team before opening day.<\/div><\/div>',
+          '<div class="qr-text"><div class="qr-label">Learn More &amp; Pre-Register<\/div><div class="qr-sub">Scan for details, to get on the waiting list, or to connect with the HOPE team before opening day.<\/div><\/div>',
           '<div style="padding:8px;background:white;border-radius:8px;"><div id="qr"><\/div><\/div>',
         '<\/div>',
       '<\/div>',
       '<div class="bot-bar">',
-        '<div class="bot-text">{POLR_WEBSITE}<\/div>',
-        '<div class="bot-text">Est. 1995 \u00b7 South Louisiana \u00b7 501(c)(3) Nonprofit<\/div>',
+        '<div class="bot-text">hopenetwork.com<\/div>',
+        '<div class="bot-text">Est. 2004 \u00b7 South Louisiana \u00b7 501(c)(3) Nonprofit<\/div>',
         '<div class="bot-text">'+f.phone+'<\/div>',
       '<\/div>',
       '<script>window.onload=function(){',
-        'new QRCode(document.getElementById("qr"),{text:"https://{POLR_WEBSITE}/platform",',
+        'new QRCode(document.getElementById("qr"),{text:"https://hopenetwork.com/platform",',
         'width:110,height:110,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
         'setTimeout(function(){window.print();},1200);',
       '};<\/script><\/body><\/html>'
@@ -14344,37 +14358,37 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
 
   // ── Facebook post generator ──
   var generateFBPost = function(item, type) {
-    var text, shareURL = 'https://{POLR_WEBSITE}';
+    var text, shareURL = 'https://hopenetwork.com';
     if(type==='meeting'&&item){
-      text = '\uD83D\uDCCD POLR Meeting — '+item.name+'\n\n\uD83D\uDDD3 '+item.day+' at '+item.time+'\n\uD83D\uDCCD '+item.location+'\n\n'+
+      text = '\uD83D\uDCCD HOPE Meeting — '+item.name+'\n\n\uD83D\uDDD3 '+item.day+' at '+item.time+'\n\uD83D\uDCCD '+item.location+'\n\n'+
         'Free and open to everyone. No commitment required. Come as you are.\n\n'+
         '\u2764\uFE0F Christ-centered recovery \u00b7 12-step biblical program \u00b7 Peer mentorship\n\n'+
         '\uD83D\uDCF1 Scan the QR code on our website to create a free account and find all meetings.\n\n'+
-        '\uD83D\uDCDE {POLR_PHONE} \u00b7 {POLR_WEBSITE}\n\n'+
+        '\uD83D\uDCDE 225-333-0330 \u00b7 hopenetwork.com\n\n'+
         '#Recovery #SoberLiving #POLRNetwork #SouthLouisiana #ChristCentered #12Steps #FreePrograms';
-      shareURL = 'https://{POLR_WEBSITE}/#meetings';
+      shareURL = 'https://hopenetwork.com/#meetings';
     } else if(type==='event'&&item){
-      text = '\uD83C\uDF89 POLR EVENT: '+item.title+'\n\n'+
+      text = '\uD83C\uDF89 HOPE EVENT: '+item.title+'\n\n'+
         '\uD83D\uDDD3 '+(item.date||'Coming soon')+' at '+(item.time||'TBD')+'\n'+
         '\uD83D\uDCCD '+(item.location||'POLR Campus')+'\n\n'+
-        (item.description||'Join the POLR recovery community for this special event. Free and open to everyone.')+'\n\n'+
-        '\uD83D\uDD17 Register free at {POLR_WEBSITE}\n'+
-        '\uD83D\uDCDE {POLR_PHONE}\n\n'+
+        (item.description||'Join the HOPE recovery community for this special event. Free and open to everyone.')+'\n\n'+
+        '\uD83D\uDD17 Register free at hopenetwork.com\n'+
+        '\uD83D\uDCDE 225-333-0330\n\n'+
         '#POLRNetwork #RecoveryCommunity #SouthLouisiana #FreeEvent #HopeAndHealing';
-      shareURL = 'https://{POLR_WEBSITE}';
+      shareURL = 'https://hopenetwork.com';
     } else if(type==='opening'){
       text = '\uD83C\uDFE0 COMING SOON: '+houseForm.houseName+' in '+houseForm.city+', '+houseForm.state+'!\n\n'+
-        'Path of Life Recovery is expanding. A new POLR Place is opening its doors in '+houseForm.city+
+        'HOPE Recovery: Hold on Pain Ends is expanding. A new HOPE Place is opening its doors in '+houseForm.city+
         (houseForm.openDate?' on '+houseForm.openDate:' soon')+'.\n\n'+
         '\uD83D\uDECF\uFE0F '+houseForm.beds+' beds for structured recovery housing\n'+
         '\uD83D\uDCDA Free GED prep and trade certification\n'+
         '\uD83D\uDCBC Workforce placement support\n'+
         '\u2764\uFE0F 12-Step Christ-centered recovery program\n\n'+
         'Free for everyone. Always.\n\n'+
-        '\uD83D\uDCDE '+houseForm.phone+' \u00b7 {POLR_WEBSITE}\n\n'+
+        '\uD83D\uDCDE '+houseForm.phone+' \u00b7 hopenetwork.com\n\n'+
         '#POLRNetwork #NewPOLRPlace #'+houseForm.city.replace(/\s+/g,'')+' #RecoveryHousing #SoberLiving #Louisiana';
     } else {
-      text = '\uD83D\uDD4A\uFE0F Path of Life Recovery is here.\n\n'+
+      text = '\uD83D\uDD4A\uFE0F HOPE Recovery: Hold on Pain Ends is here.\n\n'+
         'Free programs. Open to everyone. No commitment required.\n\n'+
         '\u2714 12-Step Christ-Centered Recovery\n'+
         '\u2714 GED Prep & Trade Certifications\n'+
@@ -14382,7 +14396,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
         '\u2714 Safe Recovery Housing\n'+
         '\u2714 Peer Mentorship\n\n'+
         '"Healing and hope for the hurting"\n\n'+
-        '\uD83D\uDCDE {POLR_PHONE} \u00b7 {POLR_WEBSITE}\n\n'+
+        '\uD83D\uDCDE 225-333-0330 \u00b7 hopenetwork.com\n\n'+
         '#POLRNetwork #Recovery #SouthLouisiana #FreePrograms #ChristCentered #Hope';
     }
     // Open Facebook sharer
@@ -14488,7 +14502,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           React.createElement('div',{style:{fontSize:'1.5rem',marginBottom:'0.5rem'}},'\uD83C\uDF89'),
           React.createElement('div',{style:{fontWeight:600,color:'var(--dtxt)',marginBottom:'0.5rem'}},'No events yet'),
           React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',marginBottom:'1rem'}},'Add events in the Events & Meetings panel, then come back to generate flyers.'),
-          React.createElement('button',{onClick:function(){openEventFlyer({title:'POLR Community Gathering',date:'April 26, 2026',time:'3:00 PM',location:'POLR Place Thibodaux',description:'Join the POLR community for a spring gathering. Food, fellowship, and testimony. Free and open to all.'});},
+          React.createElement('button',{onClick:function(){openEventFlyer({title:'POLR Community Gathering',date:'April 26, 2026',time:'3:00 PM',location:'HOPE Place Port Allen',description:'Join the HOPE community for a spring gathering. Food, fellowship, and testimony. Free and open to all.'});},
             className:'btn-primary',style:{padding:'0.6rem 1.5rem'}},'Preview Demo Event Flyer')
         )
       ):events.map(function(evt){
@@ -14512,17 +14526,17 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
     // ── OPENING SOON ──
     tab==='opening'&&React.createElement('div',null,
       React.createElement('div',{className:'d-card',style:{marginBottom:'1.25rem'}},
-        React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'\uD83C\uDFE0 NEW POLR PLACE DETAILS')),
+        React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'\uD83C\uDFE0 NEW HOPE PLACE DETAILS')),
         React.createElement('div',{className:'d-card-body'},
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem',marginBottom:'1rem'}},
             React.createElement('div',{style:{gridColumn:'1/-1'}},
               React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'House / Location Name'),
-              React.createElement('input',{value:houseForm.houseName,onChange:setHF('houseName'),placeholder:'e.g. POLR Place Baton Rouge',
+              React.createElement('input',{value:houseForm.houseName,onChange:setHF('houseName'),placeholder:'e.g. HOPE Place Baton Rouge',
                 style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}})
             ),
             ...[['address','Street Address','text','501 Main St'],['city','City','text','Baton Rouge'],
-                ['state','State','text','LA'],['director','Director Name','text','POLR Director'],
-                ['beds','Beds Available','number','8'],['phone','Contact Phone','tel','{POLR_PHONE}'],
+                ['state','State','text','LA'],['director','Director Name','text','HOPE Director'],
+                ['beds','Beds Available','number','8'],['phone','Contact Phone','tel','225-333-0330'],
                 ['openDate','Opening Date','text','May 1, 2026']
             ].map(function(f){
               return React.createElement('div',{key:f[0]},
@@ -14539,7 +14553,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
               React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)'}},'QR code on poster links directly to your video')
             ),
             React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)',marginBottom:'0.75rem',lineHeight:1.65}},
-              'Paste a YouTube, Vimeo, Facebook, or Instagram video URL. The poster QR code will link straight to your video — when someone scans, their phone opens the video immediately. Leave blank to link to the POLR website instead.'),
+              'Paste a YouTube, Vimeo, Facebook, or Instagram video URL. The poster QR code will link straight to your video — when someone scans, their phone opens the video immediately. Leave blank to link to the HOPE website instead.'),
             React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.65rem',marginBottom:'0.5rem'}},
               React.createElement('div',{style:{gridColumn:'1/-1'}},
                 React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Video URL — YouTube / Vimeo / Facebook / Instagram / Any Link'),
@@ -14574,7 +14588,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
                 '✅ Video QR active — QR on poster links to: '+houseForm.videoUrl.slice(0,55)+(houseForm.videoUrl.length>55?'…':'')),
               React.createElement('button',{onClick:function(){setHouseForm(function(p){return Object.assign({},p,{videoUrl:'',videoCTA:'Scan to Watch Our Story'});});},
                 style:{padding:'0.2rem 0.55rem',borderRadius:5,border:'1px solid rgba(46,196,160,0.3)',background:'transparent',color:'var(--l4)',cursor:'pointer',fontSize:'0.7rem',fontWeight:700}},'✕ Clear')
-            ):React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',fontStyle:'italic'}},'▶️ No video attached — QR will link to POLR website')
+            ):React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',fontStyle:'italic'}},'▶️ No video attached — QR will link to HOPE website')
           ),
           React.createElement('div',{style:{display:'flex',gap:'0.65rem',flexWrap:'wrap'}},
             React.createElement('button',{onClick:openOpeningSoonPoster,
@@ -14597,7 +14611,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem',marginBottom:'1.25rem'}},
             React.createElement('button',{onClick:function(){generateFBPost(null,'general');},
               style:{padding:'0.85rem',borderRadius:10,background:'rgba(59,89,152,0.1)',border:'1px solid rgba(59,89,152,0.25)',color:'#3b5998',cursor:'pointer',fontWeight:700,fontSize:'0.88rem',textAlign:'left'}},
-              '\uD83D\uDD4A\uFE0F General POLR Post\n',
+              '\uD83D\uDD4A\uFE0F General HOPE Post\n',
               React.createElement('div',{style:{fontSize:'0.72rem',fontWeight:400,color:'var(--dmuted)',marginTop:'0.2rem'}},'Overview of all programs with hashtags')
             ),
             React.createElement('button',{onClick:function(){generateFBPost(null,'opening');},
@@ -14611,7 +14625,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
             meetings.filter(function(m){return m.active!==false;}).map(function(mtg){
               return React.createElement('button',{key:mtg.id,onClick:function(){generateFBPost(mtg,'meeting');},
                 style:{padding:'0.45rem 0.85rem',borderRadius:8,background:'rgba(91,196,110,0.08)',border:'1px solid rgba(91,196,110,0.2)',color:'var(--l5)',cursor:'pointer',fontWeight:600,fontSize:'0.78rem'}},
-                '\uD83D\uDDD3 '+mtg.name.replace('POLR Place ','').replace(' Thibodaux',''));
+                '\uD83D\uDDD3 '+mtg.name.replace('HOPE Place ','').replace(' Thibodaux',''));
 
 
     // ── PRIVATE REFLECTION ──
@@ -14623,7 +14637,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
         ),
         React.createElement('div',{className:'d-card-body'},
           React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dtxt)',lineHeight:1.75,marginBottom:'0.85rem'}},
-            'The POLR Free Reflection Journal is a completely private, no-account tool. No name required. No login. No data stored on a server. Everything stays on the person\'s own device. It is not a clinical assessment. It is a structured self-reflection tool built around the 12-step journey — a quiet, private space for honest self-reflection before someone is ready to talk to anyone else.'
+            'The HOPE Free Reflection Journal is a completely private, no-account tool. No name required. No login. No data stored on a server. Everything stays on the person\'s own device. It is not a clinical assessment. It is a structured self-reflection tool built around the 12-step journey — a quiet, private space for honest self-reflection before someone is ready to talk to anyone else.'
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'0.65rem'}},
             [
@@ -14632,7 +14646,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
               ['🤝','No Commitment','Scanning the QR does not sign anyone up for anything.'],
               ['📱','Works on Any Phone','Opens in the browser. No app download required.'],
               ['❤️','Non-Judgmental','Structured reflection prompts. No wrong answers.'],
-              ['💙','Connects to Help','Shows POLR contact info if they want to talk to someone.'],
+              ['💙','Connects to Help','Shows HOPE contact info if they want to talk to someone.'],
             ].map(function(item){
               return React.createElement('div',{key:item[1],style:{padding:'0.75rem',background:'rgba(46,196,160,0.04)',border:'1px solid rgba(46,196,160,0.15)',borderRadius:10}},
                 React.createElement('div',{style:{fontSize:'1.3rem',marginBottom:'0.3rem'}},item[0]),
@@ -14646,19 +14660,19 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
 
       // Per-campus QR + poster generator
       React.createElement('div',{className:'d-card',style:{marginBottom:'1.25rem'}},
-        React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'GENERATE BY POLR PLACE')),
+        React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'GENERATE BY HOPE PLACE')),
         React.createElement('div',{className:'d-card-body'},
           React.createElement('div',{style:{fontSize:'0.8rem',color:'var(--dmuted)',marginBottom:'0.85rem',lineHeight:1.65}},
-            'Each POLR Place gets its own QR code and poster so people know exactly which location to contact if they are ready to take the next step.'
+            'Each HOPE Place gets its own QR code and poster so people know exactly which location to contact if they are ready to take the next step.'
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.85rem'}},
             [
-              {id:'polr-place-thibodaux', name:'POLR Place Thibodaux',         phone:'{POLR_PHONE}', email:'{POLR_EMAIL}',        city:'Thibodaux'},
-              {id:'polr-place-hop-thib',  name:'POLR Place @ HOP Thibodaux',   phone:'{POLR_PHONE}', email:'hop.thibodaux@{POLR_WEBSITE}', city:'Thibodaux'},
-              {id:'polr-place-hop-larose',name:'POLR Place @ HOP Larose',      phone:'{POLR_PHONE}', email:'hop.larose@{POLR_WEBSITE}',    city:'Larose'},
-              {id:'polr-place-port-allen',name:'POLR Place Port Allen',         phone:'{POLR_PHONE}', email:'portallen@{POLR_WEBSITE}',     city:'Port Allen'},
+              {id:'hope-place-port-allen', name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',        city:'Port Allen'},
+              {id:'hope-place-port-allen',  name:'HOPE Place Port Allen',   phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', city:'Port Allen'},
+              {id:'hope-place-port-allen',name:'HOPE Place Port Allen',      phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',    city:'Larose'},
+              {id:'polr-place-port-allen',name:'HOPE Place Port Allen',         phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',     city:'Port Allen'},
             ].map(function(campus){
-              var campusURL = 'https://{POLR_WEBSITE}/platform?campus='+campus.id+'#journal';
+              var campusURL = 'https://hopenetwork.com/platform?campus='+campus.id+'#journal';
               return React.createElement('div',{key:campus.id,className:'d-card',style:{border:'1px solid rgba(46,196,160,0.2)'}},
                 React.createElement('div',{className:'d-card-head'},
                   React.createElement('div',null,
@@ -14730,7 +14744,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
                           '.bot-text{font-size:10pt;font-weight:700;color:#0c1a2e;letter-spacing:0.05em;}',
                           '<\/style><\/head><body>',
                           '<div class="top">',
-                            '<div class="brand">Path of Life Recovery<\/div>',
+                            '<div class="brand">HOPE Recovery: Hold on Pain Ends<\/div>',
                             '<div class="campus-tag">'+camp.name+'<br>'+camp.city+'<\/div>',
                           '<\/div>',
                           '<div class="accent"><\/div>',
@@ -14765,7 +14779,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
                             '<\/div>',
                             '<div class="verse">&ldquo;Come unto me, all ye that labour and are heavy laden, and I will give you rest.&rdquo; — Matthew 11:28 KJV<\/div>',
                           '<\/div>',
-                          '<div class="bottom"><div class="bot-text">{POLR_WEBSITE} · Free · Confidential · No Commitment · Path of Life Recovery Est. 1995<\/div><\/div>',
+                          '<div class="bottom"><div class="bot-text">hopenetwork.com · Free · Confidential · No Commitment · HOPE Recovery: Hold on Pain Ends Est. 2004<\/div><\/div>',
                           '<script>window.onload=function(){',
                             'new QRCode(document.getElementById("qr"),{text:"'+url+'",',
                             'width:160,height:160,colorDark:"#0c1a2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});',
@@ -14779,8 +14793,8 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
                     },'🖨️ Print Poster (8.5×11)'),
                     React.createElement('button',{
                       onClick:(function(camp){return function(){
-                        var text = '🔒 Something private for you.\n\nNo login. No account. No phone number. Just a quiet space to be honest with yourself.\n\nPath of Life Recovery built a free private reflection tool for anyone who needs it. Whether you are ready to ask for help or just trying to figure out where you stand.\n\n✔ Takes 5 minutes\n✔ Completely private — nothing leaves your phone\n✔ No commitment. No judgment. No cost.\n\nIf you want to talk after, we are here.\n📞 '+camp.phone+'\n📍 '+camp.name+'\n\n#Privacy #Recovery #YouAreNotAlone #SouthLouisiana #POLRNetwork #FreeHelp';
-                        var shareURL = 'https://{POLR_WEBSITE}/platform?campus='+camp.id+'#journal';
+                        var text = '🔒 Something private for you.\n\nNo login. No account. No phone number. Just a quiet space to be honest with yourself.\n\nHOPE Recovery: Hold on Pain Ends built a free private reflection tool for anyone who needs it. Whether you are ready to ask for help or just trying to figure out where you stand.\n\n✔ Takes 5 minutes\n✔ Completely private — nothing leaves your phone\n✔ No commitment. No judgment. No cost.\n\nIf you want to talk after, we are here.\n📞 '+camp.phone+'\n📍 '+camp.name+'\n\n#Privacy #Recovery #YouAreNotAlone #SouthLouisiana #POLRNetwork #FreeHelp';
+                        var shareURL = 'https://hopenetwork.com/platform?campus='+camp.id+'#journal';
                         var fbURL = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareURL)+'&quote='+encodeURIComponent(text.substring(0,500));
                         window.open(fbURL,'_blank','width=600,height=500');
                         try{navigator.clipboard.writeText(text);}catch(e){}
@@ -14799,7 +14813,7 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
       // Legal / language note
       React.createElement('div',{style:{padding:'0.85rem 1.1rem',background:'rgba(255,255,255,0.03)',border:'1px solid var(--bdr)',borderRadius:10,fontSize:'0.78rem',color:'var(--dmuted)',lineHeight:1.7}},
         React.createElement('span',{style:{fontWeight:700,color:'var(--dtxt)'}},'⚠️ Language Guidance: '),
-        '"Private Reflection" is the recommended term on all materials. Avoid "assessment," "evaluation," or "screening" which carry clinical or legal implications in behavioral health contexts. The tool is explicitly a self-reflection journal, not a diagnostic instrument. POLR makes no clinical claims and the tool contains no recommendation that can be construed as medical advice. If a person indicates they are in crisis, the tool directs them to call {POLR_PHONE} or 988.'
+        '"Private Reflection" is the recommended term on all materials. Avoid "assessment," "evaluation," or "screening" which carry clinical or legal implications in behavioral health contexts. The tool is explicitly a self-reflection journal, not a diagnostic instrument. HOPE makes no clinical claims and the tool contains no recommendation that can be construed as medical advice. If a person indicates they are in crisis, the tool directs them to call 225-333-0330 or 988.'
       )
     )
 
@@ -14814,15 +14828,15 @@ function BizQRStudio({ platform, update, toast, session, setActive }) {
 
 // ════════════════════════════════════════════════════════════════════════
 // BUILD 1 — TERMINOLOGY MAPPER
-// White-label clients replace POLR-specific terms throughout the platform
+// White-label clients replace HOPE-specific terms throughout the platform
 // ════════════════════════════════════════════════════════════════════════
 function BizTerminologyMapper({ platform, update, toast, setActive }) {
   var terms = platform.terminology || {
-    networkName:'POLR Network', campusName:'POLR Place', houseName:'POLR House',
-    reflectionName:'POLR Reflection', pointsName:'POLR Points',
-    signaturePhrase:'Walk well.', adminTitle:'POLR Director',
+    networkName:'HOPE Recovery Network', campusName:'HOPE Place', houseName:'HOPE House',
+    reflectionName:'HOPE Reflection', pointsName:'HOPE Points',
+    signaturePhrase:'Walk it out faithfully.', adminTitle:'HOPE Director',
     staffTitle:'Ambassador', programName:'12-Step Recovery',
-    siteDomain:'{POLR_WEBSITE}', orgName:'Path of Life Recovery'
+    siteDomain:'hopenetwork.com', orgName:'HOPE Recovery: Hold on Pain Ends'
   };
 
   var _sl = React.useState(null), selClient=_sl[0], setSelClient=_sl[1];
@@ -14830,21 +14844,21 @@ function BizTerminologyMapper({ platform, update, toast, setActive }) {
   var setF = function(k){ return function(e){ setForm(function(p){ return Object.assign({},p,{[k]:e.target.value}); }); }; };
 
   var TERM_FIELDS = [
-    {key:'orgName',         label:'Organization Name',     placeholder:'Path of Life Recovery',    desc:'Full legal name — appears in footer, certificates, and contracts'},
-    {key:'networkName',     label:'Network / Platform Name',placeholder:'POLR Network',             desc:'Used in dashboard header, nav brand, and all "network" references'},
-    {key:'campusName',      label:'Campus Name (singular)', placeholder:'POLR Place',               desc:'e.g. "Hope House" — replaces "POLR Place" everywhere'},
-    {key:'houseName',       label:'Recovery House Name',    placeholder:'POLR House',               desc:'e.g. "Recovery Home" — used in housing panel and resident records'},
+    {key:'orgName',         label:'Organization Name',     placeholder:'HOPE Recovery: Hold on Pain Ends',    desc:'Full legal name — appears in footer, certificates, and contracts'},
+    {key:'networkName',     label:'Network / Platform Name',placeholder:'HOPE Recovery Network',             desc:'Used in dashboard header, nav brand, and all "network" references'},
+    {key:'campusName',      label:'Campus Name (singular)', placeholder:'HOPE Place',               desc:'e.g. "Hope House" — replaces "HOPE Place" everywhere'},
+    {key:'houseName',       label:'Recovery House Name',    placeholder:'HOPE House',               desc:'e.g. "Recovery Home" — used in housing panel and resident records'},
     {key:'reflectionName',  label:'Reflection Tool Name',   placeholder:'POLR Reflection',          desc:'e.g. "Hope Reflection" — used in QR codes and poster copy'},
     {key:'pointsName',      label:'Points / Rewards Name',  placeholder:'POLR Points',              desc:'e.g. "Hope Credits" — used in milestone and reward systems'},
-    {key:'signaturePhrase', label:'Signature Phrase',        placeholder:'Walk well.',               desc:'e.g. "Walk in Hope." — email sign-offs, certificate footers, toasts'},
-    {key:'adminTitle',      label:'Admin / Director Title',  placeholder:'POLR Director',            desc:'e.g. "Executive Director" — replaces "POLR Director" in notifications'},
+    {key:'signaturePhrase', label:'Signature Phrase',        placeholder:'Walk it out faithfully.',               desc:'e.g. "Walk in Hope." — email sign-offs, certificate footers, toasts'},
+    {key:'adminTitle',      label:'Admin / Director Title',  placeholder:'HOPE Director',            desc:'e.g. "Executive Director" — replaces "HOPE Director" in notifications'},
     {key:'staffTitle',      label:'Staff / Mentor Title',    placeholder:'Ambassador',               desc:'e.g. "Recovery Coach" — replaces "Ambassador" in pipeline and nav'},
     {key:'programName',     label:'Recovery Program Name',   placeholder:'12-Step Recovery',         desc:'e.g. "Hope Steps" — used in education, meetings, and step tracking'},
-    {key:'siteDomain',      label:'Website Domain',          placeholder:'{POLR_WEBSITE}',          desc:'Used in QR poster footers, contract templates, and email copy'},
+    {key:'siteDomain',      label:'Website Domain',          placeholder:'hopenetwork.com',          desc:'Used in QR poster footers, contract templates, and email copy'},
   ];
 
   var PRESET_CLIENTS = [
-    {name:'POLR (Default)',     terms:{networkName:'POLR Network',campusName:'POLR Place',houseName:'POLR House',reflectionName:'POLR Reflection',pointsName:'POLR Points',signaturePhrase:'Walk well.',adminTitle:'POLR Director',staffTitle:'Ambassador',programName:'12-Step Recovery',siteDomain:'{POLR_WEBSITE}',orgName:'Path of Life Recovery'}},
+    {name:'POLR (Default)',     terms:{networkName:'HOPE Recovery Network',campusName:'HOPE Place',houseName:'HOPE House',reflectionName:'HOPE Reflection',pointsName:'HOPE Points',signaturePhrase:'Walk it out faithfully.',adminTitle:'HOPE Director',staffTitle:'Ambassador',programName:'12-Step Recovery',siteDomain:'hopenetwork.com',orgName:'HOPE Recovery: Hold on Pain Ends'}},
     {name:'Hope Recovery',      terms:{networkName:'Hope Network',campusName:'Hope House',houseName:'Hope Home',reflectionName:'Hope Reflection',pointsName:'Hope Points',signaturePhrase:'Walk in Hope.',adminTitle:'Executive Director',staffTitle:'Recovery Coach',programName:'Hope Steps',siteDomain:'hoperecovery.org',orgName:'Hope Recovery Ministries'}},
     {name:'New Life Ministry',  terms:{networkName:'New Life Network',campusName:'New Life Place',houseName:'New Life House',reflectionName:'New Life Journal',pointsName:'New Life Credits',signaturePhrase:'Live new.',adminTitle:'Ministry Director',staffTitle:'Life Coach',programName:'New Life Steps',siteDomain:'newlifeministry.org',orgName:'New Life Recovery Ministry'}},
     {name:'Redeemer House',     terms:{networkName:'Redeemer Network',campusName:'Redeemer House',houseName:'Redeemer Home',reflectionName:'Redeemer Reflection',pointsName:'Redeemer Points',signaturePhrase:'Redeemed and walking.',adminTitle:'House Director',staffTitle:'Peer Mentor',programName:'Redemption Steps',siteDomain:'redeemerhouse.org',orgName:'Redeemer House Ministries'}},
@@ -14867,7 +14881,7 @@ function BizTerminologyMapper({ platform, update, toast, setActive }) {
       client: form.orgName,
       generatedAt: new Date().toISOString(),
       terminology: form,
-      note: 'Apply this config to the white-label platform deployment to override all POLR-specific terminology.'
+      note: 'Apply this config to the white-label platform deployment to override all HOPE-specific terminology.'
     }, null, 2);
     try { navigator.clipboard.writeText(config); } catch(e) {}
     toast({icon:'\uD83D\uDCCB', title:'Config copied to clipboard',
@@ -14881,7 +14895,7 @@ function BizTerminologyMapper({ platform, update, toast, setActive }) {
     React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--l1)'}},
       React.createElement('div',{className:'lvh-tag'},'Platform Business'),
       React.createElement('div',{className:'lvh-title'},'Terminology Mapper'),
-      React.createElement('div',{className:'lvh-sub'},'Configure all POLR-specific terms for each white-label client. One change here updates labels throughout nav, dashboards, posters, QR copy, contracts, and notifications.')
+      React.createElement('div',{className:'lvh-sub'},'Configure all HOPE-specific terms for each white-label client. One change here updates labels throughout nav, dashboards, posters, QR copy, contracts, and notifications.')
     ),
 
     // Quick presets
@@ -14984,7 +14998,7 @@ function BizAccountingLedger({ platform, update, toast, setActive }) {
   var _sf=React.useState({
     type:'income', category:'housing', description:'',
     amount:'', date:new Date().toISOString().split('T')[0],
-    payer:'', campus:'POLR Place Thibodaux', status:'paid',
+    payer:'', campus:'HOPE Place Port Allen', status:'paid',
     paypalRef:'', notes:''
   }), form=_sf[0], setForm=_sf[1];
   var setF=function(k){return function(e){setForm(function(p){return Object.assign({},p,{[k]:e.target.value});});};};
@@ -15019,25 +15033,25 @@ function BizAccountingLedger({ platform, update, toast, setActive }) {
       {id:'platform_dev', label:'Platform Development',   desc:'Software development costs'},
       {id:'marketing',    label:'Marketing & Printing',    desc:'Posters, flyers, advertising'},
       {id:'other',        label:'Other Expense',           desc:'Miscellaneous operating expenses'},
-      {id:'polr_rev_share',label:'POLR Revenue Share',      desc:'Monthly % of white-label revenue owed to POLR HQ per Consulting Agreement'},
+      {id:'polr_rev_share',label:'POLR Revenue Share',      desc:'Monthly % of white-label revenue owed to HOPE HQ per Consulting Agreement'},
     ]
   };
 
   // Seed transactions
   var SEED = [
-    {id:'lx1',type:'income',category:'housing',description:'Housing fees — POLR Place Thibodaux — March',amount:3200,date:'2026-03-01',payer:'Residents',campus:'POLR Place Thibodaux',status:'paid',paypalRef:'',notes:'8 residents \xd7 $400/mo'},
-    {id:'lx2',type:'income',category:'housing',description:'Housing fees — HOP Thibodaux — March',amount:2100,date:'2026-03-01',payer:'Residents',campus:'POLR Place @ HOP Thibodaux',status:'paid',paypalRef:'',notes:'6 residents \xd7 $350/mo'},
+    {id:'lx1',type:'income',category:'housing',description:'Housing fees — HOPE Place Port Allen — March',amount:3200,date:'2026-03-01',payer:'Residents',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'8 residents \xd7 $400/mo'},
+    {id:'lx2',type:'income',category:'housing',description:'Housing fees — HOPE Place Port Allen — March',amount:2100,date:'2026-03-01',payer:'Residents',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'6 residents \xd7 $350/mo'},
     {id:'lx3',type:'income',category:'license_fee',description:'Platform license — Hope Recovery Ministries — March',amount:499,date:'2026-03-01',payer:'Hope Recovery Ministries',campus:'External',status:'paid',paypalRef:'PP-2026030112345',notes:'Growth plan'},
     {id:'lx4',type:'income',category:'license_fee',description:'Platform license — Redeemer House NO — March',amount:799,date:'2026-03-01',payer:'Redeemer House New Orleans',campus:'External',status:'paid',paypalRef:'PP-2026030112346',notes:'Ministry Pro plan'},
     {id:'lx5',type:'income',category:'license_fee',description:'Platform license — Gulf Coast Reentry — March',amount:2500,date:'2026-03-01',payer:'Gulf Coast Reentry Collaborative',campus:'External',status:'pending',paypalRef:'',notes:'Reentry Pro plan — invoice sent'},
     {id:'lx6',type:'income',category:'grant_award',description:'Entergy Foundation — Workforce Dev Grant',amount:65000,date:'2026-03-01',payer:'Entergy Foundation',campus:'All',status:'paid',paypalRef:'',notes:'Award #EF-2026-0042'},
     {id:'lx7',type:'income',category:'grant_royalty',description:'Grant royalty — Hope Recovery WIOA award',amount:6500,date:'2026-03-15',payer:'Hope Recovery Ministries',campus:'External',status:'pending',paypalRef:'',notes:'10% of $65,000 WIOA award'},
-    {id:'lx8',type:'income',category:'placement_fee',description:'Employer placement fee — BR Facility Services',amount:750,date:'2026-03-10',payer:'BR Facility Services',campus:'POLR Place Thibodaux',status:'paid',paypalRef:'PP-2026031098765',notes:'Marcus W. — 90-day retention confirmed'},
-    {id:'lx9',type:'income',category:'cohort_sponsor',description:'Cohort sponsorship — OSHA-10 Spring 2026',amount:5000,date:'2026-03-01',payer:'Turner Industries',campus:'POLR Place Thibodaux',status:'paid',paypalRef:'',notes:'10-person cohort'},
-    {id:'lx10',type:'expense',category:'house_mother',description:'House Mother compensation — Alpha House — March',amount:1200,date:'2026-03-01',payer:'',campus:'POLR Place Thibodaux',status:'paid',paypalRef:'',notes:'Maria S. — $300/wk \xd7 4 weeks'},
-    {id:'lx11',type:'expense',category:'house_mother',description:'House Mother compensation — Beta House — March',amount:1200,date:'2026-03-01',payer:'',campus:'POLR Place @ HOP Thibodaux',status:'paid',paypalRef:'',notes:'Carmen R. — $300/wk \xd7 4 weeks'},
-    {id:'lx12',type:'expense',category:'maintenance',description:'Flooring + paint — House Alpha & Beta',amount:4200,date:'2026-03-05',payer:'',campus:'POLR Place Thibodaux',status:'paid',paypalRef:'',notes:'Annual refresh'},
-    {id:'lx13',type:'expense',category:'supplies',description:'Curriculum packets + devotionals — Larose',amount:680,date:'2026-03-08',payer:'',campus:'POLR Place @ HOP Larose',status:'paid',paypalRef:'',notes:'Step packets Q2 2026'},
+    {id:'lx8',type:'income',category:'placement_fee',description:'Employer placement fee — BR Facility Services',amount:750,date:'2026-03-10',payer:'BR Facility Services',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'PP-2026031098765',notes:'Marcus W. — 90-day retention confirmed'},
+    {id:'lx9',type:'income',category:'cohort_sponsor',description:'Cohort sponsorship — OSHA-10 Spring 2026',amount:5000,date:'2026-03-01',payer:'Turner Industries',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'10-person cohort'},
+    {id:'lx10',type:'expense',category:'house_mother',description:'House Mother compensation — Alpha House — March',amount:1200,date:'2026-03-01',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Maria S. — $300/wk \xd7 4 weeks'},
+    {id:'lx11',type:'expense',category:'house_mother',description:'House Mother compensation — Beta House — March',amount:1200,date:'2026-03-01',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Carmen R. — $300/wk \xd7 4 weeks'},
+    {id:'lx12',type:'expense',category:'maintenance',description:'Flooring + paint — House Alpha & Beta',amount:4200,date:'2026-03-05',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Annual refresh'},
+    {id:'lx13',type:'expense',category:'supplies',description:'Curriculum packets + devotionals — Larose',amount:680,date:'2026-03-08',payer:'',campus:'HOPE Place Port Allen',status:'paid',paypalRef:'',notes:'Step packets Q2 2026'},
   ];
 
   var allTx = [...SEED, ...ledger];
@@ -15217,7 +15231,7 @@ function BizAccountingLedger({ platform, update, toast, setActive }) {
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Campus'),
             React.createElement('select',{value:form.campus,onChange:setF('campus'),style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none'}},
-              ['POLR Place Thibodaux','POLR Place @ HOP Thibodaux','POLR Place @ HOP Larose','POLR Place Port Allen','External','All'].map(function(s){return React.createElement('option',{key:s},s);}))
+              ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','External','All'].map(function(s){return React.createElement('option',{key:s},s);}))
           ),
           React.createElement('div',{style:{gridColumn:'1/-1'}},
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Notes'),
@@ -15553,7 +15567,7 @@ function BizInvoicePayPal({ platform, update, toast, setActive }) {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-// POLR REVENUE SHARE — integrated in Consulting Agreement + Accounting
+// HOPE REVENUE SHARE — integrated in Consulting Agreement + Accounting
 // ════════════════════════════════════════════════════════════════════════
 // This logic lives in three places:
 //  1. BizConsultingRevShare — standalone calc/tracker panel
@@ -15565,8 +15579,8 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
   var _t=React.useState('dashboard'), tab=_t[0], setTab=_t[1];
   var _sm=React.useState({
     enabled:true, pct:10, label:'POLR Revenue Share',
-    payeeName:'Path of Life Recovery, Inc.',
-    payeeEmail:'{POLR_EMAIL}',
+    payeeName:'HOPE Recovery, Inc.',
+    payeeEmail:'bro.chuck.edwards@gmail.com',
     payeePayPal:'', notes:'10% of all white-label platform licensing revenue'
   }), cfg=_sm[0], setCfg=_sm[1];
   var setC=function(k){return function(e){setCfg(function(p){return Object.assign({},p,{[k]:e.target.type==='checkbox'?e.target.checked:e.target.value});});};};
@@ -15635,7 +15649,7 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
     React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--l4)'}},
       React.createElement('div',{className:'lvh-tag'},'Platform Business'),
       React.createElement('div',{className:'lvh-title'},'POLR Revenue Share'),
-      React.createElement('div',{className:'lvh-sub'},'Track and pay the optional '+(savedCfg.pct||10)+'% of white-label licensing revenue owed to Path of Life Recovery, Inc. per the Consulting Services Agreement.')
+      React.createElement('div',{className:'lvh-sub'},'Track and pay the optional '+(savedCfg.pct||10)+'% of white-label licensing revenue owed to HOPE Recovery, Inc. per the Consulting Services Agreement.')
     ),
 
     // Status banner
@@ -15661,7 +15675,7 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
     React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.85rem',marginBottom:'1.25rem'}},
       [{label:'White-Label Revenue',val:'$'+totalWLRev.toLocaleString(),color:'var(--l5)',sub:'collected (paid)'},
        {label:'Share Owed ('+(savedCfg.pct||10)+'%)',val:'$'+shareAmt.toLocaleString(),color:'var(--l4)',sub:'of total WL revenue'},
-       {label:'Already Paid',val:'$'+totalPaidShares.toLocaleString(),color:'var(--l2)',sub:'to POLR HQ'},
+       {label:'Already Paid',val:'$'+totalPaidShares.toLocaleString(),color:'var(--l2)',sub:'to HOPE HQ'},
        {label:'Current Balance',val:'$'+balance.toLocaleString(),color:balance>0?'var(--gold)':'var(--l5)',sub:balance>0?'due now':'fully paid'},
       ].map(function(s){
         return React.createElement('div',{key:s.label,className:'d-card',style:{textAlign:'center',padding:'1rem'}},
@@ -15684,7 +15698,7 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
     tab==='dashboard'&&React.createElement('div',null,
       balance>0&&React.createElement('div',{className:'d-card',style:{marginBottom:'1.25rem',borderLeft:'3px solid var(--gold)'}},
         React.createElement('div',{className:'d-card-head'},
-          React.createElement('span',{className:'d-card-title',style:{color:'var(--gold)'}},'PAYMENT DUE TO POLR HQ'),
+          React.createElement('span',{className:'d-card-title',style:{color:'var(--gold)'}},'PAYMENT DUE TO HOPE HQ'),
           React.createElement('span',{style:{fontFamily:'var(--font-serif)',fontSize:'1.2rem',fontWeight:700,color:'var(--gold)'}},'$'+balance.toLocaleString())
         ),
         React.createElement('div',{className:'d-card-body'},
@@ -15708,11 +15722,11 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
         React.createElement('div',{className:'d-card-body'},
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',fontSize:'0.85rem'}},
             [['Included in revenue base','Platform license fees, per-resident fees, and setup fees from ALL white-label clients'],
-             ['NOT included','Grant royalties, placement fees, court per-diem, POLR HQ\'s own housing revenue, donations'],
+             ['NOT included','Grant royalties, placement fees, court per-diem, HOPE HQ\'s own housing revenue, donations'],
              ['Calculation','Monthly: sum of all paid white-label income × '+(savedCfg.pct||10)+'%'],
              ['Payment timing','Pay monthly alongside your own licensing invoice cycle'],
              ['Legal basis','Optional clause in Consulting Services Agreement — toggle in Contract Generator'],
-             ['Recording','Each payment records as an expense in the Accounting Ledger (category: POLR Rev Share)'],
+             ['Recording','Each payment records as an expense in the Accounting Ledger (category: HOPE Rev Share)'],
             ].map(function(row){
               return React.createElement('div',{key:row[0],style:{padding:'0.65rem 0.85rem',background:'rgba(255,255,255,0.02)',border:'1px solid var(--bdr)',borderRadius:8}},
                 React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.78rem',marginBottom:'0.25rem'}},row[0]),
@@ -15780,7 +15794,7 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
           React.createElement('input',{type:'checkbox',checked:cfg.enabled,onChange:setC('enabled'),style:{accentColor:'var(--l4)',width:16,height:16}}),
           React.createElement('div',null,
             React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.88rem'}},'Revenue Share Enabled'),
-            React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},'Check only if this clause is in your signed Consulting Services Agreement with POLR HQ')
+            React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},'Check only if this clause is in your signed Consulting Services Agreement with HOPE HQ')
           )
         ),
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem',marginBottom:'1rem'}},
@@ -15791,17 +15805,17 @@ function BizConsultingRevShare({ platform, update, toast, setActive }) {
           ),
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Payee Name'),
-            React.createElement('input',{value:cfg.payeeName,onChange:setC('payeeName'),placeholder:'Path of Life Recovery, Inc.',
+            React.createElement('input',{value:cfg.payeeName,onChange:setC('payeeName'),placeholder:'HOPE Recovery, Inc.',
               style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}})
           ),
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'Payee Email'),
-            React.createElement('input',{value:cfg.payeeEmail,onChange:setC('payeeEmail'),placeholder:'{POLR_EMAIL}',
+            React.createElement('input',{value:cfg.payeeEmail,onChange:setC('payeeEmail'),placeholder:'bro.chuck.edwards@gmail.com',
               style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}})
           ),
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.3rem'}},'POLR PayPal Handle (for payment links)'),
-            React.createElement('input',{value:cfg.payeePayPal,onChange:setC('payeePayPal'),placeholder:'e.g. polrnetwork',
+            React.createElement('input',{value:cfg.payeePayPal,onChange:setC('payeePayPal'),placeholder:'e.g. hopenetwork',
               style:{width:'100%',padding:'0.65rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}})
           )
         ),
@@ -16196,25 +16210,25 @@ function MentorMatchEngine({ platform, update, session, toast, setActive }) {
 
   // Alumni pool: residents who are status 'Alumni' or have days > 180
   var ALUMNI_POOL = [
-    {id:'alum1',name:'Marcus W.',days:420,campus:'POLR Place Thibodaux',
+    {id:'alum1',name:'Marcus W.',days:420,campus:'HOPE Place Port Allen',
      talents:['carpentry','mentorship','cooking'],
      barriers:['substance_alcohol','housing_instability','incarceration'],
      stepProgress:12,employed:true,employer:'BR Facility Services',
      bio:'12 steps complete. 14 months clean. Working full-time. Available for weekly check-ins.',
      availability:'Tue/Thu evenings'},
-    {id:'alum2',name:'Devon S.',days:380,campus:'POLR Place Thibodaux',
+    {id:'alum2',name:'Devon S.',days:380,campus:'HOPE Place Port Allen',
      talents:['warehouse','driving','leadership'],
      barriers:['substance_opioid','family_separation','court_referral'],
      stepProgress:12,employed:true,employer:'Gulf Freight',
      bio:'Former court referral. 12 months clean. Forklift certified. Loves helping guys who came from the system.',
      availability:'Mon/Wed evenings'},
-    {id:'alum3',name:'Angela M.',days:310,campus:'POLR Place Thibodaux',
+    {id:'alum3',name:'Angela M.',days:310,campus:'HOPE Place Port Allen',
      talents:['home_health','childcare','peer_support'],
      barriers:['substance_alcohol','domestic_violence','housing_instability'],
      stepProgress:9,employed:true,employer:'Home Instead',
      bio:'HHA certified. 10 months clean. Strong peer support background.',
      availability:'Weekends'},
-    {id:'alum4',name:'Terrance B.',days:290,campus:'POLR Place Port Allen',
+    {id:'alum4',name:'Terrance B.',days:290,campus:'HOPE Place Port Allen',
      talents:['construction','driving','welding'],
      barriers:['substance_methamphetamine','incarceration','court_referral'],
      stepProgress:11,employed:true,employer:'Turner Industries',
@@ -16396,16 +16410,16 @@ function MentorMatchEngine({ platform, update, session, toast, setActive }) {
 //  - Custom stages, points, qualifications per stage
 //  - Approval gates at every promotion (higher-ups must approve)
 //  - Per-person admin overrides and master control
-//  - POLR HQ master control over all campuses
+//  - HOPE HQ master control over all campuses
 //  - White-label equivalent configuration per network
 //  - Full audit trail on every approval, denial, or override
 // ════════════════════════════════════════════════════════════════════════
 
 // ── DEFAULT WALK CONFIG (editable by admin) ──────────────────────────
 var DEFAULT_WALK_CONFIG = {
-  networkName: 'POLR Network',
+  networkName: 'HOPE Recovery Network',
   version: '1.0',
-  lastEditedBy: 'POLRTTD',
+  lastEditedBy: 'HOPETTD',
   lastEditedAt: null,
   requireApproval: true,         // every stage promotion needs approval
   approvalChain: ['campus','hq'], // campus-level first, then HQ
@@ -16563,7 +16577,7 @@ var DEFAULT_WALK_CONFIG = {
 
 // ════════════════════════════════════════════════════════════════════════
 // WALK ADMIN PANEL — Admin configures stages, points, qualifications
-// Full master control for POLR HQ and campus directors
+// Full master control for HOPE HQ and campus directors
 // ════════════════════════════════════════════════════════════════════════
 function WalkAdminPanel({ platform, update, session, toast }) {
   var _t=React.useState('stages'), tab=_t[0], setTab=_t[1];
@@ -16676,7 +16690,7 @@ function WalkAdminPanel({ platform, update, session, toast }) {
       React.createElement('div',{className:'lvh-tag'},'Administration'),
       React.createElement('div',{className:'lvh-title'},'Walk Configuration'),
       React.createElement('div',{className:'lvh-sub'},
-        (session&&session.level===0?'🔑 Platform Owner — Master Control':'🏛️ POLR HQ Admin')+
+        (session&&session.level===0?'🔑 Platform Owner — Master Control':'🏛️ HOPE HQ Admin')+
         ' | All stage requirements, point thresholds, qualification gates, and promotion approvals are configured here. Changes apply to all campuses immediately.')
     ),
 
@@ -16960,11 +16974,11 @@ function WalkAdminPanel({ platform, update, session, toast }) {
           )
         ),
         React.createElement('div',{style:{padding:'0.75rem',background:'rgba(200,145,58,0.05)',border:'1px solid rgba(200,145,58,0.2)',borderRadius:8,marginBottom:'1rem',fontSize:'0.8rem',color:'var(--dmuted)',lineHeight:1.65}},
-          '🔑 White-label clients can rename stages, labels, and bonus events within their deployment. They CANNOT reduce approval requirements below what is set here. POLR HQ retains master control over the approval chain structure.'
+          '🔑 White-label clients can rename stages, labels, and bonus events within their deployment. They CANNOT reduce approval requirements below what is set here. HOPE HQ retains master control over the approval chain structure.'
         ),
         React.createElement('button',{onClick:function(){saveConfig(DEFAULT_WALK_CONFIG);},
           style:{padding:'0.6rem 1.25rem',borderRadius:8,background:'rgba(239,68,68,0.08)',border:'1px solid rgba(239,68,68,0.2)',color:'#fc8181',cursor:'pointer',fontWeight:700,fontSize:'0.82rem'}},
-          '↩ Reset to POLR Defaults')
+          '↩ Reset to HOPE Defaults')
       )
     )
   );
@@ -17043,14 +17057,14 @@ function MemberWalkPanel({ platform, update, session, toast }) {
     writeAudit(platform,update,session&&session.username||'member','PROMOTION_REQUESTED',
       'resident',myRecord&&myRecord.id||'demo',{stage:walkStage},{requestedStage:nextStage&&nextStage.id});
     setRequesting(false); setEvidence('');
-    toast({icon:'📋',title:'Advancement request submitted',body:'Your request has been sent to your House Mother and Director for review. Walk well.'});
+    toast({icon:'📋',title:'Advancement request submitted',body:'Your request has been sent to your House Mother and Director for review. Walk it out faithfully.'});
   };
 
   return React.createElement('div',null,
     React.createElement('div',{className:'lvl-header',style:{'--acc':'var(--gold)'}},
       React.createElement('div',{className:'lvh-tag'},'My Journey'),
       React.createElement('div',{className:'lvh-title'},'My Walk'),
-      React.createElement('div',{className:'lvh-sub'},'Your personal progress in the '+(cfg.networkName||'POLR Network')+' recovery program. Each stage has specific qualifications. Promotions require approval from your House Mother and Director.')
+      React.createElement('div',{className:'lvh-sub'},'Your personal progress in the '+(cfg.networkName||'HOPE Recovery Network')+' recovery program. Each stage has specific qualifications. Promotions require approval from your House Mother and Director.')
     ),
 
     // Current stage hero card
@@ -17240,7 +17254,7 @@ var WF_PRICING = {
         'Compliance and attendance reporting',
         'Custom cohort design',
         'Monthly workforce analytics dashboard',
-        'Quarterly business review with POLR leadership',
+        'Quarterly business review with HOPE leadership',
         'Named cohort sponsorship option',
       ]
     },
@@ -17283,11 +17297,11 @@ var WF_PIPELINES = [
     color:'var(--l4)',
     purpose:'Connect pre-screened, motivated job-seekers in recovery to your open positions.',
     employerBenefits:[
-      '$9,600 federal WOTC tax credit per eligible hire — POLR handles all paperwork',
+      '$9,600 federal WOTC tax credit per eligible hire — HOPE handles all paperwork',
       'Candidates drug-tested weekly — no surprise failed tests on day one',
       'Motivated workers who have overcome adversity — above-average retention',
       '$750 placement fee — far below the $3,000-5,000 average for staffing agencies',
-      '30-day post-hire check-in from your POLR coordinator',
+      '30-day post-hire check-in from your HOPE coordinator',
     ],
     candidateBenefits:[
       'Job-ready preparation: resume, interview coaching, soft skills',
@@ -17342,11 +17356,11 @@ var WF_PIPELINES = [
   {
     id:'wotc_documentation', label:'WOTC Documentation Service', icon:'📋',
     color:'var(--l5)',
-    purpose:'Already hiring from qualifying populations? POLR handles all IRS WOTC documentation — you collect the credit.',
+    purpose:'Already hiring from qualifying populations? HOPE handles all IRS WOTC documentation — you collect the credit.',
     employerBenefits:[
       'Average $9,600 tax credit per eligible hire — requires IRS Form 8850 within 28 days of hire',
-      'Missing this deadline costs you the full credit — POLR makes sure you never miss it',
-      'Works on existing employees, not just POLR placements',
+      'Missing this deadline costs you the full credit — HOPE makes sure you never miss it',
+      'Works on existing employees, not just HOPE placements',
       '$149/mo service — typical ROI: $6,400+ net per eligible hire',
       'We verify eligibility, prepare forms, track deadlines',
     ],
@@ -17431,7 +17445,7 @@ function WorkforcePlacementDashboard({ platform, update, session, toast, setActi
       '<hr class="gold"><p class="sub">Effective: '+today+'<\/p>',
       '<div class="pt">',
         '<div><div class="ph">EMPLOYER<\/div><div class="pc"><div class="pn">'+(emp.name||'[Employer Name]')+'<\/div><div class="pr">(&ldquo;Employer&rdquo;)<\/div><\/div><\/div>',
-        '<div><div class="ph">SERVICE PROVIDER<\/div><div class="pc"><div class="pn">Path of Life Recovery, Inc.<\/div><div class="pr">(&ldquo;POLR&rdquo;)<\/div><\/div><\/div>',
+        '<div><div class="ph">SERVICE PROVIDER<\/div><div class="pc"><div class="pn">HOPE Recovery, Inc.<\/div><div class="pr">(&ldquo;POLR&rdquo;)<\/div><\/div><\/div>',
       '<\/div>',
       '<div class="sh">SECTION 1 &mdash; SERVICES<\/div>',
       '<p class="bt">POLR agrees to provide workforce placement services to Employer under the <strong>'+tierObj.label+'<\/strong> tier, including: candidate sourcing and pre-screening, drug testing verification, job readiness assessment, placement coordination, and WOTC tax credit documentation as described below.<\/p>',
@@ -17441,7 +17455,7 @@ function WorkforcePlacementDashboard({ platform, update, session, toast, setActi
       tierObj.subscriptionMonthly>0?'<tr><td>Monthly Service Fee<\/td><td>'+tierObj.subscriptionDesc+'<\/td><td>1st of each month<\/td><\/tr>':'',
       '<tr><td>WOTC Documentation<\/td><td>Included &mdash; $9,600 credit flows to Employer<\/td><td>Forms submitted within 28 days of hire<\/td><\/tr>',
       '<\/table>',
-      '<div class="hl">WOTC Tax Credit: Employer may receive up to $9,600 per qualifying hire under the Work Opportunity Tax Credit (IRC &sect;51). POLR prepares and submits IRS Form 8850 and ETA Form 9061 within the 28-day window. Employer must sign and return forms within 5 business days of receipt. Failure to return signed forms forfeits the credit. POLR bears no liability for missed deadlines caused by Employer delay.<\/div>',
+      '<div class="hl">WOTC Tax Credit: Employer may receive up to $9,600 per qualifying hire under the Work Opportunity Tax Credit (IRC &sect;51). HOPE prepares and submits IRS Form 8850 and ETA Form 9061 within the 28-day window. Employer must sign and return forms within 5 business days of receipt. Failure to return signed forms forfeits the credit. HOPE bears no liability for missed deadlines caused by Employer delay.<\/div>',
       '<div class="sh">SECTION 3 &mdash; BULK HIRING DISCOUNTS<\/div>',
       '<table class="ft"><tr><th>Hires in Contract Period<\/th><th>Discount<\/th><th>Effective Rate<\/th><\/tr>',
       '<tr><td>1&ndash;4 hires<\/td><td>None<\/td><td>$'+tierObj.placementFee+' per hire<\/td><\/tr>',
@@ -17450,15 +17464,15 @@ function WorkforcePlacementDashboard({ platform, update, session, toast, setActi
       '<tr><td>20+ hires<\/td><td>30%<\/td><td>$'+Math.round(tierObj.placementFee*0.7)+' per hire (or upgrade to Enterprise)<\/td><\/tr>',
       '<\/table>',
       '<div class="sh">SECTION 4 &mdash; CANDIDATE STANDARDS & SCREENING<\/div>',
-      '<p class="si"><strong>Pre-Placement:<\/strong> All candidates presented to Employer have completed: minimum '+tierObj.id==='standard'?'30':'60'+' days in POLR program, recent negative drug screen, background disclosure, and job-readiness assessment.<\/p>',
-      '<p class="si"><strong>Ongoing Drug Testing:<\/strong> POLR residents continue weekly drug testing during employment. Positive results are reported to POLR staff. Employer is notified only if the result affects job performance or safety.<\/p>',
-      '<p class="si"><strong>Background Disclosure:<\/strong> All candidates disclose background history to POLR before referral. POLR does not guarantee suitability for all positions. Employer is responsible for conducting its own background check per applicable law.<\/p>',
+      '<p class="si"><strong>Pre-Placement:<\/strong> All candidates presented to Employer have completed: minimum '+tierObj.id==='standard'?'30':'60'+' days in HOPE program, recent negative drug screen, background disclosure, and job-readiness assessment.<\/p>',
+      '<p class="si"><strong>Ongoing Drug Testing:<\/strong> HOPE residents continue weekly drug testing during employment. Positive results are reported to HOPE staff. Employer is notified only if the result affects job performance or safety.<\/p>',
+      '<p class="si"><strong>Background Disclosure:<\/strong> All candidates disclose background history to HOPE before referral. HOPE does not guarantee suitability for all positions. Employer is responsible for conducting its own background check per applicable law.<\/p>',
       '<div class="sh">SECTION 5 &mdash; RETENTION & FOLLOW-UP<\/div>',
-      '<p class="bt">POLR provides 30-day and 90-day retention check-ins for each placed candidate. Employer agrees to notify POLR within 48 hours of any termination, resignation, or performance issue affecting a POLR-referred employee. POLR will offer a replacement candidate at no additional placement fee if separation occurs within 30 days of hire and is not due to Employer-initiated reduction in force.<\/p>',
+      '<p class="bt">POLR provides 30-day and 90-day retention check-ins for each placed candidate. Employer agrees to notify HOPE within 48 hours of any termination, resignation, or performance issue affecting a HOPE-referred employee. HOPE will offer a replacement candidate at no additional placement fee if separation occurs within 30 days of hire and is not due to Employer-initiated reduction in force.<\/p>',
       '<div class="sh">SECTION 6 &mdash; EMPLOYER OBLIGATIONS<\/div>',
-      '<p class="si">Employer agrees to: (a) provide a safe, non-discriminatory workplace; (b) pay candidates at or above the prevailing wage for the position; (c) complete and return all WOTC forms within 5 business days; (d) notify POLR of terminations within 48 hours; (e) not solicit POLR staff, coordinators, or other employers within the POLR network for 12 months following contract termination.<\/p>',
+      '<p class="si">Employer agrees to: (a) provide a safe, non-discriminatory workplace; (b) pay candidates at or above the prevailing wage for the position; (c) complete and return all WOTC forms within 5 business days; (d) notify HOPE of terminations within 48 hours; (e) not solicit HOPE staff, coordinators, or other employers within the HOPE network for 12 months following contract termination.<\/p>',
       '<div class="sh">SECTION 7 &mdash; LIABILITY & LIMITATION<\/div>',
-      '<p class="bt">POLR is not an employer of record. POLR candidates are employees of Employer, not POLR. POLR is not liable for candidate conduct, performance, or any workplace incident. Employer assumes all employer-of-record obligations including payroll taxes, workers&rsquo; compensation, and compliance with applicable labor law. POLR&rsquo;s total liability under this Agreement shall not exceed the total service fees paid in the 3 months preceding the claim.<\/p>',
+      '<p class="bt">POLR is not an employer of record. HOPE candidates are employees of Employer, not HOPE. HOPE is not liable for candidate conduct, performance, or any workplace incident. Employer assumes all employer-of-record obligations including payroll taxes, workers&rsquo; compensation, and compliance with applicable labor law. POLR&rsquo;s total liability under this Agreement shall not exceed the total service fees paid in the 3 months preceding the claim.<\/p>',
       '<div class="sh">SECTION 8 &mdash; TERM & TERMINATION<\/div>',
       '<p class="bt">Term: '+tierObj.contractTerm+'. Either party may terminate with 30 days written notice. Placement fees for hires made before termination remain due. WOTC documentation obligations survive termination for hires made during the term.<\/p>',
       '<div class="sh">SECTION 9 &mdash; GOVERNING LAW<\/div>',
@@ -17466,9 +17480,9 @@ function WorkforcePlacementDashboard({ platform, update, session, toast, setActi
       '<hr class="gold" style="margin-top:14px">',
       '<div class="sg">',
         '<div class="sb"><div class="sbh">EMPLOYER<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:3px">'+(emp.name||'[Employer Name]')+'<\/p><p style="font-size:8pt;color:#64748b;margin-bottom:8px">'+(emp.contact||'')+(emp.email?' &middot; '+emp.email:'')+'<\/p><div class="sl2"><\/div><p class="slb">Authorized Signature &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>',
-        '<div class="sb"><div class="sbh">PATH OF LIFE RECOVERY, INC.<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:3px">Path of Life Recovery, Inc.<\/p><p style="font-size:8pt;color:#64748b;margin-bottom:8px">Director &middot; {POLR_EMAIL} &middot; {POLR_PHONE}<\/p><div class="sl2"><\/div><p class="slb">Authorized Signature &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>',
+        '<div class="sb"><div class="sbh">PATH OF LIFE RECOVERY, INC.<\/div><p style="font-weight:700;color:#0c1a2e;margin-bottom:3px">HOPE Recovery, Inc.<\/p><p style="font-size:8pt;color:#64748b;margin-bottom:8px">Director &middot; bro.chuck.edwards@gmail.com &middot; 225-333-0330<\/p><div class="sl2"><\/div><p class="slb">Authorized Signature &amp; Title<\/p><div class="sl2" style="margin-top:14px"><\/div><p class="slb">Date<\/p><\/div>',
       '<\/div>',
-      '<div class="fn">Employer Partnership Agreement &mdash; '+tierObj.label+' &mdash; Path of Life Recovery, Inc. &mdash; {POLR_WEBSITE} &mdash; Review with counsel before execution. This agreement does not constitute legal advice.<\/div>',
+      '<div class="fn">Employer Partnership Agreement &mdash; '+tierObj.label+' &mdash; HOPE Recovery, Inc. &mdash; hopenetwork.com &mdash; Review with counsel before execution. This agreement does not constitute legal advice.<\/div>',
       '<\/body><\/html>',
     ].join('');
     var w=window.open('','_blank','width=960,height=780');
@@ -17749,7 +17763,7 @@ function WorkforcePlacementDashboard({ platform, update, session, toast, setActi
     tab==='wotc'&&React.createElement('div',null,
       React.createElement('div',{style:{padding:'0.85rem 1.1rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.25)',borderRadius:10,marginBottom:'1.25rem',fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.7}},
         React.createElement('span',{style:{fontWeight:700,color:'var(--gold)'}},'WOTC Rule: '),
-        'IRS Form 8850 must be submitted within 28 days of hire date. Missing this deadline permanently forfeits the $9,600 credit. POLR prepares all forms — employers must sign and return within 5 business days of receipt.'
+        'IRS Form 8850 must be submitted within 28 days of hire date. Missing this deadline permanently forfeits the $9,600 credit. HOPE prepares all forms — employers must sign and return within 5 business days of receipt.'
       ),
       jobs.length===0?
         React.createElement('div',{className:'d-card',style:{padding:'2rem',textAlign:'center',color:'var(--dmuted)'}},'No job assignments on record yet.')
@@ -17832,7 +17846,7 @@ var DEFAULT_MODULE_CONFIG = {
     // ── Ministry Core ──
     'Programs':      {enabled:true, label:'Programs & Meetings', desc:'12-step meetings, programs, QR scanner, step tracker, step lessons.', icon:'🙏', lockable:false, group:'Ministry'},
     'Content':       {enabled:true, label:'Content & Testimonies', desc:'Testimony review, blog, announcements, community wall, resources.', icon:'📖', lockable:false, group:'Ministry'},
-    'Housing':       {enabled:true, label:'Housing', desc:'POLR Houses, House Mother HQ, resident management, property partners.', icon:'🏠', lockable:false, group:'Ministry'},
+    'Housing':       {enabled:true, label:'Housing', desc:'HOPE Houses, House Mother HQ, resident management, property partners.', icon:'🏠', lockable:false, group:'Ministry'},
     'Workforce':     {enabled:true, label:'Workforce', desc:'Workforce panel, employer CRM, placement system, growth profile.', icon:'💼', lockable:false, group:'Ministry'},
     'Financial':     {enabled:true, label:'Donations & Campaigns', desc:'Donation recording, campaign tracking, ledger writes.', icon:'💛', lockable:false, group:'Ministry'},
     'Operations':    {enabled:true, label:'Operations', desc:'Scheduler, campuses, restoration pipeline, war room, forecast, pitch builder, contact routing.', icon:'⚙️', lockable:false, group:'Ministry'},
@@ -17917,7 +17931,7 @@ var BENEFIT_PAGES = {
     icon:'🎓',
     color:'var(--l1)',
     tagline:'Sponsor a complete training cohort. Graduate your future employees.',
-    whatItIs:'The Cohort Manager lets employers sponsor a named training cohort — "Gulf South Logistics Workforce Cohort." POLR co-designs the curriculum, recruits residents who match the employer\'s needs, runs the training, and delivers job-ready graduates.',
+    whatItIs:'The Cohort Manager lets employers sponsor a named training cohort — "Gulf South Logistics Workforce Cohort." HOPE co-designs the curriculum, recruits residents who match the employer\'s needs, runs the training, and delivers job-ready graduates.',
     whoItsFor:'Directors and Workforce Coordinators managing employer-sponsored training. Employers in the Preferred or Enterprise tier.',
     keyBenefits:[
       {icon:'🎓',title:'Named cohort sponsorship',desc:'Employer gets a named cohort and community recognition. First-hire rights on every graduate.'},
@@ -17933,12 +17947,12 @@ var BENEFIT_PAGES = {
     icon:'🔨',
     color:'var(--gold)',
     tagline:'Reduced tuition agreements with trade schools. Your residents get certified. Employers get skilled workers.',
-    whatItIs:'The Trade Partners panel manages MOU-based partnerships with trade schools, community colleges, and apprenticeship programs. Partners agree to reduced tuition for POLR residents in exchange for a referral pipeline and community recognition.',
+    whatItIs:'The Trade Partners panel manages MOU-based partnerships with trade schools, community colleges, and apprenticeship programs. Partners agree to reduced tuition for HOPE residents in exchange for a referral pipeline and community recognition.',
     whoItsFor:'Directors negotiating trade school agreements. Education coordinators managing enrollment in external programs.',
     keyBenefits:[
-      {icon:'💵',title:'Reduced tuition',desc:'Partner schools offer 20-50% tuition reduction for POLR residents. Some offer full scholarships for qualifying residents.'},
+      {icon:'💵',title:'Reduced tuition',desc:'Partner schools offer 20-50% tuition reduction for HOPE residents. Some offer full scholarships for qualifying residents.'},
       {icon:'📜',title:'Certification pipeline',desc:'Residents earn certifications that are employer-recognized: OSHA-10, HHA, ServSafe, CDL-A, welding certs.'},
-      {icon:'🤝',title:'Referral relationship',desc:'Trade schools get a steady pipeline of motivated students. POLR gets below-market tuition. Both win.'},
+      {icon:'🤝',title:'Referral relationship',desc:'Trade schools get a steady pipeline of motivated students. HOPE gets below-market tuition. Both win.'},
       {icon:'📊',title:'Grant documentation',desc:'Trade partner agreements and completion records feed directly into WIOA grant outcome reporting.'},
     ],
     metrics:['MOU tracking and renewal alerts','Enrollment per partner per period','Certification completion rate','Grant documentation export'],
@@ -17981,12 +17995,12 @@ var BENEFIT_PAGES = {
     icon:'🏆',
     color:'var(--gold)',
     tagline:'Employers sponsor a cohort. They name it. They get first-hire rights on every graduate.',
-    whatItIs:'A Named Cohort Sponsorship is a formal employer partnership where a company co-designs a training cohort with POLR. The cohort bears the employer\'s name, residents train specifically for that employer\'s open positions, and the employer gets guaranteed interview rights on graduation day.',
+    whatItIs:'A Named Cohort Sponsorship is a formal employer partnership where a company co-designs a training cohort with HOPE. The cohort bears the employer\'s name, residents train specifically for that employer\'s open positions, and the employer gets guaranteed interview rights on graduation day.',
     whoItsFor:'Enterprise and Preferred employer partners. Corporate sponsors seeking community impact with measurable ROI.',
     keyBenefits:[
       {icon:'🏢',title:'Community recognition',desc:'"Gulf South Logistics Workforce Cohort" — your company name on a cohort that trains workers in your community.'},
       {icon:'🎯',title:'Hire-ready graduates',desc:'Residents train for your specific positions, your safety requirements, your culture. No generic workforce training.'},
-      {icon:'💰',title:'WOTC on every hire',desc:'$9,600 federal tax credit per qualifying graduate you hire. POLR handles all documentation.'},
+      {icon:'💰',title:'WOTC on every hire',desc:'$9,600 federal tax credit per qualifying graduate you hire. HOPE handles all documentation.'},
       {icon:'📊',title:'Measurable ROI',desc:'Average 8-12 graduates per cohort. 67% hired by sponsor. Average $9,600 WOTC × hires = documented financial return.'},
     ],
     metrics:['$0 placement fee for sponsored cohort graduates','$9,600 WOTC per qualifying hire','8-12 graduates per cohort','67% hire rate by sponsoring employer'],
@@ -18003,7 +18017,7 @@ var BENEFIT_PAGES = {
       {icon:'⚖️',title:'Built-in accountability',desc:'Employment is a court requirement. Residents who lose their job face court consequences. This creates retention motivation that market workers don\'t have.'},
       {icon:'📋',title:'Compliance reporting',desc:'POLR provides attendance and conduct reports to the court, relieving employers of that burden.'},
       {icon:'💰',title:'WOTC on every qualifying hire',desc:'Court-referred participants from qualifying categories are WOTC-eligible. Same $9,600 credit.'},
-      {icon:'🔄',title:'Replacement guarantee',desc:'If a court-referred employee exits within 30 days, POLR provides a replacement at no additional fee.'},
+      {icon:'🔄',title:'Replacement guarantee',desc:'If a court-referred employee exits within 30 days, HOPE provides a replacement at no additional fee.'},
     ],
     metrics:['91% 30-day retention (accountability effect)','70% 90-day retention','$9,600 WOTC per qualifying hire','Monthly compliance reports to court'],
     whenToDisable:'N/A — partnership option. Available in Enterprise tier and court contract programs.',
@@ -18239,8 +18253,8 @@ function ModuleControlCenter({ platform, update, session, toast }) {
                 '<div class="metrics"><h3>Key Metrics & Outcomes<\/h3><ul>'+
                 page.metrics.map(function(m){return '<li>'+m+'<\/li>';}).join('')+
                 '<\/ul><\/div>'+
-                '<div class="footer">Path of Life Recovery, Inc. &middot; {POLR_WEBSITE} &middot; {POLR_EMAIL} &middot; {POLR_PHONE}<br>'+
-                'This document is prepared for employer and partner information. Walk well.<\/div>'+
+                '<div class="footer">HOPE Recovery, Inc. &middot; hopenetwork.com &middot; bro.chuck.edwards@gmail.com &middot; 225-333-0330<br>'+
+                'This document is prepared for employer and partner information. Walk it out faithfully.<\/div>'+
                 '<\/body><\/html>';
               var w=window.open('','_blank','width=960,height=780');
               if(w){w.document.write(html);w.document.close();w.focus();setTimeout(function(){w.print();},900);}
@@ -18255,7 +18269,7 @@ function ModuleControlCenter({ platform, update, session, toast }) {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-// POLR FINANCIAL ENGINE — Zeffy + PayPal + Tax + Split + Enforcement
+// HOPE FINANCIAL ENGINE — Zeffy + PayPal + Tax + Split + Enforcement
 // NON-DESTRUCTIVE: extends existing ledger[], invoices[], donations[]
 // All new state: zeffyDonations, fundAllocations, taxFlags, payoutLog
 // ════════════════════════════════════════════════════════════════════════
@@ -18333,7 +18347,7 @@ var triggerPlacementInvoice = function(platform, update, residentName, employerN
     taxClass:'taxable', taxLabel:'Taxable Revenue',
     split:split, description:'Workforce Placement Fee — '+residentName+' @ '+employerName,
     contractRequired:true, paymentBlocked:false,
-    memo:'Net 30. WOTC documentation included. Questions: {POLR_EMAIL}'
+    memo:'Net 30. WOTC documentation included. Questions: bro.chuck.edwards@gmail.com'
   };
   // Add to invoices[]
   update('invoices', [...(platform.invoices||[]), invoice]);
@@ -18547,7 +18561,7 @@ function UnifiedFinancialOverview({ platform, update, session, toast, setActive 
     tab==='zeffy'&&React.createElement('div',null,
       React.createElement('div',{style:{padding:'0.85rem 1rem',background:'rgba(91,196,110,0.05)',border:'1px solid rgba(91,196,110,0.2)',borderRadius:10,marginBottom:'1.25rem',fontSize:'0.8rem',color:'var(--dmuted)',lineHeight:1.7}},
         React.createElement('span',{style:{fontWeight:700,color:'var(--l5)'}},'🟢 Zeffy Integration: '),
-        'Zeffy is a zero-fee nonprofit donation platform. Donations collected via Zeffy arrive as tax-deductible gifts to POLR (501c3). Record each donation below — or import from your Zeffy dashboard export. All Zeffy entries are auto-classified as nonprofit/tax-deductible and are ',
+        'Zeffy is a zero-fee nonprofit donation platform. Donations collected via Zeffy arrive as tax-deductible gifts to HOPE (501c3). Record each donation below — or import from your Zeffy dashboard export. All Zeffy entries are auto-classified as nonprofit/tax-deductible and are ',
         React.createElement('strong',null,'never mixed'),
         ' with PayPal revenue in reporting or splits.'
       ),
@@ -18632,7 +18646,7 @@ function UnifiedFinancialOverview({ platform, update, session, toast, setActive 
     // ── TAX CLASSIFICATION TAB ──
     tab==='tax'&&React.createElement('div',null,
       React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'0.85rem',marginBottom:'1.25rem'}},
-        [{label:'🟢 Nonprofit / Tax-Deductible',val:fmt(nonprofitTotal),count:filteredLedger.filter(function(e){return e.taxClass==='nonprofit';}).length,color:'var(--l5)',desc:'Donations, grants, restricted/unrestricted gifts. Deductible to donor. Not taxable to POLR.'},
+        [{label:'🟢 Nonprofit / Tax-Deductible',val:fmt(nonprofitTotal),count:filteredLedger.filter(function(e){return e.taxClass==='nonprofit';}).length,color:'var(--l5)',desc:'Donations, grants, restricted/unrestricted gifts. Deductible to donor. Not taxable to HOPE.'},
          {label:'🔵 Taxable Revenue',val:fmt(taxableTotal),count:filteredLedger.filter(function(e){return e.taxClass==='taxable';}).length,color:'var(--l2)',desc:'Placement fees, license fees, service revenue. Subject to federal/state income tax.'},
          {label:'⚠️ UBI Risk',val:fmt(ubiRiskTotal),count:ubiFlags.length,color:'#fc8181',desc:'Unrelated Business Income. May trigger UBIT. Review with accountant. Housing income is common UBI risk for nonprofits.'},
         ].map(function(s){
@@ -18690,7 +18704,7 @@ function UnifiedFinancialOverview({ platform, update, session, toast, setActive 
             );
           }),
           React.createElement('div',{style:{marginTop:'0.65rem',fontSize:'0.72rem',color:'var(--dmuted)',lineHeight:1.65}},
-            'Splits are calculated automatically on every taxable transaction. Platform % goes to the platform licensor. Campus % stays in POLR operations for the campus that generated the revenue. Program % funds direct ministry.')
+            'Splits are calculated automatically on every taxable transaction. Platform % goes to the platform licensor. Campus % stays in HOPE operations for the campus that generated the revenue. Program % funds direct ministry.')
         )
       ),
       // Split summary
@@ -18796,7 +18810,7 @@ function ZeffyDonationForm({ platform, update, toast }) {
         ),
         React.createElement('div',null,
           React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Campaign (optional)'),
-          React.createElement('input',{value:form.campaign||'',onChange:setF('campaign'),placeholder:'e.g. Walk Well 2026',
+          React.createElement('input',{value:form.campaign||'',onChange:setF('campaign'),placeholder:'e.g. HOPE In Motion 2026',
             style:{width:'100%',padding:'0.55rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none',boxSizing:'border-box'}})
         )
       ),
@@ -18819,7 +18833,7 @@ function ZeffyDonationForm({ platform, update, toast }) {
 //    e.g. disable Workforce → "Career Support" disappears from homepage.
 //
 // 2. PER-CAMPUS SITE CONFIGS
-//    Each POLR Place gets its own config profile: name, hero text,
+//    Each HOPE Place gets its own config profile: name, hero text,
 //    featured modules, contact info, colors, pastor quote, feature list.
 //    The QR Studio can generate a campus-specific site URL/poster.
 //
@@ -18835,18 +18849,18 @@ function ZeffyDonationForm({ platform, update, toast }) {
 var DEFAULT_SITE_CONFIG = {
   slug: 'polr-hq',
   type: 'polr',          // 'polr' | 'campus' | 'whitelabel'
-  name: 'Path of Life Recovery',
-  networkName: 'POLR Network',
+  name: 'HOPE Recovery: Hold on Pain Ends',
+  networkName: 'HOPE Recovery Network',
   tagline: 'Healing and hope for the hurting.',
   heroHeadline: 'A New Walk Begins Here',
-  heroSubline: 'Christ-centered recovery ministry serving South Louisiana since 1995.',
+  heroSubline: 'Christ-centered recovery ministry serving South Louisiana since 2004.',
   primaryColor: '#0c1a2e',
   accentColor: '#c8913a',
-  logoText: 'POLR',
-  domain: '{POLR_WEBSITE}',
-  phone: '{POLR_PHONE}',
-  email: '{POLR_EMAIL}',
-  address: 'Thibodaux, Louisiana',
+  logoText: 'HOPE',
+  domain: 'hopenetwork.com',
+  phone: '225-333-0330',
+  email: 'bro.chuck.edwards@gmail.com',
+  address: 'Port Allen, Louisiana',
   pastorQuote: '',
   pastorName: '',
   // Which public sections to show on homepage
@@ -18888,7 +18902,7 @@ var MODULE_WEBSITE_FEATURES = {
   'Programs':       {icon:'🙏', title:'12-Step Recovery', desc:'Christ-centered step program with weekly meetings, accountability groups, and spiritual mentorship.'},
   'Education':      {icon:'📚', title:'Education & Training', desc:'GED prep, trade certifications, home health aide, forklift, CDL, and life skills — free to members.'},
   'Workforce':      {icon:'💼', title:'Career Support', desc:'Job placement, employer partnerships, resume coaching, and WOTC tax credit documentation for employers.'},
-  'Housing':        {icon:'🏠', title:'Structured Housing', desc:'Safe, structured living in POLR Places with house mothers, accountability, and community.'},
+  'Housing':        {icon:'🏠', title:'Structured Housing', desc:'Safe, structured living in HOPE Places with house mothers, accountability, and community.'},
   'Financial':      {icon:'💛', title:'Donor-Supported', desc:'100% of donations support direct recovery ministry. Zero platform fees on Zeffy donations.'},
   'Mentorship':     {icon:'🤝', title:'Peer Mentorship', desc:'Matched with an alumni mentor who has walked the same road. Accountability, connection, and hope.'},
   'Content':        {icon:'📖', title:'Testimonies & Stories', desc:'Real stories from people who have walked this program. Faith, restoration, and transformation.'},
@@ -18924,7 +18938,7 @@ function SiteConfigManager({ platform, update, session, toast, setActive }) {
     var slug = 'campus-'+(camp.slug||camp.name.toLowerCase().replace(/\s+/g,'-'));
     allConfigs.push(Object.assign({}, DEFAULT_SITE_CONFIG, {
       slug:slug, type:'campus', name:camp.name, address:camp.address||camp.city||'',
-      phone:camp.phone||'{POLR_PHONE}', domain:'{POLR_WEBSITE}/'+slug,
+      phone:camp.phone||'225-333-0330', domain:'hopenetwork.com/'+slug,
     }, siteConfigs[slug] || {}));
   });
   (platform.licenseClients||[]).forEach(function(client) {
@@ -18990,7 +19004,7 @@ function SiteConfigManager({ platform, update, session, toast, setActive }) {
     // Config list
     allConfigs.map(function(cfg){
       var typeColor = cfg.type==='polr'?'var(--gold)':cfg.type==='campus'?'var(--l4)':'var(--l1)';
-      var typeLabel = cfg.type==='polr'?'🏛️ POLR HQ':cfg.type==='campus'?'🏠 Campus':'🌐 White-Label';
+      var typeLabel = cfg.type==='polr'?'🏛️ HOPE HQ':cfg.type==='campus'?'🏠 Campus':'🌐 White-Label';
       var features = getEffectiveFeatures(cfg);
       return React.createElement('div',{key:cfg.slug,className:'d-card',style:{marginBottom:'0.65rem',borderLeft:'3px solid '+typeColor,cursor:'pointer'},
         onClick:function(){setSelConfig(cfg);}},
@@ -19071,12 +19085,12 @@ function SiteConfigEditor({ cfg, platform, update, session, toast, saveCfg, enab
     tab==='basics'&&React.createElement('div',{className:'d-card'},
       React.createElement('div',{className:'d-card-body'},
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.65rem',marginBottom:'0.75rem'}},
-          inp('Site / Location Name','name','text','e.g. POLR Place Baton Rouge'),
-          inp('Network / Brand Name','networkName','text','e.g. POLR Network'),
-          inp('Website Domain','domain','text','{POLR_WEBSITE}'),
-          inp('Phone','phone','tel','{POLR_PHONE}'),
-          inp('Email','email','email','{POLR_EMAIL}'),
-          inp('Address / City','address','text','Thibodaux, Louisiana')
+          inp('Site / Location Name','name','text','e.g. HOPE Place Baton Rouge'),
+          inp('Network / Brand Name','networkName','text','e.g. HOPE Recovery Network'),
+          inp('Website Domain','domain','text','hopenetwork.com'),
+          inp('Phone','phone','tel','225-333-0330'),
+          inp('Email','email','email','bro.chuck.edwards@gmail.com'),
+          inp('Address / City','address','text','Port Allen, Louisiana')
         ),
         React.createElement('div',{style:{marginBottom:'0.75rem'}},
           inp('Hero Headline (large text on homepage)','heroHeadline','text','A New Walk Begins Here')),
@@ -19101,8 +19115,8 @@ function SiteConfigEditor({ cfg, platform, update, session, toast, saveCfg, enab
       React.createElement('div',{className:'d-card-body'},
         React.createElement('div',{style:{padding:'0.65rem 0.85rem',background:'rgba(200,145,58,0.05)',border:'1px solid rgba(200,145,58,0.2)',borderRadius:8,marginBottom:'0.85rem',fontSize:'0.75rem',color:'var(--dmuted)',lineHeight:1.65}},
           cfg.type==='whitelabel'?
-            '\uD83D\uDD12 White-label clients can only enable modules that are globally enabled by POLR Platform Owner. They cannot enable modules that have been globally disabled.':
-            '\uD83C\uDFE0 Campus-level overrides let each POLR Place enable only the modules relevant to their operation. A location without workforce services can hide those sections from their site.'
+            '\uD83D\uDD12 White-label clients can only enable modules that are globally enabled by HOPE Platform Owner. They cannot enable modules that have been globally disabled.':
+            '\uD83C\uDFE0 Campus-level overrides let each HOPE Place enable only the modules relevant to their operation. A location without workforce services can hide those sections from their site.'
         ),
         Object.entries(DEFAULT_MODULE_CONFIG.modules).map(function(entry){
           var key=entry[0], mod=entry[1];
@@ -19178,12 +19192,12 @@ function SiteConfigEditor({ cfg, platform, update, session, toast, saveCfg, enab
           ),
           React.createElement('div',null,
             React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.25rem'}},'Logo Text'),
-            React.createElement('input',{type:'text',value:form.logoText||'',onChange:setF('logoText'),placeholder:'POLR',
+            React.createElement('input',{type:'text',value:form.logoText||'',onChange:setF('logoText'),placeholder:'HOPE',
               style:{width:'100%',padding:'0.55rem',borderRadius:7,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none',boxSizing:'border-box'}})
           )
         ),
         cfg.type==='whitelabel'&&React.createElement('div',{style:{padding:'0.65rem 0.85rem',background:'rgba(139,124,248,0.05)',border:'1px solid rgba(139,124,248,0.2)',borderRadius:8,marginBottom:'0.85rem',fontSize:'0.75rem',color:'var(--dmuted)',lineHeight:1.65}},
-          '\uD83C\uDF10 White-label branding: this client\u2019s colors and logo appear on their deployed instance of the platform. POLR branding is replaced with their own. Their users will not see POLR Network references unless the WL client chooses to include them.'),
+          '\uD83C\uDF10 White-label branding: this client\u2019s colors and logo appear on their deployed instance of the platform. HOPE branding is replaced with their own. Their users will not see HOPE Recovery Network references unless the WL client chooses to include them.'),
         React.createElement('button',{onClick:save,style:{width:'100%',marginTop:'0.5rem',padding:'0.65rem',borderRadius:9,background:'linear-gradient(135deg,var(--l1),rgba(139,124,248,0.4))',color:'white',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.88rem',fontFamily:'var(--font-serif)'}},'Save Branding')
       )
     ),
@@ -19215,8 +19229,8 @@ function GuestMeetingsPanel({ platform, toast, session }) {
 
   var meetings = platform.meetings||[];
   var campusLocations = {
-    'POLR Place Thibodaux': 'Thibodaux, LA', 'POLR Place @ HOP Thibodaux': 'Thibodaux, LA',
-    'POLR Place @ HOP Larose': 'Larose, LA', 'Port Allen': 'Port Allen, LA'
+    'HOPE Place Port Allen': 'Thibodaux, LA', 'HOPE Place Port Allen': 'Thibodaux, LA',
+    'HOPE Place Port Allen': 'Larose, LA', 'Port Allen': 'Port Allen, LA'
   };
 
   var handleSocialLocation = function(prov) {
@@ -19231,7 +19245,7 @@ function GuestMeetingsPanel({ platform, toast, session }) {
       React.createElement('h2',{style:{fontFamily:'var(--font-serif)',color:'var(--dtxt)',fontWeight:600}},'POLR Meetings')
     ),
     React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,marginBottom:'1.25rem'}},
-      React.createElement('div',{style:{fontSize:'0.9rem',color:'var(--dtxt)',marginBottom:'0.75rem',fontStyle:'italic',fontFamily:'var(--font-serif)'}},'Share your location or enter your city to find the closest POLR meeting. All meetings are free and open to everyone.'),
+      React.createElement('div',{style:{fontSize:'0.9rem',color:'var(--dtxt)',marginBottom:'0.75rem',fontStyle:'italic',fontFamily:'var(--font-serif)'}},'Share your location or enter your city to find the closest HOPE meeting. All meetings are free and open to everyone.'),
       React.createElement('div',{style:{display:'flex',gap:'0.65rem',flexWrap:'wrap',marginBottom:'0.85rem'}},
         [['🌐','Use Google Location','google'],['🍎','Use Apple Location','apple'],['📘','Use Facebook','facebook']].map(function(item){
           return React.createElement('button',{key:item[2],onClick:function(){handleSocialLocation(item[2]);},
@@ -19289,7 +19303,7 @@ function GuestMeetingsPanel({ platform, toast, session }) {
         React.createElement('div',{style:{fontSize:'0.9rem',color:'var(--dtxt)',marginBottom:'0.5rem',fontFamily:'var(--font-serif)'}},'Not ready for a meeting? That\'s okay.'),
         React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)'}},
           'Call or text our team: ',
-          React.createElement('a',{href:'tel:{POLR_PHONE}',style:{color:'var(--gold)',fontWeight:700,textDecoration:'none'}},'{POLR_PHONE}')
+          React.createElement('a',{href:'tel:225-333-0330',style:{color:'var(--gold)',fontWeight:700,textDecoration:'none'}},'225-333-0330')
         )
       )
     )
@@ -19491,9 +19505,9 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
       'Something is moving in you. These questions prove it.',
       'Growth is rarely visible in the moment. Keep going.',
       'You are not who you were. Keep going.',
-      'Every person who walked out of POLR started with a moment like this one.',
+      'Every person who walked out of HOPE started with a moment like this one.',
     ];
-    var enc=risk.crisis?'You are not alone. What you\'re feeling is real — and there is help. Please call 988. POLR is also here: {POLR_PHONE}.':risk.relapse?'You had the courage to be honest. That honesty is the first act of recovery. Don\'t run — reach out. POLR has people who have walked this exact road.':risk.housing?'Housing instability is a crisis POLR responds to directly. Call {POLR_PHONE} today.':affs[Math.floor(Math.random()*affs.length)];
+    var enc=risk.crisis?'You are not alone. What you\'re feeling is real — and there is help. Please call 988. HOPE is also here: 225-333-0330.':risk.relapse?'You had the courage to be honest. That honesty is the first act of recovery. Don\'t run — reach out. HOPE has people who have walked this exact road.':risk.housing?'Housing instability is a crisis HOPE responds to directly. Call 225-333-0330 today.':affs[Math.floor(Math.random()*affs.length)];
     var newStreak=streak+1;
     var nextStep=(stepNum%12)+1;
     var entry={id:'j'+Date.now(),step:stepNum,theme:currentModel.theme,answers:Object.assign({},answers),action:answers[18]||answers[6]||'',risk:risk,encouragement:enc,ts:new Date().toISOString(),streak:newStreak};
@@ -19530,7 +19544,7 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
         React.createElement('div',{style:{fontWeight:700,color:'#fc8181',marginBottom:'0.4rem',fontFamily:'var(--font-serif)'}},'⚠️ A Note Before You Go'),
         React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--dtxt)',lineHeight:1.75}},r.encouragement),
         r.risk.crisis&&React.createElement('div',{style:{marginTop:'0.75rem',fontWeight:700,color:'#fc8181'}},
-          '988 Suicide & Crisis Lifeline: ',React.createElement('a',{href:'tel:988',style:{color:'#fc8181'}},'988'),'  ·  POLR: ',React.createElement('a',{href:'tel:{POLR_PHONE}',style:{color:'var(--gold)'}},'{POLR_PHONE}')
+          '988 Suicide & Crisis Lifeline: ',React.createElement('a',{href:'tel:988',style:{color:'#fc8181'}},'988'),'  ·  POLR: ',React.createElement('a',{href:'tel:225-333-0330',style:{color:'var(--gold)'}},'225-333-0330')
         )
       ),
       !r.risk.crisis&&!r.risk.relapse&&!r.risk.housing&&React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,marginBottom:'1.25rem',fontStyle:'italic',fontFamily:'var(--font-serif)',fontSize:'0.9rem',color:'var(--dtxt)',lineHeight:1.75}},
@@ -19573,7 +19587,7 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
       React.createElement('div',{style:{display:'flex',gap:'0.85rem',flexWrap:'wrap'}},
         React.createElement('button',{onClick:function(){setDone(false);setStage(0);setAnswers({});setResult(null);setStepNum(function(s){return(s%12)+1;});},style:{flex:1,padding:'0.7rem',borderRadius:10,background:'var(--bg3)',border:'1px solid var(--bdr2)',color:'var(--dtxt)',cursor:'pointer',fontWeight:600}},'Begin Step '+(stepNum%12+1)+' Session'),
         React.createElement('button',{onClick:function(){if(typeof setPage==='function')setPage('guest-signup');},style:{flex:2,padding:'0.7rem',borderRadius:10,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontFamily:'var(--font-serif)'}},
-          'Save My Journey — Join POLR Free')
+          'Save My Journey — Join HOPE Free')
       ),
       React.createElement('div',{style:{marginTop:'1.5rem',padding:'1.25rem 1.4rem',background:'rgba(139,124,248,0.05)',border:'1px solid rgba(139,124,248,0.15)',borderRadius:14,textAlign:'center'}},
         React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--l1)',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.12em',marginBottom:'0.5rem'}},'Psalm 34:8'),
@@ -19586,19 +19600,19 @@ function GuestJournalPanel({ platform, update, toast, session, setPage }) {
         React.createElement('div',{style:{fontSize:'0.82rem',fontWeight:600,color:'var(--dtxt)',marginBottom:'0.65rem'}},'Connect with a Group Chair or Director in your area:'),
         React.createElement('div',{style:{display:'flex',gap:'0.65rem',flexWrap:'wrap',justifyContent:'center',marginBottom:'0.85rem'}},
           [
-            {name:'POLR Place Thibodaux',     phone:'{POLR_PHONE}', href:'tel:{POLR_PHONE}'},
-            {name:'POLR Place @ HOP Thibodaux',      phone:'{POLR_PHONE}', href:'tel:{POLR_PHONE}'},
-            {name:'POLR Place @ HOP Larose',         phone:'{POLR_PHONE}', href:'tel:{POLR_PHONE}'},
-            {name:'Port Allen',         phone:'{POLR_PHONE}', href:'tel:{POLR_PHONE}'},
+            {name:'HOPE Place Port Allen',     phone:'225-333-0330', href:'tel:225-333-0330'},
+            {name:'HOPE Place Port Allen',      phone:'225-333-0330', href:'tel:225-333-0330'},
+            {name:'HOPE Place Port Allen',         phone:'225-333-0330', href:'tel:225-333-0330'},
+            {name:'Port Allen',         phone:'225-333-0330', href:'tel:225-333-0330'},
           ].map(function(loc){
             return React.createElement('a',{key:loc.name,href:loc.href,
               style:{padding:'0.45rem 0.85rem',borderRadius:8,background:'rgba(200,145,58,0.08)',border:'1px solid rgba(200,145,58,0.2)',color:'var(--gold)',fontWeight:600,fontSize:'0.8rem',textDecoration:'none',whiteSpace:'nowrap'}},
               loc.name,' · ',loc.phone);
           })
         ),
-        React.createElement('a',{href:'mailto:{POLR_EMAIL}',
+        React.createElement('a',{href:'mailto:bro.chuck.edwards@gmail.com',
           style:{display:'inline-block',padding:'0.55rem 1.5rem',borderRadius:8,background:'rgba(139,124,248,0.1)',border:'1px solid rgba(139,124,248,0.2)',color:'var(--l1)',fontWeight:700,fontSize:'0.85rem',textDecoration:'none'}},
-          '✉️ Email a Director — {POLR_EMAIL}')
+          '✉️ Email a Director — bro.chuck.edwards@gmail.com')
       )
     );
   }
@@ -19684,8 +19698,8 @@ function GuestMentorPanel({ platform, update, toast }) {
   if (sent) return React.createElement('div',{style:{textAlign:'center',padding:'3rem 1rem'}},
     React.createElement('div',{style:{fontSize:'3rem',marginBottom:'1rem'}},'🙏'),
     React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.4rem',color:'var(--dtxt)',marginBottom:'0.5rem'}},'Request received.'),
-    React.createElement('div',{style:{color:'var(--dmuted)',fontSize:'0.9rem',lineHeight:1.65,maxWidth:480,margin:'0 auto'}},'A POLR Group Chair or Director will reach out to you at the contact you provided. You don\'t have to have it together. That\'s exactly why we\'re here.'),
-    React.createElement('div',{style:{marginTop:'1.25rem',fontSize:'0.85rem',color:'var(--gold)',fontWeight:700}},'While you wait: call {POLR_PHONE} or visit any meeting \u2014 no appointment needed.')
+    React.createElement('div',{style:{color:'var(--dmuted)',fontSize:'0.9rem',lineHeight:1.65,maxWidth:480,margin:'0 auto'}},'A HOPE Group Chair or Director will reach out to you at the contact you provided. You don\'t have to have it together. That\'s exactly why we\'re here.'),
+    React.createElement('div',{style:{marginTop:'1.25rem',fontSize:'0.85rem',color:'var(--gold)',fontWeight:700}},'While you wait: call 225-333-0330 or visit any meeting \u2014 no appointment needed.')
   );
 
   return React.createElement('div',null,
@@ -19710,11 +19724,11 @@ function GuestMentorPanel({ platform, update, toast }) {
           })
         ),
         React.createElement('div',{style:{marginBottom:'0.85rem'}},
-          React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Nearest POLR Place or City'),
+          React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Nearest HOPE Place or City'),
           React.createElement('select',{value:campus,onChange:function(e){setCampus(e.target.value);},
             style:{width:'100%',padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none'}},
             React.createElement('option',{value:''},'-- Select nearest --'),
-            ['POLR Place Thibodaux','POLR Place @ HOP Thibodaux','POLR Place @ HOP Larose','Port Allen','Not sure'].map(function(loc){
+            ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen','Not sure'].map(function(loc){
               return React.createElement('option',{key:loc,value:loc},loc);
             })
           )
@@ -19738,7 +19752,7 @@ function GuestMentorPanel({ platform, update, toast }) {
 
 function GuestSignupPanel({ platform, update, toast, setPage }) {
   var _s1=useState('register'), mode=_s1[0], setMode=_s1[1];
-  var _s2=useState({name:'',email:'',phone:'',campus:'POLR Place Thibodaux',password:'',agreeTerms:false,agreeHIPAA:false,agreeMinistry:false}),
+  var _s2=useState({name:'',email:'',phone:'',campus:'HOPE Place Port Allen',password:'',agreeTerms:false,agreeHIPAA:false,agreeMinistry:false}),
     form=_s2[0], setForm=_s2[1];
   var _s3=useState(false), loading=_s3[0], setLoading=_s3[1];
 
@@ -19780,7 +19794,7 @@ function GuestSignupPanel({ platform, update, toast, setPage }) {
       actionYes:'Reach out to welcome them',actionNo:'Noted',responses:[]
     };
     update('notifications',[...(platform.notifications||[]),welcomeNote]);
-    toast({icon:'🙏',title:'Welcome to POLR, '+form.name+'!',body:'Your account is created. A Group Chair will reach out soon.'});
+    toast({icon:'🙏',title:'Welcome to HOPE, '+form.name+'!',body:'Your account is created. A Group Chair will reach out soon.'});
     if(setPage) setPage('platform');
   };
 
@@ -19819,10 +19833,10 @@ function GuestSignupPanel({ platform, update, toast, setPage }) {
             })
           ),
           React.createElement('div',{style:{marginBottom:'0.75rem'}},
-            React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Nearest POLR Place'),
+            React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.3rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Nearest HOPE Place'),
             React.createElement('select',{value:form.campus,onChange:setF('campus'),
               style:{width:'100%',padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none'}},
-              ['POLR Place Thibodaux','POLR Place @ HOP Thibodaux','POLR Place @ HOP Larose','Port Allen'].map(function(loc){
+              ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen'].map(function(loc){
                 return React.createElement('option',{key:loc,value:loc},loc);
               })
             )
@@ -19836,9 +19850,9 @@ function GuestSignupPanel({ platform, update, toast, setPage }) {
       ),
       // Legal agreements
       React.createElement('div',{style:{marginBottom:'1.25rem',display:'flex',flexDirection:'column',gap:'0.65rem'}},
-        [['agreeTerms',true,'I agree to the POLR Terms of Service and Privacy Policy. My data is never sold or shared with advertisers.'],
-         ['agreeHIPAA',false,'I understand this platform may contain health-related information. I consent to POLR storing my recovery progress data for program participation purposes only.'],
-         ['agreeMinistry',true,'I understand POLR is a Christ-centered recovery ministry. Participation is voluntary, free of charge, and not a substitute for clinical care.'],
+        [['agreeTerms',true,'I agree to the HOPE Terms of Service and Privacy Policy. My data is never sold or shared with advertisers.'],
+         ['agreeHIPAA',false,'I understand this platform may contain health-related information. I consent to HOPE storing my recovery progress data for program participation purposes only.'],
+         ['agreeMinistry',true,'I understand HOPE is a Christ-centered recovery ministry. Participation is voluntary, free of charge, and not a substitute for clinical care.'],
         ].map(function(item){
           return React.createElement('label',{key:item[0],style:{display:'flex',gap:'0.75rem',cursor:'pointer',padding:'0.65rem 0.85rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',alignItems:'flex-start'}},
             React.createElement('input',{type:'checkbox',checked:form[item[0]],onChange:setF(item[0]),style:{marginTop:3,flexShrink:0}}),
@@ -19848,23 +19862,23 @@ function GuestSignupPanel({ platform, update, toast, setPage }) {
       ),
       React.createElement('button',{onClick:handleSubmit,
         style:{width:'100%',padding:'0.85rem',borderRadius:10,background:'var(--gold)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'0.95rem',fontFamily:'var(--font-serif)'}},
-        'Join POLR Free — No Cost, Ever')
+        'Join HOPE Free — No Cost, Ever')
     )
   );
 }
 
 // ═══════════════════════════════════════════════════════════════════
 //  GuestGuidePanel — "Start Here" for anonymous first-time visitors
-//  Explains what POLR is, what recovery looks like here, how to join,
+//  Explains what HOPE is, what recovery looks like here, how to join,
 //  and routes them to the right next step.
 // ═══════════════════════════════════════════════════════════════════
 function GuestGuidePanel({ platform, toast, session, setActive, setPage }) {
   setActive = setActive || function(){};
 
   var provision = null;
-  try { provision = JSON.parse(localStorage.getItem('polr_provision') || 'null'); } catch(e) {}
-  var orgName = (provision && provision.orgName) ? provision.orgName : 'Path of Life Recovery';
-  var cfg = window.POLR_CONTACT ? window.POLR_CONTACT.get(platform) : { phone:'{POLR_PHONE}', email:'{POLR_EMAIL}', website:'{POLR_WEBSITE}' };
+  try { provision = JSON.parse(localStorage.getItem('hope_provision') || 'null'); } catch(e) {}
+  var orgName = (provision && provision.orgName) ? provision.orgName : 'HOPE Recovery: Hold on Pain Ends';
+  var cfg = window.POLR_CONTACT ? window.POLR_CONTACT.get(platform) : { phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', website:'hopenetwork.com' };
 
   var STEPS = [
     { num: 1, icon: '🤝', color: 'var(--l2)',
@@ -19901,17 +19915,17 @@ function GuestGuidePanel({ platform, toast, session, setActive, setPage }) {
 
   var FAQS = [
     { q: 'Is this program free?',
-      a: 'Yes. All POLR programs, meetings, curriculum, and workforce services are free to participants. Housing has a nominal program fee once you are employed.' },
+      a: 'Yes. All HOPE programs, meetings, curriculum, and workforce services are free to participants. Housing has a nominal program fee once you are employed.' },
     { q: 'Do I have to be Christian to join?',
       a: 'No. We are a faith-inspired organization and our program is built on spiritual principles, but we welcome people of all backgrounds and beliefs. Many of our most committed members came in with no faith at all.' },
     { q: 'What if I have a criminal record?',
-      a: 'We specifically serve people re-entering from incarceration. A criminal record is not a barrier — it is often the reason people find us. POLR also has employer partnerships that specifically hire people with records.' },
-    { q: 'Do I have to live at a POLR house?',
-      a: 'No. You can attend meetings and access education programs without living in POLR housing. Housing is available for those who need structured living support.' },
+      a: 'We specifically serve people re-entering from incarceration. A criminal record is not a barrier — it is often the reason people find us. HOPE also has employer partnerships that specifically hire people with records.' },
+    { q: 'Do I have to live at a HOPE house?',
+      a: 'No. You can attend meetings and access education programs without living in HOPE housing. Housing is available for those who need structured living support.' },
     { q: 'What happens if I relapse?',
       a: 'Relapse is addressed directly and honestly in our program. It does not automatically end your participation. What matters is honesty and recommitment. We have seen many people find their footing after a relapse.' },
     { q: 'Is my information private?',
-      a: 'Yes. POLR does not share your personal information with law enforcement or outside agencies without your consent, except as required by law. Our anonymous journal and guest features require no personal information at all.' },
+      a: 'Yes. HOPE does not share your personal information with law enforcement or outside agencies without your consent, except as required by law. Our anonymous journal and guest features require no personal information at all.' },
   ];
 
   var _faq = React.useState(null);
@@ -20044,10 +20058,10 @@ function GuestDonatePanel({ platform, toast, update, session, setActive }) {
   update = update || function(){};
 
   var provision = null;
-  try { provision = JSON.parse(localStorage.getItem('polr_provision') || 'null'); } catch(e) {}
-  var orgName = (provision && provision.orgName) ? provision.orgName : 'Path of Life Recovery';
+  try { provision = JSON.parse(localStorage.getItem('hope_provision') || 'null'); } catch(e) {}
+  var orgName = (provision && provision.orgName) ? provision.orgName : 'HOPE Recovery: Hold on Pain Ends';
   var cfg = window.POLR_CONTACT ? window.POLR_CONTACT.get(platform) : {
-    phone:'{POLR_PHONE}', email:'{POLR_EMAIL}', website:'{POLR_WEBSITE}'
+    phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com', website:'hopenetwork.com'
   };
 
   // Live metrics from platform state
@@ -20292,7 +20306,7 @@ function GuestDonatePanel({ platform, toast, update, session, setActive }) {
       [
         { icon:'🚗', title:'Donate a Vehicle',       desc:'Cars, motorcycles, bicycles — distributed to members in recovery who need transportation to work.', action:'transportation' },
         { icon:'👕', title:'Donate Clothing & Goods',  desc:'Clothing, furniture, household items — for residents rebuilding from nothing.', action:'thrift' },
-        { icon:'🍱', title:'Donate Food',             desc:'Restaurants, grocers, and individuals can donate meals or food to keep POLR households fed.', action:'foodbank' },
+        { icon:'🍱', title:'Donate Food',             desc:'Restaurants, grocers, and individuals can donate meals or food to keep HOPE households fed.', action:'foodbank' },
       ].map(function(item, i) {
         return React.createElement('div', { key:i, style:{ display:'flex', gap:'1rem',
           alignItems:'flex-start', padding:'0.75rem 0',
@@ -20346,7 +20360,7 @@ function Dashboard({
   // Expose reload hook so seed script can push fresh lessons into React state
   window.__POLR_RELOAD_LESSONS = function() {
     try {
-      var fresh = JSON.parse(localStorage.getItem('polr_platform') || 'null');
+      var fresh = JSON.parse(localStorage.getItem('hope_platform') || 'null');
       if (fresh && fresh.stepLessons) {
         setPlatform(function(prev) { return Object.assign({}, prev, { stepLessons: fresh.stepLessons }); });
       }
@@ -20359,7 +20373,7 @@ function Dashboard({
   useEffect(function() {
     var handleSeedComplete = function() {
       try {
-        var fresh = JSON.parse(localStorage.getItem('polr_platform') || 'null');
+        var fresh = JSON.parse(localStorage.getItem('hope_platform') || 'null');
         if (fresh) {
           setPlatform(function(prev) { return Object.assign({}, prev, { stepLessons: fresh.stepLessons || prev.stepLessons }); });
         }
@@ -20646,7 +20660,7 @@ function Dashboard({
   {
     id: 'housing',
     icon: '🏠',
-    label: 'POLR Houses',
+    label: 'HOPE Houses',
     group: 'Housing',
     roles: [0, 1, 3]
   }, {
@@ -20962,10 +20976,10 @@ function Dashboard({
     }
   }, {
     icon: '✍️',
-    label: 'Walk Well Blog',
+    label: 'HOPE In Motion Blog',
     hint: 'Blog',
     fn: function () {
-      return setPage('walkwell');
+      return setPage('hopeinmotion');
     }
   }, {
     icon: '🤝',
@@ -21002,7 +21016,7 @@ function Dashboard({
     label: 'Sign Out',
     hint: 'Auth',
     fn: function () {
-      sessionStorage.removeItem('polr_session');
+      sessionStorage.removeItem('hope_session');
       setPage('home');
     }
   }];
@@ -21230,7 +21244,7 @@ function Dashboard({
             aiGrants.filter(function(g){ if(!g.deadline||g.status==='awarded'||g.status==='declined') return false; return Math.round((new Date(g.deadline)-new Date())/(864e5))<=14; }).forEach(function(g){ var d=Math.round((new Date(g.deadline)-new Date())/(864e5)); liveTasks.push({priority:'P1',icon:'📅',urgent:d<=7,title:'Grant Deadline in '+d+' days — '+g.grantName,desc:(g.agency||'Funder')+' — stage: '+(g.stage||'drafting'),action:'Open Grant',actionTarget:'grant-engine'}); });
             aiExpansion.filter(function(m){return m.status==='active';}).slice(0,2).forEach(function(m){ liveTasks.push({priority:'P2',icon:'🗺️',title:'Expansion Mission Active — '+(m.city||m.id),desc:'Mission in progress. Review status.',action:'War Room',actionTarget:'warroom'}); });
             aiAlerts.filter(function(a){return !a.resolved;}).slice(0,3).forEach(function(a){ liveTasks.push({priority:'P2',icon:'⚠️',title:'Unresolved Alert: '+a.type,desc:(a.member||'')+' — '+(a.note||''),action:'Alerts',actionTarget:'alerts'}); });
-            if(liveTasks.length===0) liveTasks=[{priority:'P3',icon:'ℹ️',title:'Dashboard is quiet — review weekly metrics',desc:'No urgent flags. Good time to review grant outlook.',action:'Overview',actionTarget:'overview'},{priority:'P3',icon:'🏠',title:'Review housing capacity',desc:'Check occupancy rates across all POLR Places.',action:'Housing',actionTarget:'house-mother'}];
+            if(liveTasks.length===0) liveTasks=[{priority:'P3',icon:'ℹ️',title:'Dashboard is quiet — review weekly metrics',desc:'No urgent flags. Good time to review grant outlook.',action:'Overview',actionTarget:'overview'},{priority:'P3',icon:'🏠',title:'Review housing capacity',desc:'Check occupancy rates across all HOPE Places.',action:'Housing',actionTarget:'house-mother'}];
           }
 
           var markDone = function(task) {
@@ -21672,7 +21686,7 @@ function Dashboard({
       level===6?'Welcome to POLR':level===5?'Welcome Back':level===3?'House Mother HQ':level===4?'Workforce Coordinator':level===2?'Group Chair':'Ministry Command'
     ),
     React.createElement('div',{style:{fontSize:'0.87rem',color:'var(--dmuted)',lineHeight:1.7,marginBottom:'1.5rem'}},
-      level===6?'Path of Life Recovery is a free, Christ-centered recovery community. All meetings are open. No commitment required. Your first step is to show up.'
+      level===6?'HOPE Recovery: Hold on Pain Ends is a free, Christ-centered recovery community. All meetings are open. No commitment required. Your first step is to show up.'
       :level===5?'Your recovery journey continues here. Check your progress, lessons, and upcoming meetings.'
       :cfg.msg
     ),
@@ -21752,6 +21766,7 @@ function Dashboard({
   }, "\uD83C\uDF10 Site"), /*#__PURE__*/React.createElement("button", {
     className: "cmd-btn",
     onClick: function () {
+      window.scrollTo({top:0,behavior:'smooth'});
       return setPage('donate');
     }
   }, "\uD83D\uDC9D Give"), /*#__PURE__*/React.createElement("button", {
@@ -21765,7 +21780,7 @@ function Dashboard({
     style: { color: "#fc8181", borderColor: "rgba(252,129,129,0.3)" },
     onClick: function () {
       if(POLR_BACKEND_LIVE) POLR_API.auth.logout().catch(function(){});
-      sessionStorage.removeItem('polr_session');
+      sessionStorage.removeItem('hope_session');
       setPage('home');
     }
   }, "\uD83D\uDEAA Log Out"))), /*#__PURE__*/React.createElement("div", {
@@ -21861,7 +21876,7 @@ function Dashboard({
   }, "Account"), /*#__PURE__*/React.createElement("div", {
     className: "d-nav-item",
     onClick: function () {
-      sessionStorage.removeItem('polr_session');
+      sessionStorage.removeItem('hope_session');
       setPage('home');
     }
   }, /*#__PURE__*/React.createElement("span", {
@@ -22542,7 +22557,7 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
   var _s1 = useState(false), showForm = _s1[0], setShowForm = _s1[1];
   var _s2 = useState({
     name:'', day:'Wednesday', startTime:'7:00 PM', endTime:'8:30 PM', location:'',
-    campus:'polr-place-thibodaux', notes:'', meetingType:'physical', capacity:'',
+    campus:'hope-place-port-allen', notes:'', meetingType:'physical', capacity:'',
     isRecurring:true, recurringFreq:'weekly', zoomLink:''
   }), form = _s2[0], setForm = _s2[1];
 
@@ -22557,7 +22572,7 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
     var diff = (dayNum - nextDate.getDay() + 7) % 7 || 7;
     nextDate.setDate(nextDate.getDate() + diff);
     var dateStr = nextDate.toISOString().replace(/[-:]/g,'').slice(0,15);
-    var ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//POLR//EN\nBEGIN:VEVENT\nSUMMARY:'+m.name+'\nDTSTART:'+dateStr+'00Z\nDTEND:'+dateStr+'00Z\nLOCATION:'+(m.location||'')+'\nDESCRIPTION:Path of Life Recovery Meeting\nRRULE:FREQ=WEEKLY\nEND:VEVENT\nEND:VCALENDAR';
+    var ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//POLR//EN\nBEGIN:VEVENT\nSUMMARY:'+m.name+'\nDTSTART:'+dateStr+'00Z\nDTEND:'+dateStr+'00Z\nLOCATION:'+(m.location||'')+'\nDESCRIPTION:HOPE Recovery: Hold on Pain Ends Meeting\nRRULE:FREQ=WEEKLY\nEND:VEVENT\nEND:VCALENDAR';
     var blob = new Blob([ics], {type:'text/calendar'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a'); a.href=url; a.download=m.name.replace(/\s/g,'_')+'.ics'; a.click();
@@ -22576,14 +22591,14 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
   var saveMeeting = function() {
     if (!form.name || !form.day) { toast({icon:'⚠️',title:'Name and day required'}); return; }
     addToList('meetings', Object.assign({}, form, { id: Date.now().toString(), createdAt: new Date().toISOString() }));
-    setForm({ name:'', day:'Wednesday', startTime:'7:00 PM', endTime:'8:30 PM', location:'', campus:'polr-place-thibodaux', notes:'', meetingType:'physical', capacity:'', isRecurring:true, recurringFreq:'weekly', zoomLink:'' });
+    setForm({ name:'', day:'Wednesday', startTime:'7:00 PM', endTime:'8:30 PM', location:'', campus:'hope-place-port-allen', notes:'', meetingType:'physical', capacity:'', isRecurring:true, recurringFreq:'weekly', zoomLink:'' });
     setShowForm(false);
     toast({icon:'✅',title:'Meeting created',body:'Reminders will be sent 24hr, 2hr, and 15min before'});
   };
 
   var DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   var MEETING_TYPES = [['physical','In Person 📍'],['zoom','Zoom 💻'],['hybrid','Hybrid 🌐']];
-  var CAMPUSES = [['polr-place-thibodaux','POLR Place Thibodaux'],['polr-place-hop-thib','POLR Place @ HOP Thibodaux'],['polr-place-hop-larose','POLR Place @ HOP Larose'],['polr-place-port-allen','Port Allen']];
+  var CAMPUSES = [['hope-place-port-allen','HOPE Place Port Allen'],['hope-place-port-allen','HOPE Place Port Allen'],['hope-place-port-allen','HOPE Place Port Allen'],['polr-place-port-allen','Port Allen']];
 
   var inp = function(val, onChange, placeholder) {
     return React.createElement('input',{type:'text',value:val||'',onChange:onChange,placeholder:placeholder,style:{width:'100%',padding:'0.65rem 0.85rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',boxSizing:'border-box'}});
@@ -22628,7 +22643,7 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
         ),
         React.createElement('div',{style:{gridColumn:'1/-1'}},
           React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.35rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Location'),
-          inp(form.location, setF('location'), '501-A St. Mary St, Thibodaux...')
+          inp(form.location, setF('location'), '12883 Hwy 190 West, Port Allen LA 70767...')
         ),
         (form.meetingType==='zoom'||form.meetingType==='hybrid') && React.createElement('div',{style:{gridColumn:'1/-1'}},
           React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.35rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Zoom Link'),
@@ -22667,8 +22682,8 @@ function MeetingsBuilder({ platform, addToList, removeFromList, updateInList, to
       React.createElement('div',{className:'d-card-head'},React.createElement('span',{className:'d-card-title'},'SCHEDULED MEETINGS')),
       (meetings.length === 0
         ? [
-            {id:'m0',name:'POLR Place Thibodaux — Daily',day:'Mon–Sat',startTime:'7:00 AM',endTime:'8:00 AM',location:'501-A St. Mary St, Thibodaux',campus:'polr-place-thibodaux',meetingType:'physical',isRecurring:true},
-            {id:'m1',name:'HOP Wednesday Night',day:'Wednesday',startTime:'7:00 PM',endTime:'8:30 PM',location:'2229 Hwy 3185, Thibodaux',campus:'polr-place-hop-thib',meetingType:'physical',isRecurring:true},
+            {id:'m0',name:'HOPE Place Port Allen',day:'Mon–Sat',startTime:'7:00 AM',endTime:'8:00 AM',location:'12883 Hwy 190 West, Port Allen LA 70767',campus:'hope-place-port-allen',meetingType:'physical',isRecurring:true},
+            {id:'m1',name:'HOP Wednesday Night',day:'Wednesday',startTime:'7:00 PM',endTime:'8:30 PM',location:'12883 Hwy 190 West, Port Allen LA 70767',campus:'hope-place-port-allen',meetingType:'physical',isRecurring:true},
             {id:'m2',name:'POLR Port Allen',day:'Monday & Friday',startTime:'6:00 PM',endTime:'7:00 PM',location:'12883 Hwy 190 W, Port Allen',campus:'polr-place-port-allen',meetingType:'physical',isRecurring:true},
           ]
         : meetings
@@ -22734,7 +22749,7 @@ function BlogBuilder({
       title: '',
       category: 'Recovery',
       body: '',
-      author: 'POLR Staff'
+      author: 'HOPE Staff'
     }),
     form = _useState24[0],
     setForm = _useState24[1];
@@ -22776,7 +22791,7 @@ function BlogBuilder({
       title: '',
       category: 'Recovery',
       body: '',
-      author: 'POLR Staff'
+      author: 'HOPE Staff'
     });
     setMode('list');
   };
@@ -22939,7 +22954,7 @@ function BlogBuilder({
       };
       addToList('blogPosts', publishedPost);
       toast({icon:'🟢', title:'Published!', body:'"' + form.title + '" is now live.'});
-      setForm({ title:'', category:'Recovery', body:'', author:'POLR Staff' });
+      setForm({ title:'', category:'Recovery', body:'', author:'HOPE Staff' });
     },
     style: {
       padding: '0.65rem 1.5rem',
@@ -23034,7 +23049,7 @@ function HousingBuilder({
   const _useState26 = useState({
       name: '',
       beds: 4,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Mixed',
       monthlyRate: 100
     }),
@@ -23074,14 +23089,14 @@ function HousingBuilder({
     setForm({
       name: '',
       beds: 4,
-      location: 'Thibodaux',
+      location: 'Port Allen',
       type: 'Mixed',
       monthlyRate: 100
     });
     setShowForm(false);
   };
   return /*#__PURE__*/React.createElement(BuilderShell, {
-    title: "POLR Houses",
+    title: "HOPE Houses",
     icon: "\uD83C\uDFE0",
     action: "+ Add House",
     onAction: function () {
@@ -23472,7 +23487,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
     : camp ? donations.filter(function(d){ return d.campus === camp || d.campus === 'General'; })
     : donations;
   var totalIn  = myDonations.reduce(function(a, d){ return a + (d.amount || 0); }, 0);
-  var CAMPUSES = ['POLR Place Thibodaux','POLR Place @ HOP Thibodaux','POLR Place @ HOP Larose','Port Allen','All Campuses'];
+  var CAMPUSES = ['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen','All Campuses'];
   // Live expenses from ledger + program fees; seed data as fallback when empty
   var ledgerExpenses = (platform.ledger||[])
     .filter(function(t){ return t.type==='expense' || (t.amount!=null && t.amount < 0); })
@@ -23484,10 +23499,10 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
       note:     t.description || t.note || ''
     }; });
   var EXPENSES = ledgerExpenses.length > 0 ? ledgerExpenses : [
-    {campus:'POLR Place Thibodaux',     category:'Housing Upgrades',    amount:4200, date:'Mar 2026', note:'Flooring + paint — House Alpha & Beta'},
-    {campus:'POLR Place @ HOP Thibodaux',category:'Housing Upgrades',  amount:2800, date:'Mar 2026', note:'HVAC service + security lighting'},
-    {campus:'POLR Place @ HOP Larose',  category:'Program Supplies',   amount:680,  date:'Mar 2026', note:'Step curriculum packets + devotionals'},
-    {campus:'POLR Place @ Port Allen',  category:'Campus Launch',       amount:1200, date:'Feb 2026', note:'Meeting space setup + signage'},
+    {campus:'HOPE Place Port Allen',     category:'Housing Upgrades',    amount:4200, date:'Mar 2026', note:'Flooring + paint — House Alpha & Beta'},
+    {campus:'HOPE Place Port Allen',category:'Housing Upgrades',  amount:2800, date:'Mar 2026', note:'HVAC service + security lighting'},
+    {campus:'HOPE Place Port Allen',  category:'Program Supplies',   amount:680,  date:'Mar 2026', note:'Step curriculum packets + devotionals'},
+    {campus:'HOPE Place Port Allen',  category:'Campus Launch',       amount:1200, date:'Feb 2026', note:'Meeting space setup + signage'},
     {campus:'All Campuses',             category:'Assurance Fund',      amount:2400, date:'Mar 2026', note:'8% reserve from housing payments'},
     {campus:'All Campuses',             category:'Workforce Initiative',amount:950,  date:'Mar 2026', note:'Job fair + employer packet printing'},
   ];
@@ -23650,10 +23665,10 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
         // Header
         React.createElement('div',{style:{textAlign:'center',marginBottom:'1.5rem',borderBottom:'1px solid var(--bdr)',paddingBottom:'1.25rem'}},
           React.createElement('div',{style:{fontSize:'1.5rem',marginBottom:'0.25rem'}},'🙏'),
-          React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',fontWeight:700,color:'var(--gold)'}},'Path of Life Recovery'),
+          React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',fontWeight:700,color:'var(--gold)'}},'HOPE Recovery: Hold on Pain Ends'),
           React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},'Charitable Contribution Receipt'),
           React.createElement('div',{style:{fontSize:'0.7rem',color:'var(--dmuted)',marginTop:'0.2rem'}},
-            '{POLR_WEBSITE}  ·  {POLR_PHONE}  ·  {POLR_EMAIL}')
+            'hopenetwork.com  ·  225-333-0330  ·  bro.chuck.edwards@gmail.com')
         ),
         // Receipt details grid
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem 1.5rem',marginBottom:'1.25rem'}},
@@ -23700,7 +23715,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
           borderRadius:8,padding:'0.85rem 1rem',marginBottom:'1.5rem',fontSize:'0.78rem',color:'var(--dtxt)',lineHeight:1.65
         }},
           React.createElement('span',{style:{fontWeight:700,color:'var(--l5)'}},'✅ Tax-Deductible: '),
-          'Path of Life Recovery, Inc. is a registered 501(c)(3) tax-exempt nonprofit organization. ',
+          'HOPE Recovery, Inc. is a registered 501(c)(3) tax-exempt nonprofit organization. ',
           'EIN / Tax-Exempt Number: ',
           React.createElement('strong',null,d.taxExemptNum || campusTaxNum),
           '. This receipt serves as documentation for your tax records. Please retain for your records.',
@@ -23717,7 +23732,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
                 +'\nEmail: '+(d.email||'—')+'\nPhone: '+(d.phone||'—')+'\nAmount: '+(isIK?d.itemDesc+' est. $'+d.itemValue:'$'+d.amount.toLocaleString())
                 +'\nCampaign: '+d.campaign+'\nCampus: '+d.campus
                 +'\nEIN: '+(d.taxExemptNum||campusTaxNum)
-                +'\n\nPath of Life Recovery, Inc. is a 501(c)(3). No goods or services provided in exchange.';
+                +'\n\nHOPE Recovery, Inc. is a 501(c)(3). No goods or services provided in exchange.';
               navigator.clipboard.writeText(text).then(function(){toast({icon:'📋',title:'Receipt copied to clipboard',body:'Paste into email to donor.'});});},
             style:{padding:'0.65rem 1.25rem',borderRadius:9,background:'var(--bg3)',border:'1px solid var(--bdr2)',color:'var(--dtxt)',cursor:'pointer',fontWeight:600}},
             '📋 Copy for Email'),
@@ -24030,7 +24045,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
             React.createElement('div',{style:{fontSize:'0.62rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.1em',color:'var(--dmuted)',marginBottom:'0.3rem'}},'Campus'),
             React.createElement('select',{value:expForm.campus,onChange:setEF('campus'),
               style:{width:'100%',padding:'0.6rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.85rem',outline:'none'}},
-              ['All Campuses','POLR Place Thibodaux','POLR Place @ Port Allen','POLR Place @ HOP Thibodaux','POLR Place @ HOP Larose']
+              ['All Campuses','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen']
                 .map(function(c){return React.createElement('option',{key:c},c);})
             )
           ),
@@ -24064,7 +24079,7 @@ function DonationsPanel({ platform, update, toast, setActive, session }) {
     // Member donor view
     lvl>=4&&React.createElement('div',null,
       React.createElement('div',{style:{padding:'1rem 1.25rem',background:'rgba(200,145,58,0.06)',border:'1px solid rgba(200,145,58,0.15)',borderRadius:12,marginBottom:'1.25rem',fontStyle:'italic',fontFamily:'var(--font-serif)',fontSize:'0.9rem',color:'var(--dtxt)',lineHeight:1.75}},
-        '\u201cEvery dollar given to POLR goes directly into the work \u2014 housing families, placing people in jobs, expanding into new territories, and keeping every program free.\u201d'
+        '\u201cEvery dollar given to HOPE goes directly into the work \u2014 housing families, placing people in jobs, expanding into new territories, and keeping every program free.\u201d'
       ),
       myExpenses.map(function(e,i){
         return React.createElement('div',{key:i,className:'d-card',style:{marginBottom:'0.5rem',display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.75rem 1rem'}},
@@ -24625,7 +24640,7 @@ function CampusesBuilder({
     toast({
       icon: '🌱',
       title: 'Campus Created!',
-      body: "".concat(form.name, " has been added to the network. Walk well.")
+      body: "".concat(form.name, " has been added to the network. Walk it out faithfully.")
     });
     setForm({
       name: '',
@@ -24641,23 +24656,23 @@ function CampusesBuilder({
   };
   const defaultCampuses = [{
     id: 'c-1',
-    name: 'POLR Place Thibodaux',
-    city: 'Thibodaux',
+    name: 'HOPE Place Port Allen',
+    city: 'Port Allen',
     parish: 'Lafourche',
     active: true,
     members: 247,
-    leader: 'POLR Director'
+    leader: 'HOPE Director'
   }, {
     id: 'c-2',
-    name: 'HOP — Thibodaux',
-    city: 'Thibodaux',
+    name: 'HOPE Place Port Allen',
+    city: 'Port Allen',
     parish: 'Lafourche',
     active: true,
     members: 80,
     leader: 'Campus Team'
   }, {
     id: 'c-3',
-    name: 'HOP — Larose',
+    name: 'HOPE Place Port Allen',
     city: 'Larose',
     parish: 'Lafourche',
     active: true,
@@ -24665,7 +24680,7 @@ function CampusesBuilder({
     leader: 'Campus Team'
   }, {
     id: 'c-4',
-    name: 'POLR Place Port Allen',
+    name: 'HOPE Place Port Allen',
     city: 'Port Allen',
     parish: 'W. Baton Rouge',
     active: true,
@@ -24706,7 +24721,7 @@ function CampusesBuilder({
       gap: '0.75rem',
       marginBottom: '0.75rem'
     }
-  }, [['name', 'Campus Name', 'text', 'e.g. POLR Gonzales'], ['city', 'City', 'text', 'City'], ['parish', 'Parish / County', 'text', 'Parish or County'], ['address', 'Address', 'text', 'Meeting location address'], ['leader', 'Lead Ambassador', 'text', 'Name of founding leader'], ['launchDate', 'Launch Date', 'date', ''], ['target', '12-Month Member Target', 'number', '40'], ['slug', 'URL Slug', 'text', 'e.g. gonzales (lowercase)']].map(function ([key, label, type, ph]) {
+  }, [['name', 'Campus Name', 'text', 'e.g. HOPE Gonzales'], ['city', 'City', 'text', 'City'], ['parish', 'Parish / County', 'text', 'Parish or County'], ['address', 'Address', 'text', 'Meeting location address'], ['leader', 'Lead Ambassador', 'text', 'Name of founding leader'], ['launchDate', 'Launch Date', 'date', ''], ['target', '12-Month Member Target', 'number', '40'], ['slug', 'URL Slug', 'text', 'e.g. gonzales (lowercase)']].map(function ([key, label, type, ph]) {
     return /*#__PURE__*/React.createElement("div", {
       key: key
     }, /*#__PURE__*/React.createElement("label", {
@@ -24927,7 +24942,7 @@ function AnnouncementsBuilder({
       fontFamily: 'var(--font-body)',
       fontSize: '0.83rem'
     }
-  }, ['All Members', 'POLR Place Thibodaux', 'POLR Place @ HOP Larose', 'Port Allen', 'Leaders Only', 'Ambassadors'].map(function (a) {
+  }, ['All Members', 'HOPE Place Port Allen', 'HOPE Place Port Allen', 'Port Allen', 'Leaders Only', 'Ambassadors'].map(function (a) {
     return /*#__PURE__*/React.createElement("option", {
       key: a
     }, a);
@@ -25309,7 +25324,7 @@ function MyLessonsPanel({ platform, toast }) {
   });
 
   // ── Progress state ──
-  var _p1 = React.useState(function(){try{return JSON.parse(localStorage.getItem('polr_lesson_progress')||'{}');}catch{return {};}});
+  var _p1 = React.useState(function(){try{return JSON.parse(localStorage.getItem('hope_lesson_progress')||'{}');}catch{return {};}});
   var progress = _p1[0], setProgress = _p1[1];
 
   // ── Quiz state ──
@@ -25329,7 +25344,7 @@ function MyLessonsPanel({ platform, toast }) {
   var readLesson = _rl1[0], setReadLesson = _rl1[1];
 
   var memberJoinDate = React.useMemo(function(){
-    try{ return new Date(localStorage.getItem('polr_join_date') || new Date().toISOString()); }
+    try{ return new Date(localStorage.getItem('hope_join_date') || new Date().toISOString()); }
     catch{ return new Date(); }
   }, []);
 
@@ -25383,7 +25398,7 @@ function MyLessonsPanel({ platform, toast }) {
     }
     var updated = Object.assign({}, progress, {[id]: {completed:true, ts:new Date().toISOString(), quizPassed:true}});
     setProgress(updated);
-    localStorage.setItem('polr_lesson_progress', JSON.stringify(updated));
+    localStorage.setItem('hope_lesson_progress', JSON.stringify(updated));
     toast({icon:'⭐', title:'Lesson Complete!', body:'Your progress has been saved.'});
     // Check if all step lessons done → show cert prompt
     var stepNum = lesson ? lesson.stepNum : null;
@@ -25395,11 +25410,11 @@ function MyLessonsPanel({ platform, toast }) {
         // B8: Auto-post celebration + admin alert on step completion
         var stepLabel = 'Step ' + stepNum;
         var mn = 'A member';
-        try { var ss=JSON.parse(localStorage.getItem('polr_session')||'null'); if(ss&&ss.name) mn=ss.name.split(' ')[0]; } catch(e8){}
+        try { var ss=JSON.parse(localStorage.getItem('hope_session')||'null'); if(ss&&ss.name) mn=ss.name.split(' ')[0]; } catch(e8){}
         var ann8 = {
           id:'step_ann_'+Date.now(), body:'🎉 '+mn+' just completed '+stepLabel+' of their 12-Step journey! '+
             (stepNum===12?'Revelation 12:11 — they overcame by the blood of the Lamb and the word of their testimony. Yours is now a weapon. Use it. ':'Keep walking well. ')+'🙏',
-          postType:'celebration', authorName:'POLR Network', authorLevel:0, visibility:'network',
+          postType:'celebration', authorName:'HOPE Recovery Network', authorLevel:0, visibility:'network',
           ts:Date.now(), pinned:false, flagged:false, reactions:{}, comments:[]
         };
         var alrt8 = {
@@ -25409,12 +25424,12 @@ function MyLessonsPanel({ platform, toast }) {
           actionYes:'Send encouragement', actionNo:'Noted', responses:[]
         };
         try {
-          var st8=JSON.parse(localStorage.getItem('polr_platform_state')||'{}');
+          var st8=JSON.parse(localStorage.getItem('hope_platform_state')||'{}');
           st8.communityPosts=[ann8].concat(st8.communityPosts||[]).slice(0,200);
           st8.notifications=[alrt8].concat(st8.notifications||[]).slice(0,500);
           var ser8=JSON.stringify(st8);
-          localStorage.setItem('polr_platform_state',ser8);
-          localStorage.setItem('polr_platform',ser8);
+          localStorage.setItem('hope_platform_state',ser8);
+          localStorage.setItem('hope_platform',ser8);
         } catch(e8b){}
       }
     }
@@ -25433,7 +25448,7 @@ function MyLessonsPanel({ platform, toast }) {
         [quizLesson.id]: {completed:true, ts:new Date().toISOString(), quizScore:pct, quizPassed:true}
       });
       setProgress(updated);
-      localStorage.setItem('polr_lesson_progress', JSON.stringify(updated));
+      localStorage.setItem('hope_lesson_progress', JSON.stringify(updated));
     }
   };
 
@@ -25463,10 +25478,10 @@ function MyLessonsPanel({ platform, toast }) {
         React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'2.2rem',fontWeight:700,color:'var(--gold)',lineHeight:1.1,marginBottom:'0.25rem'}},'Step ' + certStep),
         React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',color:'var(--dtxt)',marginBottom:'1.25rem'}},step.title||''),
         React.createElement('div',{style:{fontSize:'0.82rem',color:'rgba(255,255,255,0.5)',marginBottom:'0.35rem'}},'Awarded to'),
-        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.6rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'1rem'}},platform.members&&platform.members[0]?platform.members[0].name:'POLR Member'),
+        React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.6rem',fontWeight:700,color:'var(--dtxt)',marginBottom:'1rem'}},platform.members&&platform.members[0]?platform.members[0].name:'HOPE Member'),
         React.createElement('div',{style:{borderTop:'1px solid rgba(200,145,58,0.25)',paddingTop:'1rem',marginTop:'0.5rem'}},
           React.createElement('div',{style:{fontSize:'0.72rem',color:'rgba(255,255,255,0.4)'}},getContactConfig(platform).name + ' \u00b7 Director ' + new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})),
-          React.createElement('div',{style:{fontSize:'0.65rem',color:'rgba(255,255,255,0.3)',marginTop:'0.2rem'}},'\u00a9 ' + new Date().getFullYear() + ' Path of Life Recovery, Inc. \u00b7 {POLR_WEBSITE}')
+          React.createElement('div',{style:{fontSize:'0.65rem',color:'rgba(255,255,255,0.3)',marginTop:'0.2rem'}},'\u00a9 ' + new Date().getFullYear() + ' HOPE Recovery, Inc. \u00b7 hopenetwork.com')
         )
       ),
       React.createElement('div',{style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}},
@@ -27253,7 +27268,7 @@ function TestimonyEditor({
       title: '',
       type: 'testimony',
       body: '',
-      campus: (session === null || session === void 0 ? void 0 : session.campus) || 'POLR Place Thibodaux',
+      campus: (session === null || session === void 0 ? void 0 : session.campus) || 'HOPE Place Port Allen',
       program: '',
       tags: ''
     }),
@@ -27283,7 +27298,7 @@ function TestimonyEditor({
     }
     addToList('blogPosts', {
       ...form,
-      author: (session === null || session === void 0 ? void 0 : session.name) || 'POLR Member',
+      author: (session === null || session === void 0 ? void 0 : session.name) || 'HOPE Member',
       date: new Date().toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -27296,7 +27311,7 @@ function TestimonyEditor({
     toast({
       icon: '🙌',
       title: 'Submitted!',
-      body: 'Your submission is pending admin review. Walk well.'
+      body: 'Your submission is pending admin review. Walk it out faithfully.'
     });
     setSubmitted(true);
   };
@@ -27327,7 +27342,7 @@ function TestimonyEditor({
       color: 'var(--dmuted)',
       marginBottom: '1.5rem'
     }
-  }, "Your testimony is pending admin review. It will appear on the Walk Well blog when approved."), /*#__PURE__*/React.createElement("button", {
+  }, "Your testimony is pending admin review. It will appear on the HOPE In Motion Blog when approved."), /*#__PURE__*/React.createElement("button", {
     onClick: function () {
       return setSubmitted(false);
     },
@@ -27354,7 +27369,7 @@ function TestimonyEditor({
     className: "lvh-title"
   }, "Submit Testimony / Report"), /*#__PURE__*/React.createElement("div", {
     className: "lvh-sub"
-  }, "Share what God is doing in your life. All submissions go to admin for review before publishing to the Walk Well blog.")), /*#__PURE__*/React.createElement("div", {
+  }, "Share what God is doing in your life. All submissions go to admin for review before publishing to the HOPE In Motion Blog.")), /*#__PURE__*/React.createElement("div", {
     className: "d-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "d-card-head"
@@ -27453,7 +27468,7 @@ function TestimonyEditor({
       fontFamily: 'var(--font-body)',
       fontSize: '0.83rem'
     }
-  }, ['POLR Place Thibodaux', 'HOP — Thibodaux', 'HOP — Larose', 'POLR Place Port Allen'].map(function (c) {
+  }, ['HOPE Place Port Allen', 'HOPE Place Port Allen', 'HOPE Place Port Allen', 'HOPE Place Port Allen'].map(function (c) {
     return /*#__PURE__*/React.createElement("option", {
       key: c
     }, c);
@@ -27519,7 +27534,7 @@ function TestimonyEditor({
 // CONTACT ROUTING PANEL (Admin only)
 // ══════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
-// POLR EXPANSION MISSIONS — Autonomous Growth System
+// HOPE EXPANSION MISSIONS — Autonomous Growth System
 // Mission creation · Task engine · Funding discovery · Document vault
 // ══════════════════════════════════════════════════════════════════════
 
@@ -27541,7 +27556,7 @@ var MISSION_TYPES = [
     funding:['Work Opportunity Tax Credit education','LA FastStart Workforce Program','TANF Employment Partnership'],
     docs:['Employer Pitch Deck','Workforce Candidate Packet','Partnership MOU Template','Employer Recognition Certificate'] },
   { id:'campus',    icon:'📡', label:'Plant New Campus',          color:'var(--l1)', priority:'Strategic',
-    tasks:['Run Growth Forecast campus simulation','Assign ambassador seed leader','Secure initial meeting venue','Establish housing partner in territory','Build local employer network','Register as POLR campus in system','Launch community outreach campaign'],
+    tasks:['Run Growth Forecast campus simulation','Assign ambassador seed leader','Secure initial meeting venue','Establish housing partner in territory','Build local employer network','Register as HOPE campus in system','Launch community outreach campaign'],
     funding:['National Recovery Foundation Grants','Faith-Based Initiative Funds','Impact investor network','Major donor campaign'],
     docs:['Campus Plant Proposal','Territory Intelligence Report','Ambassador Credential Package','Community Partnership MOU','First-Year Budget Projection'] },
   { id:'grant',     icon:'💰', label:'Apply for Grant Funding',   color:'var(--l5)', priority:'Medium',
@@ -27558,7 +27573,7 @@ function ExpansionMissions({ platform, update, toast, session, setActive }) {
   var _s1=useState('board'),    view=_s1[0],    setView=_s1[1];
   var _s2=useState(null),       selMission=_s2[0], setSelMission=_s2[1];
   var _s3=useState(false),      creating=_s3[0],   setCreating=_s3[1];
-  var _s4=useState({type:'',location:'',campus:'Thibodaux',priority:'High',deadline:'',expectedImpact:'',notes:''}),
+  var _s4=useState({type:'',location:'',campus:'Port Allen',priority:'High',deadline:'',expectedImpact:'',notes:''}),
     form=_s4[0], setForm=_s4[1];
 
   var missions = platform.expansionMissions || [];
@@ -27978,7 +27993,7 @@ function StepsTracker({
     if (!completed[n]) toast({
       icon: '⭐',
       title: "Step ".concat(n, " Complete!"),
-      body: 'Your plan has been updated. Walk well.'
+      body: 'Your plan has been updated. Walk it out faithfully.'
     });
   };
   return /*#__PURE__*/React.createElement(BuilderShell, {
@@ -28114,7 +28129,7 @@ function MemberCalendar({
         return ev && toast({
           icon: '📅',
           title: "March ".concat(d),
-          body: d === 20 ? 'Drug Test — 8-10 AM' : d === 23 ? 'Housing Payment Due — $100' : d === 25 ? 'HOP Thibodaux 7PM' : 'POLR Meeting'
+          body: d === 20 ? 'Drug Test — 8-10 AM' : d === 23 ? 'Housing Payment Due — $100' : d === 25 ? 'HOPE Place Port Allen 7PM' : 'POLR Meeting'
         });
       },
       style: {
@@ -28153,7 +28168,7 @@ function MemberProfile({ platform, update, session, toast }) {
   var _s1=useState({
     name:(session&&session.name)||'',
     email:(session&&session.email)||'',
-    campus:(session&&session.campus)||'POLR Place Thibodaux',
+    campus:(session&&session.campus)||'HOPE Place Port Allen',
     phone:'', bio:'', sobrietyPublic:false, shareBreakthroughs:true,
     allowMentorContact:true, notifyMilestones:true
   }), form=_s1[0], setForm=_s1[1];
@@ -28188,7 +28203,7 @@ function MemberProfile({ platform, update, session, toast }) {
     }
     setTimeout(function(){
       setSaving(false);
-      toast({icon:'✅',title:'Profile saved',body:'Your profile has been updated. Walk well.'});
+      toast({icon:'✅',title:'Profile saved',body:'Your profile has been updated. Walk it out faithfully.'});
     },500);
   };
 
@@ -28238,7 +28253,7 @@ function MemberProfile({ platform, update, session, toast }) {
               '📷 Upload Photo',
               React.createElement('input',{type:'file',accept:'image/*',onChange:handlePhoto,style:{display:'none'}})
             ),
-            React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',marginBottom:'0.75rem',lineHeight:1.5}},'Max 5MB · JPEG, PNG, or WebP · Photo appears on your Community posts and your profile card. Only visible to POLR community members.'),
+            React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',marginBottom:'0.75rem',lineHeight:1.5}},'Max 5MB · JPEG, PNG, or WebP · Photo appears on your Community posts and your profile card. Only visible to HOPE community members.'),
 
             // Emoji avatar alternative
             React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',marginBottom:'0.4rem',textTransform:'uppercase',letterSpacing:'0.08em',fontWeight:700}},'Or choose an avatar icon:'),
@@ -28249,7 +28264,7 @@ function MemberProfile({ platform, update, session, toast }) {
                 },em);
               })
             ),
-            React.createElement('div',{style:{marginTop:'0.65rem',fontSize:'0.72rem',color:'var(--ddim)',fontStyle:'italic'}},'Your profile photo is private to the POLR community. It is never shared externally without your permission.')
+            React.createElement('div',{style:{marginTop:'0.65rem',fontSize:'0.72rem',color:'var(--ddim)',fontStyle:'italic'}},'Your profile photo is private to the HOPE community. It is never shared externally without your permission.')
           )
         )
       )
@@ -28262,7 +28277,7 @@ function MemberProfile({ platform, update, session, toast }) {
         React.createElement('div',null,inp('name','Full Name','text','')),
         React.createElement('div',null,inp('email','Email','email','')),
         React.createElement('div',null,inp('phone','Phone','tel','985-...')),
-        React.createElement('div',null,React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'0.35rem'}},React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em'}},'Campus'),React.createElement('select',{value:form.campus,onChange:setF('campus'),style:{padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',width:'100%'}},['POLR Place Thibodaux','POLR Place @ HOP Thibodaux','POLR Place @ HOP Larose','Port Allen'].map(function(loc){return React.createElement('option',{key:loc,value:loc},loc);})))),
+        React.createElement('div',null,React.createElement('div',{style:{display:'flex',flexDirection:'column',gap:'0.35rem'}},React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',textTransform:'uppercase',letterSpacing:'0.08em'}},'Campus'),React.createElement('select',{value:form.campus,onChange:setF('campus'),style:{padding:'0.6rem 0.8rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',width:'100%'}},['HOPE Place Port Allen','HOPE Place Port Allen','HOPE Place Port Allen','Port Allen'].map(function(loc){return React.createElement('option',{key:loc,value:loc},loc);})))),
         React.createElement('div',{style:{gridColumn:'1/-1'}},
           React.createElement('div',{style:{fontSize:'0.68rem',color:'var(--dmuted)',marginBottom:'0.35rem',textTransform:'uppercase',letterSpacing:'0.08em'}},'Personal Bio (shared only with your mentor)'),
           React.createElement('textarea',{value:form.bio,onChange:setF('bio'),rows:3,placeholder:'A brief note about yourself — your story, your goals, what brought you here...',style:{width:'100%',padding:'0.65rem 0.85rem',borderRadius:8,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.88rem',outline:'none',resize:'vertical',lineHeight:1.65,boxSizing:'border-box'}})
@@ -28324,7 +28339,7 @@ function SystemActivityFeed({ platform, session, toast }) {
       .catch(function() {
         // Backend offline — pull from local writeAudit trail
         try {
-          var localAudit = JSON.parse(localStorage.getItem('polr_audit_log')||'[]');
+          var localAudit = JSON.parse(localStorage.getItem('hope_audit_log')||'[]');
           setActions(localAudit.slice(-100).reverse());
           setLastRefresh('Local — offline');
         } catch(e) { setActions([]); }
@@ -28419,9 +28434,9 @@ function WarRoomPanel({ platform, toast, setActive }) {
 
   // Campus cells for the heat map
   var CAMPUSES_MAP = [
-    {name:'POLR Place\nThibodaux', key:'thibodaux', icon:'🏛️'},
+    {name:'HOPE Place\nThibodaux', key:'thibodaux', icon:'🏛️'},
     {name:'HOP\nThibodaux',        key:'hop-thib',  icon:'✝️'},
-    {name:'HOP\nLarose',           key:'polr-place-hop-larose',icon:'🙏'},
+    {name:'HOP\nLarose',           key:'hope-place-port-allen',icon:'🙏'},
     {name:'Port Allen',            key:'polr-place-port-allen',icon:'🌆'},
   ];
 
@@ -28568,7 +28583,7 @@ function WarRoomPanel({ platform, toast, setActive }) {
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1rem',padding:'1.25rem'}},
           [
             ['Avg Transform',avgTransform||68,'var(--l5)'],
-            ['Active POLR Places',4,'var(--l2)'],
+            ['Active HOPE Places',4,'var(--l2)'],
             ['Total Partners',propertyPartners.length||3,'var(--gold)'],
             ['Network Score',Math.round((avgTransform||68)*0.9+5),'var(--l4)'],
           ].map(function(row){
@@ -28660,11 +28675,11 @@ function AuditLog({ platform, session }) {
   var logs = [...(platform.auditLog||[])];
   // Merge with seed entries so it's never empty
   var SEED = [
-    {id:'al-s1',actor:'POLRTTD',action:'SYSTEM_INITIALIZED',entityType:'platform',entityId:'polr-hq',before:null,after:{version:'2026.03'},timestamp:'2026-03-28T08:00:00.000Z',campus:'All'},
-    {id:'al-s2',actor:'POLRHQ',action:'MEETING_ATTENDANCE_MARKED',entityType:'meeting',entityId:'m1',before:null,after:{date:'2026-03-28',count:6},timestamp:'2026-03-28T07:15:00.000Z',campus:'POLR Place Thibodaux'},
-    {id:'al-s3',actor:'POLRHQ',action:'DRUG_TEST_RECORDED',entityType:'resident',entityId:'r3',before:null,after:{result:'negative',date:'2026-03-27'},timestamp:'2026-03-27T14:30:00.000Z',campus:'POLR Place Thibodaux'},
-    {id:'al-s4',actor:'POLRTTD',action:'CONTRACT_GENERATED',entityType:'invoice',entityId:'inv001',before:null,after:{client:'Hope Recovery',plan:'growth'},timestamp:'2026-03-26T11:00:00.000Z',campus:'External'},
-    {id:'al-s5',actor:'POLRHQ',action:'TESTIMONY_APPROVED',entityType:'testimony',entityId:'t1',before:{status:'pending'},after:{status:'published'},timestamp:'2026-03-25T16:45:00.000Z',campus:'All'},
+    {id:'al-s1',actor:'HOPETTD',action:'SYSTEM_INITIALIZED',entityType:'platform',entityId:'polr-hq',before:null,after:{version:'2026.03'},timestamp:'2026-03-28T08:00:00.000Z',campus:'All'},
+    {id:'al-s2',actor:'HOPEHQ',action:'MEETING_ATTENDANCE_MARKED',entityType:'meeting',entityId:'m1',before:null,after:{date:'2026-03-28',count:6},timestamp:'2026-03-28T07:15:00.000Z',campus:'HOPE Place Port Allen'},
+    {id:'al-s3',actor:'HOPEHQ',action:'DRUG_TEST_RECORDED',entityType:'resident',entityId:'r3',before:null,after:{result:'negative',date:'2026-03-27'},timestamp:'2026-03-27T14:30:00.000Z',campus:'HOPE Place Port Allen'},
+    {id:'al-s4',actor:'HOPETTD',action:'CONTRACT_GENERATED',entityType:'invoice',entityId:'inv001',before:null,after:{client:'Hope Recovery',plan:'growth'},timestamp:'2026-03-26T11:00:00.000Z',campus:'External'},
+    {id:'al-s5',actor:'HOPEHQ',action:'TESTIMONY_APPROVED',entityType:'testimony',entityId:'t1',before:{status:'pending'},after:{status:'published'},timestamp:'2026-03-25T16:45:00.000Z',campus:'All'},
   ];
   var allLogs = [...logs, ...SEED];
   var ACTION_COLOR = {
@@ -28737,10 +28752,10 @@ function ContactConfigPanel({ platform, update, toast, session }) {
 
   var cfg = platform.contactConfig || {};
   var hq  = Object.assign({
-    name:'Path of Life Recovery', shortName:'POLR',
-    phone:'{POLR_PHONE}', email:'{POLR_EMAIL}',
-    website:'polrnetwork.com', address:'Thibodaux, Louisiana',
-    tagline:'Walk well.'
+    name:'HOPE Recovery: Hold on Pain Ends', shortName:'HOPE',
+    phone:'225-333-0330', email:'bro.chuck.edwards@gmail.com',
+    website:'hopenetwork.com', address:'Port Allen, Louisiana',
+    tagline:'Walk it out faithfully.'
   }, cfg.hq || {});
 
   var campusCfgs = cfg.campuses || {};
@@ -28751,12 +28766,12 @@ function ContactConfigPanel({ platform, update, toast, session }) {
     inKindReportStyle:'anonymous'
   }, cfg.privacy || {});
 
-  var CAMPUSES = ['polr-place-thibodaux','polr-place-hop-thibodaux','polr-place-hop-larose','port-allen'];
+  var CAMPUSES = ['hope-place-port-allen','hope-place-port-allenodaux','hope-place-port-allen','port-allen'];
   var CAMPUS_LABELS = {
-    'polr-place-thibodaux':'POLR Place Thibodaux',
-    'polr-place-hop-thibodaux':'POLR Place @ HOP Thibodaux',
-    'polr-place-hop-larose':'POLR Place @ HOP Larose',
-    'port-allen':'POLR Place @ Port Allen'
+    'hope-place-port-allen':'HOPE Place Port Allen',
+    'hope-place-port-allenodaux':'HOPE Place Port Allen',
+    'hope-place-port-allen':'HOPE Place Port Allen',
+    'port-allen':'HOPE Place Port Allen'
   };
 
   var _tab = React.useState('hq');
@@ -28827,7 +28842,7 @@ function ContactConfigPanel({ platform, update, toast, session }) {
       React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',fontFamily:'var(--font-mono)',marginBottom:'0.2rem'}},'SYSTEM CONFIGURATION'),
       React.createElement('h2',{style:{fontFamily:'var(--font-serif)',color:'var(--dtxt)',fontWeight:600}},'Contact & Branding'),
       React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--dmuted)',lineHeight:1.6,marginTop:'0.25rem'}},
-        'Control all phone numbers, emails, URLs, and privacy settings across the entire platform. These values replace all {POLR_PHONE}, {POLR_EMAIL}, and {POLR_WEBSITE} tokens throughout the system.'
+        'Control all phone numbers, emails, URLs, and privacy settings across the entire platform. These values replace all 225-333-0330, bro.chuck.edwards@gmail.com, and hopenetwork.com tokens throughout the system.'
       )
     ),
 
@@ -28860,21 +28875,21 @@ function ContactConfigPanel({ platform, update, toast, session }) {
       ),
       React.createElement('div',{className:'d-card-body'},
         React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem 1.25rem'}},
-          FIELD('Organization Name',hqForm.name,setHQField('name'),'Path of Life Recovery'),
-          FIELD('Short Name',hqForm.shortName,setHQField('shortName'),'POLR'),
+          FIELD('Organization Name',hqForm.name,setHQField('name'),'HOPE Recovery: Hold on Pain Ends'),
+          FIELD('Short Name',hqForm.shortName,setHQField('shortName'),'HOPE'),
           FIELD('Phone Number',hqForm.phone,setHQField('phone'),'985.224.7421','Appears on all documents, receipts, and footers','tel'),
-          FIELD('Email Address',hqForm.email,setHQField('email'),'admin@polrnetwork.com','Primary contact email throughout platform','email'),
-          FIELD('Website URL',hqForm.website,setHQField('website'),'polrnetwork.com','Without https:// — added automatically'),
-          FIELD('Physical Address',hqForm.address,setHQField('address'),'Thibodaux, Louisiana'),
+          FIELD('Email Address',hqForm.email,setHQField('email'),'bro.chuck.edwards@gmail.com','Primary contact email throughout platform','email'),
+          FIELD('Website URL',hqForm.website,setHQField('website'),'hopenetwork.com','Without https:// — added automatically'),
+          FIELD('Physical Address',hqForm.address,setHQField('address'),'Port Allen, Louisiana'),
           React.createElement('div',{style:{gridColumn:'1/-1'}},
-            FIELD('Footer Tagline',hqForm.tagline,setHQField('tagline'),'"Walk well."','Appears in lesson footers and certificates')
+            FIELD('Footer Tagline',hqForm.tagline,setHQField('tagline'),'"Walk it out faithfully."','Appears in lesson footers and certificates')
           )
         ),
         React.createElement('div',{style:{marginTop:'1rem',padding:'0.85rem 1rem',background:'rgba(200,145,58,0.06)',
           border:'1px solid rgba(200,145,58,0.18)',borderRadius:9,fontSize:'0.78rem',color:'var(--dmuted)'}},
           React.createElement('span',{style:{fontWeight:700,color:'var(--gold)'}},'Preview: '),
-          '"', hqForm.tagline||'Walk well.', '" — ', hqForm.name||'Path of Life Recovery',
-          ' · ', hqForm.website||'polrnetwork.com', ' · ', hqForm.phone||'985.224.7421'
+          '"', hqForm.tagline||'Walk it out faithfully.', '" — ', hqForm.name||'HOPE Recovery: Hold on Pain Ends',
+          ' · ', hqForm.website||'hopenetwork.com', ' · ', hqForm.phone||'985.224.7421'
         ),
         React.createElement('button',{onClick:saveHQ,className:'btn-primary',style:{marginTop:'1rem',fontSize:'0.88rem'}},
           '✅ Save HQ Contact Info')
@@ -28986,7 +29001,7 @@ function ContactConfigPanel({ platform, update, toast, session }) {
           React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)',marginBottom:'0.65rem'}},
             'What level of detail appears in reports sent to Transportation, Thrift, and Food partners'),
           React.createElement('div',{style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
-            [['campus','Campus totals only — "3 vehicles donated to POLR Place Thibodaux"'],
+            [['campus','Campus totals only — "3 vehicles donated to HOPE Place Port Allen"'],
              ['count', 'Count only — "3 members received vehicles this quarter"'],
              ['full',  'Full detail — member names visible (requires member consent)'],
             ].map(function(opt) {
@@ -29011,8 +29026,8 @@ function ContactConfigPanel({ platform, update, toast, session }) {
           React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)',marginBottom:'0.65rem'}},
             'How to describe recipients in partner thank-you reports and receipts'),
           React.createElement('div',{style:{display:'flex',gap:'0.5rem',flexWrap:'wrap'}},
-            [['anonymous', '"A member in recovery at POLR Place Thibodaux received this vehicle"'],
-             ['campus',    '"A resident of POLR Place Thibodaux received this vehicle"'],
+            [['anonymous', '"A member in recovery at HOPE Place Port Allen received this vehicle"'],
+             ['campus',    '"A resident of HOPE Place Port Allen received this vehicle"'],
              ['role',      '"A workforce-track member in their 4th month of recovery received this vehicle"'],
             ].map(function(opt) {
               var active = privForm.inKindReportStyle === opt[0];
@@ -29042,10 +29057,10 @@ function SettingsPanel({
   session
 }) {
   const _useState42 = useState({
-      siteName: 'POLR Network',
+      siteName: 'HOPE Recovery Network',
       tagline: 'Healing and hope for the hurting',
-      contactEmail: '{POLR_EMAIL}',
-      contactPhone: '{POLR_PHONE}',
+      contactEmail: 'bro.chuck.edwards@gmail.com',
+      contactPhone: '225-333-0330',
       termsVersion: '2026-02',
       aiEnabled: true,
       maintenanceMode: false
@@ -29191,7 +29206,7 @@ function GuestGuide({
       borderLeft: '3px solid var(--l6)',
       paddingLeft: '1.25rem'
     }
-  }, "\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\" — Matthew 11:28 (KJV)"), [['📅', 'Attend Your First Meeting', 'All POLR meetings are open, free, and judgment-free. No membership needed. Just show up.', 'Find a Meeting', 'guest-meetings'], ['📖', 'Read the 12 Steps', 'POLR\'s biblical 12-step recovery program. Read at your own pace — no commitment required.', 'Read Now', 'steps'], ['✍️', 'Walk Well Blog', 'Daily encouragement, recovery insights, and Scripture-grounded teaching.', 'Read Blog', 'walkwell'], ['💝', 'Support the Ministry', 'Every dollar supports recovery, housing, and campus expansion.', 'Give Now', 'donate'], ['⚡', 'Create an Account', 'Unlock your full member journey — step tracking, meetings, mentorship, and more.', 'Join POLR', 'guest-signup']].map(function ([icon, title, desc, action, page]) {
+  }, "\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\" — Matthew 11:28 (KJV)"), [['📅', 'Attend Your First Meeting', 'All HOPE meetings are open, free, and judgment-free. No membership needed. Just show up.', 'Find a Meeting', 'guest-meetings'], ['📖', 'Read the 12 Steps', 'HOPE Recovery\'s biblical 12-step recovery program. Read at your own pace — no commitment required.', 'Read Now', 'steps'], ['✍️', 'HOPE In Motion Blog', 'Daily encouragement, recovery insights, and Scripture-grounded teaching.', 'Read Blog', 'hopeinmotion'], ['💝', 'Support the Ministry', 'Every dollar supports recovery, housing, and campus expansion.', 'Give Now', 'donate'], ['⚡', 'Create an Account', 'Unlock your full member journey — step tracking, meetings, mentorship, and more.', 'Join HOPE', 'guest-signup']].map(function ([icon, title, desc, action, page]) {
     return /*#__PURE__*/React.createElement("div", {
       key: title,
       style: {
@@ -29251,66 +29266,66 @@ function GuestGuide({
 // ═══════════════════════════════════════════════════
 // SHARED DATA
 // ═══════════════════════════════════════════════════
-const SAYINGS = ['Our greatest testimony is not the <strong>words</strong> we say, but the <strong>lives</strong> we live.', '<strong>Repentance</strong> is not perfection, but a new <strong>direction.</strong>', '<strong>Blame</strong> keeps us stuck; <strong>truth</strong> moves us forward.', 'Temptation isn\'t a sin, but a cue to <strong>walk in the Spirit.</strong>', 'Sometimes what looked like a <strong>setback</strong>, was God setting you up for a new <strong>opportunity.</strong>', 'You don\'t have to have it together to <strong>walk through the door.</strong>', 'Healing isn\'t linear — but every <strong>honest step</strong> counts.'];
+const SAYINGS = ['Our greatest testimony isn\'t just words, but how we <strong>walk it out.</strong>', '<strong>Repentance</strong> is not perfection, but a turning of the heart toward <strong>God.</strong>', '<strong>Blame</strong> keeps us bound; <strong>truth</strong> is what sets us free.', 'Temptation is not the sin, but the moment to <strong>choose the Spirit.</strong>', 'What is <strong>hidden</strong> keeps us sick; what is brought into the <strong>light</strong> brings healing.', 'Freedom is not found in <strong>striving</strong>, but in <strong>surrender.</strong>', 'We don\'t walk this out flawlessly — we walk it out <strong>faithfully.</strong>'];
 const MEETINGS_DATA = [{
   day: 'Mon–Sat',
   time: '7:00 AM',
-  name: 'POLR Place Thibodaux — Daily',
-  location: '501-A St. Mary St, Thibodaux',
+  name: 'HOPE Place Port Allen',
+  location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: 'Drug Court Certified'
 }, {
   day: 'Wednesday',
   time: '6:30 PM',
-  name: 'HOP Thibodaux — Check-In',
-  location: '2229 Hwy 3185, Thibodaux',
+  name: 'HOPE Place Port Allen — Check-In',
+  location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: 'Childcare Available'
 }, {
   day: 'Wednesday',
   time: '7:00 PM',
-  name: 'HOP Thibodaux — Worship + Lesson',
-  location: '2229 Hwy 3185, Thibodaux',
+  name: 'HOPE Place Port Allen — Worship + Lesson',
+  location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: ''
 }, {
   day: 'Wednesday',
   time: '8:00 PM',
-  name: 'HOP Thibodaux — Open Share',
-  location: '2229 Hwy 3185, Thibodaux',
+  name: 'HOPE Place Port Allen — Open Share',
+  location: '12883 Hwy 190 West, Port Allen LA 70767',
   note: ''
 }, {
   day: 'Monday',
   time: '6:00 PM',
-  name: 'POLR Place Port Allen',
+  name: 'HOPE Place Port Allen',
   zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-port-allen',
   location: '12883 Hwy 190 West, Port Allen',
   note: 'New Campus'
 }, {
   day: 'Wednesday',
   time: '7:00 PM',
-  name: 'POLR Place @ HOP Larose',
-  location: 'Larose, LA',
+  name: 'HOPE Place Port Allen',
+  location: 'Port Allen, LA',
   note: ''
 }];
 const CAMPUSES = [{
-  slug: 'polr-place-thibodaux',
-  name: 'POLR Place Thibodaux',
-  location: 'Thibodaux, LA · Lafourche Parish',
+  slug: 'hope-place-port-allen',
+  name: 'HOPE Place Port Allen',
+  location: 'Thibodaux, LA · West Baton Rouge Parish',
   badge: 'active',
   badgeLabel: 'Flagship',
   zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-core',
-  desc: 'Our flagship daily meeting center. Certified with Lafourche Drug Court.',
+  desc: 'Our recovery center serving West Baton Rouge Parish and surrounding communities.',
   metrics: [{
-    v: '600+',
+    v: '500+',
     l: 'Lives'
   }, {
     v: '7×/wk',
     l: 'Meetings'
   }, {
-    v: '31yr',
+    v: '21yr',
     l: 'Ministry'
   }]
 }, {
-  slug: 'polr-place-hop-thib',
-  name: 'HOP — Thibodaux',
+  slug: 'hope-place-port-allen',
+  name: 'HOPE Place Port Allen',
   zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-core',
   location: 'Thibodaux, LA',
   badge: 'active',
@@ -29327,10 +29342,10 @@ const CAMPUSES = [{
     l: 'Childcare'
   }]
 }, {
-  slug: 'polr-place-hop-larose',
-  name: 'HOP — Larose',
+  slug: 'hope-place-port-allen',
+  name: 'HOPE Place Port Allen',
   zeffyLink: 'https://www.zeffy.com/en-US/donation-form/polr-core',
-  location: 'Larose, LA',
+  location: 'Port Allen, LA',
   badge: 'active',
   badgeLabel: 'Active',
   desc: 'Serving the Golden Meadow corridor with weekly recovery meetings.',
@@ -29346,7 +29361,7 @@ const CAMPUSES = [{
   }]
 }, {
   slug: 'polr-place-port-allen',
-  name: 'POLR Place Port Allen',
+  name: 'HOPE Place Port Allen',
   location: 'Port Allen, LA',
   badge: 'new',
   badgeLabel: 'New',
@@ -29372,13 +29387,13 @@ const PATHWAYS = [{
   icon: '🌱',
   type: 'Campus Launch',
   name: 'Campus Launch Partner',
-  desc: 'Help plant a new POLR campus. Provide funding, leadership, or coordination.',
+  desc: 'Help plant a new HOPE campus. Provide funding, leadership, or coordination.',
   cta: 'Launch a Campus'
 }, {
   icon: '💼',
   type: 'Business Workforce',
   name: 'Business Workforce Partner',
-  desc: 'Hire from the POLR candidate pipeline. Post openings, sponsor training.',
+  desc: 'Hire from the HOPE candidate pipeline. Post openings, sponsor training.',
   cta: 'Register as Employer'
 }, {
   icon: '🏠',
@@ -29394,9 +29409,9 @@ const PATHWAYS = [{
   cta: 'Become a Sponsor'
 }];
 const STEPS_DATA = [
-  // The 12 Steps of Path of Life Recovery
+  // The 12 Steps of HOPE Recovery: Hold on Pain Ends
   // Adapted from the 12 Steps of AA, biblically focused
-  // \u00a9 Path of Life Recovery, Inc. \u2014 {POLR_WEBSITE}
+  // \u00a9 HOPE Recovery, Inc. \u2014 hopenetwork.com
   {
     n: 1,
     title: 'We Admitted Our Powerlessness',
@@ -29477,7 +29492,7 @@ const LEGAL_DOCS = {
     version: '2026-02',
     content: [{
       h: '1. Who We Are',
-      p: 'Path of Life Recovery is a Christ-centered, nonprofit recovery ministry in Thibodaux, Louisiana. We are not a licensed medical provider, therapist, or addiction treatment center.'
+      p: 'HOPE Recovery: Hold on Pain Ends is a Christ-centered, nonprofit recovery ministry in Port Allen, Louisiana. We are not a licensed medical provider, therapist, or addiction treatment center.'
     }, {
       h: '2. Faith-Based Mission',
       p: 'All programs are grounded in biblical faith. Participation is voluntary and open to anyone seeking hope and healing.'
@@ -29486,19 +29501,19 @@ const LEGAL_DOCS = {
       p: 'Nothing on this platform constitutes medical advice, psychiatric treatment, or clinical addiction therapy.'
     }, {
       h: '4. Voluntary Participation',
-      p: 'All participation in POLR programs is entirely voluntary. Members may withdraw at any time.'
+      p: 'All participation in HOPE programs is entirely voluntary. Members may withdraw at any time.'
     }, {
       h: '5. No Guarantee of Outcomes',
       p: 'POLR does not guarantee recovery outcomes, employment placement, or housing placement.'
     }, {
       h: '6. Donation Non-Refund',
-      p: 'All donations are final and non-refundable. POLR is a 501(c)(3) nonprofit; donations are tax-deductible.'
+      p: 'All donations are final and non-refundable. HOPE is a 501(c)(3) nonprofit; donations are tax-deductible.'
     }, {
       h: '7. Right to Remove Members',
       p: 'POLR reserves the right to suspend or remove any member for conduct violations.'
     }, {
       h: '8. Governing Law — Louisiana',
-      p: 'These Terms are governed by the laws of the State of Louisiana. Any disputes shall be resolved in Lafourche Parish, Louisiana.'
+      p: 'These Terms are governed by the laws of the State of Louisiana. Any disputes shall be resolved in West Baton Rouge Parish, Louisiana.'
     }]
   },
   privacy: {
@@ -29512,7 +29527,7 @@ const LEGAL_DOCS = {
       p: 'POLR will never sell, rent, or trade your personal information. We do not share recovery status without your explicit consent.'
     }, {
       h: 'Data Security',
-      p: 'We use SSL/TLS encryption. You may request deletion of your data by contacting {POLR_EMAIL}.'
+      p: 'We use SSL/TLS encryption. You may request deletion of your data by contacting bro.chuck.edwards@gmail.com.'
     }, {
       h: 'Cookies',
       p: 'Session and preference cookies only. No advertising cookies.'
@@ -29533,10 +29548,10 @@ const LEGAL_DOCS = {
     version: '2026-02',
     content: [{
       h: 'Faith-Based Context',
-      p: 'POLR programs are presented from a Christian worldview. Scripture and prayer are central to our ministry.'
+      p: 'HOPE programs are presented from a Christian worldview. Scripture and prayer are central to our ministry.'
     }, {
       h: 'Not Therapy',
-      p: 'Spiritual guidance from POLR staff is not a substitute for licensed counseling or psychotherapy.'
+      p: 'Spiritual guidance from HOPE staff is not a substitute for licensed counseling or psychotherapy.'
     }, {
       h: 'No Denomination Required',
       p: 'We welcome anyone willing to engage in recovery through faith, regardless of church background.'
@@ -29553,7 +29568,7 @@ const LEGAL_DOCS = {
       p: 'Arriving impaired, soliciting substances, harassment, violence, sharing another member\'s story without consent.'
     }, {
       h: 'Enforcement',
-      p: 'Violations may result in warning, suspension, or permanent removal. Appeals: {POLR_EMAIL}.'
+      p: 'Violations may result in warning, suspension, or permanent removal. Appeals: bro.chuck.edwards@gmail.com.'
     }]
   }
 };
@@ -29605,7 +29620,7 @@ const LEVELS = [{
   color: '--l6',
   bg: '--l6b',
   name: 'Guest',
-  msg: '"Welcome to POLR. All meetings are open. The 12 Steps are free. When you\'re ready — we\'re here."'
+  msg: '"Welcome to HOPE. All meetings are open. The 12 Steps are free. When you\'re ready — we\'re here."'
 }];
 const TESTIMONY_FEED = [{
   icon: '🎉',
@@ -29647,7 +29662,7 @@ const TESTIMONY_FEED = [{
   name: 'Tamika W.',
   tier: 'tier-b',
   tl: 'Bronze',
-  event: 'Moved into POLR House Gamma',
+  event: 'Moved into HOPE House Gamma',
   time: '3 days ago'
 }];
 const AMOUNTS = [25, 50, 100, 250, 500, 1000];
@@ -29656,27 +29671,27 @@ const AMOUNTS = [25, 50, 100, 250, 500, 1000];
 const TERMS_VERSION = '2026-02';
 function getSession() {
   try {
-    return JSON.parse(sessionStorage.getItem('polr_session') || 'null');
+    return JSON.parse(sessionStorage.getItem('hope_session') || 'null');
   } catch {
     return null;
   }
 }
 function setSession(d) {
-  sessionStorage.setItem('polr_session', JSON.stringify({
+  sessionStorage.setItem('hope_session', JSON.stringify({
     ...d,
     ts: Date.now()
   }));
 }
 function getLegalAccept() {
   try {
-    const a = JSON.parse(localStorage.getItem('polr_legal') || 'null');
+    const a = JSON.parse(localStorage.getItem('hope_legal') || 'null');
     return (a === null || a === void 0 ? void 0 : a.version) === TERMS_VERSION;
   } catch {
     return false;
   }
 }
 function setLegalAccept(email = '') {
-  localStorage.setItem('polr_legal', JSON.stringify({
+  localStorage.setItem('hope_legal', JSON.stringify({
     version: TERMS_VERSION,
     ts: new Date().toISOString(),
     email
@@ -29762,8 +29777,8 @@ function GlobalNav({
     key: 'steps',
     label: '12 Steps'
   }, {
-    key: 'walkwell',
-    label: 'Walk Well'
+    key: 'hopeinmotion',
+    label: 'HOPE In Motion'
   }, {
     key: 'partner',
     label: 'Partner With Us'
@@ -29780,7 +29795,7 @@ function GlobalNav({
     }
   }, /*#__PURE__*/React.createElement("span", {
     className: "nav-brand-mark"
-  }, "P"), "POLR Network"), /*#__PURE__*/React.createElement("div", {
+  }, "P"), "HOPE Recovery Network"), /*#__PURE__*/React.createElement("div", {
     className: "nav-spacer"
   }), /*#__PURE__*/React.createElement("ul", {
     className: "nav-links"
@@ -29798,9 +29813,10 @@ function GlobalNav({
     onClick: function () {
       return setPage(session ? 'dashboard' : 'platform');
     }
-  }, session ? "".concat((_session$name = session.name) === null || _session$name === void 0 ? void 0 : _session$name.split(' ')[0], " \xB7 Dashboard") : 'Member Login')), session && /*#__PURE__*/React.createElement("button", {className: "nav-cta", style: {background:"transparent", color:"rgba(252,129,129,0.85)", border:"1px solid rgba(252,129,129,0.25)", marginLeft:"0.35rem"}, onClick: function() { sessionStorage.removeItem('polr_session'); setPage('home'); }}, "Log Out"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("button", {
+  }, session ? "".concat((_session$name = session.name) === null || _session$name === void 0 ? void 0 : _session$name.split(' ')[0], " \xB7 Dashboard") : 'Member Login')), session && /*#__PURE__*/React.createElement("button", {className: "nav-cta", style: {background:"transparent", color:"rgba(252,129,129,0.85)", border:"1px solid rgba(252,129,129,0.25)", marginLeft:"0.35rem"}, onClick: function() { sessionStorage.removeItem('hope_session'); setPage('home'); }}, "Log Out"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("button", {
     className: "nav-give-btn",
     onClick: function () {
+      window.scrollTo({top:0,behavior:'smooth'});
       return setPage('donate');
     }
   }, "Give Now"))), /*#__PURE__*/React.createElement("button", {
@@ -29893,20 +29909,21 @@ function SiteFooter({
     className: "footer-top"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "footer-brand"
-  }, "Path of Life Recovery"), /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery: Hold on Pain Ends"), /*#__PURE__*/React.createElement("div", {
     className: "footer-tagline"
-  }, "\"Healing and hope for the hurting\" \u2014 Christ-centered recovery ministry serving South Louisiana since 1995."), /*#__PURE__*/React.createElement("div", {
+  }, "\"Healing and hope for the hurting\" \u2014 Christ-centered recovery ministry serving South Louisiana since 2004."), /*#__PURE__*/React.createElement("div", {
     className: "footer-contact"
-  }, "{POLR_WEBSITE} \xB7 {POLR_PHONE} \xB7 {POLR_EMAIL}")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, "hopenetwork.com \xB7 225-333-0330 \xB7 bro.chuck.edwards@gmail.com")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "footer-col-title"
   }, "Ministry"), /*#__PURE__*/React.createElement("ul", {
     className: "footer-links"
-  }, [['home', 'Our Story'], ['steps', 'The 12 Steps'], ['walkwell', 'Walk Well'], ['partner', 'Partner With Us'], ['donate', 'Donate']].map(function ([k, l]) {
+  }, [['home', 'Our Story'], ['steps', 'The 12 Steps'], ['hopeinmotion', 'HOPE In Motion'], ['partner', 'Partner With Us'], ['donate', 'Donate']].map(function ([k, l]) {
     return /*#__PURE__*/React.createElement("li", {
       key: k
     }, /*#__PURE__*/React.createElement("button", {
       className: "footer-link-btn",
       onClick: function () {
+        window.scrollTo({top:0,behavior:'smooth'});
         return setPage(k);
       }
     }, l));
@@ -29920,6 +29937,7 @@ function SiteFooter({
     }, /*#__PURE__*/React.createElement("button", {
       className: "footer-link-btn",
       onClick: function () {
+        window.scrollTo({top:0,behavior:'smooth'});
         return setPage(k);
       }
     }, l));
@@ -29933,19 +29951,21 @@ function SiteFooter({
     }, /*#__PURE__*/React.createElement("button", {
       className: "footer-link-btn",
       onClick: function () {
+        window.scrollTo({top:0,behavior:'smooth'});
         return setPage('legal');
       }
     }, l));
   })), /*#__PURE__*/React.createElement("button", {
     className: "footer-give",
     onClick: function () {
+      window.scrollTo({top:0,behavior:'smooth'});
       return setPage('donate');
     }
   }, "Give Now \u2192"))), /*#__PURE__*/React.createElement("div", {
     className: "footer-bottom"
-  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 Path of Life Recovery, Inc. \xB7 Thibodaux, Louisiana \xB7 501(c)(3) Nonprofit"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", null, "\xA9 2026 HOPE Recovery, Inc. \xB7 Port Allen, Louisiana \xB7 501(c)(3) Nonprofit"), /*#__PURE__*/React.createElement("span", {
     className: "footer-ww"
-  }, "\"Walk well.\""))));
+  }, "\"Walk it out faithfully.\""))));
 }
 
 // ═══ HOME PAGE ═══
@@ -29970,7 +29990,7 @@ function HomePage({
   var _showEducation=_showSecs.education!==false&&_enabledMods.includes('Education');
   var _showHousing=_showSecs.housing!==false&&_enabledMods.includes('Housing');
   var _heroHeadline=_siteCfg.heroHeadline||'A New Walk Begins Here';
-  var _heroSubline=_siteCfg.heroSubline||'Christ-centered recovery ministry serving South Louisiana since 1995.';
+  var _heroSubline=_siteCfg.heroSubline||'Christ-centered recovery ministry serving South Louisiana since 2004.';
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("section", {
     className: "hero"
   }, /*#__PURE__*/React.createElement("div", {
@@ -29979,15 +29999,15 @@ function HomePage({
     className: "hero-content"
   }, /*#__PURE__*/React.createElement(SiteTicker, null), /*#__PURE__*/React.createElement("div", {
     className: "hero-eyebrow"
-  }, "Christ-Centered Recovery Ministry \xB7 South Louisiana \xB7 Est. 1995"), /*#__PURE__*/React.createElement("h1", {
+  }, "Christ-Centered Recovery Ministry \xB7 South Louisiana \xB7 Est. 2004"), /*#__PURE__*/React.createElement("h1", {
     className: "hero-title"
-  }, "Path of Life Recovery", /*#__PURE__*/React.createElement("span", {
+  }, "HOPE Recovery: Hold on Pain Ends", /*#__PURE__*/React.createElement("span", {
     className: "hero-title-sub"
   }, "Healing and hope for the hurting.")), /*#__PURE__*/React.createElement("div", {
     className: "hero-divider"
   }), /*#__PURE__*/React.createElement("p", {
     className: "hero-sub"
-  }, "POLR is more than a meeting \u2014 it's a ", /*#__PURE__*/React.createElement("em", null, "movement"), ". Rooted in Scripture, built on community, powered by the grace of Jesus Christ."), /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery is more than a meeting \u2014 it's a ", /*#__PURE__*/React.createElement("em", null, "movement"), ". Rooted in Scripture, built on community, powered by the grace of Jesus Christ."), /*#__PURE__*/React.createElement("div", {
     className: "hero-btns"
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn-primary",
@@ -30009,7 +30029,7 @@ function HomePage({
     }
   }, "Member Login")), /*#__PURE__*/React.createElement("div", {
     className: "hero-stats"
-  }, [['600+', 'Est. Lives Touched'], ['31yr', 'Ministry'], ['4', 'Campuses'], ['Free', 'Basic Plan']].map(function ([n, l]) {
+  }, [['500+', 'Est. Lives Touched'], ['21yr', 'Ministry'], ['4', 'Campuses'], ['Free', 'Basic Plan']].map(function ([n, l]) {
     return /*#__PURE__*/React.createElement("div", {
       key: l,
       className: "hs"
@@ -30028,7 +30048,7 @@ function HomePage({
     className: "eyebrow"
   }, "Our Story"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, "More Than 30 Years of Walking People Home"), /*#__PURE__*/React.createElement("div", {
+  }, "More Than 21 Years of Walking People Home"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
@@ -30084,7 +30104,7 @@ function HomePage({
       fontSize: '0.78rem',
       color: 'rgba(255,255,255,0.35)'
     }
-  }, "\u2014 Jeff Walthers, Director \xB7 Path of Life Recovery")), /*#__PURE__*/React.createElement("p", {
+  }, "\u2014 Chuck Edwards, Director \xB7 HOPE Recovery: Hold on Pain Ends")), /*#__PURE__*/React.createElement("p", {
     style: {
       fontFamily: 'var(--font-italic)',
       fontSize: '1.05rem',
@@ -30100,7 +30120,7 @@ function HomePage({
       color: 'var(--navy2)',
       marginBottom: '1.5rem'
     }
-  }, "Today, by God's grace, Jeff walks into his 30th year of complete sobriety \u2014 and continues to walk the Path that now guides hundreds of others."), /*#__PURE__*/React.createElement("button", {
+  }, "Today, by God's grace, Jeff walks into his 21st year of ministry \u2014 and continues to walk the Path that now guides hundreds of others."), /*#__PURE__*/React.createElement("button", {
     className: "btn-primary",
     onClick: function () {
       return setPage('steps');
@@ -30140,11 +30160,11 @@ function HomePage({
   }, {
     icon: '👥',
     title: 'Community-Driven',
-    text: 'Recovery happens in relationship. POLR builds communities of accountability and friendship.'
+    text: 'Recovery happens in relationship. HOPE builds communities of accountability and friendship.'
   }, {
     icon: '🏠',
     title: 'Housing Support',
-    text: 'POLR House provides structured recovery housing with a path to independence.'
+    text: 'HOPE House provides structured recovery housing with a path to independence.'
   }, {
     icon: '💼',
     title: 'Workforce Ready',
@@ -30169,9 +30189,9 @@ function HomePage({
     style: {
       color: 'var(--gold)'
     }
-  }, "Walk Well Sayings"), /*#__PURE__*/React.createElement("h2", {
+  }, "HOPE In Motion Sayings"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title light"
-  }, "Words That Walk With You"), /*#__PURE__*/React.createElement("div", {
+  }, "Walk It Out"), /*#__PURE__*/React.createElement("div", {
     className: "sayings-wall"
   }, SAYINGS.slice(0, 4).map(function (s, i) {
     return /*#__PURE__*/React.createElement("div", {
@@ -30192,32 +30212,32 @@ function HomePage({
     className: "eyebrow"
   }, "Find a Meeting"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, "POLR Meetings Are Open to Everyone"), /*#__PURE__*/React.createElement("p", {
+  }, "HOPE Recovery Is Open to Everyone"), /*#__PURE__*/React.createElement("p", {
     className: "section-lead"
   }, "You don't need membership or anything figured out. Just show up. Every seat is for you."), /*#__PURE__*/React.createElement("div", {
     className: "locations-grid"
   }, [{
-    name: 'POLR Place',
+    name: 'HOPE Place',
     loc: 'Thibodaux',
-    type: 'Daily Recovery Center',
-    address: '501-A St. Mary St, Thibodaux LA 70301',
+    type: 'Recovery Center · Est. 2004',
+    address: '12883 Hwy 190 West, Port Allen LA 70767 LA 70301',
     sch: 'Mon–Sat · <span>7:00 AM</span>'
   }, {
-    name: 'POLR Place @ HOP Thibodaux',
+    name: 'HOPE Place Port Allen',
     loc: 'Thibodaux',
     type: 'Wednesday Evening',
-    address: '2229 Hwy 3185, Thibodaux LA 70301',
+    address: '12883 Hwy 190 West, Port Allen LA 70767',
     sch: 'Wednesday · <span>6:30–9:00 PM</span>'
   }, {
-    name: 'POLR Place @ HOP Larose',
+    name: 'HOPE Place Port Allen',
     loc: 'Larose',
     type: 'Wednesday Evening',
-    address: 'Larose, LA · Lafourche Parish',
+    address: 'Larose, LA · West Baton Rouge Parish',
     sch: 'Wednesday · <span>7:00 PM</span>'
   }, {
-    name: 'POLR Place Port Allen',
+    name: 'HOPE Place Port Allen',
     loc: 'Port Allen',
-    type: 'New Campus · 2025',
+    type: 'Recovery Center · Est. 2004',
     address: '12883 Hwy 190 West, Port Allen LA 70767',
     sch: 'Monday · <span>6:00 PM</span>'
   }].map(function (loc) {
@@ -30269,7 +30289,7 @@ function HomePage({
     className: "section-inner"
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
-  }, "POLR House"), /*#__PURE__*/React.createElement("h2", {
+  }, "HOPE House"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
   }, "A Home for the Journey"), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -30280,7 +30300,7 @@ function HomePage({
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     className: "section-lead"
-  }, "Recovery requires more than willpower. POLR House provides structured, Christ-centered transitional housing for men and women committed to the recovery process."), /*#__PURE__*/React.createElement("div", {
+  }, "Recovery requires more than willpower. HOPE House provides structured, Christ-centered transitional housing for men and women committed to the recovery process."), /*#__PURE__*/React.createElement("div", {
     className: "scripture-block",
     style: {
       marginBottom: '1.5rem'
@@ -30371,12 +30391,12 @@ function HomePage({
       ),
       /*#__PURE__*/React.createElement("div", { style: { display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' } },
         /*#__PURE__*/React.createElement("button", { className: 'btn-primary', onClick: function() { setPage('partner'); }, style: { padding: '0.85rem 2rem', fontSize: '1rem' } },
-          'Partner With POLR \u2192'),
+          'Partner With HOPE \u2192'),
         /*#__PURE__*/React.createElement("button", { className: 'btn-ghost', onClick: function() { setPage('education'); }, style: { padding: '0.85rem 1.5rem', fontSize: '1rem' } },
           'View Education Tracks')
       )
     )
-  ), /*#__PURE__*/React.createElement("div", {
+  ), /*#__PURE__*/React.createElement("section", {className: "section s-alt"}, /*#__PURE__*/React.createElement("div", {className: "section-inner"}, /*#__PURE__*/React.createElement("div", {className: "eyebrow"}, "Launch a HOPE Place"), /*#__PURE__*/React.createElement("h2", {className: "section-title"}, "Bring HOPE Recovery to Your Community"), /*#__PURE__*/React.createElement("p", {className: "section-lead"}, "HOPE Places are completely free to launch. We provide the platform, curriculum, training, and grant writing tools. You provide the community."), /*#__PURE__*/React.createElement("div", {style: {display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:"1.5rem",margin:"2.5rem 0"}}, ["Full Platform|Complete ministry OS. Housing, LMS, workforce, financial tracking. Operational in 2 weeks.",  "12-Step Curriculum|21 years of KJV-grounded curriculum. 12 steps, 19 courses, 35 lessons. Ready day one.",  "Grant Writing Tools|Built-in grant assistance and funding templates to help your HOPE Place thrive.",  "Personal Training|Chuck Edwards personally walks every new director through the entire system.",  "2-Week Setup|From approval to fully operational in 14 days. We handle the technical setup.",  "Ongoing Support|Direct access to HOPE Recovery HQ every step of the way.", "Biblical Foundation|Every step of the curriculum is grounded in KJV Scripture. Faith is not optional - it is the foundation.", "No Cost Ever|HOPE Places are free to launch and free to operate. The Gospel does not have a price tag." ].map(function(s){var p=s.split("|");return /*#__PURE__*/React.createElement("div",{key:p[0],style:{background:"var(--bg2)",border:"1px solid var(--bdr2)",borderRadius:14,padding:"1.75rem",marginBottom:"0.5rem"}}, /*#__PURE__*/React.createElement("div",{style:{fontFamily:"var(--font-serif)",fontWeight:700,fontSize:"1rem",marginBottom:"0.5rem",color:"var(--text)"}},p[0]), /*#__PURE__*/React.createElement("div",{style:{fontSize:"0.85rem",color:"var(--text)",lineHeight:1.6}},p[1]));})), /*#__PURE__*/React.createElement("div",{style:{background:"var(--card)",border:"1px solid var(--bdr)",borderRadius:16,padding:"2rem",maxWidth:620,margin:"2rem auto 0"}}, /*#__PURE__*/React.createElement("div",{className:"eyebrow",style:{marginBottom:"1rem"}},"Get Started"), /*#__PURE__*/React.createElement("h3",{style:{fontFamily:"var(--font-serif)",fontSize:"1.35rem",marginBottom:"0.5rem",color:"var(--text)"}},"Ready to Launch a HOPE Place?"), /*#__PURE__*/React.createElement("p",{style:{fontSize:"0.9rem",color:"var(--text)",marginBottom:"1.5rem",lineHeight:1.6}},"Chuck Edwards personally reviews every application. Free to launch. Free forever."), /*#__PURE__*/React.createElement("a",{href:"mailto:bro.chuck.edwards@gmail.com?subject=HOPE%20Place%20Launch%20Inquiry",className:"btn-primary",style:{display:"block",padding:"0.85rem 2rem",fontSize:"1rem",textAlign:"center",textDecoration:"none"}},"Submit Inquiry →")))), /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
   }, "Contact"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
@@ -30400,7 +30420,7 @@ function HomePage({
       color: 'var(--gold2)',
       marginBottom: '1.25rem'
     }
-  }, "Path of Life Recovery"), [['📞', 'Phone', '{POLR_PHONE}'], ['✉️', 'Email', '{POLR_EMAIL}'], ['📍', 'POLR Place', '501-A St. Mary St, Thibodaux LA 70301'], ['🌐', 'Website', 'www.{POLR_WEBSITE}']].map(function ([icon, label, val]) {
+  }, "HOPE Recovery: Hold on Pain Ends"), [['📞', 'Phone', '225-333-0330'], ['✉️', 'Email', 'bro.chuck.edwards@gmail.com'], ['📍', 'HOPE Place', '12883 Hwy 190 West, Port Allen LA 70767 LA 70301'], ['🌐', 'Website', 'www.hopenetwork.com']].map(function ([icon, label, val]) {
     return /*#__PURE__*/React.createElement("div", {
       key: label,
       className: "contact-item"
@@ -30418,7 +30438,7 @@ function HomePage({
     }
   }, "\"His arms are still open. And He's ready to walk you into a new beginning.\"", /*#__PURE__*/React.createElement("span", {
     className: "ref"
-  }, "\u2014 Jeff Walthers, POLR Director")), /*#__PURE__*/React.createElement("div", {
+  }, "\u2014 Chuck Edwards, HOPE Director")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',
@@ -30439,9 +30459,10 @@ function HomePage({
       borderColor: 'var(--border)'
     },
     onClick: function () {
+      window.scrollTo({top:0,behavior:'smooth'});
       return setPage('donate');
     }
-  }, "Support POLR \u2192"), /*#__PURE__*/React.createElement("button", {
+  }, "Support HOPE \u2192"), /*#__PURE__*/React.createElement("button", {
     className: "btn-ghost",
     style: {
       color: 'var(--text)',
@@ -30450,7 +30471,7 @@ function HomePage({
     onClick: function () {
       return setPage('guest-signup');
     }
-  }, "Member Login \u2192")))));
+  }, "Member Login \u2192"))))))));
 }
 
 // ═══ 12 STEPS ═══
@@ -30490,7 +30511,7 @@ function StepsPage({
     className: "hero-eyebrow"
   }, "Biblical Recovery"), /*#__PURE__*/React.createElement("h1", {
     className: "hero-title"
-  }, "The 12 Steps of POLR"), /*#__PURE__*/React.createElement("div", {
+  }, "The 12 Steps of HOPE Recovery"), /*#__PURE__*/React.createElement("div", {
     className: "hero-divider"
   }), /*#__PURE__*/React.createElement("p", {
     className: "hero-sub"
@@ -30580,7 +30601,7 @@ function StepsPage({
       color: 'rgba(255,255,255,0.5)',
       marginBottom: '1.5rem'
     }
-  }, "Download the complete POLR Digital Binder \u2014 12 steps, journal pages, goals, and meeting schedule."), /*#__PURE__*/React.createElement("div", {
+  }, "Download the complete HOPE Digital Binder \u2014 12 steps, journal pages, goals, and meeting schedule."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: '0.75rem',
@@ -30621,47 +30642,47 @@ function WalkWellPage({
     const posts = [{
     icon: '📖',
     cat: 'Scripture',
-    title: 'The God Who Waits for You',
+    title: 'The Father Is Already Running',
     excerpt: "The parable of the Prodigal Son isn\'t about the son returning — it\'s about the Father running.",
-    author: 'Jeff Walthers',
+    author: 'Chuck Edwards',
     date: 'Mar 18, 2026',
     readTime: '5 min read',
     featured: true,
-    body: "The parable of the Prodigal Son is the most misnamed story in Scripture. We call it the story of the son who came back. But Jesus told it as the story of a father who ran.\n\nThe son came to himself. He rehearsed his speech. He started the long walk home expecting nothing more than a servant's wage. But the text says the father saw him while he was yet a great way off. Which means the father had been looking. Waiting. Watching the road.\n\nThat is the God we serve.\n\nEvery person who has ever sat in a POLR meeting has felt the weight of that walk home. The shame rehearsal. The calculations of what you deserve. The bracing for the lecture.\n\nAnd then — running feet. A robe. A ring. A party.\n\nGrace is not a reward for the right posture of repentance. It is a father sprinting down a road. That's the whole point. If you have never felt unworthy of the celebration, you have never understood the parable. And if you have never let yourself receive the celebration, you have not yet finished the story.\n\nThe father didn't check the son's sobriety date. He checked his pulse. He was alive. He was home. That was enough.\n\nWalk well. He's been watching the road."
+    body: "The parable of the Prodigal Son is the most misnamed story in Scripture. We call it the story of the son who came back. But Jesus told it as the story of a father who ran.\n\nThe son came to himself. He rehearsed his speech. He started the long walk home expecting nothing more than a servant's wage. But the text says the father saw him while he was yet a great way off. Which means the father had been looking. Waiting. Watching the road.\n\nThat is the God we serve.\n\nEvery person who has ever sat in a HOPE meeting has felt the weight of that walk home. The shame rehearsal. The calculations of what you deserve. The bracing for the lecture.\n\nAnd then — running feet. A robe. A ring. A party.\n\nGrace is not a reward for the right posture of repentance. It is a father sprinting down a road. That's the whole point. If you have never felt unworthy of the celebration, you have never understood the parable. And if you have never let yourself receive the celebration, you have not yet finished the story.\n\nThe father didn't check the son's sobriety date. He checked his pulse. He was alive. He was home. That was enough.\n\nWalk it out faithfully. He's been watching the road."
   }, {
     icon: '🔥',
     cat: 'Recovery',
     title: 'What Repentance Actually Looks Like',
     excerpt: "Repentance isn\'t crying at an altar. It\'s waking up Monday and making a different choice.",
-    author: 'POLR Staff',
+    author: 'HOPE Staff',
     date: 'Mar 12, 2026'
   }, {
     icon: '📖',
     cat: 'Step Work',
     title: 'Working Step Four Without Fear',
     excerpt: 'Most people stall at Step Four because they\'re afraid of what they\'ll find.',
-    author: 'Jeff Walthers',
+    author: 'Chuck Edwards',
     date: 'Mar 5, 2026',
     readTime: '6 min read',
-    body: "Most people who relapse do so not from lack of willpower but from unfinished step work. Step Four is where they stop.\n\nThe instruction is simple: make a searching and fearless moral inventory. The word 'fearless' is doing a lot of work in that sentence. Because every person who has ever sat down to do Step Four has felt the fear.\n\nFear of what they'll find. Fear of having to share it in Step Five. Fear that what they find will confirm the worst thing they believe about themselves.\n\nHere is what thirty years of walking people through the steps has taught us at POLR:\n\nThe things you are most afraid to write down are the things that have the most power over you. And the moment you write them down — just write them, just get them on paper — some of that power begins to drain away.\n\nYou are not taking inventory of who you are. You are taking inventory of what you've been carrying. There is a difference. The inventory is not your identity. It is the weight you've been dragging. Step Four is how you set it down.\n\nDo it with a pastor, mentor, or trusted accountability partner. Do it slowly. Do it honestly. Don't wait until you feel ready. You will never feel ready. Start anyway.\n\nWalk well."
+    body: "Most people who relapse do so not from lack of willpower but from unfinished step work. Step Four is where they stop.\n\nThe instruction is simple: make a searching and fearless moral inventory. The word 'fearless' is doing a lot of work in that sentence. Because every person who has ever sat down to do Step Four has felt the fear.\n\nFear of what they'll find. Fear of having to share it in Step Five. Fear that what they find will confirm the worst thing they believe about themselves.\n\nHere is what years of walking people through the steps has taught us at HOPE Recovery:\n\nThe things you are most afraid to write down are the things that have the most power over you. And the moment you write them down — just write them, just get them on paper — some of that power begins to drain away.\n\nYou are not taking inventory of who you are. You are taking inventory of what you've been carrying. There is a difference. The inventory is not your identity. It is the weight you've been dragging. Step Four is how you set it down.\n\nDo it with a pastor, mentor, or trusted accountability partner. Do it slowly. Do it honestly. Don't wait until you feel ready. You will never feel ready. Start anyway.\n\nWalk it out faithfully."
   }, {
     icon: '🏠',
     cat: 'Housing',
-    title: 'What POLR House Taught Me',
-    excerpt: 'Living in a sober house is where I learned what accountability actually feels like.',
+    title: 'What HOPE House Taught Me',
+    excerpt: 'I came into HOPE House thinking structure was a punishment. I left understanding it was a gift.',
     author: 'Marcus W.',
     date: 'Feb 28, 2026',
     readTime: '4 min read',
-    body: "I came into POLR House thinking structure was a punishment. I left understanding it was a gift.\n\nCurfew at 10 PM. Drug testing. Chores. Meeting requirements. When they handed me the house rules on my first day, I read them like an inmate reading a sentence.\n\nThree months later I understood.\n\nStructure is not punishment for people in recovery. It is the scaffolding that holds the new building up while the concrete sets. When your decision-making is compromised — and early recovery means your decision-making is compromised — you need an external structure to carry the weight your internal structure can't carry yet.\n\nThe curfew kept me off streets I had no business being on at midnight. The drug testing kept me accountable to something outside my own willpower. The chores taught me that I was part of a household, not just a resident of one. The meeting requirements kept the most important medicine in my life — community — from being optional on the days I most wanted to skip it.\n\nI have been out of POLR House for two years. I still keep a structure. Not because someone requires it. Because I know what I'm like without it.\n\nIf you're resistant to the structure, that resistance is information. Sit with it. Then show up anyway.\n\nWalk well."
+    body: "I came into HOPE House thinking structure was a punishment. I left understanding it was a gift.\n\nCurfew at 10 PM. Drug testing. Chores. Meeting requirements. When they handed me the house rules on my first day, I read them like an inmate reading a sentence.\n\nThree months later I understood.\n\nStructure is not punishment for people in recovery. It is the scaffolding that holds the new building up while the concrete sets. When your decision-making is compromised — and early recovery means your decision-making is compromised — you need an external structure to carry the weight your internal structure can't carry yet.\n\nThe curfew kept me off streets I had no business being on at midnight. The drug testing kept me accountable to something outside my own willpower. The chores taught me that I was part of a household, not just a resident of one. The meeting requirements kept the most important medicine in my life — community — from being optional on the days I most wanted to skip it.\n\nI have been out of HOPE House for two years. I still keep a structure. Not because someone requires it. Because I know what I'm like without it.\n\nIf you're resistant to the structure, that resistance is information. Sit with it. Then show up anyway.\n\nWalk it out faithfully."
   }, {
     icon: '🎯',
     cat: 'Leadership',
-    title: 'From Participant to Group Chair',
+    title: 'From Participant to Leader',
     excerpt: "Nobody told me I\'d end up leading a group. Here\'s how it happened.",
     author: 'Angela L.',
     date: 'Feb 20, 2026',
     readTime: '5 min read',
-    body: "The day my leader asked if I\'d consider leading a group, I almost laughed. Eighteen months earlier I had been homeless.\n\nBut that is exactly how POLR is designed to work. Not a program where the professionals minister to the broken. A community where the people who have walked the path turn around and walk it with the next person.\n\nGroup Chair is not an honor. It's a responsibility. You show up early. You make coffee. You know everyone's name and their story. You notice when someone hasn't been there in two weeks and you reach out — not with a form letter but with a phone call or a visit.\n\nLeadership in recovery is not about having the answers. It's about having walked far enough down the road that you can turn back and say — I know this section. I know where the drop-offs are. Stay close.\n\nEvery Group Chair at POLR was once a newcomer. Every Campus Leader was once a Group Chair. That is not an accident. That is the design. Because the person most qualified to guide someone out of addiction is not someone who read about addiction in a textbook. It's someone who walked out of it — and chose to come back to the door to hold it open.\n\nIf you are approaching the point where you could lead, start. Not because you're ready. Because readiness is built by doing.\n\nWalk well."
+    body: "The day my leader asked if I\'d consider leading a group, I almost laughed. Eighteen months earlier I had been homeless.\n\nBut that is exactly how HOPE is designed to work. Not a program where the professionals minister to the broken. A community where the people who have walked the path turn around and walk it with the next person.\n\nGroup Chair is not an honor. It's a responsibility. You show up early. You make coffee. You know everyone's name and their story. You notice when someone hasn't been there in two weeks and you reach out — not with a form letter but with a phone call or a visit.\n\nLeadership in recovery is not about having the answers. It's about having walked far enough down the road that you can turn back and say — I know this section. I know where the drop-offs are. Stay close.\n\nEvery Group Chair at HOPE was once a newcomer. Every Campus Leader was once a Group Chair. That is not an accident. That is the design. Because the person most qualified to guide someone out of addiction is not someone who read about addiction in a textbook. It's someone who walked out of it — and chose to come back to the door to hold it open.\n\nIf you are approaching the point where you could lead, start. Not because you're ready. Because readiness is built by doing.\n\nWalk it out faithfully."
   }];
   var allPosts = (typeof getPublishedTestimonies==='function' ? getPublishedTestimonies().map(function(t){return {icon:t.icon||'🙌',cat:t.cat||'Testimony',title:t.title,excerpt:t.body.slice(0,120)+'...',author:t.author,date:t.date||new Date().toLocaleDateString(),readTime:t.readTime||'2 min read',featured:false,body:t.body,isTestimony:true};}) : []).concat(posts);
   const _useState46 = useState(0),
@@ -30688,10 +30709,10 @@ function WalkWellPage({
           React.createElement("button", {
             onClick: function() { setSelectedPost(null); window.scrollTo(0,0); },
             style: { background: "none", border: "none", color: "var(--gold)", cursor: "pointer", fontSize: "0.85rem", marginBottom: "1.25rem", fontFamily: "var(--font-serif)" }
-          }, "← Walk Well Blog"),
+          }, "← HOPE In Motion Blog"),
           React.createElement("div", { style: { display: "inline-block", padding: "0.2rem 0.65rem", background: "rgba(200,145,58,0.2)", borderRadius: 20, fontSize: "0.65rem", fontWeight: 700, color: "var(--gold2)", marginBottom: "0.75rem" } }, sp.cat),
           React.createElement("h1", { style: { fontFamily: "var(--font-serif)", fontSize: "clamp(1.6rem,3.5vw,2.4rem)", fontWeight: 700, color: "white", lineHeight: 1.15, marginBottom: "1rem" } }, sp.title),
-          React.createElement("div", { style: { fontSize: "0.8rem", color: "rgba(255,255,255,0.45)" } }, sp.author || "POLR Staff", " · ", sp.date, sp.readTime ? " · " + sp.readTime : "")
+          React.createElement("div", { style: { fontSize: "0.8rem", color: "rgba(255,255,255,0.45)" } }, sp.author || "HOPE Staff", " · ", sp.date, sp.readTime ? " · " + sp.readTime : "")
         )
       ),
       React.createElement("div", { style: { maxWidth: 720, margin: "0 auto", padding: "3rem 2rem" } },
@@ -30700,7 +30721,7 @@ function WalkWellPage({
           : React.createElement("p", { style: { fontFamily: "var(--font-italic)", fontSize: "1.1rem", lineHeight: 1.85, color: "var(--muted)" } }, sp.excerpt),
         React.createElement("div", { style: { borderTop: "2px solid var(--gold)", paddingTop: "2rem", marginTop: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" } },
           React.createElement("button", { onClick: function() { setSelectedPost(null); window.scrollTo(0,0); }, style: { background: "var(--navy)", color: "var(--gold)", border: "none", cursor: "pointer", padding: "0.75rem 1.5rem", borderRadius: 8, fontFamily: "var(--font-serif)", fontWeight: 700 } }, "← Back to Blog"),
-          React.createElement("div", { style: { fontFamily: "var(--font-italic)", fontStyle: "italic", fontSize: "1rem", color: "var(--muted)" } }, "'Walk well.'")
+          React.createElement("div", { style: { fontFamily: "var(--font-italic)", fontStyle: "italic", fontSize: "1rem", color: "var(--muted)" } }, "'Walk it out faithfully.'")
         )
       )
     );
@@ -30739,7 +30760,7 @@ function WalkWellPage({
       color: 'white',
       letterSpacing: '0.04em'
     }
-  }, "Walk Well"), /*#__PURE__*/React.createElement("p", {
+  }, "HOPE In Motion"), /*#__PURE__*/React.createElement("p", {
     style: {
       fontFamily: 'var(--font-italic)',
       fontStyle: 'italic',
@@ -30792,7 +30813,7 @@ function WalkWellPage({
       fontFamily: 'var(--font-body)',
       fontSize: '0.82rem'
     }
-  }, "\u2190 Back to POLR Website")), /*#__PURE__*/React.createElement("div", {
+  }, "\u2190 Back to HOPE Website")), /*#__PURE__*/React.createElement("div", {
     style: {
       maxWidth: 1100,
       margin: '0 auto',
@@ -30844,7 +30865,7 @@ function WalkWellPage({
       color: 'white',
       position: 'relative'
     }
-  }, "The God Who Waits for You")), /*#__PURE__*/React.createElement("div", {
+  }, "The Father Is Already Running")), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '1.5rem'
     }
@@ -30863,7 +30884,7 @@ function WalkWellPage({
       fontSize: '0.75rem',
       color: 'var(--muted)'
     }
-  }, /*#__PURE__*/React.createElement("span", null, "Jeff Walthers \xB7 Mar 18, 2026"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", null, "Chuck Edwards \xB7 Mar 18, 2026"), /*#__PURE__*/React.createElement("span", {
     style: {
       color: 'var(--gold)',
       fontWeight: 600
@@ -30962,7 +30983,7 @@ function WalkWellPage({
       color: 'var(--gold)',
       marginBottom: '0.75rem'
     }
-  }, "POLR Saying"), /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Saying"), /*#__PURE__*/React.createElement("div", {
     onClick: function () {
       return setCur(function (i) {
         return (i + 1) % SAYINGS.length;
@@ -31088,13 +31109,13 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
   var TRACKS = [
     {id:'ged',   icon:'📖', title:'GED Preparation',       tag:'Academic Foundation',
      color:'var(--l2)', bg:'rgba(59,158,245,0.08)',
-     desc:'Pass the GED and unlock every door — employment, college, licensing, trade school. POLR walks with you from assessment to test day.',
+     desc:'Pass the GED and unlock every door — employment, college, licensing, trade school. HOPE walks with you from assessment to test day.',
      outcomes:['Official GED credential','Increased earning potential','Eligibility for higher trade and academic programs'],
      timeline:'3–6 months',
      steps:['Free readiness assessment','Customized study schedule','Practice exams with feedback','Test registration support','Celebration on passing day']},
     {id:'trade', icon:'🔧', title:'Trade Certification Prep', tag:'Industrial & Skilled Trades',
      color:'var(--gold)', bg:'rgba(200,145,58,0.08)',
-     desc:'Pipefitters, boilermakers, welders, electricians. South Louisiana is one of the highest-demand trade regions in the nation. POLR prepares you and connects you.',
+     desc:'Pipefitters, boilermakers, welders, electricians. South Louisiana is one of the highest-demand trade regions in the nation. HOPE prepares you and connects you.',
      outcomes:['OSHA-10 Safety Certification','Trade aptitude assessment','Apprenticeship placement support','Union referral network access'],
      timeline:'6–12 months',
      steps:['OSHA-10 certification','Trade aptitude and interest assessment','Trade school enrollment assistance','Apprenticeship tracking and support','Employer placement']},
@@ -31170,14 +31191,14 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
             React.createElement('div', {style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',color:'var(--navy)',marginBottom:'0.5rem',fontWeight:600}},
               'This track is free. All of it. Always.'),
             React.createElement('div', {style:{fontSize:'0.85rem',color:'var(--muted)',marginBottom:'1.25rem',lineHeight:1.65}},
-              'Every POLR education program is available at no cost to members. Create a free account to enroll and start today.'),
+              'Every HOPE education program is available at no cost to members. Create a free account to enroll and start today.'),
             React.createElement('div', {style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap'}},
               React.createElement('button', {onClick:function(){setPage('platform');},
                 style:{padding:'0.8rem 2rem',borderRadius:10,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'1rem',fontFamily:'var(--font-serif)'}},
                 'Enroll Free \u2192'),
-              React.createElement('a', {href:'tel:{POLR_PHONE}',
+              React.createElement('a', {href:'tel:225-333-0330',
                 style:{padding:'0.8rem 1.5rem',borderRadius:10,background:'white',border:'1px solid var(--border)',color:'var(--navy)',fontWeight:600,fontSize:'0.9rem',textDecoration:'none'}},
-                'Call {POLR_PHONE}')
+                'Call 225-333-0330')
             )
           )
         )
@@ -31197,12 +31218,12 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
         React.createElement('h1', {className:'hero-title'}, 'Free Education for People in Recovery'),
         React.createElement('div', {className:'hero-divider'}),
         React.createElement('p', {className:'hero-sub'},
-          'GED preparation, trade certifications, workforce readiness, life skills, and ministry training. All free. All inside POLR. All designed for where you are right now.'),
+          'GED preparation, trade certifications, workforce readiness, life skills, and ministry training. All free. All inside HOPE. All designed for where you are right now.'),
         React.createElement('div', {style:{display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap',marginTop:'1.75rem'}},
           React.createElement('button', {onClick:function(){setPage('platform');},className:'btn-primary',style:{padding:'0.85rem 2rem',fontSize:'1rem'}},
             'Join Free \u2014 Start Learning \u2192'),
-          React.createElement('a', {href:'tel:{POLR_PHONE}',style:{padding:'0.85rem 1.5rem',borderRadius:10,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',color:'white',fontWeight:600,fontSize:'0.9rem',textDecoration:'none'}},
-            'Call {POLR_PHONE}')
+          React.createElement('a', {href:'tel:225-333-0330',style:{padding:'0.85rem 1.5rem',borderRadius:10,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',color:'white',fontWeight:600,fontSize:'0.9rem',textDecoration:'none'}},
+            'Call 225-333-0330')
         )
       )
     ),
@@ -31252,13 +31273,13 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
       React.createElement('div', {style:{background:'var(--navy)',borderRadius:16,padding:'2.5rem',textAlign:'center',color:'white',marginBottom:'3rem'}},
         React.createElement('h3', {style:{fontFamily:'var(--font-serif)',fontSize:'1.5rem',fontWeight:700,color:'var(--gold2)',marginBottom:'0.5rem'}}, 'How It Works'),
         React.createElement('p', {style:{color:'rgba(255,255,255,0.6)',marginBottom:'2rem',maxWidth:540,margin:'0 auto 2rem'}},
-          'Education at POLR is free, mentor-supported, and built around your schedule and your story.'),
+          'Education at HOPE is free, mentor-supported, and built around your schedule and your story.'),
         React.createElement('div', {style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1.25rem',marginBottom:'2rem'}},
           [
             ['🤝','Connect','Show up. Start a conversation. No commitment required.'],
             ['📋','Assess','Free readiness assessment — we meet you where you are.'],
             ['📚','Enroll','Choose your track. A mentor is assigned. Lessons unlock.'],
-            ['💼','Graduate','Earn your credential. POLR networks with employers to open doors for you.'],
+            ['💼','Graduate','Earn your credential. HOPE networks with employers to open doors for you.'],
           ].map(function(step){
             return React.createElement('div', {key:step[0],style:{textAlign:'center'}},
               React.createElement('div', {style:{fontSize:'2rem',marginBottom:'0.5rem'}}, step[0]),
@@ -31276,7 +31297,7 @@ function EducationPage({ setPage, page, session, mobileOpen, setMobileOpen }) {
       React.createElement('div', {style:{borderLeft:'3px solid var(--gold)',paddingLeft:'1.5rem',margin:'2rem 0'}},
         React.createElement('p', {style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',fontStyle:'italic',color:'var(--navy)',lineHeight:1.8,marginBottom:'0.5rem'}},
           '\u201cEvery job placement is not just an employment record \u2014 it is a family stabilized, a neighborhood changed, and a testimony written.\u201d'),
-        React.createElement('div', {style:{fontSize:'0.8rem',color:'var(--muted)',fontWeight:600}}, 'POLR Network \u00b7 Path of Life Recovery')
+        React.createElement('div', {style:{fontSize:'0.8rem',color:'var(--muted)',fontWeight:600}}, 'HOPE Recovery Network \u00b7 HOPE Recovery: Hold on Pain Ends')
       )
     ),
 
@@ -31313,7 +31334,7 @@ function LegalPage({
     className: "hero-title"
   }, "Legal & Policies"), /*#__PURE__*/React.createElement("p", {
     className: "hero-sub"
-  }, "Path of Life Recovery is committed to clarity, integrity, and your protection.")), /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery: Hold on Pain Ends is committed to clarity, integrity, and your protection.")), /*#__PURE__*/React.createElement("div", {
     className: "legal-tabs"
   }, Object.entries(LEGAL_DOCS).map(function ([k, v]) {
     return /*#__PURE__*/React.createElement("button", {
@@ -31419,15 +31440,15 @@ function DonatePage({
     className: "hero-eyebrow"
   }, "Your Generosity Changes Lives"), /*#__PURE__*/React.createElement("h1", {
     className: "hero-title"
-  }, "Give to POLR", /*#__PURE__*/React.createElement("span", {
+  }, "Give to HOPE Recovery", /*#__PURE__*/React.createElement("span", {
     className: "hero-title-sub"
   }, "Every gift walks someone toward healing.")), /*#__PURE__*/React.createElement("div", {
     className: "hero-divider"
   }), /*#__PURE__*/React.createElement("p", {
     className: "hero-sub"
-  }, "POLR is a 501(c)(3) nonprofit. 100% of donations support recovery programs, housing, leadership development, and campus expansion."), /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery is a 501(c)(3) nonprofit. 100% of donations support recovery programs, housing, leadership development, and campus expansion."), /*#__PURE__*/React.createElement("div", {
     className: "hero-stats"
-  }, [['4', 'Campuses'], ['600+', 'Lives'], ['31yr', 'Ministry'], ['$0', 'Overhead']].map(function ([n, l]) {
+  }, [['4', 'Campuses'], ['500+', 'Lives'], ['21yr', 'Ministry'], ['$0', 'Overhead']].map(function ([n, l]) {
     return /*#__PURE__*/React.createElement("div", {
       key: l,
       className: "hs"
@@ -31446,7 +31467,7 @@ function DonatePage({
     className: "eyebrow"
   }, "Choose Your Campus"), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, "Support a POLR Location"), /*#__PURE__*/React.createElement("p", {
+  }, "Support a HOPE Location"), /*#__PURE__*/React.createElement("p", {
     className: "section-lead"
   }, "Your gift goes directly to the campus you choose \u2014 funding meetings, housing, and outreach in that area."), /*#__PURE__*/React.createElement("div", {
     className: "campus-grid"
@@ -31515,7 +31536,7 @@ function DonatePage({
       color: 'rgba(255,255,255,0.5)',
       marginBottom: '1.5rem'
     }
-  }, "Funding the next generation of POLR campuses."), /*#__PURE__*/React.createElement("button", {
+  }, "Funding the next generation of HOPE campuses."), /*#__PURE__*/React.createElement("button", {
     className: "btn-primary",
     onClick: function () {
       return setModal({
@@ -31548,7 +31569,7 @@ function DonatePage({
       color: 'var(--muted)',
       lineHeight: 1.8
     }
-  }, "Path of Life Recovery, Inc. is a registered 501(c)(3) tax-exempt nonprofit. All donations are tax-deductible. Contact {POLR_EMAIL} or {POLR_PHONE} for questions."))), modal && /*#__PURE__*/React.createElement("div", {
+  }, "HOPE Recovery, Inc. is a registered 501(c)(3) tax-exempt nonprofit. All donations are tax-deductible. Contact bro.chuck.edwards@gmail.com or 225-333-0330 for questions."))), modal && /*#__PURE__*/React.createElement("div", {
     className: "modal-overlay open",
     onClick: function (e) {
       if (e.target === e.currentTarget) setModal(null);
@@ -31634,7 +31655,7 @@ function DonatePage({
       color: 'var(--muted)',
       marginTop: '0.75rem'
     }
-  }, "\uD83D\uDD12 POLR is a 501(c)(3) nonprofit \xB7 Tax-deductible")))), /*#__PURE__*/React.createElement(SiteFooter, {
+  }, "\uD83D\uDD12 HOPE is a 501(c)(3) nonprofit \xB7 Tax-deductible")))), /*#__PURE__*/React.createElement(SiteFooter, {
     setPage: setPage
   }));
 }
@@ -31654,58 +31675,58 @@ function PartnerPage({ setPage, toast, page, session, mobileOpen, setMobileOpen 
 
   var PARTNER_TYPES = [
     {id:'employer',      icon:'\U0001f3ed', label:'Employer Partner',       color:'var(--gold)',
-     desc:'Hire POLR graduates. Access WOTC tax credits. Sponsor a training cohort. Get first placement rights.',
+     desc:'Hire HOPE graduates. Access WOTC tax credits. Sponsor a training cohort. Get first placement rights.',
      benefits:['First access to certified graduates','WOTC documentation (up to $9,600/hire)','No-cost workforce pipeline','90-day retention support included'],
      cta:'Become an Employer Partner',
-     details:'POLR Employer Partners gain a direct pipeline to pre-screened, drug-tested, behaviorally assessed workforce candidates who have completed a structured accountability program. Every POLR candidate arrives with documented sobriety, an active case manager, a 90-day retention coordinator, and WOTC eligibility documentation worth up to $9,600 in federal tax credits per hire. Our employer partners report an average of 14+ months of retention — significantly above the industry average for entry-level positions. When you hire a POLR graduate, you do not just fill a position. You complete a restoration.',
+     details:'POLR Employer Partners gain a direct pipeline to pre-screened, drug-tested, behaviorally assessed workforce candidates who have completed a structured accountability program. Every HOPE candidate arrives with documented sobriety, an active case manager, a 90-day retention coordinator, and WOTC eligibility documentation worth up to $9,600 in federal tax credits per hire. Our employer partners report an average of 14+ months of retention — significantly above the industry average for entry-level positions. When you hire a HOPE graduate, you do not just fill a position. You complete a restoration.',
      learnMoreLink:'employer'},
     {id:'trade-school',  icon:'\U0001f393', label:'Trade School / Training', color:'var(--l2)',
-     desc:'Partner via MOU. POLR delivers motivated, supported students. Your enrollment and completion numbers go up.',
+     desc:'Partner via MOU. HOPE delivers motivated, supported students. Your enrollment and completion numbers go up.',
      benefits:['Pre-screened, stabilized students','Retention coordinator on every enrollee','Completion data for your accreditation reports','WIOA-eligible students with documentation'],
      cta:'Request Partnership MOU',
-     details:'Trade School and Training Partners enter a Memorandum of Understanding (MOU) with POLR that provides a steady pipeline of motivated, pre-stabilized students. Because our members have housing, case management, and active recovery support, they arrive ready to learn — not distracted by survival stress. POLR provides retention coordinators who stay in contact with enrolled members and help programs address issues early. Our members are frequently WIOA-eligible, meaning their training may be funded through workforce development programs. Partner schools gain enrollment pipeline, improved completion metrics, and community recognition.',
+     details:'Trade School and Training Partners enter a Memorandum of Understanding (MOU) with HOPE that provides a steady pipeline of motivated, pre-stabilized students. Because our members have housing, case management, and active recovery support, they arrive ready to learn — not distracted by survival stress. HOPE provides retention coordinators who stay in contact with enrolled members and help programs address issues early. Our members are frequently WIOA-eligible, meaning their training may be funded through workforce development programs. Partner schools gain enrollment pipeline, improved completion metrics, and community recognition.',
      learnMoreLink:'trade-school'},
     {id:'union',         icon:'\U0001f528', label:'Union / Apprenticeship',  color:'var(--l4)',
      desc:'POLR fast-tracks candidates into your apprenticeship pipeline. We provide OSHA-10 certification and retention support.',
      benefits:['Pre-certified OSHA-10 candidates','Recovery coordinator through first 90 days','Documented work history and references','Reduces your dropout rate'],
      cta:'Open Apprenticeship Pipeline',
-     details:'POLR Union and Apprenticeship Partners receive candidates who arrive OSHA-10 certified, drug-tested, behaviorally assessed, and supported by an active recovery coordinator for their first 90 days in the program. People in recovery who secure union apprenticeships have among the highest retention rates in the trades — because the structure and brotherhood of the trades mirrors the accountability structure of recovery. POLR has documented work history, references from program staff, and character assessments available for every candidate. We reduce your dropout rate because we support the whole person, not just the skill set.',
+     details:'POLR Union and Apprenticeship Partners receive candidates who arrive OSHA-10 certified, drug-tested, behaviorally assessed, and supported by an active recovery coordinator for their first 90 days in the program. People in recovery who secure union apprenticeships have among the highest retention rates in the trades — because the structure and brotherhood of the trades mirrors the accountability structure of recovery. HOPE has documented work history, references from program staff, and character assessments available for every candidate. We reduce your dropout rate because we support the whole person, not just the skill set.',
      learnMoreLink:'union'},
     {id:'church',        icon:'\u270f\ufe0f',  label:'Church Partner',          color:'var(--l1)',
-     desc:'Host a POLR meeting. Support a campus. Provide volunteer mentors and discipleship resources.',
-     benefits:['Host POLR meetings at your facility','Volunteer mentor opportunities','Community discipleship impact','Ministry training resources'],
+     desc:'Host a HOPE meeting. Support a campus. Provide volunteer mentors and discipleship resources.',
+     benefits:['Host HOPE meetings at your facility','Volunteer mentor opportunities','Community discipleship impact','Ministry training resources'],
      cta:'Become a Church Partner',
-     details:'POLR Church Partners host the weekly recovery meetings that are the heartbeat of the program. Hosting costs nothing — POLR provides the curriculum, trained facilitators, and accountability structure. You provide the room and the welcome. Many of our longest-serving churches have seen direct congregation growth as graduates return to faith communities. We also offer volunteer mentor matching, connecting church members with POLR residents for discipleship relationships that go beyond the meeting room. Church partnerships are the community roots that make every other part of POLR sustainable.',
+     details:'POLR Church Partners host the weekly recovery meetings that are the heartbeat of the program. Hosting costs nothing — HOPE provides the curriculum, trained facilitators, and accountability structure. You provide the room and the welcome. Many of our longest-serving churches have seen direct congregation growth as graduates return to faith communities. We also offer volunteer mentor matching, connecting church members with HOPE residents for discipleship relationships that go beyond the meeting room. Church partnerships are the community roots that make every other part of HOPE sustainable.',
      learnMoreLink:'church'},
     {id:'sponsor',       icon:'\U0001f4b0', label:'Cohort Sponsor',          color:'var(--l5)',
      desc:'Fund a specific training cohort. $5,000 sends 10 people through OSHA-10. Your name on the cohort. First hiring rights.',
      benefits:['Named cohort sponsorship','Completion certificate with your logo','First hiring access to all graduates','Tax-deductible contribution (501c3)'],
      cta:'Sponsor a Training Cohort',
-     details:'Cohort Sponsors fund a specific certification training for a group of POLR members. $5,000 sponsors 10 people through OSHA-10 safety certification. $8,500 sponsors a welding fundamentals cohort. $12,000 funds a full CDL prep cohort. Your organization\u2019s name appears on the completion certificate every graduate receives, on POLR marketing materials, and in our annual impact report. Cohort sponsors receive first right of contact for hiring graduates from their sponsored cohort. All contributions are tax-deductible to a 501(c)(3). You do not just fund training — you fund a career that sustains a family.',
+     details:'Cohort Sponsors fund a specific certification training for a group of HOPE members. $5,000 sponsors 10 people through OSHA-10 safety certification. $8,500 sponsors a welding fundamentals cohort. $12,000 funds a full CDL prep cohort. Your organization\u2019s name appears on the completion certificate every graduate receives, on HOPE marketing materials, and in our annual impact report. Cohort sponsors receive first right of contact for hiring graduates from their sponsored cohort. All contributions are tax-deductible to a 501(c)(3). You do not just fund training — you fund a career that sustains a family.',
      learnMoreLink:'sponsor'},
     {id:'housing',       icon:'\U0001f3e0', label:'Housing Partner / Landlord',color:'var(--l3)',
-     desc:'Provide safe housing for POLR members. Continuity occupancy guarantee, assurance fund, and full property support.',
+     desc:'Provide safe housing for HOPE members. Continuity occupancy guarantee, assurance fund, and full property support.',
      benefits:['Guaranteed occupancy continuity','Property assurance fund participation','Inspection support and maintenance coordination','Community compliance documentation'],
      cta:'Become a Housing Partner',
-     details:'POLR Housing Partners provide safe, stable housing for program members under a mission-aligned property agreement. Partners receive guaranteed occupancy continuity — POLR coordinates transitions so units stay occupied. The POLR Assurance Fund covers damage beyond normal wear. Our housing coordinator handles tenant communication, inspection support, and community compliance documentation. For property owners who want their investment to serve more than a financial purpose, POLR Housing Partnership is a way to be part of restoration in your community. Most partners describe it as among the most meaningful decisions they have made with their real estate.',
+     details:'POLR Housing Partners provide safe, stable housing for program members under a mission-aligned property agreement. Partners receive guaranteed occupancy continuity — HOPE coordinates transitions so units stay occupied. The HOPE Assurance Fund covers damage beyond normal wear. Our housing coordinator handles tenant communication, inspection support, and community compliance documentation. For property owners who want their investment to serve more than a financial purpose, HOPE Housing Partnership is a way to be part of restoration in your community. Most partners describe it as among the most meaningful decisions they have made with their real estate.',
      learnMoreLink:'housing'},
     {id:'transportation', icon:'\U0001f697', label:'Transportation Partner',   color:'var(--l2)',
-     desc:'Donate vehicles or transportation resources to help POLR members get to work, meetings, medical appointments, and rebuild independence.',
+     desc:'Donate vehicles or transportation resources to help HOPE members get to work, meetings, medical appointments, and rebuild independence.',
      benefits:['Tax-deductible vehicle donation (501c3)','POLR issues official donation receipt for your records','Vehicles distributed to members demonstrating sustained recovery','Transportation barriers are among the top reasons people lose jobs — your donation removes them'],
      cta:'Donate a Vehicle or Transportation Resource',
-     details:'Transportation is one of the most critical barriers to recovery and employment. A working vehicle can be the difference between keeping a job and losing it. POLR Transportation Partners donate cars, motorcycles, trucks, or bicycles that are distributed to members who have demonstrated 90+ days of sobriety and active employment. Every donation is documented, receipted, and acknowledged. No vehicle is too old — if it runs, it changes a life.',
+     details:'Transportation is one of the most critical barriers to recovery and employment. A working vehicle can be the difference between keeping a job and losing it. HOPE Transportation Partners donate cars, motorcycles, trucks, or bicycles that are distributed to members who have demonstrated 90+ days of sobriety and active employment. Every donation is documented, receipted, and acknowledged. No vehicle is too old — if it runs, it changes a life.',
      learnMoreLink:'transportation'},
     {id:'thrift',         icon:'\U0001f455', label:'Thrift Ministry Partner',  color:'var(--l4)',
-     desc:'Donate unused clothing, furniture, household goods, or business surplus to outfit POLR members rebuilding their lives from nothing.',
+     desc:'Donate unused clothing, furniture, household goods, or business surplus to outfit HOPE members rebuilding their lives from nothing.',
      benefits:['Tax-deductible in-kind donation receipt provided','Bulk donations accepted from businesses and estates','Items go directly to residents and families in the program','Professional donation acknowledgment for your records'],
      cta:'Donate Clothing, Furniture, or Business Surplus',
-     details:'When someone comes into POLR housing, they often arrive with nothing. POLR Thrift Ministry Partners provide the clothing, household items, and furniture that turn an empty room into a home. We accept clothing in all sizes, household goods, furniture, and business surplus inventory. Every donation is sorted, distributed, and receipted. Businesses clearing out office equipment, seasonal merchandise, or returned goods can make a significant difference with items they would otherwise discard.',
+     details:'When someone comes into HOPE housing, they often arrive with nothing. HOPE Thrift Ministry Partners provide the clothing, household items, and furniture that turn an empty room into a home. We accept clothing in all sizes, household goods, furniture, and business surplus inventory. Every donation is sorted, distributed, and receipted. Businesses clearing out office equipment, seasonal merchandise, or returned goods can make a significant difference with items they would otherwise discard.',
      learnMoreLink:'thrift'},
     {id:'foodbank',       icon:'\U0001f371', label:'Food Ministry Partner',    color:'var(--l5)',
-     desc:'Donate food — fresh, packaged, or prepared — to keep POLR households fed while members rebuild their financial foundation.',
+     desc:'Donate food — fresh, packaged, or prepared — to keep HOPE households fed while members rebuild their financial foundation.',
      benefits:['Restaurants, grocers, and caterers can donate surplus daily or weekly','Businesses can sponsor a meal or a week of meals for a full campus','All food donations logged and receipted for tax documentation','Reduces food insecurity — a documented relapse risk factor'],
      cta:'Donate Food to POLR',
-     details:'Food insecurity is one of the most immediate stressors in early recovery. POLR Food Ministry Partners donate food — canned goods, produce, prepared meals, catered surplus, bakery items, and restaurant overage — to keep POLR households consistently fed. When residents do not have to worry about food, they can focus on recovery, work, and rebuilding their lives. Restaurant partners can set up weekly surplus donation schedules. Grocery partners can donate near-expiration items. Individuals can sponsor a week of meals for a campus.',
+     details:'Food insecurity is one of the most immediate stressors in early recovery. HOPE Food Ministry Partners donate food — canned goods, produce, prepared meals, catered surplus, bakery items, and restaurant overage — to keep HOPE households consistently fed. When residents do not have to worry about food, they can focus on recovery, work, and rebuilding their lives. Restaurant partners can set up weekly surplus donation schedules. Grocery partners can donate near-expiration items. Individuals can sponsor a week of meals for a campus.',
      learnMoreLink:'foodbank'},
   ];
 
@@ -31715,14 +31736,14 @@ function PartnerPage({ setPage, toast, page, session, mobileOpen, setMobileOpen 
     if (!form.name||!form.email){toast({icon:'\u26a0\ufe0f',title:'Name and email required'});return;}
     // Write to platform state via localStorage (same mechanism as all other panels)
     try {
-      var state = JSON.parse(localStorage.getItem('polr_platform_state')||'{}');
+      var state = JSON.parse(localStorage.getItem('hope_platform_state')||'{}');
       // Route to correct array based on partner type
       if (form.type==='employer'||form.type==='sponsor') {
         var refs = state.employerReferrals||[];
         refs.push({id:'ref'+Date.now(),employerName:form.org||form.name,empName:form.name,
           empEmail:form.email,empPhone:form.phone,referralType:form.type==='sponsor'?'cohort-sponsor':'pipeline-partner',
           program:form.program,reason:form.notes,status:'new',submittedAt:new Date().toISOString(),
-          source:'partner-page',assignedTo:'POLR Director'});
+          source:'partner-page',assignedTo:'HOPE Director'});
         state.employerReferrals=refs;
       } else if (form.type==='trade-school'||form.type==='union') {
         var tps = state.tradePartners||[];
@@ -31750,7 +31771,7 @@ function PartnerPage({ setPage, toast, page, session, mobileOpen, setMobileOpen 
         type:'info',sentAt:new Date().toISOString(),requireResponse:true,
         actionYes:'Schedule call',actionNo:'Send info packet',responses:[]});
       state.notifications=notifs;
-      localStorage.setItem('polr_platform_state',JSON.stringify(state));
+      localStorage.setItem('hope_platform_state',JSON.stringify(state));
     } catch(e){}
     setSubmitted(true);
   };
@@ -31805,7 +31826,7 @@ function PartnerPage({ setPage, toast, page, session, mobileOpen, setMobileOpen 
           React.createElement('div',{style:{fontFamily:'Georgia,serif',fontWeight:700,color:'var(--navy,#0a1628)',
             fontSize:'1rem',marginBottom:'1rem'}},'How It Works'),
           [['1','Submit Inquiry','Fill out the partner form — name, contact info, and a brief description of what you can donate.'],
-           ['2','POLR Coordinates','A POLR team member will contact you within 48 hours to coordinate pickup, delivery, or schedule.'],
+           ['2','POLR Coordinates','A HOPE team member will contact you within 48 hours to coordinate pickup, delivery, or schedule.'],
            ['3','Official Receipt','POLR issues a tax-deductible donation receipt for your records with EIN/tax-exempt number, date, and description of donation.'],
            ['4','Impact Report','You receive an impact acknowledgment showing how your donation served the community — anonymous member counts, campus-level outcomes, and life milestones — with full privacy protection for all individuals.']
           ].map(function(step,i){
@@ -31825,7 +31846,7 @@ function PartnerPage({ setPage, toast, page, session, mobileOpen, setMobileOpen 
           React.createElement('div',{style:{fontFamily:'Georgia,serif',fontSize:'1.2rem',fontWeight:700,
             color:'var(--navy,#0a1628)',marginBottom:'0.5rem'}},dt.cta),
           React.createElement('div',{style:{fontSize:'0.85rem',color:'#888',marginBottom:'1.25rem',lineHeight:1.65}},
-            'Contact us at {POLR_PHONE} or {POLR_EMAIL}, or complete the partner inquiry form.'),
+            'Contact us at 225-333-0330 or bro.chuck.edwards@gmail.com, or complete the partner inquiry form.'),
           React.createElement('button',{onClick:function(){setDetailType(null);setF('type')({target:{value:dt.id}});},
             style:{padding:'0.85rem 2.5rem',borderRadius:10,background:dt.color,color:'white',
                    border:'none',cursor:'pointer',fontWeight:700,fontSize:'1rem',fontFamily:'Georgia,serif'}},
@@ -31842,8 +31863,8 @@ return React.createElement('div',{style:{minHeight:'100vh',background:'var(--cre
     React.createElement('div',{style:{background:'var(--navy)',padding:'7rem 2rem 5rem',textAlign:'center',position:'relative',overflow:'hidden'}},
       React.createElement('div',{style:{position:'absolute',inset:0,background:'radial-gradient(ellipse 80% 60% at 50% -10%,rgba(200,145,58,0.1),transparent 55%)'}}),
       React.createElement('div',{style:{position:'relative',maxWidth:760,margin:'0 auto'}},
-        React.createElement('div',{className:'hero-eyebrow'},'Join the POLR Pipeline'),
-        React.createElement('h1',{className:'hero-title'},'Partner With POLR'),
+        React.createElement('div',{className:'hero-eyebrow'},'Join the HOPE Pipeline'),
+        React.createElement('h1',{className:'hero-title'},'Partner With HOPE'),
         React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',color:'rgba(255,255,255,0.6)',lineHeight:1.7,maxWidth:600,margin:'0 auto 2rem'}},
           'Employers. Trade schools. Unions. Churches. Sponsors. Housing providers. Every partner plays a specific role in the same pipeline — from recovery to training to employment to stability.'
         ),
@@ -31905,7 +31926,7 @@ return React.createElement('div',{style:{minHeight:'100vh',background:'var(--cre
       // Partner type selector
       React.createElement('div',{style:{textAlign:'center',marginBottom:'2rem'}},
         React.createElement('h2',{style:{fontFamily:'var(--font-serif)',fontSize:'1.6rem',fontWeight:700,color:'var(--navy)',marginBottom:'0.5rem'}},'Choose Your Partnership Role'),
-        React.createElement('p',{style:{color:'var(--muted)',fontSize:'0.95rem'}},'Each role creates a real record in the POLR dashboard. The POLR team is notified within minutes.')
+        React.createElement('p',{style:{color:'var(--muted)',fontSize:'0.95rem'}},'Each role creates a real record in the HOPE dashboard. The HOPE team is notified within minutes.')
       ),
       React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem',marginBottom:'3rem'}},
         PARTNER_TYPES.map(function(pt){
@@ -31952,7 +31973,7 @@ return React.createElement('div',{style:{minHeight:'100vh',background:'var(--cre
             React.createElement('span',{style:{fontSize:'1.5rem'}},selType.icon),
             React.createElement('div',null,
               React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.1rem',fontWeight:700,color:'var(--navy)'}},selType.cta),
-              React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--muted)'}},'Creates a record in POLR dashboard immediately')
+              React.createElement('div',{style:{fontSize:'0.82rem',color:'var(--muted)'}},'Creates a record in HOPE dashboard immediately')
             )
           ),
           React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.85rem',marginBottom:'0.85rem'}},
@@ -31975,7 +31996,7 @@ return React.createElement('div',{style:{minHeight:'100vh',background:'var(--cre
               style:{width:'100%',padding:'0.7rem 0.85rem',borderRadius:8,border:'1px solid var(--border)',background:'white',color:'var(--navy)',fontSize:'0.85rem',outline:'none',resize:'vertical',boxSizing:'border-box'}})
           ),
           React.createElement('div',{style:{padding:'0.75rem 1rem',background:'rgba(91,196,110,0.06)',border:'1px solid rgba(91,196,110,0.2)',borderRadius:8,marginBottom:'1.25rem',fontSize:'0.8rem',color:'var(--navy)',lineHeight:1.65}},
-            '\u2713 This form creates a real record in the POLR dashboard. The POLR team is notified immediately. Response within 24 hours.'
+            '\u2713 This form creates a real record in the HOPE dashboard. The HOPE team is notified immediately. Response within 24 hours.'
           ),
           React.createElement('button',{onClick:submitPartnerInquiry,
             style:{width:'100%',padding:'0.9rem',borderRadius:10,background:'linear-gradient(135deg,var(--gold),#8b5e2a)',color:'var(--navy)',border:'none',cursor:'pointer',fontWeight:700,fontSize:'1rem',fontFamily:'var(--font-serif)'}},
@@ -31985,7 +32006,7 @@ return React.createElement('div',{style:{minHeight:'100vh',background:'var(--cre
           React.createElement('div',{style:{fontSize:'3rem',marginBottom:'0.75rem'}},'\u2705'),
           React.createElement('div',{style:{fontFamily:'var(--font-serif)',fontSize:'1.3rem',fontWeight:700,color:'var(--navy)',marginBottom:'0.4rem'}},'Partnership Request Received'),
           React.createElement('div',{style:{fontSize:'0.88rem',color:'var(--muted)',marginBottom:'1rem',lineHeight:1.65}},
-            'Our team has been notified and will contact you within 24 hours. Your inquiry is now in the POLR partner dashboard. Walk well.'
+            'Our team has been notified and will contact you within 24 hours. Your inquiry is now in the HOPE partner dashboard. Walk it out faithfully.'
           ),
           React.createElement('button',{onClick:function(){setSubmitted(false);setForm({name:'',org:'',email:'',phone:'',type:'employer',program:'Trade - OSHA-10',size:'',notes:'',referralType:'pipeline-partner'});},
             style:{padding:'0.65rem 1.5rem',borderRadius:9,background:'var(--cream)',border:'1px solid var(--border)',color:'var(--navy)',cursor:'pointer',fontWeight:600}},'Submit Another Inquiry')
@@ -32111,7 +32132,7 @@ function App() {
     session: session,
     mobileOpen: mobileOpen,
     setMobileOpen: setMobileOpen
-  }), page === 'walkwell' && /*#__PURE__*/React.createElement(WalkWellPage, {
+  }), page === 'hopeinmotion' && /*#__PURE__*/React.createElement(WalkWellPage, {
     setPage: navigate,
     page: page,
     session: session,
@@ -32160,10 +32181,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(
 
 
 
+
 /**
- * ═══════════════════════════════════════════════════════════════════
- *  POLR NETWORK — PWA Layer
- *  Injected into POLR-WIRED.html
+ * ═══════════════════════════════════════════════════════════════════;
+ *  HOPE NETWORK — PWA Layer
+ *  Injected into HOPE-WIRED.html
  *  Provides:
  *    1. PWA manifest + meta tags (injected into <head>)
  *    2. Service Worker (cached for offline)
@@ -32172,7 +32194,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(
  *    5. Install prompt
  *    6. Background sync queue
  *    7. Real-time heartbeat to backend
- * ═══════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════;
  */
 
 (function() {
@@ -32180,18 +32202,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(
 
 // ── Version + config ──────────────────────────────────────────────
 var PWA_VERSION    = '2026.1.0';
-var CACHE_NAME     = 'polr-network-v' + PWA_VERSION;
+var CACHE_NAME     = 'hope-recovery-network-v' + PWA_VERSION;
 var SW_SCOPE       = '/';
 var SYNC_INTERVAL  = 90000;  // 90 seconds
 var TOKEN_EXPIRY   = 86400000; // 24 hours
 
-// ── All localStorage keys POLR uses ──────────────────────────────
+// ── All localStorage keys HOPE uses ──────────────────────────────
 var LS_KEYS = [
-  'polr_platform_state', 'polr_platform', 'polr_members',
-  'polr_edu_progress',   'polr_lesson_progress',
+  'hope_platform_state', 'hope_platform', 'polr_members',
+  'polr_edu_progress',   'hope_lesson_progress',
   'polr_journal_history','polr_journal_step','polr_journal_streak',
-  'polr_legal',          'polr_join_date',
-  'polr_session',        'polr_token',       'polr_provision'
+  'hope_legal',          'hope_join_date',
+  'hope_session',        'hope_token',       'hope_provision'
 ];
 
 // ═══════════════════════════════════════════════════════════════════
@@ -32200,8 +32222,8 @@ var LS_KEYS = [
 // ═══════════════════════════════════════════════════════════════════
 function injectManifest() {
   var manifest = {
-    name: 'POLR Network — Ministry Operating System',
-    short_name: 'POLR Network',
+    name: 'HOPE Recovery Network — Ministry Operating System',
+    short_name: 'HOPE Recovery Network',
     description: 'Christ-centered recovery ministry platform — member management, workforce, housing, and education.',
     start_url: window.location.pathname + window.location.search,
     scope: '/',
@@ -32228,8 +32250,8 @@ function injectManifest() {
   if (provision && provision.org) {
     manifest.start_url = window.location.pathname + '?org=' + provision.org +
       (provision.role ? '&role=' + provision.role : '');
-    manifest.name = (provision.orgName || 'POLR') + ' — Recovery Platform';
-    manifest.short_name = provision.orgName || 'POLR';
+    manifest.name = (provision.orgName || 'HOPE') + ' — Recovery Platform';
+    manifest.short_name = provision.orgName || 'HOPE';
     if (provision.themeColor) manifest.theme_color = provision.themeColor;
     if (provision.bgColor)    manifest.background_color = provision.bgColor;
   }
@@ -32263,7 +32285,7 @@ function buildInlineIcon(size, bg, fg, letter) {
 function injectMetaTags() {
   var provision = readProvision();
   var themeColor = (provision && provision.themeColor) || '#c8913a';
-  var appName    = (provision && provision.orgName) ? provision.orgName + ' Recovery' : 'POLR Network';
+  var appName    = (provision && provision.orgName) ? provision.orgName + ' Recovery' : 'HOPE Recovery Network';
 
   var metas = [
     { name: 'theme-color',                     content: themeColor },
@@ -32305,7 +32327,7 @@ function injectMetaTags() {
 //  Caches the HTML shell + CDN assets for full offline capability
 // ═══════════════════════════════════════════════════════════════════
 var SW_CODE = `
-const CACHE = 'polr-network-v2026.1.0';
+const CACHE = 'hope-recovery-network-v2026.1.0';
 const SHELL_URL = self.location.pathname.replace('sw.js','');
 
 // Assets to pre-cache
@@ -32420,7 +32442,7 @@ self.addEventListener('push', function(e) {
   try {
     var data = e.data.json();
     e.waitUntil(
-      self.registration.showNotification(data.title || 'POLR Network', {
+      self.registration.showNotification(data.title || 'HOPE Recovery Network', {
         body: data.body || '',
         icon: '/icon-192.png',
         badge: '/icon-192.png',
@@ -32461,7 +32483,7 @@ function registerServiceWorker() {
   // injected into a real URL path using the Fetch API + URL.createObjectURL workaround
   // with proper MIME type forcing (works in Chrome 93+, Firefox 90+)
   // Strategy 0: Use the real /sw.js file deployed alongside index.html (production)
-  // This is the correct approach for polrnetwork.com hosted on Netlify/Cloudflare
+  // This is the correct approach for hopenetwork.com hosted on Netlify/Cloudflare
   function tryRegisterRealFile() {
     // Only attempt if we appear to be in a real deployment context
     var isProduction = window.location.hostname !== 'localhost' &&
@@ -32644,10 +32666,10 @@ function dbGetAll(storeName) {
 function writePlatformState(state) {
   try {
     var s = JSON.stringify(state);
-    localStorage.setItem('polr_platform_state', s);
-    localStorage.setItem('polr_platform', s);
+    localStorage.setItem('hope_platform_state', s);
+    localStorage.setItem('hope_platform', s);
     // Also write to IndexedDB (non-blocking)
-    dbPut('platform', { key: 'polr_platform_state', value: state, updatedAt: Date.now() })
+    dbPut('platform', { key: 'hope_platform_state', value: state, updatedAt: Date.now() })
       .catch(function() {});
   } catch(e) {}
 }
@@ -32670,12 +32692,12 @@ function enqueueMutation(type, payload) {
 // ═══════════════════════════════════════════════════════════════════
 function readProvision() {
   try {
-    return JSON.parse(localStorage.getItem('polr_provision') || 'null');
+    return JSON.parse(localStorage.getItem('hope_provision') || 'null');
   } catch(e) { return null; }
 }
 
 function writeProvision(data) {
-  localStorage.setItem('polr_provision', JSON.stringify(data));
+  localStorage.setItem('hope_provision', JSON.stringify(data));
   dbPut('provision', { key: 'config', value: data }).catch(function() {});
 }
 
@@ -32769,7 +32791,7 @@ function handleProvisioning() {
 function buildLocalProvision(params) {
   return {
     org:          params.org || 'polr-default',
-    orgName:      formatOrgName(params.org || 'POLR Network'),
+    orgName:      formatOrgName(params.org || 'HOPE Recovery Network'),
     role:         params.role || 'member',
     campus:       params.campus || null,
     partner:      params.partner || null,
@@ -32806,7 +32828,7 @@ function applyProvision(provision) {
   // Auto-select campus if provisioned
   if (provision.campus) {
     try {
-      var state = JSON.parse(localStorage.getItem('polr_platform_state') || '{}');
+      var state = JSON.parse(localStorage.getItem('hope_platform_state') || '{}');
       if (!state.defaultCampus) {
         state.defaultCampus = provision.campus;
         writePlatformState(state);
@@ -32829,7 +32851,7 @@ function applyProvision(provision) {
 function applyStarterData(starterData) {
   if (!starterData) return;
   try {
-    var existing = JSON.parse(localStorage.getItem('polr_platform_state') || '{}');
+    var existing = JSON.parse(localStorage.getItem('hope_platform_state') || '{}');
     // Merge starter data — only fill empty arrays/objects, never overwrite existing user data
     Object.keys(starterData).forEach(function(key) {
       if (existing[key] === undefined || existing[key] === null ||
@@ -32849,7 +32871,7 @@ function showProvisioningOverlay(orgId) {
   el.id = 'polr-provision-overlay';
   el.style.cssText = 'position:fixed;inset:0;background:#0a0f1a;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;';
   el.innerHTML = '<div style="font-size:2rem">🙏</div>' +
-    '<div style="font-family:Georgia,serif;color:#c8913a;font-size:1.1rem;font-weight:700">POLR Network</div>' +
+    '<div style="font-family:Georgia,serif;color:#c8913a;font-size:1.1rem;font-weight:700">HOPE Recovery Network</div>' +
     '<div style="color:#888;font-size:0.85rem">Setting up ' + (formatOrgName(orgId || '') || 'your platform') + '…</div>' +
     '<div style="width:180px;height:3px;background:#1a2236;border-radius:2px;overflow:hidden;margin-top:0.5rem">' +
     '<div id="polr-provision-bar" style="width:0%;height:100%;background:#c8913a;border-radius:2px;transition:width 1.5s ease;"></div></div>';
@@ -32891,7 +32913,7 @@ function syncToBackend() {
 
     var apiBase = window.POLR_API_BASE ||
       (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://polr-backend-production.up.railway.app/api');
-    var token = localStorage.getItem('polr_token') || null;
+    var token = localStorage.getItem('hope_token') || null;
 
     Promise.all(pending.map(function(item) {
       return fetch(apiBase + '/sync/push', {
@@ -32923,7 +32945,7 @@ function pullFromBackend() {
   if (!navigator.onLine) return;
   var apiBase = window.POLR_API_BASE ||
     (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://polr-backend-production.up.railway.app/api');
-  var token = localStorage.getItem('polr_token') || null;
+  var token = localStorage.getItem('hope_token') || null;
   if (!token) return;
 
   fetch(apiBase + '/sync/pull?since=' + (lastSyncAt || 0), {
@@ -32933,7 +32955,7 @@ function pullFromBackend() {
   .then(function(data) {
     if (!data || !data.state) return;
     try {
-      var local = JSON.parse(localStorage.getItem('polr_platform_state') || '{}');
+      var local = JSON.parse(localStorage.getItem('hope_platform_state') || '{}');
       // Deep merge: server wins for most keys, but user-specific keys stay local
       var localOnly = ['stepLessons', 'eduCourseLessons', 'taxExemptNumbers'];
       var merged = Object.assign({}, data.state);
@@ -32949,17 +32971,17 @@ function pullFromBackend() {
 
 // Unique client identifier (persistent across sessions)
 function getClientId() {
-  var id = localStorage.getItem('polr_client_id');
+  var id = localStorage.getItem('hope_client_id');
   if (!id) {
     id = 'client_' + Math.random().toString(36).slice(2) + '_' + Date.now();
-    localStorage.setItem('polr_client_id', id);
+    localStorage.setItem('hope_client_id', id);
   }
   return id;
 }
 
 // ═══════════════════════════════════════════════════════════════════
 //  SECTION 7: INSTALL PROMPT
-//  Shows custom "Add to Home Screen" prompt with POLR branding
+//  Shows custom "Add to Home Screen" prompt with HOPE branding
 // ═══════════════════════════════════════════════════════════════════
 var deferredInstallPrompt = null;
 var installBannerShown    = false;
@@ -32996,7 +33018,7 @@ function showInstallBanner() {
   installBannerShown = true;
 
   var provision = readProvision();
-  var appName = (provision && provision.orgName) ? provision.orgName : 'POLR Network';
+  var appName = (provision && provision.orgName) ? provision.orgName : 'HOPE Recovery Network';
   var color   = (provision && provision.themeColor) ? provision.themeColor : '#c8913a';
 
   var banner = document.createElement('div');
@@ -33044,7 +33066,7 @@ function showInstallBanner() {
 
   document.getElementById('polr-install-dismiss').addEventListener('click', function() {
     hideInstallBanner();
-    localStorage.setItem('polr_install_dismissed', Date.now());
+    localStorage.setItem('hope_install_dismissed', Date.now());
   });
 
   // Add animation
@@ -33064,7 +33086,7 @@ function showIOSInstallInstructions() {
   modal.innerHTML =
     '<div style="background:#0e1520;border-radius:16px 16px 0 0;padding:2rem;width:100%;text-align:center;font-family:Georgia,serif;">' +
     '<div style="font-size:1.5rem;margin-bottom:0.75rem">📱</div>' +
-    '<div style="color:#c8913a;font-weight:700;font-size:1rem;margin-bottom:0.5rem">Install POLR Network</div>' +
+    '<div style="color:#c8913a;font-weight:700;font-size:1rem;margin-bottom:0.5rem">Install HOPE Recovery Network</div>' +
     '<div style="color:#888;font-size:0.82rem;line-height:1.65;margin-bottom:1rem">' +
     'In Safari: tap the <strong style="color:#c8913a">Share</strong> button (⬆) at the bottom of the screen, ' +
     'then tap <strong style="color:#c8913a">Add to Home Screen</strong>.' +
@@ -33109,7 +33131,7 @@ function initOfflineStatus() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  SECTION 9: EXPOSE GLOBAL POLR PWA API
+//  SECTION 9: EXPOSE GLOBAL HOPE PWA API
 //  So the React app can interact with PWA features
 // ═══════════════════════════════════════════════════════════════════
 window.POLR_PWA = {
@@ -33163,7 +33185,7 @@ window.POLR_PWA = {
         try { localStorage.setItem(k, JSON.stringify(data[k])); } catch(e) {}
       }
     });
-    writePlatformState(data.polr_platform_state || {});
+    writePlatformState(data.hope_platform_state || {});
     window.dispatchEvent(new CustomEvent('polr:stateUpdated', { detail: data }));
   },
 
@@ -33183,7 +33205,7 @@ window.POLR_PWA = {
 //  INIT SEQUENCE
 // ═══════════════════════════════════════════════════════════════════
 function init() {
-  console.log('[PWA] POLR Network PWA Layer v' + PWA_VERSION + ' initializing');
+  console.log('[PWA] HOPE Recovery Network PWA Layer v' + PWA_VERSION + ' initializing');
 
   // 1. Handle provisioning from URL params (FIRST — before anything else)
   handleProvisioning();
@@ -33229,23 +33251,23 @@ if (document.readyState === 'loading') {
 
 
 /**
- * ═══════════════════════════════════════════════════════════════════
- *  POLR NETWORK — Complete Course Content Seed
+ * ═══════════════════════════════════════════════════════════════════;
+ *  HOPE NETWORK — Complete Course Content Seed
  *  Run this ONCE in browser console OR inject via admin panel.
  *  Seeds: 12-Step biblical lessons + all LMS course lessons
  *  Total: 12 step lessons + 57 LMS lessons across 6 tracks
- * ═══════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════;
  *
  *  HOW TO APPLY:
- *  1. Open POLR-WIRED.html in your browser
- *  2. Log in as admin (POLRTTD / ACTS2:38)
+ *  1. Open HOPE-WIRED.html in your browser
+ *  2. Log in as admin (HOPETTD / ACTS2:38)
  *  3. Open browser DevTools → Console (F12)
  *  4. Paste this entire file and press Enter
  *  5. Refresh the page — all content is now loaded
  *
  *  OR (preferred): Add <script src="polr_content_seed.js"><\/script>
- *  just before the closing body tag in POLR-WIRED.html for auto-seeding. 
- * ═══════════════════════════════════════════════════════════════════
+ *  just before the closing body tag in HOPE-WIRED.html for auto-seeding. 
+ * ═══════════════════════════════════════════════════════════════════;
  */
 
 (function() {
@@ -33255,9 +33277,9 @@ if (document.readyState === 'loading') {
 function mkLesson(id, stepNum, title, sections, body, quiz, journalPrompt, teacherNotes) {
   return {
     id: id, stepNum: stepNum, version: 1, title: title,
-    author: 'POLR Staff', duration: '45 min', status: 'approved',
-    header: { orgName: 'Path of Life Recovery', stepLabel: stepNum ? 'Step ' + stepNum : title, date: '2026-01-01' },
-    footer: { text: '"Walk well." — {POLR_NAME} · {POLR_WEBSITE} · {POLR_PHONE}', show: true },
+    author: 'HOPE Staff', duration: '45 min', status: 'approved',
+    header: { orgName: 'HOPE Recovery: Hold on Pain Ends', stepLabel: stepNum ? 'Step ' + stepNum : title, date: '2026-01-01' },
+    footer: { text: '"Walk it out faithfully." — HOPE Recovery · hopenetwork.com · 225-333-0330', show: true },
     sections: sections,
     bodyBlocks: [{ id: 'b1', label: 'Lesson Body', content: body }],
     focusWords: [], teacherNotes: teacherNotes || '', journalLines: 7,
@@ -33320,7 +33342,7 @@ stepLessons['1'] = [mkLesson('seed_s1_l1', 1,
       'Where has your life become unmanageable? Not just with substances — with relationships, with honesty, with keeping commitments? Write one specific thing that happened in the last year that you would not have chosen if you were truly in control. Pray Psalm 139:23-24: "Search me, O God, and know my heart: try me, and know my thoughts: And see if there be any wicked way in me, and lead me in the way everlasting." (KJV)',
       null, 10),
     sec('s12','final','POLR Final Thought',
-      'Walk well. One step at a time. "The Lord is my shepherd; I shall not want." (Psalm 23:1 KJV) You are not alone.',
+      'Walk it out faithfully. One step at a time. "The Lord is my shepherd; I shall not want." (Psalm 23:1 KJV) You are not alone.',
       null, 11),
   ],
   'Step 1 is the foundation of everything. Without it, none of the other steps work.\n\nYou are here because something brought you here — pain, a court order, a family member who gave an ultimatum, your own exhaustion. Whatever it was, it is enough. The reason you arrived does not have to be noble. The decision you make while you are here can be.\n\nThere is a phrase: "I am not the same person I was when I was using." This is partly true — sanctification is real, and Christ transforms us. But Step 1 teaches us not to grow overconfident. The strongholds of the flesh are patient. Temptation does not disappear because you have been clean for 60 days. Apart from Christ, we can do nothing. (John 15:5 KJV)\n\nIn early recovery, many people feel a sudden, false confidence. They feel good. They think: I have this. This is normal. This feeling is not recovery — it is the beginning of recovery. Real recovery is built over time, through the steps, through service, through walking with God. Step 1 is where it starts.',
@@ -33381,7 +33403,7 @@ stepLessons['2'] = [mkLesson('seed_s2_l1', 2,
       'You do not need to invent belief. You need to return to truth. God is not waiting to be defined — He is waiting to be acknowledged and followed. Isaiah 44:22 says: "I have blotted out, as a thick cloud, thy transgressions, and, as a cloud, thy sins: return unto me; for I have redeemed thee." (KJV) Return. He is already there.',
       null, 12),
   ],
-  'Step 2 is not a gentle step. It is a correction.\n\nThe version of recovery that says "any higher power works" — the group, nature, the universe, your own conscience — has a serious problem: it is not true. And a foundation built on an untruth will eventually crack under the weight of real suffering.\n\nStep 2 in the POLR program means this: came to believe in the God of the Bible — the Father of the Lord Jesus Christ — as the only source of restoration and sanity.\n\nThis does not mean everyone arrives here in the same moment or at the same speed. God is patient. "Came to believe" acknowledges a process. But the direction of that process is fixed — toward the truth of who God is, not toward a customized version we prefer.\n\nIsaiah 1:18 says: "Come now, and let us reason together, saith the LORD: though your sins be as scarlet, they shall be as white as snow." (KJV) God invites reasoning — honest, open, searching. He is not afraid of your questions. He is not diminished by your doubt. But He will not pretend to be something He is not.\n\nIf you have been hurt by religion, by the church, by people who claimed to represent God — bring that honestly. God can hold it. But do not let the failure of people become a barrier to the truth of God Himself.',
+  'Step 2 is not a gentle step. It is a correction.\n\nThe version of recovery that says "any higher power works" — the group, nature, the universe, your own conscience — has a serious problem: it is not true. And a foundation built on an untruth will eventually crack under the weight of real suffering.\n\nStep 2 in the HOPE program means this: came to believe in the God of the Bible — the Father of the Lord Jesus Christ — as the only source of restoration and sanity.\n\nThis does not mean everyone arrives here in the same moment or at the same speed. God is patient. "Came to believe" acknowledges a process. But the direction of that process is fixed — toward the truth of who God is, not toward a customized version we prefer.\n\nIsaiah 1:18 says: "Come now, and let us reason together, saith the LORD: though your sins be as scarlet, they shall be as white as snow." (KJV) God invites reasoning — honest, open, searching. He is not afraid of your questions. He is not diminished by your doubt. But He will not pretend to be something He is not.\n\nIf you have been hurt by religion, by the church, by people who claimed to represent God — bring that honestly. God can hold it. But do not let the failure of people become a barrier to the truth of God Himself.',
   [
     {q:'What is the spiritual principle of Step 2?',c:['Faith only','Hope grounded in the truth of God','Openness to any belief','Willingness to try'],a:1,
      e:'Hope grounded in the character of God is the principle of Step 2. Romans 15:13 says the God of hope fills us with joy and peace in believing. This is not wishful thinking — it is confidence in who God is and what He has promised.'},
@@ -33930,7 +33952,7 @@ stepLessons['12'] = [mkLesson('seed_s12_l1', 12,
       'Who is waiting for your Step 12? Who is where you were? Proverbs 11:25 says: "The liberal soul shall be made fat: and he that watereth shall be watered also himself." (KJV) Write the name of one person you can reach toward this week. Write what you would say. Begin with your own story — nothing else is required.',
       null, 10),
     sec('s12','final','POLR Final Thought',
-      '"Having therefore these promises, dearly beloved, let us cleanse ourselves from all filthiness of the flesh and spirit, perfecting holiness in the fear of God." (2 Corinthians 7:1 KJV) The steps are not an end. They are the beginning of a life of increasing holiness, service, and conscious contact with the living God. Walk well.',
+      '"Having therefore these promises, dearly beloved, let us cleanse ourselves from all filthiness of the flesh and spirit, perfecting holiness in the fear of God." (2 Corinthians 7:1 KJV) The steps are not an end. They are the beginning of a life of increasing holiness, service, and conscious contact with the living God. Walk it out faithfully.',
       null, 11),
   ],
   'Step 12 is where recovery becomes ministry.\n\nThe person who has worked the first eleven steps honestly carries something the world cannot manufacture: evidence. Evidence that God transforms. Evidence that the bondage of the flesh is not the final word. Evidence — in a living, breathing, standing-in-front-of-you human being — that what seems impossible is not.\n\n1 Peter 3:15 says: "But sanctify the Lord God in your hearts: and be ready always to give an answer to every man that asketh you a reason of the hope that is in you." (KJV) You now have a reason for your hope. Step 12 asks you to be ready to give it.\n\nCarry the message. Not by preaching — by living. Not by perfection — by honesty. Not by having all the answers — by pointing to the One who does.',
@@ -33955,7 +33977,7 @@ stepLessons['12'] = [mkLesson('seed_s12_l1', 12,
 function mkCoursLesson(id, courseId, order, title, body, quiz, duration) {
   return {
     id: id, courseId: courseId, order: order, title: title, status: 'approved',
-    duration: duration || '20 min', author: 'POLR Staff',
+    duration: duration || '20 min', author: 'HOPE Staff',
     body: body,
     quiz: quiz ? quiz.map(function(q, i) {
       return { id: 'q' + (i+1), question: q.q, choices: q.c, correct: q.a, explanation: q.e };
@@ -34017,9 +34039,9 @@ eduCourseLessons['wf-1'] = [
      {q:'What email address should you use on a resume?',c:['Your nickname from your old crew','A professional email with your name','Your personal Gmail with a funny username','You do not need an email on a resume'],a:1,e:'Use a professional email address — ideally firstname.lastname@gmail.com or similar. Employers notice unprofessional email addresses.'}],'25 min'),
 
   mkCoursLesson('wf1-l2','wf-1',2,'Addressing Your Background',
-    'Many people in recovery have gaps in employment, a criminal record, or both. Here is how to handle both honestly and strategically.\n\nFor employment gaps:\n- Do not lie or invent jobs you did not have.\n- Brief, honest framing: "Personal circumstances requiring my full attention" covers a lot.\n- If asked in an interview: "I went through a personal challenge that I have worked through. I am now focused entirely on building my career and I can show you why I am the right person for this role."\n\nFor criminal record:\n- Louisiana has "ban the box" protections — many employers cannot ask about criminal history on the initial application.\n- Research the employer before the interview. Some industries (working with children, certain financial roles) have restrictions. Know this before you apply.\n- If asked: Be honest, brief, and pivot to the present. "I made mistakes in my past. I took accountability, I completed my sentence, and since then I have [specific positive actions]. That experience made me someone who does not take opportunity for granted."\n- WOTC (Work Opportunity Tax Credit): Employers who hire people with criminal records can receive significant federal tax credits. POLR can document this for employers. It turns your record into a financial incentive for them to hire you.\n\nYour story is not a liability. Told correctly, it is proof of resilience.',
+    'Many people in recovery have gaps in employment, a criminal record, or both. Here is how to handle both honestly and strategically.\n\nFor employment gaps:\n- Do not lie or invent jobs you did not have.\n- Brief, honest framing: "Personal circumstances requiring my full attention" covers a lot.\n- If asked in an interview: "I went through a personal challenge that I have worked through. I am now focused entirely on building my career and I can show you why I am the right person for this role."\n\nFor criminal record:\n- Louisiana has "ban the box" protections — many employers cannot ask about criminal history on the initial application.\n- Research the employer before the interview. Some industries (working with children, certain financial roles) have restrictions. Know this before you apply.\n- If asked: Be honest, brief, and pivot to the present. "I made mistakes in my past. I took accountability, I completed my sentence, and since then I have [specific positive actions]. That experience made me someone who does not take opportunity for granted."\n- WOTC (Work Opportunity Tax Credit): Employers who hire people with criminal records can receive significant federal tax credits. HOPE can document this for employers. It turns your record into a financial incentive for them to hire you.\n\nYour story is not a liability. Told correctly, it is proof of resilience.',
     [{q:'What does "ban the box" mean?',c:['Employers cannot hire people with records','Employers cannot ask about criminal history on the initial application','You must check a box if you have a record','Records are automatically expunged'],a:1,e:'"Ban the box" refers to policies that prevent employers from asking about criminal history on initial job applications, giving applicants a chance to be considered on their qualifications first.'},
-     {q:'What is the WOTC?',c:['A job training program','A federal tax credit employers receive for hiring people with barriers to employment','A background check service','A program that seals criminal records'],a:1,e:'The Work Opportunity Tax Credit (WOTC) is a federal tax incentive for employers who hire people with certain barriers, including criminal records. POLR can document this credit for employers.'},
+     {q:'What is the WOTC?',c:['A job training program','A federal tax credit employers receive for hiring people with barriers to employment','A background check service','A program that seals criminal records'],a:1,e:'The Work Opportunity Tax Credit (WOTC) is a federal tax incentive for employers who hire people with certain barriers, including criminal records. HOPE can document this credit for employers.'},
      {q:'When an interviewer asks about a gap in employment, what is the best approach?',c:['Lie and invent a job','Refuse to discuss it','Give a brief, honest answer and pivot to your strengths and present focus','Tell the full story of your addiction'],a:2,e:'Be honest and brief. Name the challenge without excessive detail, then immediately pivot to what you have done since and why you are the right person for this role.'}],'25 min'),
 
   mkCoursLesson('wf1-l3','wf-1',3,'Interview Skills',
@@ -34029,7 +34051,7 @@ eduCourseLessons['wf-1'] = [
      {q:'When asked "What is your weakness?", what is the best response?',c:['Say you have no weaknesses','Name something unrelated to the job','Name a real weakness and describe what you are actively doing to improve it','Say "I work too hard"'],a:2,e:'Name a genuine weakness and immediately describe the specific steps you are taking to address it. This shows self-awareness and a growth mindset — both highly valued by employers.'}],'30 min'),
 
   mkCoursLesson('wf1-l4','wf-1',4,'Background Check Navigation',
-    'Most employers run background checks. Here is what happens and how to navigate it.\n\nWhat shows on a background check:\n- Criminal record (felonies and misdemeanors)\n- Credit history (for financial and government roles)\n- Employment verification (your work history)\n- Education verification (degrees and certifications)\n- Driving record (for roles requiring driving)\n\nWhat does NOT show:\n- Arrests without conviction (in many states)\n- Records expunged or sealed\n- Juvenile records (usually)\n\nExpungement in Louisiana:\nLouisiana has a process for expunging certain records. Eligibility depends on the charge and whether you have completed your sentence. Talk to a lawyer or legal aid organization. POLR can help connect you with resources.\n\nBeing proactive:\nIf you know a background check is coming, get your own copy first (you can access your criminal record through Louisiana State Police for a small fee). Know what will appear before the employer does.\n\nIf something appears:\nBe honest before the check runs, not after. Frame it: "I want to be transparent with you — there is something in my background. Here is what it is and here is what I have done since." Employers are far more likely to work with you if you tell them yourself.\n\nEmployer education:\nMany employers do not know how to evaluate records. POLR can provide employers with context, documentation of your program completion, drug test records, and WOTC credit information.',
+    'Most employers run background checks. Here is what happens and how to navigate it.\n\nWhat shows on a background check:\n- Criminal record (felonies and misdemeanors)\n- Credit history (for financial and government roles)\n- Employment verification (your work history)\n- Education verification (degrees and certifications)\n- Driving record (for roles requiring driving)\n\nWhat does NOT show:\n- Arrests without conviction (in many states)\n- Records expunged or sealed\n- Juvenile records (usually)\n\nExpungement in Louisiana:\nLouisiana has a process for expunging certain records. Eligibility depends on the charge and whether you have completed your sentence. Talk to a lawyer or legal aid organization. HOPE can help connect you with resources.\n\nBeing proactive:\nIf you know a background check is coming, get your own copy first (you can access your criminal record through Louisiana State Police for a small fee). Know what will appear before the employer does.\n\nIf something appears:\nBe honest before the check runs, not after. Frame it: "I want to be transparent with you — there is something in my background. Here is what it is and here is what I have done since." Employers are far more likely to work with you if you tell them yourself.\n\nEmployer education:\nMany employers do not know how to evaluate records. HOPE can provide employers with context, documentation of your program completion, drug test records, and WOTC credit information.',
     [{q:'Which of the following typically does NOT appear on a background check?',c:['Felony convictions','Records that have been expunged','Misdemeanor convictions','Employment history'],a:1,e:'Expunged records are typically not visible on a background check — they have been legally cleared from the public record. Eligibility for expungement varies by charge and state.'},
      {q:'When is the best time to disclose a criminal record to an employer?',c:['Never, unless they find it','After you are hired','Before the background check runs, proactively','Only if they ask directly'],a:2,e:'Being proactive — disclosing before the check runs — builds trust and gives you control of the narrative. Employers are far more forgiving of honesty than they are of feeling deceived.'},
      {q:'What is expungement?',c:['A process to hide your record from yourself','A legal process to clear certain charges from your public record','A fee you pay to reduce your sentence','A program for first-time offenders only'],a:1,e:'Expungement is a legal process that removes or seals certain criminal charges from the public record. Eligibility varies based on the charge, conviction, and time elapsed.'}],'25 min'),
@@ -34044,7 +34066,7 @@ eduCourseLessons['ls-1'] = [
      {q:'Why is tracking every dollar spent important?',c:['To report income to your parole officer','Because you cannot manage what you cannot see','To show your pastor or mentor you are responsible','To apply for government benefits'],a:1,e:'Tracking spending reveals patterns and "leaks" — small daily expenses that add up to significant money. You cannot change what you do not see.'}],'25 min'),
 
   mkCoursLesson('ls1-l2','ls-1',2,'Building Financial Stability',
-    'Financial stability in recovery is built in stages. Do not expect to go from debt and no savings to financial security overnight. Here is the sequence.\n\nStage 1: Survive (0-90 days)\nGoal: Pay rent and eat. Nothing more is required right now. If you are in a POLR Place, your housing is covered. Focus on stability.\n\nStage 2: Stabilize (90 days - 1 year)\nGoal: Open a bank account. Build $500 in emergency savings. Stop the bleeding on debt — at minimum, make minimum payments.\n\nStage 3: Build (1-3 years)\nGoal: Grow emergency savings to 3 months of expenses. Begin paying down high-interest debt. Start thinking about larger goals.\n\nOpening a bank account:\nIf a bank has rejected you due to past ChexSystems records, try a credit union or a second-chance checking account. Many credit unions offer these specifically for people in your situation.\n\nChexSystems: This is a database banks use to check if you have bounced checks or owed money to banks. Negative records stay for 5 years. Second-chance accounts bypass this check.\n\nThe envelope method: Withdraw cash for each spending category (groceries, transportation, etc.) and put it in labeled envelopes. When the envelope is empty, spending in that category stops for the week.',
+    'Financial stability in recovery is built in stages. Do not expect to go from debt and no savings to financial security overnight. Here is the sequence.\n\nStage 1: Survive (0-90 days)\nGoal: Pay rent and eat. Nothing more is required right now. If you are in a HOPE Place, your housing is covered. Focus on stability.\n\nStage 2: Stabilize (90 days - 1 year)\nGoal: Open a bank account. Build $500 in emergency savings. Stop the bleeding on debt — at minimum, make minimum payments.\n\nStage 3: Build (1-3 years)\nGoal: Grow emergency savings to 3 months of expenses. Begin paying down high-interest debt. Start thinking about larger goals.\n\nOpening a bank account:\nIf a bank has rejected you due to past ChexSystems records, try a credit union or a second-chance checking account. Many credit unions offer these specifically for people in your situation.\n\nChexSystems: This is a database banks use to check if you have bounced checks or owed money to banks. Negative records stay for 5 years. Second-chance accounts bypass this check.\n\nThe envelope method: Withdraw cash for each spending category (groceries, transportation, etc.) and put it in labeled envelopes. When the envelope is empty, spending in that category stops for the week.',
     [{q:'What is a ChexSystems record?',c:['A credit score','A database of banking problems like bounced checks','A criminal background check for banks','A list of debt collectors'],a:1,e:'ChexSystems is a database that banks check to see if you have had banking problems — bounced checks, unpaid bank fees, closed accounts. Negative records stay for 5 years.'},
      {q:'What is the financial goal in the first 90 days of recovery?',c:['Pay off all debt','Open a savings account','Survive — pay rent and eat','Apply for a credit card'],a:2,e:'In the first 90 days, the financial goal is simply to survive — keep housing stable and eat. More complex financial goals come later when the foundation of recovery is solid.'},
      {q:'What is a second-chance checking account?',c:['An account with no minimum balance','A bank account for people with ChexSystems records who are denied regular accounts','A savings account with a government guarantee','A credit union account for seniors'],a:1,e:'A second-chance checking account is designed for people who have been rejected by standard banks due to ChexSystems records. They offer basic banking access to help rebuild financial standing.'}],'25 min'),
@@ -34053,7 +34075,7 @@ eduCourseLessons['ls-1'] = [
 // ── TRADE TRACK ──
 eduCourseLessons['tr-1'] = [
   mkCoursLesson('tr1-l1','tr-1',1,'OSHA-10 Overview: Why Safety Certification Changes Everything',
-    'OSHA stands for Occupational Safety and Health Administration — the federal agency that sets workplace safety standards.\n\nThe OSHA-10 is a 10-hour safety training course. It is one of the most valuable credentials you can earn for industrial, construction, or plant work.\n\nWhat employers see: When your resume says "OSHA-10 Certified," it tells the employer three things:\n1. You take safety seriously\n2. You have received formal training\n3. You are less likely to cause an injury or accident (which costs them money)\n\nIndustries that require or strongly prefer OSHA-10:\n- Oil and gas refineries\n- Construction (all commercial and industrial projects)\n- Petrochemical plants\n- Warehousing and logistics\n- Manufacturing\n\nSalary impact: OSHA-10 holders typically start $2-4 more per hour than non-certified applicants. Over a year, that is $4,000-$8,000.\n\nHow to earn it: The OSHA-10 is a 10-hour course, typically done over 2 days or spread across a week. POLR partners with training providers to offer this to members. Upon completion, you receive a wallet card — an industry-recognized credential.\n\nWhat the course covers:\n- OSHA regulations and workers\' rights\n- Hazard recognition\n- Fall protection\n- Personal Protective Equipment (PPE)\n- Electrical safety\n- Hazard Communication (knowing what chemicals you are working around)',
+    'OSHA stands for Occupational Safety and Health Administration — the federal agency that sets workplace safety standards.\n\nThe OSHA-10 is a 10-hour safety training course. It is one of the most valuable credentials you can earn for industrial, construction, or plant work.\n\nWhat employers see: When your resume says "OSHA-10 Certified," it tells the employer three things:\n1. You take safety seriously\n2. You have received formal training\n3. You are less likely to cause an injury or accident (which costs them money)\n\nIndustries that require or strongly prefer OSHA-10:\n- Oil and gas refineries\n- Construction (all commercial and industrial projects)\n- Petrochemical plants\n- Warehousing and logistics\n- Manufacturing\n\nSalary impact: OSHA-10 holders typically start $2-4 more per hour than non-certified applicants. Over a year, that is $4,000-$8,000.\n\nHow to earn it: The OSHA-10 is a 10-hour course, typically done over 2 days or spread across a week. HOPE partners with training providers to offer this to members. Upon completion, you receive a wallet card — an industry-recognized credential.\n\nWhat the course covers:\n- OSHA regulations and workers\' rights\n- Hazard recognition\n- Fall protection\n- Personal Protective Equipment (PPE)\n- Electrical safety\n- Hazard Communication (knowing what chemicals you are working around)',
     [{q:'What does OSHA stand for?',c:['Office of Safety and Health Awareness','Occupational Safety and Health Administration','Organization of Safety and Hazard Assessment','Operational Standard for Hiring Applicants'],a:1,e:'OSHA stands for Occupational Safety and Health Administration — the federal agency that sets and enforces workplace safety standards.'},
      {q:'How long is the OSHA-10 course?',c:['5 hours','10 hours (2 days)','40 hours (1 week)','20 hours'],a:1,e:'The OSHA-10 is a 10-hour course, typically completed over 2 days. Upon completion, participants receive a wallet card credential recognized across industrial industries.'},
      {q:'What is a realistic salary benefit of having OSHA-10 certification?',c:['No salary benefit — it is just required','$0.50 more per hour','$2-4 more per hour ($4,000-$8,000 per year)','Double the base wage'],a:2,e:'OSHA-10 holders typically earn $2-4 more per hour than non-certified applicants. Over a full year, that equals $4,000-$8,000 in additional income.'}],'25 min'),
@@ -34068,16 +34090,16 @@ eduCourseLessons['tr-1'] = [
 // ── MINISTRY TRACK ──
 eduCourseLessons['mn-1'] = [
   mkCoursLesson('mn1-l1','mn-1',1,'How to Lead a Recovery Meeting',
-    'A recovery meeting is a sacred space — created for one purpose: giving people what they need to stay alive. Your job as a facilitator is to protect that space and serve the people in it.\n\nBefore the meeting:\n- Arrive 15-20 minutes early. Set up chairs in a circle or rows depending on size. A circle communicates equality.\n- Have literature available: the Word of God (KJV Bible), any POLR step materials.\n- Know who is speaking or if it is an open share meeting.\n- Pray. Privately. Ask for wisdom and the right words.\n\nOpening the meeting:\n- Welcome everyone. Keep it warm and brief.\n- Announce the group name, purpose, and format.\n- Read the preamble (or have a member read it).\n- Make announcements: time, format, any upcoming events.\n- Introduce the speaker or open for sharing.\n\nDuring the meeting:\n- Your job is to create safety, not to control the content.\n- Hold the space for cross-talk rules (no direct advice, no comments on another\'s share).\n- If someone shares something concerning — crisis, relapse, safety — respond with care, not alarm.\n- Keep time gently. A soft "we\'ll need to wrap up in a minute" is enough.\n\nClosing:\n- Thank the speaker or sharers.\n- Read a closing scripture (suggested: Romans 8:1, Isaiah 40:31, or Philippians 4:6-7 KJV), then close with the Lord\'s Prayer or a pastoral benediction.\n- Remind people: "Walk well. The Word of God is true and the steps are proven. Keep coming."\n- Stay after. The newcomer who cannot look anyone in the eye is the one who most needs someone to stay.',
+    'A recovery meeting is a sacred space — created for one purpose: giving people what they need to stay alive. Your job as a facilitator is to protect that space and serve the people in it.\n\nBefore the meeting:\n- Arrive 15-20 minutes early. Set up chairs in a circle or rows depending on size. A circle communicates equality.\n- Have literature available: the Word of God (KJV Bible), any HOPE step materials.\n- Know who is speaking or if it is an open share meeting.\n- Pray. Privately. Ask for wisdom and the right words.\n\nOpening the meeting:\n- Welcome everyone. Keep it warm and brief.\n- Announce the group name, purpose, and format.\n- Read the preamble (or have a member read it).\n- Make announcements: time, format, any upcoming events.\n- Introduce the speaker or open for sharing.\n\nDuring the meeting:\n- Your job is to create safety, not to control the content.\n- Hold the space for cross-talk rules (no direct advice, no comments on another\'s share).\n- If someone shares something concerning — crisis, relapse, safety — respond with care, not alarm.\n- Keep time gently. A soft "we\'ll need to wrap up in a minute" is enough.\n\nClosing:\n- Thank the speaker or sharers.\n- Read a closing scripture (suggested: Romans 8:1, Isaiah 40:31, or Philippians 4:6-7 KJV), then close with the Lord\'s Prayer or a pastoral benediction.\n- Remind people: "Walk it out faithfully. The Word of God is true and the steps are proven. Keep coming."\n- Stay after. The newcomer who cannot look anyone in the eye is the one who most needs someone to stay.',
     [{q:'Why is a circle the preferred seating arrangement for a recovery meeting?',c:['It is easier to see the speaker','It communicates equality — no one is above anyone else','It allows more people to fit in the room','It is traditional with no specific meaning'],a:1,e:'A circle communicates equality — everyone is on the same level. Recovery works because people who have been through the same thing share with each other. The circle reflects that.'},
      {q:'What is the facilitator\'s primary job during the meeting?',c:['To correct wrong statements about the program','To make sure everyone shares','To create safety for honest sharing — not to control content','To lead a Bible study'],a:2,e:'The facilitator\'s job is to create and protect safety — a space where people can share honestly without judgment or unsolicited advice. Content belongs to the members.'},
      {q:'What should you do after the meeting closes?',c:['Pack up immediately','Stay — the newcomer who cannot look anyone in the eye needs someone to remain','Only stay if you are paid to','Go to the speaker and give feedback'],a:1,e:'Staying after the meeting is often where the real work happens. Newcomers who are too afraid to share often wait until after. The coffee hour after the meeting has saved lives.'}],'35 min'),
 
   mkCoursLesson('mn1-l2','mn-1',2,'Scripture and Recovery — KJV Foundations',
-    'The Bible and recovery speak the same language — the language of surrender, honesty, community, and transformation. The 12 steps were written by people deeply shaped by Christian Scripture.\n\nStep 1 and Powerlessness — Romans 7:18-19: "For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s experience is the universal experience of addiction: the will to change without the power to do so.\n\nStep 2 and Hope — Hebrews 11:1: "Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. Faith and Step 2 are the same movement.\n\nStep 3 and Surrender — Proverbs 3:5-6: "Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives and trust something greater than our own best thinking.\n\nStep 4 and Honesty — Psalm 139:23-24: "Search me, O God, and know my heart: try me, and know my thoughts." David\'s invitation to God to look at everything — even the hard parts.\n\nStep 12 and Service — Matthew 10:8: "Freely ye have received, freely give." The foundation of sponsorship, service, and the principle of paying forward what was given to us.\n\nIn a POLR meeting: Scripture is not used to judge. It is used to illumine. The person who has never opened a Bible and the person who has read it for thirty years can both find something here.',
+    'The Bible and recovery speak the same language — the language of surrender, honesty, community, and transformation. The 12 steps were written by people deeply shaped by Christian Scripture.\n\nStep 1 and Powerlessness — Romans 7:18-19: "For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s experience is the universal experience of addiction: the will to change without the power to do so.\n\nStep 2 and Hope — Hebrews 11:1: "Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. Faith and Step 2 are the same movement.\n\nStep 3 and Surrender — Proverbs 3:5-6: "Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives and trust something greater than our own best thinking.\n\nStep 4 and Honesty — Psalm 139:23-24: "Search me, O God, and know my heart: try me, and know my thoughts." David\'s invitation to God to look at everything — even the hard parts.\n\nStep 12 and Service — Matthew 10:8: "Freely ye have received, freely give." The foundation of sponsorship, service, and the principle of paying forward what was given to us.\n\nIn a HOPE meeting: Scripture is not used to judge. It is used to illumine. The person who has never opened a Bible and the person who has walked with it for years can both find something here.',
     [{q:'What Scripture is used to illustrate the powerlessness of Step 1?',c:['Psalm 23','Romans 7:18-19','Hebrews 11:1','Matthew 10:8'],a:1,e:'Romans 7:18-19 — Paul\'s description of willing to do good but lacking the power — directly reflects the experience of addiction: the will without the ability.'},
      {q:'What is the Scripture connection to Step 12 (service)?',c:['Proverbs 3:5','Matthew 10:8 — "Freely ye have received, freely give"','Hebrews 11:1','Psalm 139:23'],a:1,e:'Matthew 10:8 — "Freely ye have received, freely give" — is the scriptural foundation for service and sponsorship. What was given to us without cost, we give to others.'},
-     {q:'How is Scripture used in a POLR meeting?',c:['To judge and correct wrong behavior','To decide who is Christian enough to share','To illumine — as a source of wisdom for everyone regardless of background','To replace the 12 steps'],a:2,e:'In POLR, Scripture is used to illumine — to offer wisdom and perspective that applies to everyone in the room, regardless of their prior relationship with the Bible.'}],'40 min'),
+     {q:'How is Scripture used in a HOPE meeting?',c:['To judge and correct wrong behavior','To decide who is Christian enough to share','To illumine — as a source of wisdom for everyone regardless of background','To replace the 12 steps'],a:2,e:'In HOPE, Scripture is used to illumine — to offer wisdom and perspective that applies to everyone in the room, regardless of their prior relationship with the Bible.'}],'40 min'),
 ];
 
 // ── HOME HEALTH AIDE TRACK ──
@@ -34099,25 +34121,25 @@ function applySeed() {
   // ── v4 migration: completely replace all 12 step lessons ──────────
   //    Wipes ALL stepLessons from state so v4 KJV content seeds fresh.
   try {
-    var _migKey = 'polr_seed_migration_v5';
+    var _migKey = 'hope_seed_migration_v5';
     if (!localStorage.getItem(_migKey)) {
-      var _st = JSON.parse(localStorage.getItem('polr_platform_state') || '{}');
+      var _st = JSON.parse(localStorage.getItem('hope_platform_state') || '{}');
       if (_st) {
         // Wipe entire stepLessons so every step gets fresh KJV seed
         _st.stepLessons = {};
-        localStorage.setItem('polr_platform_state', JSON.stringify(_st));
+        localStorage.setItem('hope_platform_state', JSON.stringify(_st));
         // Also clear the legacy platform key
-        var _lp = JSON.parse(localStorage.getItem('polr_platform') || '{}');
-        if (_lp) { _lp.stepLessons = {}; localStorage.setItem('polr_platform', JSON.stringify(_lp)); }
+        var _lp = JSON.parse(localStorage.getItem('hope_platform') || '{}');
+        if (_lp) { _lp.stepLessons = {}; localStorage.setItem('hope_platform', JSON.stringify(_lp)); }
       }
       localStorage.setItem(_migKey, '1');
       // Clear old migration keys so this runs clean
-      localStorage.removeItem('polr_seed_migration_v4'); localStorage.removeItem('polr_seed_migration_v4b');
+      localStorage.removeItem('hope_seed_migration_v4'); localStorage.removeItem('hope_seed_migration_v4b');
     }
   } catch(_me) {}
 
   var stored = {};
-  try { stored = JSON.parse(localStorage.getItem('polr_platform_state') || '{}'); } catch(e) {}
+  try { stored = JSON.parse(localStorage.getItem('hope_platform_state') || '{}'); } catch(e) {}
   if (!stored || typeof stored !== 'object') stored = {};
   // Ensure stepLessons is empty after migration so seed fully overwrites
   if (!stored.stepLessons || Object.keys(stored.stepLessons).length === 0) {
@@ -34164,8 +34186,8 @@ function applySeed() {
 
   try {
     var s = JSON.stringify(stored);
-    localStorage.setItem('polr_platform_state', s);
-    localStorage.setItem('polr_platform', s);
+    localStorage.setItem('hope_platform_state', s);
+    localStorage.setItem('hope_platform', s);
     try { window.dispatchEvent(new CustomEvent('polr:seedComplete')); } catch(_se) {}
     console.log('[POLR Seed v5] steps +' + stepsAdded + ' ~' + stepsUpdated +
       ' | LMS +' + lmsAdded + ' ~' + lmsUpdated);
@@ -34180,7 +34202,7 @@ applySeed();
 
 
 /**
- * POLR NETWORK — LMS Course Content Supplement
+ * HOPE NETWORK — LMS Course Content Supplement
  * Adds full lesson content for all remaining courses
  */
 (function() {
@@ -34188,7 +34210,7 @@ applySeed();
 
 function mkL(id, courseId, order, title, body, quiz, duration) {
   return { id:id, courseId:courseId, order:order, title:title, status:'approved',
-    duration:duration||'25 min', author:'POLR Staff', body:body,
+    duration:duration||'25 min', author:'HOPE Staff', body:body,
     quiz:(quiz||[]).map(function(q,i){ return {id:'q'+(i+1),question:q.q,choices:q.c,correct:q.a,explanation:q.e}; }),
     passingScore:70, createdAt:'2026-01-01T00:00:00.000Z' };
 }
@@ -34315,7 +34337,7 @@ add['ls-3'] = [
      {q:'If a child is distant or angry when a parent enters recovery, this most likely means:',c:['The child does not love the parent','The child has been permanently damaged','The child is protecting themselves from further disappointment — a normal, healthy response','The parent has already failed at recovery'],a:2,e:'Anger and distance are normal self-protection responses after cycles of hope and disappointment. They heal as the parent demonstrates sustained, consistent change over time.'}],'30 min'),
 
   mkL('ls3-l2','ls-3',2,'Co-Parenting and DCFS Navigation',
-    'Recovery often involves navigating co-parenting with someone who may still be using, or working within a DCFS case to regain custody. Both situations require specific strategies.\n\nCo-parenting with someone in active addiction:\n- Children\'s safety comes first — always\n- Document everything: dates, incidents, communications\n- Keep communication brief, business-like, and focused on the children\n- Do not use children as messengers or informants\n- Never speak negatively about the other parent to the children — this hurts the children, not the other parent\n- If safety is a real concern, contact a lawyer or DCFS\n\nIf you have an open DCFS case:\n- Follow your case plan exactly. Every missed drug test and missed appointment is documented.\n- Be honest with your caseworker — they typically know more than you think. Honesty builds credibility.\n- Attend every visit. Early, every time.\n- Document your recovery: meetings attended, program completion, pastor or mentor contact\n- POLR can provide documentation of your participation to support your case\n\nReunification:\nThe standard is your child\'s best interest. Demonstrating consistently that you are that best interest — sober, stable, present — is the only path. There are no shortcuts.\n\nDCFS exists primarily to reunify families when it is safe to do so. Work with it, not against it.',
+    'Recovery often involves navigating co-parenting with someone who may still be using, or working within a DCFS case to regain custody. Both situations require specific strategies.\n\nCo-parenting with someone in active addiction:\n- Children\'s safety comes first — always\n- Document everything: dates, incidents, communications\n- Keep communication brief, business-like, and focused on the children\n- Do not use children as messengers or informants\n- Never speak negatively about the other parent to the children — this hurts the children, not the other parent\n- If safety is a real concern, contact a lawyer or DCFS\n\nIf you have an open DCFS case:\n- Follow your case plan exactly. Every missed drug test and missed appointment is documented.\n- Be honest with your caseworker — they typically know more than you think. Honesty builds credibility.\n- Attend every visit. Early, every time.\n- Document your recovery: meetings attended, program completion, pastor or mentor contact\n- HOPE can provide documentation of your participation to support your case\n\nReunification:\nThe standard is your child\'s best interest. Demonstrating consistently that you are that best interest — sober, stable, present — is the only path. There are no shortcuts.\n\nDCFS exists primarily to reunify families when it is safe to do so. Work with it, not against it.',
     [{q:'When co-parenting with a person in active addiction, what should you never do?',c:['Document communications','Keep communication child-focused','Speak negatively about the other parent to your children','Set clear safety boundaries'],a:2,e:'Speaking negatively about the other parent to children hurts the children — not the other parent. Children are made of both parents and experience criticism of one parent as an attack on part of themselves.'},
      {q:'What is the most important thing to do with your DCFS caseworker?',c:['Minimize negative information to appear more stable','Be fully honest — they know more than you think, and honesty builds the credibility you need','Only communicate through a lawyer','Avoid them unless required'],a:1,e:'Be fully honest. Caseworkers typically have more information than families expect. Honesty combined with action builds the trust needed for reunification. Deception, when discovered, damages your case significantly.'},
      {q:'What is the standard that determines reunification with your children?',c:['The length of your sobriety','Your child\'s best interest — demonstrated through consistent sobriety, stability, and presence over time','The other parent\'s behavior','The caseworker\'s personal opinion of you'],a:1,e:'The standard for reunification is your child\'s best interest. You demonstrate this through documented compliance with the case plan, sustained sobriety, and consistent, present behavior over time — not through speeches or promises.'}],'30 min'),
@@ -34366,30 +34388,30 @@ add['tr-4'] = [
 // ─── MN-2: Scripture & Recovery ───────────────────────────────────
 add['mn-2'] = [
   mkL('mn2-l1','mn-2',1,'Scripture and Recovery — KJV Foundations',
-    'The POLR 12-step program is grounded in Scripture — surrender, honesty, community, and transformation are biblical principles. The path of recovery is the path of sanctification. Every step has its root in the Word of God.\n\nStep 1 — Romans 7:18-19:\n"For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s exact experience of addiction: wanting to stop, being unable to. This is Step 1.\n\nStep 2 — Hebrews 11:1:\n"Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. This is Step 2.\n\nStep 3 — Proverbs 3:5-6:\n"Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives. This is Step 3.\n\nStep 4 — Psalm 139:23-24:\n"Search me, O God, and know my heart." David\'s invitation to honest self-examination. This is Step 4.\n\nStep 5 — James 5:16:\n"Confess your faults one to another, and pray one for another, that ye may be healed." The purpose of Step 5 — speaking secrets to another human being so healing can begin.\n\nStep 12 — Matthew 10:8:\n"Freely ye have received, freely give." The foundation of mentorship and service.\n\nIn a POLR meeting, Scripture illumines — it does not judge. The person who has never opened a Bible and the person who has read it for thirty years can both find wisdom here.',
+    'The HOPE 12-step program is grounded in Scripture — surrender, honesty, community, and transformation are biblical principles. The path of recovery is the path of sanctification. Every step has its root in the Word of God.\n\nStep 1 — Romans 7:18-19:\n"For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not." Paul\'s exact experience of addiction: wanting to stop, being unable to. This is Step 1.\n\nStep 2 — Hebrews 11:1:\n"Now faith is the substance of things hoped for, the evidence of things not seen." Recovery requires believing in something we cannot yet see. This is Step 2.\n\nStep 3 — Proverbs 3:5-6:\n"Trust in the LORD with all thine heart; and lean not unto thine own understanding." The instruction to stop running our own lives. This is Step 3.\n\nStep 4 — Psalm 139:23-24:\n"Search me, O God, and know my heart." David\'s invitation to honest self-examination. This is Step 4.\n\nStep 5 — James 5:16:\n"Confess your faults one to another, and pray one for another, that ye may be healed." The purpose of Step 5 — speaking secrets to another human being so healing can begin.\n\nStep 12 — Matthew 10:8:\n"Freely ye have received, freely give." The foundation of mentorship and service.\n\nIn a HOPE meeting, Scripture illumines — it does not judge. The person who has never opened a Bible and the person who has walked with it for years can both find wisdom here.',
     [{q:'Which Scripture best illustrates the powerlessness of Step 1?',c:['Psalm 23','Romans 7:18-19','Hebrews 11:1','Matthew 10:8'],a:1,e:'Romans 7:18-19 — Paul\'s description of willing to do good but lacking the power — directly mirrors the experience of addiction: the will without the ability to carry it out.'},
      {q:'What is the scriptural foundation for Step 12 service?',c:['Proverbs 3:5','Matthew 10:8 — "Freely ye have received, freely give"','Hebrews 11:1','James 5:16'],a:1,e:'Matthew 10:8 — "Freely ye have received, freely give" — is the scriptural foundation for mentorship and service. What was given to us without cost, we give to others.'},
-     {q:'How is Scripture used in a POLR meeting?',c:['To judge and correct wrong behavior','To determine who is Christian enough to participate','To illumine — offering wisdom to everyone regardless of their prior relationship with the Bible','To replace the 12 steps'],a:2,e:'In POLR, Scripture illumines — it offers wisdom that applies to everyone regardless of background. It is not used to judge or exclude. The door is wide enough for everyone.'}],'40 min'),
+     {q:'How is Scripture used in a HOPE meeting?',c:['To judge and correct wrong behavior','To determine who is Christian enough to participate','To illumine — offering wisdom to everyone regardless of their prior relationship with the Bible','To replace the 12 steps'],a:2,e:'In HOPE, Scripture illumines — it offers wisdom that applies to everyone regardless of background. It is not used to judge or exclude. The door is wide enough for everyone.'}],'40 min'),
 
   mkL('mn2-l2','mn-2',2,'Leading with Scripture in Recovery Contexts',
-    'Using Scripture effectively in a recovery meeting requires wisdom. The same verse that opens a door for one person can close it for another. Here is how to lead with Scripture well.\n\nContext first:\nBefore quoting Scripture, establish the human truth. "Most of us came in here having tried to stop and failed. Paul describes exactly this experience..." The Scripture illuminates something the listener already feels — it does not introduce a foreign idea.\n\nKJV in POLR:\nPath of Life Recovery uses the King James Version as its primary text. The KJV\'s literary quality, memorability, and connection to English-language recovery tradition all make it the right choice. When reading KJV publicly: read slowly. The Elizabethan English is unfamiliar. Pause after reading to explain the plain meaning in modern language.\n\nScripture as invitation, not weapon:\nPeople in early recovery often carry religious wounds — religion used to shame them, condemn them, or reject them. Scripture deployed as a weapon closes doors. Scripture offered as bread — nourishment for the journey — opens them.\n\nHandling theological disagreement:\nSomeone will disagree. They will quote a different translation, a different interpretation, or reject the text entirely. The correct response: "That is a fair perspective. What I know is what this verse has meant to people in recovery who have worked these steps. What matters most is what you do with your life today." Return to recovery. Do not argue theology in a meeting.\n\nMemorization for leaders:\nA Group Chair or Ambassador who has committed key verses to memory can offer them naturally in the moment — not as a performance, but as a resource. Suggested verses to memorize: Proverbs 3:5-6, Romans 7:18, James 5:16, Psalm 51:10, Matthew 5:23-24, Hebrews 11:1.',
+    'Using Scripture effectively in a recovery meeting requires wisdom. The same verse that opens a door for one person can close it for another. Here is how to lead with Scripture well.\n\nContext first:\nBefore quoting Scripture, establish the human truth. "Most of us came in here having tried to stop and failed. Paul describes exactly this experience..." The Scripture illuminates something the listener already feels — it does not introduce a foreign idea.\n\nKJV in POLR:\nHOPE Recovery: Hold on Pain Ends uses the King James Version as its primary text. The KJV\'s literary quality, memorability, and connection to English-language recovery tradition all make it the right choice. When reading KJV publicly: read slowly. The Elizabethan English is unfamiliar. Pause after reading to explain the plain meaning in modern language.\n\nScripture as invitation, not weapon:\nPeople in early recovery often carry religious wounds — religion used to shame them, condemn them, or reject them. Scripture deployed as a weapon closes doors. Scripture offered as bread — nourishment for the journey — opens them.\n\nHandling theological disagreement:\nSomeone will disagree. They will quote a different translation, a different interpretation, or reject the text entirely. The correct response: "That is a fair perspective. What I know is what this verse has meant to people in recovery who have worked these steps. What matters most is what you do with your life today." Return to recovery. Do not argue theology in a meeting.\n\nMemorization for leaders:\nA Group Chair or Ambassador who has committed key verses to memory can offer them naturally in the moment — not as a performance, but as a resource. Suggested verses to memorize: Proverbs 3:5-6, Romans 7:18, James 5:16, Psalm 51:10, Matthew 5:23-24, Hebrews 11:1.',
     [{q:'When introducing a Scripture in a recovery meeting, what should you do first?',c:['Read the verse then explain it','Establish the human truth the verse illuminates before quoting it','Ask the group to open their Bibles','Quote the verse in the original Greek or Hebrew for accuracy'],a:1,e:'Establish the human truth first — the experience everyone in the room feels. Then show how the Scripture illuminates what they already know. This makes the Scripture land, rather than feeling foreign.'},
      {q:'What is the recommended response when someone theologically disagrees with a Scripture you share?',c:['Argue your interpretation with additional verses','Apologize and remove the verse from your teaching','Return to recovery: "What matters most is what you do with your life today"','Ask them to keep their opinion to themselves'],a:2,e:'Return to recovery. You are not there to argue theology. Acknowledge their perspective briefly, then redirect: "What matters most is what you do with your life today." Stay in your lane.'},
-     {q:'Why does POLR use the King James Version as its primary text?',c:['Because it is the only accurate translation','Because it is legally required for religious organizations','Because of its literary quality, memorability, and connection to English-language recovery tradition','Because it is the easiest to understand'],a:2,e:'POLR uses the KJV for its literary quality, memorability, and deep connection to the English-language recovery tradition. When reading KJV publicly, read slowly and explain the plain meaning in modern language.'}],'35 min'),
+     {q:'Why does HOPE use the King James Version as its primary text?',c:['Because it is the only accurate translation','Because it is legally required for religious organizations','Because of its literary quality, memorability, and connection to English-language recovery tradition','Because it is the easiest to understand'],a:2,e:'POLR uses the KJV for its literary quality, memorability, and deep connection to the English-language recovery tradition. When reading KJV publicly, read slowly and explain the plain meaning in modern language.'}],'35 min'),
 ];
 
 // ─── MN-3: Ambassador Training ─────────────────────────────────────
 add['mn-3'] = [
   mkL('mn3-l1','mn-3',1,'What an Ambassador Does',
-    'The POLR Ambassador is the most advanced leadership role in the ministry. It requires everything the previous tracks have built.\n\nThe Ambassador\'s role:\n- Represent POLR in the community: churches, courts, businesses, civic organizations\n- Identify and develop meeting locations\n- Recruit and train Group Chairs\n- Serve as liaison between community and the POLR platform\n- Build the partnerships that allow new campuses to launch\n\nWhat Ambassadors are NOT:\n- Not executives — they serve\n- Not counselors — they connect\n- Not bosses of the Group Chairs they develop — they coach\n\nCharacter requirements:\nThe role requires sustained integrity. An Ambassador who relapses must step down. An Ambassador who misrepresents POLR must be corrected. The role is a trust — and trust can be revoked.\n\nAn Ambassador should be able to say honestly:\n- "I have worked all 12 steps with a pastor or accountability partner."\n- "I mentor and disciple others."\n- "My life outside the room reflects what I say inside it."\n\nPractical expectations:\n- Monthly check-in with POLR leadership\n- Quarterly reporting on community engagement\n- Immediate disclosure of any relapse or major personal crisis\n- Participation in Ambassador meetings and ongoing training\n\nThe privilege:\nThe Ambassador gets to be the reason someone\'s life changed. Not a therapist, not a judge — the person who showed up at the right moment with the right word and the right story. That is the privilege.',
-    [{q:'What is the primary role of a POLR Ambassador?',c:['To run POLR\'s financial operations','To represent POLR in the community and develop leaders and meeting locations','To provide counseling for members in crisis','To manage the technology platform'],a:1,e:'Ambassadors represent POLR in the community — in churches, courts, businesses — building partnerships, developing meeting sites, and recruiting and coaching Group Chairs.'},
+    'The HOPE Ambassador is the most advanced leadership role in the ministry. It requires everything the previous tracks have built.\n\nThe Ambassador\'s role:\n- Represent HOPE in the community: churches, courts, businesses, civic organizations\n- Identify and develop meeting locations\n- Recruit and train Group Chairs\n- Serve as liaison between community and the HOPE platform\n- Build the partnerships that allow new campuses to launch\n\nWhat Ambassadors are NOT:\n- Not executives — they serve\n- Not counselors — they connect\n- Not bosses of the Group Chairs they develop — they coach\n\nCharacter requirements:\nThe role requires sustained integrity. An Ambassador who relapses must step down. An Ambassador who misrepresents HOPE must be corrected. The role is a trust — and trust can be revoked.\n\nAn Ambassador should be able to say honestly:\n- "I have worked all 12 steps with a pastor or accountability partner."\n- "I mentor and disciple others."\n- "My life outside the room reflects what I say inside it."\n\nPractical expectations:\n- Monthly check-in with HOPE leadership\n- Quarterly reporting on community engagement\n- Immediate disclosure of any relapse or major personal crisis\n- Participation in Ambassador meetings and ongoing training\n\nThe privilege:\nThe Ambassador gets to be the reason someone\'s life changed. Not a therapist, not a judge — the person who showed up at the right moment with the right word and the right story. That is the privilege.',
+    [{q:'What is the primary role of a HOPE Ambassador?',c:['To run POLR\'s financial operations','To represent HOPE in the community and develop leaders and meeting locations','To provide counseling for members in crisis','To manage the technology platform'],a:1,e:'Ambassadors represent HOPE in the community — in churches, courts, businesses — building partnerships, developing meeting sites, and recruiting and coaching Group Chairs.'},
      {q:'What must an Ambassador do if they relapse?',c:['Keep it private to protect the ministry\'s reputation','Step down from the Ambassador role','Ask another Ambassador to cover temporarily','Continue serving but with added accountability'],a:1,e:'An Ambassador who relapses must step down. The role is a trust extended by the ministry. Sustained sobriety is a requirement — and transparency when it breaks is a requirement of integrity.'},
      {q:'The relationship between an Ambassador and the Group Chairs they develop is best described as:',c:['Boss to employee','Coach to developing leader — not hierarchical authority, but servant leadership','Equals with no defined relationship','Supervisor and direct report'],a:1,e:'An Ambassador coaches Group Chairs — guiding, equipping, and encouraging, but not controlling. The model is servant leadership. The Ambassador serves the people they develop.'}],'40 min'),
 
   mkL('mn3-l2','mn-3',2,'Community Partnerships and Campus Launch',
-    'A new POLR campus grows from relationships — with churches, courts, businesses, and people in the community who share the mission.\n\nChurch partnerships:\nChurches provide meeting space, community credibility, and access to volunteers and financial support. Look for churches whose leadership understands addiction as a spiritual and moral struggle — one that deserves compassion and redemption, not condemnation. Christ came for the lost and the broken. (Luke 5:31-32)\n\nApproach: Request a meeting with the pastor. Bring documentation of POLR\'s program and outcomes. Ask: "Would you be willing to host a meeting?" Do not ask for money in the first meeting.\n\nCourt and probation partnerships:\nCourts and probation departments look for programs providing accountability and recovery support for people on supervision. A POLR meeting can be listed as a court-approved recovery meeting.\n\nApproach: Meet with the district DA office or probation administrator. Provide documentation of meeting format, accountability structure, and reporting capability.\n\nEmployer partnerships:\nEmployers gain access to a pre-screened, motivated workforce — and WOTC tax credits for hiring people with criminal records.\n\nApproach: Lead with their benefit. "Our members are drug-tested, program-verified, motivated workers. We generate significant tax credits for employers who hire them."\n\nSocial services and healthcare:\nHospitals and clinics regularly encounter people needing recovery support. A warm referral from a social worker is one of the best ways someone finds POLR. Provide brochures and contact information. Follow up regularly.\n\nThe Ambassador rule:\nDo not ask for things in the first meeting. Show up to give — to explain, to connect, to offer. The asking comes after trust is built.',
-    [{q:'What should you NOT do when first approaching a church about a POLR partnership?',c:['Bring documentation of POLR\'s outcomes','Request a meeting with the pastor','Ask for financial support in the first meeting','Explain how POLR serves the community'],a:2,e:'Never ask for money in the first meeting. Build the relationship first — establish mission alignment, share outcomes, create trust. Financial conversations come after the partnership foundation exists.'},
-     {q:'What is the primary benefit POLR offers employer partners?',c:['Free advertising','Access to drug-tested, program-verified workers and significant WOTC tax credits','Guaranteed employees who will never have problems','Government contracts'],a:1,e:'POLR offers employers a pre-screened, drug-tested, motivated workforce — plus WOTC (Work Opportunity Tax Credit) documentation that generates real tax incentives for hiring people with records.'},
+    'A new HOPE campus grows from relationships — with churches, courts, businesses, and people in the community who share the mission.\n\nChurch partnerships:\nChurches provide meeting space, community credibility, and access to volunteers and financial support. Look for churches whose leadership understands addiction as a spiritual and moral struggle — one that deserves compassion and redemption, not condemnation. Christ came for the lost and the broken. (Luke 5:31-32)\n\nApproach: Request a meeting with the pastor. Bring documentation of POLR\'s program and outcomes. Ask: "Would you be willing to host a meeting?" Do not ask for money in the first meeting.\n\nCourt and probation partnerships:\nCourts and probation departments look for programs providing accountability and recovery support for people on supervision. A HOPE meeting can be listed as a court-approved recovery meeting.\n\nApproach: Meet with the district DA office or probation administrator. Provide documentation of meeting format, accountability structure, and reporting capability.\n\nEmployer partnerships:\nEmployers gain access to a pre-screened, motivated workforce — and WOTC tax credits for hiring people with criminal records.\n\nApproach: Lead with their benefit. "Our members are drug-tested, program-verified, motivated workers. We generate significant tax credits for employers who hire them."\n\nSocial services and healthcare:\nHospitals and clinics regularly encounter people needing recovery support. A warm referral from a social worker is one of the best ways someone finds HOPE. Provide brochures and contact information. Follow up regularly.\n\nThe Ambassador rule:\nDo not ask for things in the first meeting. Show up to give — to explain, to connect, to offer. The asking comes after trust is built.',
+    [{q:'What should you NOT do when first approaching a church about a HOPE partnership?',c:['Bring documentation of POLR\'s outcomes','Request a meeting with the pastor','Ask for financial support in the first meeting','Explain how HOPE serves the community'],a:2,e:'Never ask for money in the first meeting. Build the relationship first — establish mission alignment, share outcomes, create trust. Financial conversations come after the partnership foundation exists.'},
+     {q:'What is the primary benefit HOPE offers employer partners?',c:['Free advertising','Access to drug-tested, program-verified workers and significant WOTC tax credits','Guaranteed employees who will never have problems','Government contracts'],a:1,e:'POLR offers employers a pre-screened, drug-tested, motivated workforce — plus WOTC (Work Opportunity Tax Credit) documentation that generates real tax incentives for hiring people with records.'},
      {q:'What is the "Ambassador rule" for building community relationships?',c:['Always state what you need in the first meeting','Do not show up unless you have a specific ask','Show up to give — do not ask for things in the first meeting; build trust first','Only approach organizations that already know POLR'],a:2,e:'Show up to give in the first meeting — explain, connect, offer value. Trust is built over time. The asking comes after the relationship is established. This is how lasting partnerships form.'}],'35 min'),
 ];
 
@@ -34414,8 +34436,8 @@ add['hh-3'] = [
 // ─── HH-4: Agency Placement Prep ──────────────────────────────────
 add['hh-4'] = [
   mkL('hh4-l1','hh-4',1,'Getting Hired by a Home Health Agency',
-    'Home health agencies are the employers who place aides with clients. Understanding how they work makes you a better candidate and employee.\n\nTypes of agencies:\n\n1. Medicare/Medicaid-certified agencies\nProvide skilled nursing and therapy with aides as part of the care team. Regulated, consistent pay, often with benefits.\n\n2. Private duty agencies\nServe clients paying privately or through long-term care insurance. More companion and personal care work. Often more flexible hours.\n\n3. Registry/staffing agencies\nMatch aides with clients as independent contractors. More flexibility, fewer benefits. Tax responsibility falls to the aide.\n\nWhat agencies look for:\n- CPR/First Aid certification (most require this — POLR can coordinate)\n- Background check clearance\n- Reliable transportation\n- Clear communication\n- Professional demeanor\n- References (program supervisors, pastors, former employers all count)\n\nNavigating your background:\nSome home health positions have restrictions for specific convictions (crimes against vulnerable persons, financial crimes). Research before applying. Many positions are accessible to people in recovery.\n\nDocumentation POLR provides:\n- Program completion certificate\n- Drug test history\n- Character references from POLR leadership\n- CPR certification coordination\n\nFirst 90 days:\nBe evaluated carefully. Show up early. Communicate concerns before they become problems. Build a positive relationship with the scheduler — they control who gets hours.',
-    [{q:'What certification do most home health agencies require?',c:['A nursing license','A driver\'s license','CPR/First Aid certification','A social work background'],a:2,e:'CPR/First Aid certification is required by most home health agencies. POLR coordinates this for members. It is one of the fastest credentials to obtain — often in a single day.'},
+    'Home health agencies are the employers who place aides with clients. Understanding how they work makes you a better candidate and employee.\n\nTypes of agencies:\n\n1. Medicare/Medicaid-certified agencies\nProvide skilled nursing and therapy with aides as part of the care team. Regulated, consistent pay, often with benefits.\n\n2. Private duty agencies\nServe clients paying privately or through long-term care insurance. More companion and personal care work. Often more flexible hours.\n\n3. Registry/staffing agencies\nMatch aides with clients as independent contractors. More flexibility, fewer benefits. Tax responsibility falls to the aide.\n\nWhat agencies look for:\n- CPR/First Aid certification (most require this — HOPE can coordinate)\n- Background check clearance\n- Reliable transportation\n- Clear communication\n- Professional demeanor\n- References (program supervisors, pastors, former employers all count)\n\nNavigating your background:\nSome home health positions have restrictions for specific convictions (crimes against vulnerable persons, financial crimes). Research before applying. Many positions are accessible to people in recovery.\n\nDocumentation HOPE provides:\n- Program completion certificate\n- Drug test history\n- Character references from HOPE leadership\n- CPR certification coordination\n\nFirst 90 days:\nBe evaluated carefully. Show up early. Communicate concerns before they become problems. Build a positive relationship with the scheduler — they control who gets hours.',
+    [{q:'What certification do most home health agencies require?',c:['A nursing license','A driver\'s license','CPR/First Aid certification','A social work background'],a:2,e:'CPR/First Aid certification is required by most home health agencies. HOPE coordinates this for members. It is one of the fastest credentials to obtain — often in a single day.'},
      {q:'What distinguishes a Medicare-certified agency from a private duty agency?',c:['Medicare agencies pay better','Medicare agencies provide skilled care as part of a team; private duty agencies serve private-paying clients with more companion care focus','Private duty agencies only hire licensed nurses','There is no practical difference'],a:1,e:'Medicare/Medicaid-certified agencies provide medical services (skilled nursing, therapy) with aides on the care team. Private duty agencies serve private-paying clients and typically focus on personal and companion care.'},
      {q:'What should you prioritize in the first 90 days at a home health agency?',c:['Negotiating your wage immediately','Requesting the best clients','Reliability, proactive communication, and building a relationship with the scheduler','Keeping to yourself and doing your work independently'],a:2,e:'The first 90 days are an evaluation period. Reliability, proactive communication about any issues, and a positive relationship with the scheduler — who controls your hours — are the most important things to establish.'}],'25 min'),
 ];
@@ -34424,7 +34446,7 @@ add['hh-4'] = [
 function applySupp() {
   var SEED_VERSION = '2026-v5';
   var stored = {};
-  try { stored = JSON.parse(localStorage.getItem('polr_platform_state') || '{}'); } catch(e) {}
+  try { stored = JSON.parse(localStorage.getItem('hope_platform_state') || '{}'); } catch(e) {}
   if (!stored || typeof stored !== 'object') stored = {};
   var existing = stored.eduCourseLessons || {};
   var added = 0, updated = 0;
@@ -34450,8 +34472,8 @@ function applySupp() {
   stored.eduCourseLessons = existing;
   try {
     var serialized = JSON.stringify(stored);
-    localStorage.setItem('polr_platform_state', serialized);
-    localStorage.setItem('polr_platform', serialized);
+    localStorage.setItem('hope_platform_state', serialized);
+    localStorage.setItem('hope_platform', serialized);
     var total = Object.values(existing).reduce(function(a,v){ return a+v.length; }, 0);
     console.log('[POLR LMS Supplement v5] Done — added:', added, 'updated:', updated, '| total LMS:', total);
   } catch(e) { console.error('[POLR LMS Supplement] Save failed:', e.message); }
@@ -34463,7 +34485,7 @@ applySupp();
 
 
 
-// ── POLR Token Resolver ──
+// ── HOPE Token Resolver ──
 // Runs after DOM renders, replaces all {POLR_*} tokens in visible text nodes
 // Respects platform.contactConfig and provisioning overrides
 (function() {
@@ -34474,10 +34496,10 @@ applySupp();
 
   function getConfig() {
     try {
-      var state = JSON.parse(localStorage.getItem('polr_platform_state') || '{}');
+      var state = JSON.parse(localStorage.getItem('hope_platform_state') || '{}');
       var cfg = (state.contactConfig && state.contactConfig.hq) || {};
       // Provisioning override
-      var provision = JSON.parse(localStorage.getItem('polr_provision') || 'null');
+      var provision = JSON.parse(localStorage.getItem('hope_provision') || 'null');
       if (provision && provision.orgName) {
         cfg = Object.assign({}, cfg, {
           name:    provision.orgName  || cfg.name,
@@ -34487,18 +34509,18 @@ applySupp();
         });
       }
       return {
-        POLR_NAME:    cfg.name    || 'Path of Life Recovery',
-        POLR_PHONE:   cfg.phone   || '985.224.7421',
-        POLR_EMAIL:   cfg.email   || 'admin@polrnetwork.com',
-        POLR_WEBSITE: cfg.website || 'polrnetwork.com',
-        POLR_ADDRESS: cfg.address || 'Thibodaux, Louisiana',
-        POLR_TAGLINE: cfg.tagline || 'Walk well.'
+        HOPE_NAME:    cfg.name    || 'HOPE Recovery: Hold on Pain Ends',
+        HOPE_PHONE:   cfg.phone   || '985.224.7421',
+        HOPE_EMAIL:   cfg.email   || 'bro.chuck.edwards@gmail.com',
+        HOPE_WEBSITE: cfg.website || 'hopenetwork.com',
+        POLR_ADDRESS: cfg.address || 'Port Allen, Louisiana',
+        POLR_TAGLINE: cfg.tagline || 'Walk it out faithfully.'
       };
     } catch(e) {
       return {
-        POLR_NAME: 'Path of Life Recovery', POLR_PHONE: '985.224.7421',
-        POLR_EMAIL: 'admin@polrnetwork.com', POLR_WEBSITE: 'polrnetwork.com',
-        POLR_ADDRESS: 'Thibodaux, Louisiana', POLR_TAGLINE: 'Walk well.'
+        HOPE_NAME: 'HOPE Recovery: Hold on Pain Ends', HOPE_PHONE: '985.224.7421',
+        HOPE_EMAIL: 'bro.chuck.edwards@gmail.com', HOPE_WEBSITE: 'hopenetwork.com',
+        POLR_ADDRESS: 'Port Allen, Louisiana', POLR_TAGLINE: 'Walk it out faithfully.'
       };
     }
   }
@@ -34587,7 +34609,7 @@ applySupp();
 
 // A3: Add collapse toggles to all .d-card-head elements
 (function() {
-  var STORAGE_KEY = 'polr_card_collapsed';
+  var STORAGE_KEY = 'hope_card_collapsed';
   function getCollapsed() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); } catch(e){ return {}; }
   }
@@ -34643,13 +34665,13 @@ applySupp();
 })();
 
 
-// POLR Agreement System
+// HOPE Agreement System
 (function() {
   var AGREEMENT_VERSION = 'POLR-IP-2026-v1';
   var BACKEND = 'https://polr-backend-production.up.railway.app';
 
   function getAgreementKey(username) {
-    return 'polr_agreement_' + username + '_' + AGREEMENT_VERSION;
+    return 'hope_agreement_' + username + '_' + AGREEMENT_VERSION;
   }
 
   function hasAgreed(username) {
@@ -34700,7 +34722,7 @@ applySupp();
     btn.textContent = 'Recording agreement...';
 
     var sess = null;
-    try { sess = JSON.parse(sessionStorage.getItem('polr_session') || 'null'); } catch(e) {}
+    try { sess = JSON.parse(sessionStorage.getItem('hope_session') || 'null'); } catch(e) {}
     var username = sess ? sess.username : 'unknown';
     var timestamp = new Date().toISOString();
 
@@ -34718,7 +34740,7 @@ applySupp();
       localStorage.setItem(getAgreementKey(username), JSON.stringify(record));
 
       // Store to backend audit log
-      var token = localStorage.getItem('polr_token');
+      var token = localStorage.getItem('hope_token');
       fetch(BACKEND + '/api/admin/record-agreement', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
@@ -34735,7 +34757,7 @@ applySupp();
   // Check agreement on load
   function checkAgreement() {
     var sess = null;
-    try { sess = JSON.parse(sessionStorage.getItem('polr_session') || 'null'); } catch(e) {}
+    try { sess = JSON.parse(sessionStorage.getItem('hope_session') || 'null'); } catch(e) {}
     if (!sess) return; // Not logged in yet
 
     var username = sess.username || 'unknown';
@@ -34759,7 +34781,7 @@ applySupp();
 (function() {
   var BASE = 'https://polr-backend-production.up.railway.app';
   function loadFeatured() {
-    var token = localStorage.getItem('polr_token');
+    var token = localStorage.getItem('hope_token');
     if (!token) return;
     fetch(BASE + '/api/testimonies/featured', {
       headers: { Authorization: 'Bearer ' + token }
@@ -34780,5 +34802,3 @@ applySupp();
   }
   setTimeout(loadFeatured, 2000);
 })();
-
-
