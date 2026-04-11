@@ -33,6 +33,12 @@ jobs:
         run: node tests/hope.test.js
         continue-on-error: true
 
+      - name: Show Results
+        run: |
+          echo '## HOPE Platform Test Results' >> $GITHUB_STEP_SUMMARY
+          cat evolution/last-results.json >> $GITHUB_STEP_SUMMARY
+        continue-on-error: true
+
       - name: Update Memory
         run: node evolution/memory-engine.js
         continue-on-error: true
@@ -46,16 +52,6 @@ jobs:
           git push
         continue-on-error: true
 
-      - name: Send Email on Failure
+      - name: Fail if tests failed
         if: steps.run_tests.outcome == 'failure'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
-          username: ${{ secrets.GMAIL_USER }}
-          password: ${{ secrets.GMAIL_PASS }}
-          subject: 'HOPE Platform Test FAILED'
-          to: bro.chuck.edwards@gmail.com
-          from: HOPE Platform Tests
-          body: 'One or more tests failed. Check: https://github.com/chuckedwards1972/polr-webapp/actions'
+        run: exit 1
