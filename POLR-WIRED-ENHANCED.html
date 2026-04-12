@@ -3472,365 +3472,83 @@ function EventsBuilder({ platform, update, toast, session }) {
 // ═══════════════════════════════════════════════════════════
 // FULL MEMBER DETAILS PANEL
 // ═══════════════════════════════════════════════════════════
-function MembersFullPanel({ platform, update, toast, session }) {
-  var _s1 = useState(null), selectedMember = _s1[0], setSelectedMember = _s1[1];
-  var _s2 = useState(''), search = _s2[0], setSearch = _s2[1];
-  var _s3 = useState('all'), filterRole = _s3[0], setFilterRole = _s3[1];
-  var _s4 = useState(false), showAddNote = _s4[0], setShowAddNote = _s4[1];
-  var _s5 = useState(''), noteText = _s5[0], setNoteText = _s5[1];
-  var _s6 = useState(false), showAddTalent = _s6[0], setShowAddTalent = _s6[1];
-  var _s7 = useState(''), talentText = _s7[0], setTalentText = _s7[1];
-
-  // DEMO DATA — replaced on first real data import
-  // DEMO DATA — replaced on first real import
-  // ── LIVE: member list from API-hydrated platform.members ──
-  // SAMPLE_MEMBERS kept only as local fallback if no API data yet
-  var SAMPLE_MEMBERS = [
-    { id:'m1', name:'Chuck Edwards', username:'HOPEHQ', role:'admin', level:0, status:'Active', campus:'Port Allen', sobrietyDate:'2020-06-01' },
-    { id:'m2', name:'James W.', username:'jamesw', role:'member', level:5, status:'Active', campus:'Port Allen' },
-    { id:'m3', name:'Sarah M.', username:'sarahm', role:'member', level:5, status:'Active', campus:'HOPE Place Port Allen' },
-  ];
-
-  // Use API members when hydrated, show sample only before first load
-  var apiMembers = (platform.members || []);
-  var memberList = apiMembers.length > 0 ? apiMembers : SAMPLE_MEMBERS;
-  var filtered = memberList.filter(function(m) {
-    var matchSearch = !search || (m.name || '').toLowerCase().includes(search.toLowerCase()) || (m.campus || '').toLowerCase().includes(search.toLowerCase());
-    var matchRole = filterRole === 'all' || m.role === filterRole;
-    return matchSearch && matchRole;
+function MembersFullPanel({platform,update,toast,session}){
+  var _cs=React.useState([]);var members=_cs[0];var setMembers=_cs[1];
+  var _lo=React.useState(true);var loading=_lo[0];var setLoading=_lo[1];
+  var _sf=React.useState(false);var showForm=_sf[0];var setShowForm=_sf[1];
+  var _ed=React.useState(null);var editing=_ed[0];var setEditing=_ed[1];
+  var _sr=React.useState('');var search=_sr[0];var setSearch=_sr[1];
+  var blank={first_name:'',last_name:'',email:'',phone:'',campus_id:'',level:6,status:'intake'};
+  var _fm=React.useState(blank);var form=_fm[0];var setForm=_fm[1];
+  var getToken=function(){try{var s=sessionStorage.getItem('hope_session')||localStorage.getItem('hope_session');return s?JSON.parse(s).token||'':'';}catch(e){return '';}};
+  var API=window.POLR_API_BASE;
+  var load=function(){
+    setLoading(true);
+    fetch(API+'/members',{headers:{'Authorization':'Bearer '+getToken()}})
+      .then(function(r){return r.json();})
+      .then(function(data){setMembers(Array.isArray(data)?data:[]);setLoading(false);})
+      .catch(function(e){setLoading(false);toast({icon:'warning',title:'Could not load members',body:String(e)});});
+  };
+  React.useEffect(function(){load();},[]);
+  var ff=function(k){return function(e){setForm(function(p){var n=Object.assign({},p);n[k]=e.target.value;return n;});};};
+  var toggleForm=function(){setShowForm(function(v){return !v;});setEditing(null);setForm(blank);};
+  var save=function(){
+    if(!form.first_name||!form.last_name){toast({icon:'warning',title:'Required',body:'First and last name required.'});return;}
+    var url=editing?API+'/members/'+editing:API+'/members';
+    var method=editing?'PUT':'POST';
+    fetch(url,{method:method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+getToken()},body:JSON.stringify(form)})
+      .then(function(r){return r.json();})
+      .then(function(){toast({icon:'ok',title:'Saved',body:form.first_name+' '+form.last_name+' saved.'});setShowForm(false);setEditing(null);setForm(blank);load();})
+      .catch(function(e){toast({icon:'warning',title:'Save failed',body:'Check connection.'});});
+  };
+  var startEdit=function(x){
+    setForm({first_name:x.first_name||'',last_name:x.last_name||'',email:x.email||'',phone:x.phone||'',campus_id:x.campus_id||'',level:x.level||6,status:x.status||'active'});
+    setEditing(x.id);setShowForm(true);
+  };
+  var filtered=members.filter(function(m){
+    if(!search)return true;
+    var s=search.toLowerCase();
+    return (m.first_name||'').toLowerCase().includes(s)||(m.last_name||'').toLowerCase().includes(s)||(m.email||'').toLowerCase().includes(s);
   });
-
-  var daysSober = function(date) {
-    if (!date) return null;
-    return Math.floor((Date.now() - new Date(date).getTime()) / (1000*60*60*24));
+  var INP=function(lbl,k,type){
+    return React.createElement('div',{style:{marginBottom:'0.5rem'}},
+      React.createElement('div',{style:{fontSize:'0.6rem',fontWeight:700,textTransform:'uppercase',color:'var(--dmuted)',marginBottom:'0.1rem'}},lbl),
+      React.createElement('input',{type:type||'text',value:form[k]||'',onChange:ff(k),style:{width:'100%',padding:'0.4rem',borderRadius:6,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.82rem',outline:'none',boxSizing:'border-box'}}));
   };
-
-  var sobLabel = function(days) {
-    if (days === null) return '—';
-    if (days >= 365*2) return Math.floor(days/365) + ' yrs';
-    if (days >= 365) return '1 yr ' + Math.floor((days%365)/30) + ' mo';
-    if (days >= 30) return Math.floor(days/30) + ' mo';
-    return days + ' days';
+  var SEL=function(lbl,k,opts){
+    return React.createElement('div',{style:{marginBottom:'0.5rem'}},
+      React.createElement('div',{style:{fontSize:'0.6rem',fontWeight:700,textTransform:'uppercase',color:'var(--dmuted)',marginBottom:'0.1rem'}},lbl),
+      React.createElement('select',{value:form[k]||'',onChange:ff(k),style:{width:'100%',padding:'0.4rem',borderRadius:6,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.82rem',outline:'none',boxSizing:'border-box'}},
+        opts.map(function(o){return React.createElement('option',{key:o[0],value:o[0]},o[1]);})));
   };
-
-  var levelLabel = function(l) {
-    return ['HQ Admin','Ambassador','HOPE Place Leader','Group Chair','Workforce','Member','Guest'][l] || 'Member';
-  };
-
-  var levelColor = function(l) {
-    return ['var(--l0)','var(--l1)','var(--l2)','var(--l3)','var(--l4)','var(--l5)','var(--l6)'][l] || 'var(--l5)';
-  };
-
-  var addNote = function(member) {
-    if (!noteText.trim()) return;
-    var updated = platform.memberNotes || {};
-    updated[member.id] = (updated[member.id] || []).concat([{ text: noteText, by: (session&&session.name)||'Admin', at: new Date().toISOString() }]);
-    update('memberNotes', updated);
-    setNoteText(''); setShowAddNote(false);
-    toast({ icon:'📝', title:'Note added' });
-  };
-
-  var addTalent = function(member) {
-    if (!talentText.trim()) return;
-    var updated = platform.memberTalents || {};
-    updated[member.id] = (updated[member.id] || []).concat([talentText.trim()]);
-    update('memberTalents', updated);
-    setTalentText(''); setShowAddTalent(false);
-    toast({ icon:'⭐', title:'Talent added' });
-  };
-
-  // Detail view
-  if (selectedMember) {
-    var m = selectedMember;
-    var days = daysSober(m.sobrietyDate);
-    var extraNotes = (platform.memberNotes || {})[m.id] || [];
-    var extraTalents = (platform.memberTalents || {})[m.id] || [];
-    var allNotes = (m.notes || []).map(function(n) { return { text:n, by:'Record', at:'' }; }).concat(extraNotes);
-    var allTalents = (m.talents || []).concat(extraTalents);
-
-    return React.createElement('div', null,
-      // Back + header
-      React.createElement('div', { style:{ display:'flex', alignItems:'center', gap:'1rem', marginBottom:'1.5rem' } },
-        React.createElement('button', { onClick: function() { setSelectedMember(null); setShowAddNote(false); setShowAddTalent(false); }, style:{ background:'none', border:'none', color:'var(--gold)', cursor:'pointer', fontSize:'0.85rem', fontFamily:'var(--font-serif)' } }, '← All Members'),
-        React.createElement('div', { style:{ flex:1 } },
-          React.createElement('div', { style:{ fontSize:'0.65rem', color:'var(--dmuted)', fontFamily:'var(--font-mono)', marginBottom:'0.1rem' } }, 'MEMBER RECORD'),
-          React.createElement('h2', { style:{ fontFamily:'var(--font-serif)', color:'var(--dtxt)', fontWeight:600 } }, m.name)
-        ),
-        React.createElement('span', { style:{ fontSize:'0.72rem', fontWeight:700, padding:'0.3rem 0.85rem', borderRadius:20, background: (m.status==='Active')?'rgba(91,196,110,0.1)':'rgba(252,129,129,0.1)', color: (m.status==='Active')?'var(--l5)':'#fc8181', border: '1px solid ' + ((m.status==='Active')?'rgba(91,196,110,0.2)':'rgba(252,129,129,0.2)') } }, m.status || 'Active')
-      ),
-
-      // Top stats row
-      React.createElement('div', { style:{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:'0.85rem', marginBottom:'1.25rem' } },
-        [
-          ['Sobriety', sobLabel(days), levelColor(5)],
-          ['Level', levelLabel(m.level||5), levelColor(m.level||5)],
-          ['Attendance', (m.attendanceCount||0)+'✖', 'var(--l4)'],
-          ['Steps Done', (m.stepsCompleted||0)+'/12', 'var(--l2)'],
-          ['Given', '$'+(m.lifetimeDonation||0).toLocaleString(), 'var(--gold)'],
-        ].map(function(row) {
-          return React.createElement('div', { key:row[0], style:{ background:'var(--card)', border:'1px solid var(--bdr)', borderRadius:10, padding:'1rem', textAlign:'center' } },
-            React.createElement('div', { style:{ fontSize:'1.35rem', fontWeight:700, fontFamily:'var(--font-serif)', color:row[2] } }, row[1]),
-            React.createElement('div', { style:{ fontSize:'0.62rem', color:'var(--dmuted)', textTransform:'uppercase', letterSpacing:'0.08em', marginTop:'0.2rem' } }, row[0])
-          );
-        })
-      ),
-
-      // Main 2-col grid
-      React.createElement('div', { style:{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.25rem' } },
-
-        // Left col — personal info
-        React.createElement('div', null,
-          React.createElement('div', { className:'d-card' },
-            React.createElement('div', { className:'d-card-head' }, React.createElement('span', { className:'d-card-title' }, 'PERSONAL INFO')),
-            React.createElement('div', { className:'d-card-body' },
-              [
-                ['Position', m.position || levelLabel(m.level||5)],
-                ['Campus', m.campus || '—'],
-                ['Email', m.email || '—'],
-                ['Phone', m.phone || '—'],
-                ['Joined', m.joinedAt ? new Date(m.joinedAt).toLocaleDateString() : '—'],
-                ['Recovery Start Date', m.sobrietyDate ? new Date(m.sobrietyDate).toLocaleDateString() : '—'],
-                ['Total Sober', days !== null ? days + ' days' : '—'],
-              ].map(function(row) {
-                return React.createElement('div', { key:row[0], style:{ display:'flex', justifyContent:'space-between', padding:'0.45rem 0', borderBottom:'1px solid var(--bdr)', fontSize:'0.82rem' } },
-                  React.createElement('span', { style:{ color:'var(--dmuted)' } }, row[0]),
-                  React.createElement('span', { style:{ color:'var(--dtxt)', fontWeight:500 } }, row[1])
-                );
-              })
-            )
-          )
-        ),
-
-        // Right col — progress
-        React.createElement('div', null,
-          React.createElement('div', { className:'d-card', style:{ marginBottom:'1rem' } },
-            React.createElement('div', { className:'d-card-head' }, React.createElement('span', { className:'d-card-title' }, 'RECOVERY PROGRESS')),
-            React.createElement('div', { className:'d-card-body' },
-              // Steps progress bar
-              React.createElement('div', { style:{ marginBottom:'0.85rem' } },
-                React.createElement('div', { style:{ display:'flex', justifyContent:'space-between', fontSize:'0.72rem', color:'var(--dmuted)', marginBottom:'0.35rem' } },
-                  React.createElement('span', null, '12 Steps Progress'),
-                  React.createElement('span', { style:{ color:'var(--l2)', fontFamily:'var(--font-mono)' } }, (m.stepsCompleted||0) + ' / 12')
-                ),
-                React.createElement('div', { style:{ height:8, background:'var(--bg3)', borderRadius:4, overflow:'hidden' } },
-                  React.createElement('div', { style:{ height:'100%', width: ((m.stepsCompleted||0)/12*100)+'%', background:'linear-gradient(90deg,var(--l2),var(--l5))', borderRadius:4, transition:'width 0.6s' } })
-                )
-              ),
-              // Attendance bar
-              React.createElement('div', null,
-                React.createElement('div', { style:{ display:'flex', justifyContent:'space-between', fontSize:'0.72rem', color:'var(--dmuted)', marginBottom:'0.35rem' } },
-                  React.createElement('span', null, 'Lifetime Attendance'),
-                  React.createElement('span', { style:{ color:'var(--l4)', fontFamily:'var(--font-mono)' } }, (m.attendanceCount||0) + ' meetings')
-                ),
-                React.createElement('div', { style:{ height:8, background:'var(--bg3)', borderRadius:4, overflow:'hidden' } },
-                  React.createElement('div', { style:{ height:'100%', width: Math.min(100,(m.attendanceCount||0)/500*100)+'%', background:'linear-gradient(90deg,var(--l4),var(--l5))', borderRadius:4 } })
-                )
-              )
-            )
-          )
-        ),
-
-        // Talents — full width
-        React.createElement('div', { style:{ gridColumn:'1/-1' } },
-          React.createElement('div', { className:'d-card' },
-            React.createElement('div', { className:'d-card-head' },
-              React.createElement('span', { className:'d-card-title' }, 'TALENTS & SKILLS'),
-              React.createElement('button', { onClick: function() { setShowAddTalent(!showAddTalent); }, style:{ padding:'0.2rem 0.65rem', borderRadius:6, background:'rgba(200,145,58,0.1)', border:'1px solid rgba(200,145,58,0.2)', color:'var(--gold)', cursor:'pointer', fontSize:'0.72rem', fontWeight:700 } }, '+ Add Talent')
-            ),
-            React.createElement('div', { className:'d-card-body' },
-              showAddTalent && React.createElement('div', { style:{ display:'flex', gap:'0.5rem', marginBottom:'0.85rem' } },
-                React.createElement('input', { value:talentText, onChange: function(e) { setTalentText(e.target.value); }, placeholder:'e.g. Carpentry, Music, Mentoring...', onKeyDown: function(e) { if(e.key==='Enter') addTalent(m); }, style:{ flex:1, padding:'0.55rem 0.8rem', borderRadius:8, border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dtxt)', fontSize:'0.85rem', outline:'none' } }),
-                React.createElement('button', { onClick: function() { addTalent(m); }, style:{ padding:'0.55rem 1rem', background:'var(--gold)', color:'var(--navy)', border:'none', borderRadius:8, cursor:'pointer', fontWeight:700, fontSize:'0.82rem' } }, 'Add')
-              ),
-              allTalents.length === 0
-                ? React.createElement('div', { style:{ color:'var(--dmuted)', fontStyle:'italic', fontSize:'0.85rem' } }, 'No talents recorded yet.')
-                : React.createElement('div', { style:{ display:'flex', flexWrap:'wrap', gap:'0.5rem' } },
-                    allTalents.map(function(t, i) {
-                      return React.createElement('span', { key:i, style:{ padding:'0.3rem 0.75rem', borderRadius:20, background:'rgba(200,145,58,0.08)', border:'1px solid rgba(200,145,58,0.15)', color:'var(--gold)', fontSize:'0.78rem', fontWeight:600 } }, t);
-                    })
-                  )
-            )
-          )
-        ),
-
-        // Notes — full width
-        React.createElement('div', { style:{ gridColumn:'1/-1' } },
-          React.createElement('div', { className:'d-card' },
-            React.createElement('div', { className:'d-card-head' },
-              React.createElement('span', { className:'d-card-title' }, 'NOTES & OBSERVATIONS'),
-              React.createElement('button', { onClick: function() { setShowAddNote(!showAddNote); }, style:{ padding:'0.2rem 0.65rem', borderRadius:6, background:'rgba(200,145,58,0.1)', border:'1px solid rgba(200,145,58,0.2)', color:'var(--gold)', cursor:'pointer', fontSize:'0.72rem', fontWeight:700 } }, '+ Add Note')
-            ),
-            React.createElement('div', { className:'d-card-body' },
-              showAddNote && React.createElement('div', { style:{ marginBottom:'1rem' } },
-                React.createElement('textarea', { value:noteText, onChange: function(e) { setNoteText(e.target.value); }, rows:3, placeholder:'Add a pastoral note, observation, or follow-up item...', style:{ width:'100%', padding:'0.65rem 0.85rem', borderRadius:8, border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dtxt)', fontSize:'0.88rem', outline:'none', resize:'vertical', lineHeight:1.6, boxSizing:'border-box' } }),
-                React.createElement('button', { onClick: function() { addNote(m); }, className:'btn-primary', style:{ padding:'0.5rem 1.1rem', fontSize:'0.82rem', marginTop:'0.5rem' } }, 'Save Note')
-              ),
-              allNotes.length === 0
-                ? React.createElement('div', { style:{ color:'var(--dmuted)', fontStyle:'italic', fontSize:'0.85rem' } }, 'No notes on record.')
-                : allNotes.map(function(n, i) {
-                    return React.createElement('div', { key:i, style:{ padding:'0.75rem', background:'var(--bg3)', borderRadius:8, marginBottom:'0.5rem', borderLeft:'3px solid var(--gold)' } },
-                      React.createElement('div', { style:{ fontSize:'0.85rem', color:'var(--dtxt)', lineHeight:1.6, marginBottom:'0.25rem' } }, n.text),
-                      (n.by || n.at) && React.createElement('div', { style:{ fontSize:'0.65rem', color:'var(--ddim)', fontFamily:'var(--font-mono)' } }, n.by, n.at ? ' · ' + new Date(n.at).toLocaleDateString() : '')
-                    );
-                  })
-            )
-          )
-        )
-      ),
-
-      // Recovery Path card
-      React.createElement('div', { style:{ marginTop:'1.25rem' } },
-        React.createElement('div', { className:'d-card' },
-          React.createElement('div', { className:'d-card-head' },
-            React.createElement('span', { className:'d-card-title' }, '🗺️ RECOVERY PATH CONFIGURATION'),
-            React.createElement('span', { style:{ fontSize:'0.68rem', color:'var(--dmuted)' } }, 'Active tracks shape scoring and pipeline visibility')
-          ),
-          React.createElement('div', { className:'d-card-body' },
-            m && React.createElement(AdaptivePathPanel, { member:m, platform:platform, update:update, toast:toast, setActive:function(){} })
-          )
-        )
-      )
-    );
-  }
-
-  // LIST VIEW
-  return React.createElement('div', null,
-    React.createElement('div', { style:{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.25rem' } },
-      React.createElement('div', null,
-        React.createElement('div', { style:{ fontSize:'0.65rem', color:'var(--dmuted)', fontFamily:'var(--font-mono)', marginBottom:'0.2rem' } }, 'MEMBER RECORDS'),
-        React.createElement('h2', { style:{ fontFamily:'var(--font-serif)', color:'var(--dtxt)', fontWeight:600 } }, 'All Members')
-      ),
-      React.createElement('div', { style:{ fontSize:'0.82rem', color:'var(--dmuted)' } }, filtered.length + ' members')
-    ),
-
-    // Search + filter
-    React.createElement('div', { style:{ display:'flex', gap:'0.75rem', marginBottom:'1.25rem' } },
-      React.createElement('input', { value:search, onChange: function(e) { setSearch(e.target.value); }, placeholder:'Search by name or campus...', style:{ flex:1, padding:'0.65rem 0.9rem', borderRadius:8, border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dtxt)', fontSize:'0.85rem', outline:'none' } }),
-      React.createElement('select', { value:filterRole, onChange: function(e) { setFilterRole(e.target.value); }, style:{ padding:'0.65rem 0.9rem', borderRadius:8, border:'1px solid var(--bdr2)', background:'var(--bg3)', color:'var(--dtxt)', fontSize:'0.85rem', outline:'none' } },
-        [['all','All Roles'],['admin','Admin'],['ambassador','Ambassador'],['chair','Group Chair'],['member','Member'],['guest','Guest']].map(function(opt) {
-          return React.createElement('option', { key:opt[0], value:opt[0] }, opt[1]);
-        })
-      )
-    ),
-
-    // Member table
-    React.createElement('div', { className:'d-card' },
-      React.createElement('div', { style:{ overflowX:'auto' } },
-        React.createElement('table', { style:{ width:'100%', borderCollapse:'collapse' } },
-          React.createElement('thead', null,
-            React.createElement('tr', { style:{ borderBottom:'1px solid var(--bdr)' } },
-              ['Member','Campus','Position','Sobriety','Steps','Attendance','Lifetime Given','Status'].map(function(h) {
-                return React.createElement('th', { key:h, style:{ padding:'0.6rem 1rem', textAlign:'left', fontSize:'0.62rem', fontWeight:700, color:'var(--dmuted)', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap' } }, h);
-              })
-            )
-          ),
-          React.createElement('tbody', null,
-            filtered.map(function(m) {
-              var days = daysSober(m.sobrietyDate);
-              return React.createElement('tr', { key:m.id||m.name, style:{ borderBottom:'1px solid var(--bdr)', cursor:'pointer', transition:'background 0.15s' }, onClick: function() { setSelectedMember(m); }, onMouseEnter: function(e) { e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }, onMouseLeave: function(e) { e.currentTarget.style.background = 'transparent'; } },
-                React.createElement('td', { style:{ padding:'0.75rem 1rem' } },
-                  React.createElement('div', { style:{ display:'flex', alignItems:'center', gap:'0.6rem' } },
-                    React.createElement('div', { style:{ width:30, height:30, borderRadius:'50%', background:'var(--bg3)', border:'1px solid var(--bdr2)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.8rem', fontWeight:700, color:levelColor(m.level||5), flexShrink:0 } }, (m.name||'?')[0]),
-                    React.createElement('div', null,
-                      React.createElement('div', { style:{ fontSize:'0.85rem', fontWeight:600, color:'var(--dtxt)' } }, m.name || m.username),
-                      m.email && React.createElement('div', { style:{ fontSize:'0.68rem', color:'var(--ddim)' } }, m.email)
-                    )
-                  )
-                ),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem', fontSize:'0.8rem', color:'var(--dmuted)' } }, m.campus || '—'),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem' } },
-                  React.createElement('span', { style:{ fontSize:'0.7rem', fontWeight:700, color:levelColor(m.level||5), padding:'0.15rem 0.5rem', borderRadius:4, background: levelColor(m.level||5).replace(')',',0.1)').replace('var(','rgba(') } }, m.position || levelLabel(m.level||5))
-                ),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem', fontSize:'0.82rem', color: days !== null && days >= 365 ? 'var(--l5)' : days !== null && days >= 90 ? 'var(--l4)' : 'var(--dmuted)', fontWeight:500 } }, sobLabel(days)),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem', fontSize:'0.82rem', color:'var(--l2)', fontFamily:'var(--font-mono)' } }, (m.stepsCompleted||0) + '/12'),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem', fontSize:'0.82rem', color:'var(--dmuted)', fontFamily:'var(--font-mono)' } }, (m.attendanceCount||0) + '✖'),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem', fontSize:'0.82rem', color:'var(--gold)', fontFamily:'var(--font-mono)' } }, '$' + (m.lifetimeDonation||0).toLocaleString()),
-                React.createElement('td', { style:{ padding:'0.75rem 1rem' } },
-                  React.createElement('span', { style:{ fontSize:'0.68rem', fontWeight:700, padding:'0.2rem 0.5rem', borderRadius:4, background: (m.status==='Active'||!m.status)?'rgba(91,196,110,0.1)':'rgba(252,129,129,0.1)', color: (m.status==='Active'||!m.status)?'var(--l5)':'#fc8181' } }, m.status || 'Active')
-                )
-              );
-            })
-          )
-        )
-      )
-    )
-  );
+  return React.createElement('div',null,
+    React.createElement('div',{className:'d-card-head'},
+      React.createElement('span',{className:'d-card-title'},'Members — Live from Database'),
+      React.createElement('div',{style:{display:'flex',gap:'0.5rem',alignItems:'center'}},
+        React.createElement('input',{type:'text',placeholder:'Search members...',value:search,onChange:function(e){setSearch(e.target.value);},style:{padding:'0.35rem 0.65rem',borderRadius:6,border:'1px solid var(--bdr2)',background:'var(--bg3)',color:'var(--dtxt)',fontSize:'0.8rem',outline:'none'}}),
+        React.createElement('button',{className:'btn-primary',onClick:toggleForm,style:{padding:'0.4rem 0.85rem',fontSize:'0.78rem',whiteSpace:'nowrap'}},showForm?'Cancel':'+ Add Member'))),
+    loading?React.createElement('div',{style:{padding:'1rem',color:'var(--dmuted)'}},'Loading members from database...'):null,
+    showForm?React.createElement('div',{className:'d-card',style:{marginBottom:'1rem'}},
+      React.createElement('div',{style:{fontSize:'0.65rem',color:'var(--dmuted)',marginBottom:'0.5rem'}},editing?'EDIT MEMBER':'ADD MEMBER'),
+      React.createElement('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.5rem'}},
+        INP('First Name','first_name'),INP('Last Name','last_name'),INP('Email','email','email'),INP('Phone','phone','tel'),
+        SEL('Status','status',[['intake','Intake'],['active','Active'],['completed','Completed'],['inactive','Inactive']]),
+        SEL('Level','level',[['6','6 - Member'],['5','5'],['4','4'],['3','3'],['2','2'],['1','1 - Staff'],['0','0 - Admin']])),
+      React.createElement('button',{className:'btn-primary',onClick:save,style:{marginTop:'0.5rem'}},editing?'Save Changes':'Add Member')):null,
+    !loading?React.createElement('div',null,
+      React.createElement('div',{style:{fontSize:'0.72rem',color:'var(--dmuted)',marginBottom:'0.75rem'}},filtered.length+' members'),
+      React.createElement('div',{style:{display:'grid',gap:'0.5rem'}},
+        filtered.map(function(m){
+          return React.createElement('div',{key:m.id,className:'d-card',style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.75rem 1rem'}},
+            React.createElement('div',null,
+              React.createElement('div',{style:{fontWeight:700,color:'var(--dtxt)',fontSize:'0.9rem'}},(m.first_name||'')+' '+(m.last_name||m.username||'')),
+              React.createElement('div',{style:{fontSize:'0.75rem',color:'var(--dmuted)'}},(m.email||'')+(m.campus_name?' | '+m.campus_name:'')+(m.status?' | '+m.status:''))),
+            React.createElement('div',{style:{display:'flex',gap:'0.35rem'}},
+              React.createElement('button',{onClick:function(){startEdit(m);},style:{padding:'0.2rem 0.5rem',fontSize:'0.7rem',borderRadius:5,border:'1px solid var(--bdr2)',background:'var(--bg2)',color:'var(--dtxt)',cursor:'pointer'}},'Edit'),
+              React.createElement('span',{style:{padding:'0.2rem 0.5rem',fontSize:'0.65rem',borderRadius:5,background:m.is_active?'rgba(91,196,110,0.15)':'rgba(239,68,68,0.1)',color:m.is_active?'var(--l5)':'#ef4444'}},m.is_active?'Active':'Inactive')));
+        }))):null);
 }
 
-
-// ═══════════════════════════════════════════════════════════
-// HOPE LESSON BUILDER — Full structured lesson editor
-// ═══════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-// KJV SCRIPTURE LIBRARY — Recovery-indexed verse database
-// ══════════════════════════════════════════════════════════════════════
-var KJV_LIBRARY = {
-  // Step-indexed
-  step: {
-    1: [
-      { id:'ps46-10', ref:'Psalm 46:10', text:'Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.', topics:['surrender','powerlessness','stillness'] },
-      { id:'pro3-5', ref:'Proverbs 3:5-6', text:'Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.', topics:['surrender','trust','direction'] },
-      { id:'rom7-18', ref:'Romans 7:18', text:'For I know that in me (that is, in my flesh,) dwelleth no good thing: for to will is present with me; but how to perform that which is good I find not.', topics:['powerlessness','flesh','will'] },
-    ],
-    2: [
-      { id:'jer29-11', ref:'Jeremiah 29:11', text:'For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.', topics:['hope','restoration','future'] },
-      { id:'ps16-11', ref:'Psalm 16:11', text:'Thou wilt shew me the path of life: in thy presence is fulness of joy; at thy right hand there are pleasures for evermore.', topics:['path','life','joy','presence'] },
-    ],
-    3: [
-      { id:'rom12-1', ref:'Romans 12:1', text:'I beseech you therefore, brethren, by the mercies of God, that ye present your bodies a living sacrifice, holy, acceptable unto God, which is your reasonable service.', topics:['surrender','will','decision','sacrifice'] },
-      { id:'jn3-16', ref:'John 3:16', text:'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.', topics:['love','belief','salvation'] },
-    ],
-    4: [
-      { id:'lam3-40', ref:'Lamentations 3:40', text:'Let us search and try our ways, and turn again to the LORD.', topics:['inventory','searching','turning'] },
-      { id:'ps139-23', ref:'Psalm 139:23-24', text:'Search me, O God, and know my heart: try me, and know my thoughts: And see if there be any wicked way in me, and lead me in the way everlasting.', topics:['inventory','honesty','searching','heart'] },
-    ],
-    5: [
-      { id:'jas5-16', ref:'James 5:16', text:'Confess your faults one to another, and pray one for another, that ye may be healed. The effectual fervent prayer of a righteous man availeth much.', topics:['confession','accountability','healing'] },
-      { id:'1jn1-9', ref:'1 John 1:9', text:'If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.', topics:['confession','forgiveness','cleansing'] },
-    ],
-    6: [
-      { id:'phi4-13', ref:'Philippians 4:13', text:'I can do all things through Christ which strengtheneth me.', topics:['strength','readiness','change'] },
-      { id:'ezk36-26', ref:'Ezekiel 36:26', text:'A new heart also will I give you, and a new spirit will I put within you: and I will take away the stony heart out of your flesh, and I will give you an heart of flesh.', topics:['transformation','new heart','change','readiness'] },
-    ],
-    7: [
-      { id:'zec4-6', ref:'Zechariah 4:6', text:'Not by might, nor by power, but by my spirit, saith the LORD of hosts.', topics:['humility','ask','spirit','dependence'] },
-      { id:'mat7-7', ref:'Matthew 7:7', text:'Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be opened unto you.', topics:['ask','seek','receive'] },
-    ],
-    8: [
-      { id:'lk15-18', ref:'Luke 15:18', text:'I will arise and go to my father, and will say unto him, Father, I have sinned against heaven, and before thee.', topics:['amends','return','humility','restore'] },
-      { id:'mat5-23', ref:'Matthew 5:23-24', text:'Therefore if thou bring thy gift to the altar, and there rememberest that thy brother hath ought against thee; Leave there thy gift before the altar, and go thy way; first be reconciled to thy brother.', topics:['amends','reconciliation','restore'] },
-    ],
-    9: [
-      { id:'rom12-18', ref:'Romans 12:18', text:'If it be possible, as much as lieth in you, live peaceably with all men.', topics:['amends','peace','reconciliation','possible'] },
-      { id:'pro28-13', ref:'Proverbs 28:13', text:'He that covereth his sins shall not prosper: but whoso confesseth and forsaketh them shall have mercy.', topics:['amends','confession','forsake','mercy'] },
-    ],
-    10: [
-      { id:'1cor10-12', ref:'1 Corinthians 10:12', text:'Wherefore let him that thinketh he standeth take heed lest he fall.', topics:['inventory','daily','vigilance','watchful'] },
-      { id:'gal6-1', ref:'Galatians 6:1', text:'Brethren, if a man be overtaken in a fault, ye which are spiritual, restore such an one in the spirit of meekness; considering thyself, lest thou also be tempted.', topics:['restoration','daily','inventory','community'] },
-    ],
-    11: [
-      { id:'phi4-6', ref:'Philippians 4:6-7', text:'Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.', topics:['prayer','meditation','peace','thanksgiving'] },
-      { id:'1th5-17', ref:'1 Thessalonians 5:17', text:'Pray without ceasing.', topics:['prayer','conscious contact','constant'] },
-    ],
-    12: [
-      { id:'mat28-19', ref:'Matthew 28:19', text:'Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.', topics:['service','carry message','go','nations'] },
-      { id:'2cor1-4', ref:'2 Corinthians 1:4', text:'Who comforteth us in all our tribulation, that we may be able to comfort them which are in any trouble, by the comfort wherewith we ourselves are comforted of God.', topics:['service','carry message','comfort','others'] },
-    ],
-  },
-  // Topic-indexed
-  topic: {
-    shame:     [{id:'ps51-10',ref:'Psalm 51:10',text:'Create in me a clean heart, O God; and renew a right spirit within me.',topics:['shame','heart','renewal']},{id:'rom8-1',ref:'Romans 8:1',text:'There is therefore now no condemnation to them which are in Christ Jesus, who walk not after the flesh, but after the Spirit.',topics:['shame','condemnation','freedom']}],
-    fear:      [{id:'isa41-10',ref:'Isaiah 41:10',text:'Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee; yea, I will uphold thee with the right hand of my righteousness.',topics:['fear','courage','strength']}],
-    hope:      [{id:'jer29-11',ref:'Jeremiah 29:11',text:'For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.',topics:['hope','future','restoration']},{id:'rom15-13',ref:'Romans 15:13',text:'Now the God of hope fill you with all joy and peace in believing, that ye may abound in hope, through the power of the Holy Ghost.',topics:['hope','joy','peace','belief']}],
-    forgiveness:[{id:'1jn1-9',ref:'1 John 1:9',text:'If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.',topics:['forgiveness','confession','cleansing']},{id:'eph4-32',ref:'Ephesians 4:32',text:'And be ye kind one to another, tenderhearted, forgiving one another, even as God for Christ\'s sake hath forgiven you.',topics:['forgiveness','kindness','compassion']}],
-    strength:  [{id:'phi4-13',ref:'Philippians 4:13',text:'I can do all things through Christ which strengtheneth me.',topics:['strength','power','Christ']},{id:'isa40-31',ref:'Isaiah 40:31',text:'But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint.',topics:['strength','wait','renewal','endurance']}],
-    temptation:[{id:'1cor10-13',ref:'1 Corinthians 10:13',text:'There hath no temptation taken you but such as is common to man: but God is faithful, who will not suffer you to be tempted above that ye are able; but will with the temptation also make a way to escape, that ye may be able to bear it.',topics:['temptation','escape','bear','faithful']}],
-    community: [{id:'ecc4-12',ref:'Ecclesiastes 4:12',text:'And if one prevail against him, two shall withstand him; and a threefold cord is not quickly broken.',topics:['community','fellowship','accountability','strength']},{id:'heb10-25',ref:'Hebrews 10:25',text:'Not forsaking the assembling of ourselves together, as the manner of some is; but exhorting one another: and so much the more, as ye see the day approaching.',topics:['community','gathering','fellowship','exhort']}],
-    identity:  [{id:'2cor5-17',ref:'2 Corinthians 5:17',text:'Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become new.',topics:['identity','new creation','transformation','old']},{id:'1pe2-9',ref:'1 Peter 2:9',text:'But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people; that ye should shew forth the praises of him who hath called you out of darkness into his marvellous light.',topics:['identity','chosen','royal','light']}],
-  }
-};
-
-// Scripture search engine
 function searchScriptures(query, stepNum) {
   var results = [];
   var q = (query || '').toLowerCase().trim();
