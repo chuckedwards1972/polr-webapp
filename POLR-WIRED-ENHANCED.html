@@ -24840,7 +24840,7 @@ function SchedulerBuilder({
   var _er=React.useState('');var error=_er[0];var setError=_er[1];
   var blank={name:'',city:'',state:'LA',address:'',zip:'',phone:'',email:'',director:'',meeting_day:'',meeting_time:'',parish:''};
   var _fm=React.useState(blank);var form=_fm[0];var setForm=_fm[1];
-  var getToken=function(){try{var keys=['hope_session','polr_session','hope_token'];for(var i=0;i<keys.length;i++){var s=sessionStorage.getItem(keys[i])||localStorage.getItem(keys[i]);if(s){var parsed=JSON.parse(s);if(parsed.token)return parsed.token;}}return '';}catch(e){return '';}};
+  var getToken=function(){try{var t=sessionStorage.getItem('hope_token')||localStorage.getItem('hope_token');if(t)return t;var s=sessionStorage.getItem('hope_session')||localStorage.getItem('hope_session');if(s){try{return JSON.parse(s).token||'';}catch(e){}}return '';}catch(e){return '';}};
   var API=window.POLR_API_BASE||'https://polr-backend-production.up.railway.app/api';
   var load=function(){setLoading(true);setError('');fetch(API+'/admin/campuses',{headers:{'Authorization':'Bearer '+getToken()}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(data){setCampuses(Array.isArray(data)?data:[]);setLoading(false);}).catch(function(e){setLoading(false);setError(String(e));});};
   React.useEffect(function(){load();},[]);
