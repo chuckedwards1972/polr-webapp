@@ -30047,6 +30047,24 @@ function loadCampusesFromDB(platform,update,toast){
     .then(function(data){if(Array.isArray(data)&&data.length>0){update("campuses",data);toast({icon:"ok",title:"Campuses loaded",body:data.length+" campuses loaded from database."});}})
     .catch(function(e){console.log("Campus load error",e);});
 }
+function loadAllFromRailway(update,toast){
+  var tok=function(){try{var s=sessionStorage.getItem('hope_session')||localStorage.getItem('hope_session');return s?JSON.parse(s).token||'':'';}catch(e){return '';}};
+  var base=window.POLR_API_BASE;
+  var hdr={'Authorization':'Bearer '+tok()};
+  var load=function(path,key){
+    fetch(base+path,{headers:hdr})
+      .then(function(r){return r.json();})
+      .then(function(data){if(Array.isArray(data)&&data.length>0){update(key,data);console.log('Loaded',data.length,key,'from Railway');}})
+      .catch(function(e){console.log('Failed to load',key,e);});
+  };
+  load('/members','members');
+  load('/housing','housing');
+  load('/workforce/employers','employers');
+  load('/workforce/placements','placements');
+  load('/financial/donations','donations');
+  load('/meetings','meetings');
+  load('/admin/campuses','campuses');
+}
 function getSession() {
   try {
     return JSON.parse(sessionStorage.getItem('hope_session') || 'null');
