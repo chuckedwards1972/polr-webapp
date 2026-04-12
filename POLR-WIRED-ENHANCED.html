@@ -30198,6 +30198,14 @@ const AMOUNTS = [25, 50, 100, 250, 500, 1000];
 
 // ═══ AUTH STATE ═══
 const TERMS_VERSION = '2026-02';
+
+function loadCampusesFromDB(platform,update,toast){
+  var tok=(function(){try{var s=sessionStorage.getItem("hope_session");return s?JSON.parse(s).token||"":"";}catch(e){return "";}})();
+  fetch(window.POLR_API_BASE+"/admin/campuses",{headers:{"Authorization":"Bearer "+tok}})
+    .then(function(r){return r.json();})
+    .then(function(data){if(Array.isArray(data)&&data.length>0){update("campuses",data);toast({icon:"ok",title:"Campuses loaded",body:data.length+" campuses loaded from database."});}})
+    .catch(function(e){console.log("Campus load error",e);});
+}
 function getSession() {
   try {
     return JSON.parse(sessionStorage.getItem('hope_session') || 'null');
