@@ -21945,6 +21945,7 @@ function Dashboard({
           toast: toast
         });
       case 'campuses':
+        loadCampusesFromDB(platform,update,toast);
         return /*#__PURE__*/React.createElement(CampusesBuilder, {
           platform: platform,
           addToList: addToList,
