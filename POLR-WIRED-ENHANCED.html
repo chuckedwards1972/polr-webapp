@@ -25121,14 +25121,14 @@ function CampusesBuilder(p){
   var _ed=React.useState(null);var editing=_ed[0];var setEditing=_ed[1];
   var blank={name:"",city:"",state:"LA",address:"",zip:"",phone:"",email:"",director:"",meeting_day:"",meeting_time:"",parish:""};
   var _fm=React.useState(blank);var form=_fm[0];var setForm=_fm[1];
-  var getToken=function(){try{var s=sessionStorage.getItem("hope_session");return s?JSON.parse(s).token||"":"";}catch(e){return "";}};
+  var getToken=function(){try{var s=sessionStorage.getItem("hope_session")||localStorage.getItem("hope_session");return s?JSON.parse(s).token||"":"";}catch(e){return "";}};
   var API=window.POLR_API_BASE;
   var load=function(){
     setLoading(true);
     fetch(API+"/admin/campuses",{headers:{"Authorization":"Bearer "+getToken()}})
       .then(function(r){return r.json();})
       .then(function(data){setCampuses(Array.isArray(data)?data:[]);setLoading(false);})
-      .catch(function(e){setLoading(false);toast({icon:"warning",title:"Could not load campuses",body:"Check connection."});});
+      .catch(function(e){setLoading(false);toast({icon:"warning",title:"Campus load error",body:String(e)});console.error("Campus fetch error:",e);});
   };
   React.useEffect(function(){load();},[]);
   var ff=function(k){return function(e){setForm(function(prev){var n=Object.assign({},prev);n[k]=e.target.value;return n;});};};
