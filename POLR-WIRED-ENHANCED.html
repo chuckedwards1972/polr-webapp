@@ -9722,12 +9722,7 @@ var predictLeadershipEmergence = function(platform) {
   }).filter(function(l){return l.score>=30;}).sort(function(a,b){return b.score-a.score;});
 };
 
-var CAMPUS_CONFIGS = [
-  { id:'thibodaux', name:'HOPE Place Port Allen', icon:'🏛️', region:'Lafourche/Terrebonne', lat:29.80, lng:-90.82 },
-  { id:'hop-thib',  name:'HOPE Place Port Allen',        icon:'✝️', region:'Lafourche',             lat:29.79, lng:-90.81 },
-  { id:'hope-place-port-allen',name:'HOPE Place Port Allen',            icon:'🙏', region:'Lafourche South',       lat:29.57, lng:-90.38 },
-  { id:'polr-place-port-allen',name:'Port Allen',              icon:'🌆', region:'West Baton Rouge',      lat:30.45, lng:-91.21 },
-];
+var CAMPUS_CONFIGS = [];
 
 var EXPANSION_TERRITORIES = [
   { id:'morgan-city', name:'Morgan City',  region:'St. Mary Parish',     priority:'High',   rationale:'Underserved, industrial workforce, no faith recovery presence' },
